@@ -17,7 +17,6 @@ body {
     background-color: #F6F6F6;
 }
 
-
 /* 사이드바 스타일 */
 .sidebar {
     width: 3.8rem;
@@ -31,42 +30,41 @@ body {
     justify-content: space-between;
 }
 
-/* 로고 배경 및 이미지 스타일 */
-.sidebar .logo {
+.sidebar__logo {
     background-color: #D9E2FF;  /* 배경 색상 설정 */
-    width: 1.8rem;   /* 로고 배경 너비 */
-    height: 1.8rem;  /* 로고 배경 높이 */
+    width: 1.8rem;
+    height: 1.8rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 8px;  /* 둥근 사각형 모양 */
+    border-radius: 8px;
 }
 
-.sidebar .logo img {
+.sidebar__logo img {
     width: 1.7rem;
     height: 1.7rem;
 }
 
-.sidebar nav {
+.sidebar__nav {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.sidebar nav ul {
+.sidebar__nav-list {
     list-style-type: none;
     padding: 0;
 }
 
-.sidebar nav ul li {
+.sidebar__nav-item {
     display: flex;
     justify-content: center;
     padding: 0.9375rem 0;
     cursor: pointer;
 }
 
-.sidebar nav ul li img {
+.sidebar__nav-item img {
     width: 1.5rem;
     height: 1.5rem;
     object-fit: contain;
@@ -91,41 +89,40 @@ body {
     height: 3.75rem;
 }
 
-/* 헤더 왼쪽에 텍스트 추가 */
-.header .title {
+.header__title {
     font-size: 1.125rem; /* 18px -> rem */
     font-weight: bold;
 }
 
 /* 검색바 스타일 */
-.search-bar {
+.header__search-bar {
     display: flex;
     align-items: center;
     background-color: #EAEAEA;
     border-radius: 6px;
     padding: 0.3125rem 0.625rem;
     width: 15.625rem;
-    margin-left: 20rem; /* 오른쪽으로 밀어서 중앙이 아닌 위치에 */
+    margin-left: 20rem;
     justify-content: flex-end;
 }
 
-.search-bar input {
-    flex: 1; /* 남은 공간을 차지하여 유동적인 입력 필드 */
+.header__search-input {
+    flex: 1;
     border: none;
     background-color: transparent;
     outline: none;
-    padding-left: 0.5rem; /* 아이콘과 간격 조정 */
+    padding-left: 0.5rem;
 }
 
-.search-icon {
+.header__search-icon {
     width: 0.9375rem;
     height: 0.9375rem;
-    margin-left: auto; /* 검색 아이콘을 오른쪽으로 밀기 */
+    margin-left: auto;
 }
 
 /* 화면 너비가 900px 이하일 때 */
 @media (max-width: 900px) {
-    .search-bar {
+    .header__search-bar {
         width: 12rem;
         margin-left: 10rem;
     }
@@ -133,52 +130,47 @@ body {
 
 /* 화면 너비가 600px 이하일 때 */
 @media (max-width: 600px) {
-    .search-bar {
+    .header__search-bar {
         width: 6rem;
         margin-left: 5rem;
     }
 }
 
-
-.header-icons {
+.header__icons {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* 오른쪽 정렬 */
-    flex-wrap: nowrap; /* 줄바꿈 방지 */
-}
-
-.chat-icon, .alert-icon, .profile-icon, .dropdown-icon {
-    margin-left: 0.625rem;  /* 아이콘 간격 */
+    justify-content: flex-end;
+    flex-wrap: nowrap;
 }
 
 /* 헤더 아이콘 스타일 */
-.chat-icon {
+.header__icon {
+    margin-left: 0.625rem;
+}
+
+.header__icon--chat {
     width: 1.4375rem;
     height: 1.4375rem;
-    vertical-align: middle;
     object-fit: contain;
 }
 
-.alert-icon {
+.header__icon--alert {
     width: 1.125rem;
     height: 1.125rem;
-    vertical-align: middle;
     object-fit: contain;
 }
 
-.profile-icon {
+.header__icon--profile {
     width: 1.875rem;
     height: 1.875rem;
     border-radius: 50%;
-    vertical-align: middle;
 }
 
-.dropdown-icon {
+.header__icon--dropdown {
     width: 0.5rem;
     height: 0.5rem;
     margin-left: 0.3125rem;
     margin-right: 3.75rem;
-    vertical-align: middle;
     object-fit: contain;
 }
 
