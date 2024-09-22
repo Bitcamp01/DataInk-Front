@@ -11,7 +11,7 @@
   - **Modifier**: 상태나 스타일 변화를 나타내며, 두 개의 하이픈(`--`)으로 구분 (예: `card__title--highlighted`)
 
   ### 파일 및 변수 명명 규칙:
-  - **파일 이름**: 소문자와 하이픈(`-`)을 사용 (예: `user-profile.html`)
+  - **파일 이름**: `kebab-case` 사용 (예: `user-profile.html`)
   - **자바스크립트 변수/함수**: `camelCase` 사용 (예: `handleClick`, `userName`)
   - **상수**: `UPPER_SNAKE_CASE` 사용 (예: `MAX_LENGTH`, `DEFAULT_COLOR`)
   - **React 컴포넌트 이름**: `PascalCase` 사용 (예: `UserProfile.jsx`)
