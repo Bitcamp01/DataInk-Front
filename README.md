@@ -89,8 +89,8 @@ project/
 
 <img 
   src="UI Style Guide.png"
-  width="75%"
-  height="75%"
+  width="90%"
+  height="90%"
   />
 
 ## 5. 협업 규칙(Git)
