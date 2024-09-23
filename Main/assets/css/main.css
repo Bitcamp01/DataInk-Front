@@ -132,7 +132,7 @@ body {
     justify-content: flex-start; /* 왼쪽 정렬 */
     transition: width 0.3s ease; /* 너비가 변할 때 부드럽게 조정 */
     width: 22.3125rem;
-    height: 2rem;
+    height: 2.5rem;
 }
 
 .header__search-input {
