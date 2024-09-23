@@ -61,8 +61,8 @@ body {
 /* 엑스트라 사이드바 */
 .extra-sidebar {
     position: fixed; 
-    left: -20.625rem; /* 기본적으로 숨겨진 상태 */
-    width: 20.625rem;
+    left: -10.625rem; /* 기본적으로 숨겨진 상태 */
+    width: 10.625rem;
     height: 100vh;
     background-color: #1F253D;
     transition: left 0.3s ease;
@@ -130,6 +130,7 @@ body {
     justify-content: flex-start; /* 왼쪽 정렬 */
     transition: width 0.3s ease; /* 너비가 변할 때 부드럽게 조정 */
     width: 22.3125rem;
+    height: 2rem;
 }
 
 .header__search-input {
@@ -179,23 +180,22 @@ body {
 
 .header__icon {
     margin-left: 1rem;
+    object-fit: contain;
 }
 
 .header__icon--chat {
-    width: 1.58125rem;
-    height: 1.58125rem;
-    object-fit: contain;
+    width: 1.8975rem;
+    height: 1.8975rem;
 }
 
 .header__icon--alert {
-    width: 1.2375rem;
-    height: 1.2375rem;
-    object-fit: contain;
+    width: 1.485rem;
+    height: 1.485rem;
 }
 
 .header__icon--profile {
-    width: 2.0625rem;
-    height: 2.0625rem;
+    width: 2.475rem;
+    height: 2.475rem;
     border-radius: 50%;
 }
 
@@ -204,7 +204,6 @@ body {
     height: 0.5rem;
     margin-left: 0.3125rem;
     margin-right: 3.75rem;
-    object-fit: contain;
 }
 
 
