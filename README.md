@@ -11,7 +11,8 @@
   - **Modifier**: 상태나 스타일 변화를 나타내며, 두 개의 하이픈(`--`)으로 구분 (예: `card__title--highlighted`)
 
   ### 파일 및 변수 명명 규칙:
-  - **파일 이름**: `kebab-case` 사용 (예: `user-profile.html`)
+  - **파일 이름(이미지 제외)**: `kebab-case` 사용 (예: `user-profile.html`)
+  - **이미지 파일**: `kebab-case`에 마지막에 `_icon, _img`로 구분 (예: `main-home_icon`)
   - **자바스크립트 변수/함수**: `camelCase` 사용 (예: `handleClick`, `userName`)
   - **상수**: `UPPER_SNAKE_CASE` 사용 (예: `MAX_LENGTH`, `DEFAULT_COLOR`)
   - **React 컴포넌트 이름**: `PascalCase` 사용 (예: `UserProfile.jsx`)
@@ -49,14 +50,17 @@
 project/
 ├── assets/
 │   ├── css/               # CSS 파일들
-│   │   ├── main.css       # 공통 스타일 파일
-│   │   └── home.css       # 홈 페이지 전용 스타일 파일
+│   │   ├── main.css          # 공통 스타일 파일
+│   │   └── home.css          # 홈 페이지 전용 스타일 파일
 │   ├── js/                # 자바스크립트 파일들
-│   │   ├── main.js        # 공통 스크립트 파일
-│   │   └── home.js        # 홈 페이지 전용 스크립트 파일
-│   ├── img/               # 이미지 파일들
+│   │   ├── main.js           # 공통 스크립트 파일
+│   │   └── home.js           # 홈 페이지 전용 스크립트 파일
+│   ├── images/            # 이미지 파일들
 │   │   ├── logo.png
 │   │   └── banner.jpg
+│   ├── icons/             # 아이콘 파일들
+│   │   ├── main-home_icon.png
+│   │   └── notice_icon.png
 │   └── fonts/             # 폰트 파일들
 │       ├── custom-font.ttf
 │       └── icon-font.woff
@@ -71,7 +75,7 @@ project/
 ├── src/
 │   ├── components/         # 컴포넌트 별로 폴더 구성
 │   │   ├── Navbar.js
-│   │   ├── Footer.js
+│   │   └── Footer.js
 │   └── pages/              # 페이지 별 구성
 │       ├── Home.js
 │       └── About.js
