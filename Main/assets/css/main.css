@@ -25,8 +25,8 @@ body {
 /* 사이드바 스타일 */
 .sidebar {
     position: fixed; /* fixed로 고정하여 화면 왼쪽에 고정 */
-    width: 70px;
-    padding: 10px;
+    width: 4.375rem;
+    padding: 0.625rem;
     text-align: center;
     box-sizing: border-box;
     z-index: 1;
@@ -76,9 +76,9 @@ body {
     display: block;
     color: white;
     text-decoration: none;
-    margin-left: 20px; /* 아이콘과 텍스트 사이의 간격을 줄임 */
+    margin-left: 1.25rem; /* 아이콘과 텍스트 사이의 간격을 줄임 */
     margin-bottom: 2.12rem; /* 링크들 간의 간격 조정 */
-    width: 400px; /* 링크 너비 */
+    width: 25rem; /* 링크 너비 */
     padding: 0.5rem 0; /* 텍스트와 아이콘 간격 조정 */
     line-height: normal; /* line-height 제거로 기본 텍스트 높이 적용 */
 }
