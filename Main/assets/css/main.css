@@ -182,17 +182,9 @@ body {
 
 .header__icon {
     margin-left: 1rem;
+    width: 1.6rem;
+    height: 1.6rem;
     object-fit: contain;
-}
-
-.header__icon--chat {
-    width: 1.8975rem;
-    height: 1.8975rem;
-}
-
-.header__icon--alert {
-    width: 1.485rem;
-    height: 1.485rem;
 }
 
 .header__icon--profile {
