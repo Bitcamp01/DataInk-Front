@@ -79,7 +79,7 @@ body {
     text-decoration: none;
     margin-left: 1.25rem; /* 아이콘과 텍스트 사이의 간격을 줄임 */
     margin-bottom: 2.12rem; /* 링크들 간의 간격 조정 */
-    width: 25rem; /* 링크 너비 */
+    width: 7rem; /* 링크 너비 */
     padding: 0.5rem 0; /* 텍스트와 아이콘 간격 조정 */
     line-height: normal; /* line-height 제거로 기본 텍스트 높이 적용 */
 }
