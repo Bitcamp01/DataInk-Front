@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mypage-profile</title>
+    <title>Profile Page</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/profile.css"> <!-- 프로필 스타일 추가 -->
 </head>
 <body>
     <div class="layout">
@@ -33,7 +34,7 @@
                 <a href="/data" class="extra-sidebar__link">데이터라벨링</a>
                 <a href="/member" class="extra-sidebar__link">멤버관리</a>
                 <a href="/" class="extra-sidebar__link">공지사항</a>
-            </div>
+            </div>  
         </aside>
 
         <!-- 메인(헤더 + 콘텐츠) 영역 -->
@@ -59,10 +60,101 @@
 
             <!-- 콘텐츠 영역 -->
             <section class="content">
-                <h1>여기에 원하는 내용을 입력하세요.</h1>
+                <!-- 상단 배경 이미지 및 프로필 정보 -->
+            <div class="profile-header" src="assets/images/catuniverse.jpg" alt>
+                <div class="profile-cover"></div>
+                <div class="profile-info">
+                    <img class="profile-info__image" src="assets/images/절미얼굴.jpg" alt="Profile Image">
+                    <h2 class="profile-info__name">Soyeon Jung</h2>
+                    <p class="profile-info__role">Labeler</p>
+                    <p class="profile-info__status">언제든지 편하게 연락해주세요 :)</p>
+                    <div class="profile-buttons">
+                        <button class="follow-btn">Follow</button>
+                        <button class="meeting-btn">Schedule a meeting</button>
+                    </div>
+                </div>
+            </div>
+
+                <!-- 탭 카테고리 -->
+            <div class="tabs">
+                <button class="tab-links active" onclick="openTab(event, 'Profile')">Profile</button>
+                <button class="tab-links" onclick="openTab(event, 'WorkStatus')">Work status</button>
+                <button class="tab-links" onclick="openTab(event, 'Alarm')">Alarm</button>
+            </div>
+
+                <!-- 탭 콘텐츠 -->
+                <div id="Profile" class="tab-content">
+                    <h3>회원정보 수정</h3>
+                    <form class="profile-form">
+                        <div class="profile-form__group">
+                            <label for="name">이름</label>
+                            <input type="text" id="name" name="name" placeholder="이름 입력">
+                        </div>
+
+                        <div class="profile-form__group">
+                            <label for="username">아이디</label>
+                            <input type="text" id="username" name="username" placeholder="아이디 입력">
+                        </div>
+
+                        <div class="profile-form__group">
+                            <label for="password">비밀번호</label>
+                            <input type="password" id="password" name="password" placeholder="대소문자 숫자가 포함된 8-16자 이내">
+                        </div>
+
+                        <div class="profile-form__group">
+                            <label for="confirm-password">비밀번호 확인</label>
+                            <input type="password" id="confirm-password" name="confirm-password" placeholder="비밀번호를 동일하게 입력해주세요">
+                        </div>
+
+                        <div class="profile-form__group">
+                            <label for="email">이메일</label>
+                            <input type="email" id="email" name="email" placeholder="이메일 주소를 입력해주세요">
+                        </div>
+
+                        <div class="profile-form__group">
+                            <label for="phone-carrier">휴대폰 인증</label>
+                            <select id="phone-carrier" name="carrier">
+                                <option value="KT">KT</option>
+                                <option value="SKT">SKT</option>
+                                <option value="LGU+">LGU+</option>
+                            </select>
+                            <input type="text" id="phone" name="phone" placeholder="숫자 입력">
+                            <button type="button" class="profile-form__button">인증번호 요청</button>
+                        </div>
+
+                        <div class="profile-form__group">
+                            <label for="birthdate">생년월일</label>
+                            <input type="text" id="birthdate" name="birthdate" placeholder="생년월일 6자리">
+                        </div>
+
+                        <div class="profile-form__group">
+                            <label for="address">주소</label>
+                            <input type="text" id="address" name="address" placeholder="우편 번호">
+                            <input type="text" name="detailed-address" placeholder="도로명 / 지번주소">
+                            <input type="text" name="extra-address" placeholder="상세 주소">
+                        </div>
+
+                        <div class="profile-form__group">
+                            <button type="submit" class="profile-form__submit">저장</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="WorkStatus" class="tab-content" style="display:none;">
+                    <h3>Work Status</h3>
+                    <!-- Work Status 콘텐츠 -->
+                </div>
+
+                <div id="Alarm" class="tab-content" style="display:none;">
+                    <h3>Alarm</h3>
+                    <!-- Work Status 콘텐츠 -->
+                </div>
             </section>
         </div>
     </div>
+
+    <!-- 스크립트 -->
+    <script src="assets/scripts/openTab.js"></script> <!-- 탭 스크립트 -->
     <script src="assets/scripts/sidebar.js"></script>
 </body>
 </html>
