@@ -1,0 +1,185 @@
+/* 공통 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #F0F0F0;
+    overflow-y: scroll;
+}
+
+/* 상단 프로필 배경 및 정보 */
+.profile-header {
+    position: relative;
+    height: 350px; /* 높이를 조금 더 키움 */
+    background: url('assets/images/catuniverse.') no-repeat center center/cover;
+}
+
+.profile-info {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.profile-info__image {
+    width: 120px; /* 이미지 크기 증가 */
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 이미지에 그림자 추가 */
+}
+
+.profile-info__name {
+    font-size: 26px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.profile-info__role {
+    color: gray;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+/* 탭 스타일 */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+    background-color: #fff;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-links {
+    background-color: #fff;
+    border: none;
+    outline: none;
+    padding: 14px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 15px 15px 0 0; /* 둥근 모서리 추가 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 부드러운 전환 효과 */
+    margin: 0 10px;
+    color: #666;
+}
+
+.tab-links:hover {
+    background-color: #e6f2ff; /* 탭 위에 마우스를 올릴 때의 배경색 */
+    color: #3498DB;
+}
+
+.tab-links.active {
+    border-bottom: 2px solid #3498DB;
+    color: #3498DB;
+    font-weight: bold;
+    background-color: #f9f9f9;
+}
+
+/* 탭 콘텐츠 스타일 */
+.tab-content {
+    display: none;
+    padding: 30px;
+    background-color: white;
+    margin-top: 10px;
+    border-radius: 10px; /* 콘텐츠 영역의 둥근 모서리 추가 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 콘텐츠 영역의 그림자 */
+}
+
+/* 기본적으로 첫 번째 탭은 표시되도록 */
+.tab-content:first-child {
+    display: block;
+}
+
+/* 프로필 수정 폼 */
+.profile-form {
+    max-width: 700px; /* 폼의 최대 너비 증가 */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f9f9f9; /* 폼 배경색 */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 폼에 그림자 */
+}
+
+.profile-form__group {
+    margin-bottom: 20px;
+}
+
+.profile-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.profile-form input, .profile-form select {
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    background-color: #fff;
+}
+
+.profile-form__button {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: #3498DB;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.profile-form__button:hover {
+    background-color: #2980B9;
+}
+
+.profile-form__submit {
+    padding: 12px;
+    background-color: #3498DB;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.profile-form__submit:hover {
+    background-color: #2980B9;
+}
+
+/* 프로필 버튼들 스타일링 */
+.profile-buttons {
+    margin-top: 20px;
+}
+
+.follow-btn, .meeting-btn {
+    padding: 10px 20px;
+    border: 1px solid #3498DB;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 5px;
+    background-color: white;
+    color: #3498DB;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.follow-btn:hover, .meeting-btn:hover {
+    background-color: #3498DB;
+    color: white;
+}
