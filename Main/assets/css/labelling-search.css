@@ -6,7 +6,7 @@
     border-radius: 0.625rem;
     display: inline-block;
     box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
-    margin-left: 23.375rem;
+    margin-left: 30.375rem;
     margin-top: 1.125rem;
 }
 
@@ -23,7 +23,7 @@
 .search__divider {
     width: 0.0625rem; /* 1px */
     height: 2.25rem; /* 36px */
-    margin: 0 4rem; /* 64px 간격 */
+    margin: 0 2rem; /* 64px 간격 */
     border-right: 0.125rem dashed #909090; /* 2px 점선 */
 }
 
@@ -42,7 +42,7 @@
     border-radius: 0.3125rem;
     appearance: none;
     background-color: white;
-    background-image: url('../icons/filter-dropdown_icon.png');
+    background-image: url('../icons/filter-drop_icon.png');
     background-repeat: no-repeat;
     background-position: right 0.625rem center;
     background-size: 0.625rem; /* 10px */
