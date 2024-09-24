@@ -1,0 +1,27 @@
+name: Slack Notification on PR Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  notify_slack:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send message to Slack
+        uses: slackapi/slack-github-action@v1.18.0
+        with:
+          payload: |
+            {
+              "text": "${{ github.actor }}님이 develop 브랜치에 머지했습니다.",
+              "attachments": [
+                {
+                  "title": "PR 제목: ${{ github.event.pull_request.title }}",
+                  "color": "#36a64f"
+                }
+              ]
+            }
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
