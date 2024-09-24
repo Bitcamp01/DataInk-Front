@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>member-management</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/member-management.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 </head>
 <body>
     <div class="layout">
@@ -58,9 +60,165 @@
             </header>
 
             <!-- 콘텐츠 영역 -->
-            <section class="content">
-                <h1>여기에 원하는 내용을 입력하세요.</h1>
-            </section>
+
+                <!-- 멤버 리스트 -->
+                <section class="member-list">                 
+                    <div class="member-list__title">전체 멤버 리스트</div>  
+                    <div class="member-list__discription">가입한 멤버들의 리스트를 확인하고<br>
+                        멤버추가 버튼을 이용하여 새로운 멤버를 등록할 수 있습니다.</div>
+
+                    <div class="member-list__tab_and_button">
+                        
+                            <div class="tab-section__tabs">
+                                <button class="tab-section__tab tab-section__tab--active">멤버 리스트</button>
+                                <button class="tab-section__tab">프로젝트 관리</button>
+                            </div>
+                        <button class="member-list__add-btn">멤버 추가</button>
+                    </div>
+                    <table class="member-list__table">
+                        <thead>
+                            <tr id="table_category">
+                                <th>No</th>
+                                <th>이름</th>
+                                <th>소속(부서)</th>
+                                <th>이메일</th>
+                                <th>전화번호</th>
+                                <th>역할</th>
+                                <th>등록일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr id="table__last">
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>               
+                        </tbody>
+                    </table>
+
+                    <!-- 페이지네이션 -->
+                    <div class="pagination">
+                        <button class="pagination__btn">
+                           <img src="assets/icons/arrow_left_icon.svg" alt="이전">
+                        </button>
+                        <ul class="pagination__list">
+                            <li class="pagination__item pagination__item--active">1</li>
+                            <li class="pagination__item">2</li>
+                            <li class="pagination__item">3</li>
+                            <li class="pagination__item">4</li>
+                            <li class="pagination__item">5</li>
+                            <li class="pagination__item">...</li>
+                        </ul>
+                        <button class="pagination__btn">
+                            <img src="assets/icons/arrow_right_icon.svg" alt="다음">
+                        </button> 
+                    </div>
+                </section>
+            </main>
+
         </div>
     </div>
     <script src="assets/scripts/sidebar.js"></script>
