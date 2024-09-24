@@ -1,0 +1,236 @@
+/* 콘텐츠 영역 스타일 */
+.content {
+    padding: 1.25rem;
+    flex: 1;
+}
+
+.overView h2 {
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.total {
+    width: 1758px;
+    height: 471px;
+    margin-left: 20px;
+    display: flex;
+    gap: 40px;
+}
+
+.profileCard {
+    width: 254px;
+    height: 421px;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #C4C4C4;
+}
+
+.profile {
+    text-align: center;
+}
+
+.profile img {
+    width: 150px;
+    height: 150px;
+}
+
+.profile h3 {
+    color: #7C97FE;
+    font-weight: normal;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.profile h2 {
+    margin: 10px;
+    border-bottom: 1px solid #D0D0D0;
+    padding-bottom: 10px;
+}
+
+.roleInfo {
+    display: flex;
+    margin-left: 35px;
+}
+
+.Affiliation {
+    padding-right: 30px;
+    border-right: 1px dotted #D0D0D0;
+    margin-right: 30px;
+}
+
+.Announcement {
+    border: 1px dotted #DBDBDB;
+    background: #F6F8FF;
+    width: 220px;
+    height: 80px;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+.Announcement a {
+    margin-top: 5px;
+    margin-left: 100px;
+    text-decoration: none;
+}
+
+.Announcement h5 {
+    margin-top: 5px;
+    margin-left: 8px;
+}
+
+.detail-info {
+    align-items: center;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.detail-info span {
+    margin: 0;
+}
+
+
+.work {
+    width: 436px;
+    height: 423px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #C4C4C4;
+}
+
+.workIn-todo {
+    width: 522px;
+    height: 425px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #C4C4C4;
+}
+
+.workIn h3 {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #DFDFDF;
+}
+.workIn span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.workIn {
+    width: 466px;
+    height: 177px;
+    margin-top: 30px;
+    margin-left: 20px;
+}
+
+.projectList {
+    margin-top: 10px;
+    margin-left: 15px;
+    width: 464px;
+    height: 140px;
+    overflow-y: scroll;
+}
+
+.projectList::-webkit-scrollbar {
+    width: 10px;
+}
+
+.projectList::-webkit-scrollbar-thumb {
+    background: #E7E7E7;
+    border-radius: 10px;
+}
+
+.projectList::-webkit-scrollbar-track {
+    background: white;
+}
+
+.todo {
+    width: 466px;
+    height: 177px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.todo h3 {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #DFDFDF;
+}
+
+.todo span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.todoList {
+    margin-top: 10px;
+    margin-left: 15px;
+    width: 464px;
+    height: 140px;
+    overflow-y: scroll;
+}
+
+.todoList::-webkit-scrollbar {
+    width: 10px;
+}
+
+.todoList::-webkit-scrollbar-thumb {
+    background: #E7E7E7;
+    border-radius: 10px;
+}
+
+.todoList::-webkit-scrollbar-track {
+    background: white;
+}
+
+.calendar {
+    width: 445px;
+    height: 426px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #C4C4C4;
+}
+
+.project {
+    margin-left: 20px;
+}
+
+#card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 20px;
+    height: 270px;
+    overflow-y: scroll;
+}
+
+#card-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+#card-container::-webkit-scrollbar-thumb {
+    background: #7C97FE; /*스크롤바 색상*/
+    border-radius: 10px;   /*스크롤바 둥글게 */
+}
+
+#card-container::-webkit-scrollbar-track {
+    background: #F6F6F6;
+}
+
+.card {
+    background: white;
+    width: 404px;
+    height: 255px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+                0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    
+}
+
+.card:hover {
+    border: 1px solid #2E7AF2;
+}
+
+.project-count {
+    font-size: 1.2rem;
+    margin-left: 5px;
+    font-weight: normal;
+}
