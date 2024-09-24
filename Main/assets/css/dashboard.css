@@ -23,7 +23,7 @@
     height: 421px;
     background: white;
     border-radius: 10px;
-    border: 2px solid #C4C4C4;
+    border: 1px solid #C4C4C4;
 }
 
 .profile {
@@ -31,11 +31,11 @@
 }
 
 .profile img {
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
 }
 
-.profile h3 {
+.profile h4 {
     color: #7C97FE;
     font-weight: normal;
     margin-top: 20px;
@@ -56,18 +56,40 @@
     padding-right: 30px;
     border-right: 1px dotted #D0D0D0;
     margin-right: 30px;
+    text-align: center;
+}
+
+.role {
+    text-align: center;
 }
 
 .Announcement {
     border: 1px dotted #DBDBDB;
     background: #F6F8FF;
     width: 220px;
-    height: 80px;
+    height: 100px;
     margin-left: 15px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
-.Announcement a {
+.detail-info {
+    display: inline-flex;
+}
+
+.detail-info img {
+    width: 9.82px;
+    height: 14.59px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.detail-info a {
+    text-decoration: none;
+    color: #2F2F2F;
+    margin-left: 5px;
+}
+
+#Announcement-detail {
     margin-top: 5px;
     margin-left: 100px;
     text-decoration: none;
