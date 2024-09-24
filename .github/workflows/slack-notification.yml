@@ -11,17 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send message to Slack
-        uses: slackapi/slack-github-action@v1.18.0
-        with:
-          payload: |
-            {
-              "text": "${{ github.actor }}님이 develop 브랜치에 머지했습니다.",
-              "attachments": [
-                {
-                  "title": "PR 제목: ${{ github.event.pull_request.title }}",
-                  "color": "#36a64f"
-                }
-              ]
-            }
-          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Send Slack notification
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "${{ github.actor }}님이 develop 브랜치에 머지했습니다. PR 제목: ${{ github.event.pull_request.title }}"
+          }' ${{ secrets.SLACK_WEBHOOK_URL }}
