@@ -43,6 +43,7 @@
 
 /* 엑스트라 사이드바 스타일 */
 .extra-sidebar {
+    z-index: 10;
     position: fixed;
     left: -10.625rem;
     width: 10.625rem;
