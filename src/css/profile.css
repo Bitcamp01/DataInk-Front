@@ -124,7 +124,7 @@ h3 {
 .tab-links {
     width: 130px;
     height: 40px;
-    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1); /*콘텐츠 영역의 그림자*/
+    box-shadow: 2px 0 2px rgba(0, 0, 0, 0.1);
     background-color: #eaeaea;
     border: none;
     outline: none;
