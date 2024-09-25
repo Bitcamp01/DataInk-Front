@@ -12,10 +12,5 @@ function addCards() {
 }
 
 // 초기 카드 추가
-addCards();
-addCards();
-addCards(); 
-addCards();
-addCards();
-addCards(); 
+
 
