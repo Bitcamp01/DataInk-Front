@@ -1,3 +1,7 @@
+.member-list__table{
+  margin-left: 0rem;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
