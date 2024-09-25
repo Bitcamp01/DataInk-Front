@@ -39,11 +39,27 @@ const Mypage = () => {
 
 
 
-          <div className="tabs">
-            <button class="tab-links active" onClick={() => setActiveTab('Profile')}>Profile</button>
-            <button class="tab-links workstatus" onClick={() => setActiveTab('Workstatus')}>Work status</button>
-            <button class="tab-links alarm" onClick={() => setActiveTab('Alarm')}>Alarm</button>
-          </div>
+          {/* 탭 버튼 */}
+      <div className="tabs">
+        <button
+          className={`tab-links ${activeTab === 'Profile' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Profile')}
+        >
+          Profile
+        </button>
+        <button
+          className={`tab-links ${activeTab === 'Workstatus' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Workstatus')}
+        >
+          Work status
+        </button>
+        <button
+          className={`tab-links alarm ${activeTab === 'Alarm' ? 'active' : ''}`}
+          onClick={() => setActiveTab('Alarm')}
+        >
+          Alarm
+        </button>
+      </div>
 
           <div>
             {renderComponent()}
