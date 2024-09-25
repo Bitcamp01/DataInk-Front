@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>labelling-search</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/labelling-search.css">
+    <link rel="stylesheet" href="assets/css/labelling-searchtable.css">
+</head>
+<body>
+    <div class="layout">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <img class="sidebar__logo" src="assets/images/datalnk-logo.png" alt="데이터잉크 아이콘">
+            <div class="sidebar__menu">
+                <a href="/main" class="sidebar__icon sidebar__icon--active">
+                    <img src="assets/images/main-home-icon.png" alt="메인홈">
+                </a>
+                <a href="/data" class="sidebar__icon">
+                    <img src="assets/images/data-icon.png" alt="데이터라벨링">
+                </a>
+                <a href="/member" class="sidebar__icon">
+                    <img src="assets/images/member-icon.png" alt="멤버관리">
+                </a>
+                <a href="/" class="sidebar__icon">
+                    <img src="assets/images/notice-icon.png" alt="공지사항">
+                </a>
+            </div>
+        </aside>
+
+        <aside class="extra-sidebar">
+            <div class="extra-sidebar__menu">
+                <a href="/main" class="extra-sidebar__link">대시보드(Home)</a>
+                <a href="/data" class="extra-sidebar__link">데이터라벨링</a>
+                <a href="/member" class="extra-sidebar__link">멤버관리</a>
+                <a href="/" class="extra-sidebar__link">공지사항</a>
+            </div>
+        </aside>
+
+        <!-- 메인(헤더 + 콘텐츠) 영역 -->
+        <div class="main">
+
+            <!-- 헤더 영역 -->
+            <header class="header">
+                <div class="header__back-icon">
+                    <img src="assets/images/back-icon.png" alt="뒤로가기">
+                </div>
+                <div class="header__title">Data Labeling</div>
+                <div class="header__search">
+                    <input type="text" class="header__search-input">
+                    <img src="assets/images/search-icon.png" alt="검색 아이콘" class="header__search-icon">
+                </div>
+                <div class="header__icons">
+                    <img src="assets/images/chat.png" alt="채팅" class="header__icon header__icon--chat">
+                    <img src="assets/images/alert.png" alt="알람" class="header__icon header__icon--alert">
+                    <img src="assets/images/profile.png" alt="프로필" class="header__icon header__icon--profile">
+                    <img src="assets/images/profile-drop.png" alt="드롭다운" class="header__icon header__icon--dropdown">
+                </div>
+            </header>
+
+            <section class="content">
+              <!-- 검색 필터 영역 -->
+              <div class="search">
+                  <div class="search__filters">
+                      <div class="search__group">
+                          <div class="search__select">
+                              <select>
+                                  <option value="" disabled selected hidden>게시날짜</option>
+                                  <option value="2024-09-10">2024.09.10</option>
+                                  <option value="2024-09-11">2024.09.11</option>
+                              </select>
+                          </div>
+                          <div class="search__select">
+                              <select>
+                                  <option value="" disabled selected hidden>작업인원</option>
+                                  <option value="worker1">작업인원 1</option>
+                                  <option value="worker2">작업인원 2</option>
+                              </select>
+                          </div>
+                      </div>
+          
+                      <div class="search__divider"></div>
+          
+                      <div class="search__group">
+                          <div class="search__select">
+                              <select>
+                                  <option value="" disabled selected hidden>대분류</option>
+                                  <option value="category1">카테고리 1</option>
+                                  <option value="category2">카테고리 2</option>
+                              </select>
+                          </div>
+                          <div class="search__select">
+                              <select>
+                                  <option value="" disabled selected hidden>중분류</option>
+                                  <option value="subcategory1">서브카테고리 1</option>
+                                  <option value="subcategory2">서브카테고리 2</option>
+                              </select>
+                          </div>
+                      </div>
+          
+                      <div class="search__input">
+                          <input type="text" class="search__input-field">
+                      </div>
+                      <button class="search__button">검색</button>
+                  </div>
+              </div>
+              
+              <!-- 테이블 영역 -->
+            <div class="search_list">
+              <table>
+                  <thead>
+                      <tr>
+                          <th><input type="checkbox"></th>
+                          <th>No</th>
+                          <th>대분류</th>
+                          <th>중분류</th>
+                          <th>소분류</th>
+                          <th>작업명</th>
+                          <th>작업번호</th>
+                          <th>마감일</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td><input type="checkbox"></td>
+                          <td>1</td>
+                          <td>경찰</td>
+                          <td>운전</td>
+                          <td>0000</td>
+                          <td>oooo ooooo oooooo</td>
+                          <td>01BCf</td>
+                          <td>2024.09.10 23:00</td>
+                      </tr>
+                      <tr>
+                          <td><input type="checkbox"></td>
+                          <td>2</td>
+                          <td>경찰</td>
+                          <td>운전</td>
+                          <td>0000</td>
+                          <td>oooo ooooo oooooo</td>
+                          <td>s0SGi</td>
+                          <td>2024.09.10 23:00</td>
+                      </tr>
+                      <tr>
+                          <td><input type="checkbox"></td>
+                          <td>3</td>
+                          <td>경찰</td>
+                          <td>운전</td>
+                          <td>0000</td>
+                          <td>oooo ooooo oooooo</td>
+                          <td>AAAS2</td>
+                          <td>2024.09.10 23:00</td>
+                      </tr>
+                      <tr>
+                          <td><input type="checkbox"></td>
+                          <td>4</td>
+                          <td>경찰</td>
+                          <td>운전</td>
+                          <td>0000</td>
+                          <td>oooo ooooo oooooo</td>
+                          <td>ls09si</td>
+                          <td>2024.09.10 23:00</td>
+                      </tr>
+                      <tr>
+                          <td><input type="checkbox"></td>
+                          <td>5</td>
+                          <td>경찰</td>
+                          <td>운전</td>
+                          <td>0000</td>
+                          <td>oooo ooooo oooooo</td>
+                          <td>0023A</td>
+                          <td>2024.09.10 23:00</td>
+                      </tr>
+                      <tr>
+                        <td><input type="checkbox"></td>
+                        <td>6</td>
+                        <td>경찰</td>
+                        <td>운전</td>
+                        <td>0000</td>
+                        <td>oooo ooooo oooooo</td>
+                        <td>01BCf</td>
+                        <td>2024.09.10 23:00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>7</td>
+                        <td>경찰</td>
+                        <td>운전</td>
+                        <td>0000</td>
+                        <td>oooo ooooo oooooo</td>
+                        <td>s0SGi</td>
+                        <td>2024.09.10 23:00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>8</td>
+                        <td>경찰</td>
+                        <td>운전</td>
+                        <td>0000</td>
+                        <td>oooo ooooo oooooo</td>
+                        <td>AAAS2</td>
+                        <td>2024.09.10 23:00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>9</td>
+                        <td>경찰</td>
+                        <td>운전</td>
+                        <td>0000</td>
+                        <td>oooo ooooo oooooo</td>
+                        <td>ls09si</td>
+                        <td>2024.09.10 23:00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>10</td>
+                        <td>경찰</td>
+                        <td>운전</td>
+                        <td>0000</td>
+                        <td>oooo ooooo oooooo</td>
+                        <td>0023A</td>
+                        <td>2024.09.10 23:00</td>
+                    </tr>
+                    <tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>10</td>
+                            <td>경찰</td>
+                            <td>운전</td>
+                            <td>0000</td>
+                            <td>oooo ooooo oooooo</td>
+                            <td>0023A</td>
+                            <td>2024.09.10 23:00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>10</td>
+                            <td>경찰</td>
+                            <td>운전</td>
+                            <td>0000</td>
+                            <td>oooo ooooo oooooo</td>
+                            <td>0023A</td>
+                            <td>2024.09.10 23:00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>10</td>
+                            <td>경찰</td>
+                            <td>운전</td>
+                            <td>0000</td>
+                            <td>oooo ooooo oooooo</td>
+                            <td>0023A</td>
+                            <td>2024.09.10 23:00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>10</td>
+                            <td>경찰</td>
+                            <td>운전</td>
+                            <td>0000</td>
+                            <td>oooo ooooo oooooo</td>
+                            <td>0023A</td>
+                            <td>2024.09.10 23:00</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>10</td>
+                            <td>경찰</td>
+                            <td>운전</td>
+                            <td>0000</td>
+                            <td>oooo ooooo oooooo</td>
+                            <td>0023A</td>
+                            <td>2024.09.10 23:00</td>
+                        </tr>
+                    </tr>
+                        <td><input type="checkbox"></td>
+                        <td>10</td>
+                        <td>경찰</td>
+                        <td>운전</td>
+                        <td>0000</td>
+                        <td>oooo ooooo oooooo</td>
+                        <td>0023A</td>
+                        <td>2024.09.10 23:00</td>
+                    </tr>
+                  </tbody>
+              </table>
+            </div>
+          </section>
+          <!-- 페이지네이션 -->
+          <!-- (라벨러입장) 검수 요청 버튼 -->
+          <button>접수 요청</button>
+        </div>
+        
+    
+    <script src="assets/scripts/sidebar.js"></script>
+</body>
+</html>
