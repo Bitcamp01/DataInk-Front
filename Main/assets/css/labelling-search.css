@@ -6,7 +6,7 @@
     border-radius: 0.625rem;
     display: inline-block;
     box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
-    margin-left: 23.375rem;
+    margin-left: 30.375rem;
     margin-top: 1.125rem;
 }
 
@@ -23,34 +23,8 @@
 .search__divider {
     width: 0.0625rem; /* 1px */
     height: 2.25rem; /* 36px */
-    margin: 0 4rem; /* 64px 간격 */
+    margin: 0 2rem; /* 64px 간격 */
     border-right: 0.125rem dashed #909090; /* 2px 점선 */
-}
-
-.search__select {
-    position: relative;
-    display: inline-block;
-    width: 9.375rem; /* 150px */
-}
-
-.search__select select {
-    width: 100%;
-    padding: 0.6875rem; /* 11px */
-    font-size: 0.875rem; /* 14px */
-    color: #7785BE;
-    border: 1px solid #7785BE;
-    border-radius: 0.3125rem;
-    appearance: none;
-    background-color: white;
-    background-image: url('../icons/filter-dropdown_icon.png');
-    background-repeat: no-repeat;
-    background-position: right 0.625rem center;
-    background-size: 0.625rem; /* 10px */
-    cursor: pointer;
-}
-
-.search__select select:focus {
-    outline: none;
 }
 
 /* 검색창과 버튼 */
@@ -97,3 +71,140 @@
     background-color: #7785BE;
     color: white;
 }
+
+/* 기본 select 스타일 적용 (기존 스타일 유지) */
+.custom-dropdown {
+    position: relative;
+    width: 100%;
+    max-width: 150px; /* 최대 너비 */
+    min-width: 150px; /* 최소 너비를 고정 */
+}
+
+.custom-dropdown__selected {
+    padding: 0.6875rem; /* 11px */
+    font-size: 0.875rem; /* 14px */
+    color: #7785BE;
+    border: 1px solid #7785BE;
+    border-radius: 0.3125rem;
+    background-color: white;
+    background-image: url('../icons/filter-drop_icon.png');
+    background-repeat: no-repeat;
+    background-position: right 0.625rem center;
+    background-size: 0.625rem; /* 10px */
+    cursor: pointer;
+    overflow: hidden; /* 선택 항목이 넘치지 않도록 */
+    white-space: nowrap; /* 텍스트가 길면 한 줄로 유지 */
+    text-overflow: ellipsis; /* 텍스트가 넘칠 경우 ... 처리 */
+}
+
+.custom-dropdown__options {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none; /* 기본적으로 드롭다운은 숨김 */
+    background-color: white;
+    border: 1px solid #7785BE;
+    border-radius: 0.3125rem;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto; /* 스크롤을 사용할 수 있도록 */
+}
+
+.custom-dropdown__option {
+    padding: 0.6875rem;
+    border-bottom: 1px solid #EAEAEA;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.custom-dropdown__option:last-child {
+    border-bottom: none;
+}
+
+.custom-dropdown__option:hover {
+    background-color: #EAEAEA;
+}
+
+.custom-dropdown__radio {
+    margin-right: 0.625rem;
+}
+
+.custom-dropdown__label {
+    font-size: 0.875rem;
+    color: #3e3e3e;
+    flex: 1; /* 라벨이 클릭 가능한 넓은 영역을 차지하게 함 */
+}
+
+/* 드롭다운 활성화 시 */
+.custom-dropdown.active .custom-dropdown__options {
+    display: block;
+}
+
+/* 드롭다운 활성화 시 */
+.custom-dropdown.active .custom-dropdown__options {
+    display: block;
+}
+
+/* 라디오 버튼 기본 스타일 숨김 */
+.custom-dropdown__radio {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* 라디오 버튼 라벨 스타일링 */
+.custom-dropdown__label {
+    position: relative;
+    padding-left: 2rem;
+    cursor: pointer;
+}
+
+/* 라디오 버튼 테두리 스타일링 (크기 0.9rem으로 변경) */
+.custom-dropdown__label::before {
+    content: '';
+    position: absolute;
+    left: 0.3rem; /* 라디오 버튼 위치 수정 */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.9rem;  /* 테두리 크기 */
+    height: 0.9rem; /* 테두리 크기 */
+    border: 2px solid #3e3e3e; /* 검은 테두리 */
+    border-radius: 50%;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+/* 내부 작은 원 (크기와 위치 조정) */
+.custom-dropdown__label::after {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 50%; /* 중앙 정렬 */
+    transform: translate(-50%, -50%);
+    width: 0.45rem; /* 작은 원 크기 */
+    height: 0.45rem; /* 작은 원 크기 */
+    background-color: transparent;
+    border-radius: 50%;
+}
+
+/* 라디오 버튼 선택 시 테두리 배경색 */
+.custom-dropdown__radio:checked + .custom-dropdown__label::before {
+    background-color: white; /* 테두리 배경색 유지 */
+}
+
+/* 라디오 버튼 선택 시 내부 작은 원 표시 */
+.custom-dropdown__radio:checked + .custom-dropdown__label::after {
+    background-color: #3e3e3e; /* 선택 시 내부 원이 검은색으로 표시 */
+}
+
+
+
+
+
+
+
+
