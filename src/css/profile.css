@@ -13,7 +13,7 @@ body {
 .profile-header {
     position: relative;
     height: 300px; /* 높이를 조금 더 키움 */
-    background: url('../images/catuniverse.jpg') no-repeat center center/cover;
+    background: url('../../public/images/catuniverse.jpg') no-repeat center center/cover;
 }
 
 .profile-header-title {
