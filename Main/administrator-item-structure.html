@@ -8,38 +8,64 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/main.css">
     <style>
+        /* 아이콘 버튼 스타일 */
+        .btn-outline-success {
 
-        .table {
-            width: 100%;
-            text-align: center;
-        }
-        th,tr{
-            vertical-align: middle;
-        }
-
-        input[type="text"] {
-            width: 80%;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
         }
 
+        .btn-outline-danger {
+
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* input 필드에 버튼이 겹치지 않도록 여백 추가 */
+        .form-control {
+            padding-right: 4rem; /* 오른쪽에 충분한 여유 공간 추가 */
+        }
+        .scrollable-table{
+            overflow-x: auto;
+            overflow-y:auto;
+            width: 80rem;
+            height: 40rem;
+
+        }
+        .scrollable-table::-webkit-scrollbar{
+            display: none;
+        }
     </style>
+
+
+
+
+
+
 </head>
 <body>
 <div class="layout">
     <!-- 사이드바 -->
     <aside class="sidebar">
-        <img class="sidebar__logo" src="assets/icons/datalnk-logo_icon.png" alt="데이터잉크 아이콘">
+        <img class="sidebar__logo" src="assets/icons/dataink-logo_icon.svg" alt="데이터잉크 아이콘">
         <div class="sidebar__menu">
             <a href="/main" class="sidebar__icon sidebar__icon--active">
-                <img src="assets/icons/main-home_icon.png" alt="메인홈">
+                <img src="assets/icons/main-home_icon.svg" alt="메인홈">
             </a>
             <a href="/data" class="sidebar__icon">
-                <img src="assets/icons/data_icon.png" alt="데이터라벨링">
+                <img src="assets/icons/data_icon.svg" alt="데이터라벨링">
             </a>
             <a href="/member" class="sidebar__icon">
-                <img src="assets/icons/member_icon.png" alt="멤버관리">
+                <img src="assets/icons/member_icon.svg" alt="멤버관리">
             </a>
             <a href="/" class="sidebar__icon">
-                <img src="assets/icons/notice_icon.png" alt="공지사항">
+                <img src="assets/icons/notice_icon.svg" alt="공지사항">
             </a>
         </div>
     </aside>
@@ -59,24 +85,24 @@
         <!-- 헤더 영역 -->
         <header class="header">
             <div class="header__back-icon">
-                <img src="assets/icons/back_icon.png" alt="뒤로가기">
+                <img src="assets/icons/back_icon.svg" alt="뒤로가기">
             </div>
             <div class="header__title">Data Labeling</div>
             <div class="header__search">
                 <input type="text" class="header__search-input">
-                <img src="assets/icons/search_icon.png" alt="검색 아이콘" class="header__search-icon">
+                <img src="assets/icons/search_icon.svg" alt="검색 아이콘" class="header__search-icon">
             </div>
             <div class="header__icons">
-                <img src="assets/icons/chat_icon.png" alt="채팅" class="header__icon header__icon--chat">
-                <img src="assets/icons/alert_icon.png" alt="알람" class="header__icon header__icon--alert">
+                <img src="assets/icons/chat_icon.svg" alt="채팅" class="header__icon header__icon--chat">
+                <img src="assets/icons/alert_icon.svg" alt="알람" class="header__icon header__icon--alert">
                 <img src="assets/images/profile_img.png" alt="프로필" class="header__icon header__icon--profile">
-                <img src="assets/icons/profile-drop_icon.png" alt="드롭다운" class="header__icon header__icon--dropdown">
+                <img src="assets/icons/profile-drop_icon.svg" alt="드롭다운" class="header__icon header__icon--dropdown">
             </div>
         </header>
 
         <!-- 콘텐츠 영역 -->
         <section class="content">
-            <div class="container mt-5">
+            <div class="container mt-5 scrollable-table" >
                 <table class="table table-bordered" id="dynamicTable">
                     <thead>
                     <tr>
@@ -97,6 +123,9 @@
                     </tfoot>
                 </table>
             </div>
+            <button type="btn btn-success btn-sm" onclick="tableStore()">
+                저장
+            </button>
         </section>
     </div>
 </div>
@@ -106,31 +135,31 @@
 <script>
 
     let data = {
-        "사건명": "",
-        "사건번호": "",
-        "제출일자": "",
-        "이유": {
-            "이유1": "",
-            "이유2": ""
-        },
-        "사건명": {
-            "한글": "",
-            "영어": ""
-        },
-        "참조": {
-            "참조1": {
-                "참조1-1": {
-                    "참조1-1-1": ""
-                },
-                "참조1-2": ""
-            },
-            "참조2": "",
-            "참조3": "",
-            "참조4": ""
-        }
     };
 
+    function changeTextFiled(e, path) {
+        const newValue = e.target.value;
+        const oldKey = path.split('.').pop();
+        if (path.startsWith('.')) {
+            path = path.slice(1);
+        }
+        const pathArray = path.split('.');
+        const parentPathArray = pathArray.slice(0, -1);
+        const parentObject=parentPathArray.reduce((obj, key) => obj && obj[key], data);
+        if (parentObject && parentObject.hasOwnProperty(oldKey)) {
+            renameKey(parentObject, oldKey, newValue);
+        }
+    }
 
+
+    function renameKey(obj, oldKey, newKey) {
+        obj[newKey] = obj[oldKey];
+        delete obj[oldKey];
+
+    }
+    function tableStore(){
+        console.log(data)
+    }
     function getObjectFromPath(path) {
         if (path.startsWith('.')) {
             path = path.slice(1);
@@ -206,27 +235,23 @@
         inputField.type = 'text';
         inputField.classList.add('form-control');
         inputField.value = value;
+        inputField.onchange = (e) => changeTextFiled(e, path);
 
-        const btnGroup = document.createElement('div');
-        btnGroup.classList.add('btn-group');
-
-
+        // 아이콘 버튼 추가
         const addButton = document.createElement('button');
-        addButton.classList.add('btn', 'btn-success', 'btn-sm');
+        addButton.classList.add('btn', 'btn-outline-success', 'btn-sm');
         addButton.innerHTML = '<i class="fas fa-plus"></i>';
         addButton.onclick = () => addRowAtPath(path);
 
-
         const removeButton = document.createElement('button');
-        removeButton.classList.add('btn', 'btn-danger', 'btn-sm');
+        removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm');
         removeButton.innerHTML = '<i class="fas fa-minus"></i>';
         removeButton.onclick = () => removeRowAtPath(path);
 
-        btnGroup.appendChild(addButton);
-        btnGroup.appendChild(removeButton);
-
+        // 버튼을 input 필드 옆에 배치
         inputGroup.appendChild(inputField);
-        inputGroup.appendChild(btnGroup);
+        inputGroup.appendChild(addButton);
+        inputGroup.appendChild(removeButton);
 
         return inputGroup;
     }
@@ -289,15 +314,16 @@
         const tableBody = document.querySelector('#dynamicTable tbody');
         tableBody.innerHTML = '';
         populateTable(data, tableBody);
+        const maxDepth = Math.max(...Object.keys(data).map(key => calculateDepth(data[key], 1)));
+        document.getElementById('tableHeader').setAttribute('colspan', maxDepth+1);
+        document.getElementById('tableFooter').setAttribute('colspan', maxDepth+1);
     }
 
 
     renderTable();
 
 
-    const maxDepth = Math.max(...Object.keys(data).map(key => calculateDepth(data[key], 1)));
-    document.getElementById('tableHeader').setAttribute('colspan', maxDepth);
-    document.getElementById('tableFooter').setAttribute('colspan', maxDepth);
+
 
 
     function calculateDepth(obj, depth) {
