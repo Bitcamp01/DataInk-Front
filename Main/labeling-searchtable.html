@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/labelling-search.css">
     <link rel="stylesheet" href="assets/css/labelling-searchtable.css">
+    <link rel="stylesheet" href="assets/css/member-management.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+
 </head>
 <body>
     <div class="layout">
@@ -105,191 +108,163 @@
                       <button class="search__button">검색</button>
                   </div>
               </div>
-              
-              <!-- 테이블 영역 -->
-            <div class="search_list">
-              <table>
-                  <thead>
-                      <tr>
-                          <th><input type="checkbox"></th>
-                          <th>No</th>
-                          <th>대분류</th>
-                          <th>중분류</th>
-                          <th>소분류</th>
-                          <th>작업명</th>
-                          <th>작업번호</th>
-                          <th>마감일</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <td><input type="checkbox"></td>
-                          <td>1</td>
-                          <td>경찰</td>
-                          <td>운전</td>
-                          <td>0000</td>
-                          <td>oooo ooooo oooooo</td>
-                          <td>01BCf</td>
-                          <td>2024.09.10 23:00</td>
-                      </tr>
-                      <tr>
-                          <td><input type="checkbox"></td>
-                          <td>2</td>
-                          <td>경찰</td>
-                          <td>운전</td>
-                          <td>0000</td>
-                          <td>oooo ooooo oooooo</td>
-                          <td>s0SGi</td>
-                          <td>2024.09.10 23:00</td>
-                      </tr>
-                      <tr>
-                          <td><input type="checkbox"></td>
-                          <td>3</td>
-                          <td>경찰</td>
-                          <td>운전</td>
-                          <td>0000</td>
-                          <td>oooo ooooo oooooo</td>
-                          <td>AAAS2</td>
-                          <td>2024.09.10 23:00</td>
-                      </tr>
-                      <tr>
-                          <td><input type="checkbox"></td>
-                          <td>4</td>
-                          <td>경찰</td>
-                          <td>운전</td>
-                          <td>0000</td>
-                          <td>oooo ooooo oooooo</td>
-                          <td>ls09si</td>
-                          <td>2024.09.10 23:00</td>
-                      </tr>
-                      <tr>
-                          <td><input type="checkbox"></td>
-                          <td>5</td>
-                          <td>경찰</td>
-                          <td>운전</td>
-                          <td>0000</td>
-                          <td>oooo ooooo oooooo</td>
-                          <td>0023A</td>
-                          <td>2024.09.10 23:00</td>
-                      </tr>
-                      <tr>
-                        <td><input type="checkbox"></td>
-                        <td>6</td>
-                        <td>경찰</td>
-                        <td>운전</td>
-                        <td>0000</td>
-                        <td>oooo ooooo oooooo</td>
-                        <td>01BCf</td>
-                        <td>2024.09.10 23:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>7</td>
-                        <td>경찰</td>
-                        <td>운전</td>
-                        <td>0000</td>
-                        <td>oooo ooooo oooooo</td>
-                        <td>s0SGi</td>
-                        <td>2024.09.10 23:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>8</td>
-                        <td>경찰</td>
-                        <td>운전</td>
-                        <td>0000</td>
-                        <td>oooo ooooo oooooo</td>
-                        <td>AAAS2</td>
-                        <td>2024.09.10 23:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>9</td>
-                        <td>경찰</td>
-                        <td>운전</td>
-                        <td>0000</td>
-                        <td>oooo ooooo oooooo</td>
-                        <td>ls09si</td>
-                        <td>2024.09.10 23:00</td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox"></td>
-                        <td>10</td>
-                        <td>경찰</td>
-                        <td>운전</td>
-                        <td>0000</td>
-                        <td>oooo ooooo oooooo</td>
-                        <td>0023A</td>
-                        <td>2024.09.10 23:00</td>
-                    </tr>
-                    <tr>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>10</td>
-                            <td>경찰</td>
-                            <td>운전</td>
-                            <td>0000</td>
-                            <td>oooo ooooo oooooo</td>
-                            <td>0023A</td>
-                            <td>2024.09.10 23:00</td>
+
+            <section class="member-list">                 
+                <table class="member-list__table">
+                    <thead>
+                        <tr id="table_category">
+                            <th class="left-cell"><input type="checkbox"></th>
+                            <th>No</th>
+                            <th>대분류</th>
+                            <th>중분류</th>
+                            <th>소분류</th>
+                            <th>작업명</th>
+                            <th>작업번호</th>
+                            <th class="right-cell">마감일</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         <tr>
-                            <td><input type="checkbox"></td>
-                            <td>10</td>
-                            <td>경찰</td>
-                            <td>운전</td>
-                            <td>0000</td>
-                            <td>oooo ooooo oooooo</td>
-                            <td>0023A</td>
-                            <td>2024.09.10 23:00</td>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>1</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>자바 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
                         </tr>
+                    </tbody>
+                    <tbody>
                         <tr>
-                            <td><input type="checkbox"></td>
-                            <td>10</td>
-                            <td>경찰</td>
-                            <td>운전</td>
-                            <td>0000</td>
-                            <td>oooo ooooo oooooo</td>
-                            <td>0023A</td>
-                            <td>2024.09.10 23:00</td>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>2</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>오라클 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
                         </tr>
+                    </tbody>
+                    <tbody>
                         <tr>
-                            <td><input type="checkbox"></td>
-                            <td>10</td>
-                            <td>경찰</td>
-                            <td>운전</td>
-                            <td>0000</td>
-                            <td>oooo ooooo oooooo</td>
-                            <td>0023A</td>
-                            <td>2024.09.10 23:00</td>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>3</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>html 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
                         </tr>
+                    </tbody>
+                    <tbody>
                         <tr>
-                            <td><input type="checkbox"></td>
-                            <td>10</td>
-                            <td>경찰</td>
-                            <td>운전</td>
-                            <td>0000</td>
-                            <td>oooo ooooo oooooo</td>
-                            <td>0023A</td>
-                            <td>2024.09.10 23:00</td>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>4</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>자바스크립트 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
                         </tr>
-                    </tr>
-                        <td><input type="checkbox"></td>
-                        <td>10</td>
-                        <td>경찰</td>
-                        <td>운전</td>
-                        <td>0000</td>
-                        <td>oooo ooooo oooooo</td>
-                        <td>0023A</td>
-                        <td>2024.09.10 23:00</td>
-                    </tr>
-                  </tbody>
-              </table>
-            </div>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>5</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>부트스트랩 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>6</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>제이쿼리 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>7</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>스프링 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>8</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>스프링부트 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>9</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>리엑트 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td class="left-cell"><input type="checkbox"></td>
+                            <td>10</td>
+                            <td>비트캠프</td>
+                            <td>5층</td>
+                            <td>502호</td>
+                            <td>리눅스 완전 복습</td>
+                            <td>32584826804</td>
+                            <td class="right-cell">2024.09.10 23:00</td>
+                        </tr>               
+                    </tbody>
+                </table>
+
+                <!-- 페이지네이션 -->
+                <div class="pagination">
+                    <button class="pagination__btn">
+                       <img src="assets/icons/arrow_left_icon.svg" alt="이전">
+                    </button>
+                    <ul class="pagination__list">
+                        <li class="pagination__item pagination__item--active">1</li>
+                        <li class="pagination__item">2</li>
+                        <li class="pagination__item">3</li>
+                        <li class="pagination__item">4</li>
+                        <li class="pagination__item">5</li>
+                        <li class="pagination__item">...</li>
+                    </ul>
+                    <button class="pagination__btn">
+                        <img src="assets/icons/arrow_right_icon.svg" alt="다음">
+                    </button> 
+                </div>
+            </section>
           </section>
-          <!-- 페이지네이션 -->
           <!-- (라벨러입장) 검수 요청 버튼 -->
-          <button>접수 요청</button>
         </div>
         
     
