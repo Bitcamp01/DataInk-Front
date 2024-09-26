@@ -1,0 +1,64 @@
+.tree-container {
+  position: relative;
+  border: 1px solid #ccc;
+  border-top: none;
+  padding: 10px;
+  min-height: calc(100vh - 4.625rem);
+  overflow: visible;
+  width: 250px;
+  background-color: #fff;
+}
+
+/* TreeView의 기본 폰트 스타일 */
+.tree-container .MuiTreeItem-label {
+  font-family: 'Pretendard', Arial, sans-serif !important;
+  color: #3E3E3E !important;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  background-color: #f9f9f9;
+  min-height: 2.2rem;
+}
+
+.label-search-icon {
+  margin-left: 0.3rem;
+  margin-right: 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  flex-grow: 1;
+  font-size: 14px;
+  background-color: transparent;
+}
+
+.side-button {
+  position: absolute;
+  top: 50%;
+  right: 0.4rem;
+  margin-right: -20px;
+  transform: translateY(-50%);
+  background-color: #D2D2D2; /* 버튼 배경색 지정 */
+  border: none;
+  cursor: pointer;
+  width: 0.8rem; /* 버튼의 너비 */
+  height: 6rem; /* 버튼의 높이, 이미지보다 길게 설정 */
+  display: flex;
+  justify-content: center; /* 이미지가 수평 중앙에 위치하도록 설정 */
+  align-items: center; /* 이미지가 수직 중앙에 위치하도록 설정 */
+}
+
+.side-button img {
+  width: 16px; /* 이미지 크기 조정 */
+  height: auto;
+}
