@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CustomDropdown from './CustomDropdown';
-import '../css/labelling-search.css'; // CSS 파일 연결
+import '../../css/labelling-search.css'; // CSS 파일 연결
 
 const SearchComponent = () => {
   const dateOptions = [
