@@ -5,7 +5,7 @@
   padding: 10px;
   min-height: calc(100vh - 4.625rem);
   overflow: visible;
-  width: 250px;
+  width: 15.6rem;
   background-color: #fff;
 }
 
@@ -61,4 +61,14 @@
 .side-button img {
   width: 16px; /* 이미지 크기 조정 */
   height: auto;
+}
+
+@media (max-width: 1280px) {
+  .search-bar {
+    
+  }
+
+  .tree-container {
+    width: 12rem;
+  }
 }
