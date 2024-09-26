@@ -123,6 +123,14 @@
     box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
 }
 
+.detailboxes textarea {
+    width: calc(100% - 2rem); /* 좌우 1rem의 여백을 고려 */
+    height: calc(100% - 1rem); /* 상하 2rem의 여백을 고려 */
+    padding: 1rem; /* 내부 여백 설정 */
+    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+    resize: none; /* 사용자가 크기를 조정하지 못하도록 설정 (필요시) */
+}
+
 .checkboxes label {
     display: block;
     margin-bottom: 8px;
@@ -136,6 +144,7 @@
     display: flex;
     /* flex-direction: column; */
     gap: 10px;
+    margin: 2.25rem;
 }
 
 .submit-container button {
@@ -152,9 +161,25 @@
     cursor: not-allowed;
 }
 
-.submit-container button.secondary {
+.submit-container button.reject-button {
+    border: #7C97FE 0.5rem;
+    border-radius: 5px;
     background-color: #f8f9fa;
-    color: #333;
+    color: #7C97FE;
+    padding: 1rem;
+    text-align: center;
+    width: 13rem;
+    margin-left: 28rem;
+}
+
+.submit-container button.apply-button {
+    border: #7C97FE 0.5rem;
+    border-radius: 5px;
+    background-color: #7C97FE;
+    color: #ffffff;
+    padding: 1rem;
+    text-align: center;
+    width: 13rem;
 }
 
 .row-item {

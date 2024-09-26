@@ -6,7 +6,7 @@
     <title>login</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/reviewer.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.6/pdfobject.min.js"></script>
 </head>
 <body>
     <div class="layout">
@@ -62,8 +62,12 @@
             <!-- 콘텐츠 영역 -->
             <section class="content">
                 <div class="pdf-section">
-                    <!-- pdf뷰어 자바스크립트 이용하느라 id 썼습니다 -->
-                    <canvas id="pdf-canvas"></canvas>
+                        <div id="pdf-viewer" style="width: 100%; height: 100%;"></div>
+                        <!-- pdfobject 사이트에서 id를 사용하고 있어서 불가피 하게 넣었습니다ㅠㅠ -->
+                        <script>
+                            PDFObject.embed("D:/%%%  private  %%%/개인문서/SQLD합격증.pdf", "#pdf-viewer");
+                            // 경로 넣어주면 됩니다.
+                        </script>
                 </div>
                 <div class="work-space">
                     <div class="container">
@@ -123,10 +127,10 @@
                                     <label><textarea cols="30" rows="5"></textarea></label>
                                 </div>
                             </div>
-                            <div class="submit-container">
-                                <button>반려</button>
-                                <button class="secondary">승인</button>
-                            </div>
+                        </div>
+                        <div class="submit-container">
+                            <button class="reject-button">반려</button>
+                            <button class="apply-button">승인</button>
                         </div>
                     </div>
                 </div>
@@ -134,7 +138,7 @@
         </div>
     </div>
     <script src="assets/scripts/sidebar.js"></script>
-    <script src="assets/scripts/pdfViewer.js"></script>
+    <script src="assets/scripts/reviewer.js"></script>
 </body>
 </html>
 
