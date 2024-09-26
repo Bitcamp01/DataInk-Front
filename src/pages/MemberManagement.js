@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/MemberManagement.css';
+import '../css/memberManagement.css';
 import FixedSizeGrid from './Table'; 
 import Sidebar from './Sidebar'; 
 import Header from './Header';
