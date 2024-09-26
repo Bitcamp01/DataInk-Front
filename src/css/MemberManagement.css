@@ -48,6 +48,7 @@
     display: flex;
     justify-content: space-between; 
     align-items: flex-end;
+    height: 50px;
   
     
 }
@@ -64,6 +65,15 @@
     width: 130px;
     height: 41px;
     margin-bottom: 15px;
+
+   
+}
+
+
+.member-list__add-btn:hover {
+    background-color: #5b6eba;
+    color: white;
+ 
 
    
 }
@@ -97,6 +107,8 @@
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px; 
     border-bottom: none;
+    margin-left: 10px;
+    margin-right: 10px;
 
 }
 
