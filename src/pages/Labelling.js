@@ -17,7 +17,7 @@ const Labelling = () => {
       <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
         
         {/* 사이드바 영역 - 왼쪽에 고정 */}
-        <Box sx={{ width: '250px', minWidth: '200px', backgroundColor: '#f0f0f0', overflowY: 'auto' }}>
+        <Box sx={{ width: '250px', minWidth: '200px'}}>
           <CustomTreeView />
         </Box>
 
