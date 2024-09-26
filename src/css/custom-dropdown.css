@@ -1,9 +1,7 @@
 /* 기본 select 스타일 적용 (기존 스타일 유지) */
 .custom-dropdown {
     position: relative;
-    width: 100%;
-    max-width: 150px; /* 최대 너비 */
-    min-width: 150px; /* 최소 너비를 고정 */
+    width: 9rem;
 }
 
 .custom-dropdown__selected {
@@ -125,4 +123,21 @@
 /* 라디오 버튼 선택 시 내부 작은 원 표시 */
 .custom-dropdown__radio:checked + .custom-dropdown__label::after {
     background-color: #3e3e3e; /* 선택 시 내부 원이 검은색으로 표시 */
+}
+
+@media (max-width: 1280px) {
+    .custom-dropdown {
+        width: 7rem; /* 좁은 화면에서 길이 축소 */
+    }
+
+    .custom-dropdown__selected {
+        font-size: 12px; /* 14px */
+    }
+
+    .custom-dropdown__label {
+        font-size: 12px;
+        color: #3e3e3e;
+        flex: 1; /* 라벨이 클릭 가능한 넓은 영역을 차지하게 함 */
+    }
+
 }
