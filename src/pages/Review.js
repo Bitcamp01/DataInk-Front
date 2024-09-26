@@ -24,9 +24,9 @@
 
 
 import React from 'react';
-import PdfViewer from './PdfViewer'; // PDF 뷰어 컴포넌트
-import SelectForm from './SelectForm'; // SelectForm 컴포넌트
-import ReviewerTable from './ReviewerTable'; // ReviewerTable 컴포넌트
+import PdfViewer from '../components/PdfViewer'; // PDF 뷰어 컴포넌트
+import SelectForm from '../components/SelectForm'; // SelectForm 컴포넌트
+import ReviewerTable from '../components/ReviewerTable'; // ReviewerTable 컴포넌트
 import '../css/reviewer.css';
 
 const Review = () => {
