@@ -1,119 +1,158 @@
-body.join-page {
-  margin: 0;
-  padding: 0;
-  background-color: #12202F;
-  font-family: 'Inter', sans-serif;
+/* form-container: 회원가입 창을 화면 가운데에 위치시키기 */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.main-container {
-  width: 400px;
-  height: 560px;
-  position: relative;
-  margin: 0 auto;
-  margin-top: 50px;
-}
-
+/* white-box: 회원가입 창 스타일 */
 .white-box {
   width: 100%;
-  height: 100%;
+  max-width: 500px; /* 창 크기를 늘림 */
   background-color: white;
-  border-radius: 20px;
-  position: relative;
+  border-radius: 30px; /* 둥근 모서리 추가 */
+  padding: 50px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
+/* 로고 및 타이틀 */
 .data-ink-title {
-  position: absolute;
-  left: 105px;
-  top: 34px;
-  color: black;
-  font-size: 16px;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .signup-title {
-  position: absolute;
-  left: 78px;
-  top: 72px;
+  text-align: center;
   color: black;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 700;
+  margin-bottom: 10px;
 }
 
 .signup-subtitle {
-  position: absolute;
-  left: 78px;
-  top: 91px;
+  text-align: center;
   color: #72737B;
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 300;
+  margin-bottom: 30px;
+}
+
+.fields-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .field {
-  position: absolute;
-  left: 78px;
-  width: 260px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .field .required {
   color: #3751B4;
-  font-size: 8px;
+  font-size: 12px;
+  margin-right: 5px;
 }
 
 .field .label {
   color: #3751B4;
-  font-size: 10px;
-  margin-left: 6px;
+  font-size: 14px;
+  width: 100px; /* 레이블 크기 고정 */
+  margin-right: 10px;
 }
 
-.field .input-text {
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-field {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #BEC2CB;
+  background-color: transparent;
+  outline: none;
+  font-size: 14px;
+  padding: 5px 0;
+}
+
+.progress-bar {
   position: absolute;
-  left: 58px;
-  top: 2px;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #47E22E;
+  transition: width 0.3s ease;
+}
+
+.input-field:focus + .progress-bar {
+  width: 100%;
+}
+
+.status-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+}
+
+/* 버튼 스타일 */
+.create-account-button {
+  width: 100%;
+  max-width: 200px;
+  height: 50px;
+  background-color: #7C97FE;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 50px;
+  border-radius: 25px;
+  margin: 20px auto;
+  cursor: pointer;
+}
+
+/* 소셜 가입 버튼 */
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.social-buttons img {
+  margin: 0 10px;
+  width: 40px;
+  height: 40px;
+}
+
+.social-signup-text {
+  text-align: center;
+  font-size: 12px;
   color: black;
-  font-size: 7px;
+  margin-top: 10px;
 }
 
-.field .input-field {
-  position: absolute;
-  left: 58px;
-  top: 15px; /* 위치 조정 */
-  width: 160px;
-  border: none; /* 모든 테두리 제거 */
-  border-bottom: 1px solid #BEC2CB; /* 밑줄 추가 */
-  background-color: transparent; /* 배경 투명 */
-  outline: none; /* 포커스 시 나타나는 외곽선 제거 */
-  font-size: 10px; /* 글자 크기 유지 */
-  color: black; /* 글자 색상 유지 */
-  padding: 0; /* 패딩 제거 */
-  margin: 0; /* 마진 제거 */
+.social-signup-text .highlight {
+  color: #0047FF;
+  font-weight: 700;
 }
 
-.field .input-progress {
-  position: absolute;
-  left: 58px;
-  top: 15px;
-  width: 80px;
-  height: 20px;
-  border: 1px solid #04FF1D;
-}
-
-.field .status-icon {
-  position: absolute;
-  left: 231px;
-  top: 2px;
-  width: 12px;
-  height: 12px;
-}
-
+/* 암호 요구사항 */
 .password-requirements {
-  position: absolute;
-  left: 150px;
-  top: 309px;
+  margin-top: 10px;
+  text-align: left;
+  width: 100%;
 }
 
 .password-requirements .requirement-text {
   color: #98989A;
-  font-size: 8px;
+  font-size: 12px;
   margin-bottom: 5px;
 }
 
@@ -121,47 +160,7 @@ body.join-page {
   color: #47E22E;
 }
 
-.create-account-button {
-  position: absolute;
-  left: 148px;
-  top: 394px;
-  width: 130px;
-  height: 27px;
-  background-color: #7C97FE;
-  color: white;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
-  line-height: 27px;
-  border-radius: 22px;
-}
-
-.social-signup {
-  position: absolute;
-  left: 78px;
-  top: 457px;
-  width: 258px;
-  text-align: center;
-}
-
-.social-buttons {
-  background-color: #DDE6F4;
-  border-radius: 20px;
-  padding: 8px 0;
-}
-
-.social-buttons img {
-  margin: 0 15px;
-}
-
-.social-signup-text {
-  margin-top: 10px;
-  color: black;
-  font-size: 10px;
-  font-weight: 100;
-}
-
-.social-signup-text .highlight {
-  color: #0047FF;
-  font-weight: 700;
+.login__logo {
+  width: 30px;
+  margin-right: 5px;
 }
