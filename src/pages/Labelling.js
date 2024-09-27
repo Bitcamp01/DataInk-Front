@@ -6,18 +6,31 @@ import { Box } from '@mui/material';
 
 const Labelling = () => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'calc(100vh - 4.625rem)',
+        overflowY: 'auto',  // Labelling.js 전체에 스크롤 적용
+      }}
+    >
       
-      {/* SearchComponent - 상단에 위치 */}
-      <Box sx={{ flexShrink: 0 }}>
+      <Box
+        sx={{
+          position: 'sticky',  // SearchComponent를 고정
+          top: 20,
+          flexShrink: 0,
+          zIndex: 1000, 
+        }}
+      >
         <SearchComponent />
       </Box>
 
       {/* 사이드바와 테이블을 배치하는 영역 */}
-      <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
+      <Box sx={{ display: 'flex', flexGrow: 1, overflowX: 'auto' }}>
         
         {/* 사이드바 영역 - 왼쪽에 고정 */}
-        <Box sx={{ width: '250px', minWidth: '200px'}}>
+        <Box >
           <CustomTreeView />
         </Box>
 
@@ -25,13 +38,13 @@ const Labelling = () => {
         <Box sx={{ 
           flexGrow: 1, 
           marginLeft: '2rem', 
+          marginTop: '8rem',
           display: 'flex', 
           justifyContent: 'center',  // 수평 가운데 정렬
-          alignItems: 'center',      // 수직 가운데 정렬
-          overflowX: 'auto',         // 좌우 스크롤 가능하게 설정
-          overflowY: 'auto',         // 필요시 상하 스크롤도 가능하게 설정
+          overflowX: 'hidden',
+          overflowY: 'auto',
         }}>
-          <Box sx={{ minWidth: '100%' }}> {/* 테이블 크기 설정으로 스크롤 유도 */}
+          <Box sx={{ minWidth: '100%'}}> {/* 테이블 크기 설정으로 스크롤 유도 */}
             <DataGridDemo />
           </Box>
         </Box>
