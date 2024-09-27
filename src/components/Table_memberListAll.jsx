@@ -1,16 +1,21 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import  '../css/Table.css';
+import  '../css/table.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+
+
+
+
 
 const columns = [
   { field: 'id',
     headerName: 'No',
-    width: 90,
+    width: 60,
     headerClassName: 'no-column-header', 
     cellClassName: 'no-column-cell', 
+    resizable: false,
     
    },
  
@@ -23,7 +28,7 @@ const columns = [
   {
     field: 'department',
     headerName: '소속(부서)',
-    width: 170,
+    width: 150,
     
   },
   {
@@ -45,6 +50,7 @@ const columns = [
     field: 'regdate',
     headerName: '등록일',
     width: 170,
+    resizable: false,
   },
 ];
 
@@ -61,10 +67,10 @@ const rows = [
   { id: 10, name: 'Roxie', department: 'Harvey', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
 ];
 
-export default function DataGridDemo() {
+export default function Table_projectList() {
   return (
     <div style={{ width: '100%' }}>
-    <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+    <Box sx={{ width: '100%',  maxWidth: '1300px', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -92,3 +98,4 @@ export default function DataGridDemo() {
 
     );
 }
+

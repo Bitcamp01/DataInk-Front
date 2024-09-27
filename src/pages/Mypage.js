@@ -23,7 +23,7 @@ const Mypage = () => {
                 <div className="profile-header">
                     <div className="profile-cover"></div>
                     <div className="profile-info">
-                        <img className="profile-info__image" src="/images/절미얼굴.jpg" alt="Profile Image" />
+                        <img className="profile-info__image" src="/images/jeolmi_img.jpg" alt="Profile Image" />
                         <div className="profile-info__intro">
                             <h2 className="profile-info__intro profile-info__intro--name">Soyeon Jung</h2>
                             <p className="profile-info__intro profile-info__intro--role">Labeler</p>
@@ -36,30 +36,27 @@ const Mypage = () => {
                     </div>
                 </div>
 
-
-
-
-          {/* 탭 버튼 */}
-      <div className="tabs">
-        <button
-          className={`tab-links ${activeTab === 'Profile' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Profile')}
-        >
-          Profile
-        </button>
-        <button
-          className={`tab-links ${activeTab === 'Workstatus' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Workstatus')}
-        >
-          Work status
-        </button>
-        <button
-          className={`tab-links alarm ${activeTab === 'Alarm' ? 'active' : ''}`}
-          onClick={() => setActiveTab('Alarm')}
-        >
-          Alarm
-        </button>
-      </div>
+              {/* 탭 버튼 */}
+          <div className="tabs">
+            <button
+              className={`tab-links ${activeTab === 'Profile' ? 'active' : ''}`}
+              onClick={() => setActiveTab('Profile')}
+            >
+              Profile
+            </button>
+            <button
+              className={`tab-links ${activeTab === 'Workstatus' ? 'active' : ''}`}
+              onClick={() => setActiveTab('Workstatus')}
+            >
+              Work status
+            </button>
+            <button
+              className={`tab-links alarm ${activeTab === 'Alarm' ? 'active' : ''}`}
+              onClick={() => setActiveTab('Alarm')}
+            >
+              Alarm
+            </button>
+          </div>
 
           <div>
             {renderComponent()}
