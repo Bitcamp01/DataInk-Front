@@ -27,7 +27,7 @@ const Labelling = () => {
       </Box>
 
       {/* 사이드바와 테이블을 배치하는 영역 */}
-      <Box sx={{ display: 'flex', flexGrow: 1, overflowX: 'auto' }}>
+      <Box sx={{ display: 'flex', flexGrow: 1, overflowX: 'hidden' }}>
         
         {/* 사이드바 영역 - 왼쪽에 고정 */}
         <Box >
@@ -41,7 +41,6 @@ const Labelling = () => {
           marginTop: '8rem',
           display: 'flex', 
           justifyContent: 'center',  // 수평 가운데 정렬
-          overflowX: 'hidden',
           overflowY: 'auto',
         }}>
           <Box sx={{ minWidth: '100%'}}> {/* 테이블 크기 설정으로 스크롤 유도 */}
