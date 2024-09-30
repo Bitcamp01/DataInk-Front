@@ -51,7 +51,7 @@ export default function Table_projectList() {
 
     { field: 'project_name', 
       headerName: '프로젝트 이름',
-       width: 180 },
+       width: 250 },
 
     { field: 'description', 
       headerName: '프로젝트 설명', 
@@ -63,7 +63,7 @@ export default function Table_projectList() {
 
     { field: 'member', 
       headerName: '프로젝트 참여자', 
-      width: 240 ,},
+      width: 330 ,},
 
     {
       field: 'actions',
@@ -152,7 +152,7 @@ export default function Table_projectList() {
             Cancel
           </Button>
           <Button onClick={handleClose} color="primary">
-            Save
+            저장 하기
           </Button>
         </DialogActions>
       </Dialog>

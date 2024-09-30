@@ -1,54 +1,64 @@
 import React from 'react';
+import styled from 'styled-components';
 import SearchComponent from '../components/labelling/SearchComponent';
 import CustomTreeView from '../components/labelling/TreeView';
 import DataGridDemo from '../components/Table_label';
-import { Box } from '@mui/material';
+
+const LabellingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 4.625rem);
+  overflow-y: auto;
+`;
+
+const StickySearchContainer = styled.div`
+  position: sticky;
+  top: 20px;
+  flex-shrink: 0;
+  z-index: 1000;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+`;
+
+const SidebarContainer = styled.div`
+  /* 사이드바 스타일을 추가할 수 있습니다 */
+`;
+
+const TableContainer = styled.div`
+  flex-grow: 1;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 8rem;
+  display: flex;
+  justify-content: center;
+`;
+
+const InnerTableContainer = styled.div`
+  min-width: 100%;
+`;
 
 const Labelling = () => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: 'calc(100vh - 4.625rem)',
-        overflowY: 'auto',  // Labelling.js 전체에 스크롤 적용
-      }}
-    >
-      
-      <Box
-        sx={{
-          position: 'sticky',  // SearchComponent를 고정
-          top: 20,
-          flexShrink: 0,
-          zIndex: 1000, 
-        }}
-      >
+    <LabellingContainer>
+      <StickySearchContainer>
         <SearchComponent />
-      </Box>
+      </StickySearchContainer>
 
-      {/* 사이드바와 테이블을 배치하는 영역 */}
-      <Box sx={{ display: 'flex', flexGrow: 1, overflowX: 'hidden' }}>
-        
-        {/* 사이드바 영역 - 왼쪽에 고정 */}
-        <Box >
+      <ContentContainer>
+        <SidebarContainer>
           <CustomTreeView />
-        </Box>
+        </SidebarContainer>
 
-        {/* 테이블 영역 - 중앙 정렬 및 좌우 스크롤 활성화 */}
-        <Box sx={{ 
-          flexGrow: 1, 
-          marginLeft: '2rem', 
-          marginTop: '8rem',
-          display: 'flex', 
-          justifyContent: 'center',  // 수평 가운데 정렬
-          overflowY: 'auto',
-        }}>
-          <Box sx={{ minWidth: '100%'}}> {/* 테이블 크기 설정으로 스크롤 유도 */}
+        <TableContainer>
+          <InnerTableContainer>
             <DataGridDemo />
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </InnerTableContainer>
+        </TableContainer>
+      </ContentContainer>
+    </LabellingContainer>
   );
 };
 
