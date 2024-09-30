@@ -1,6 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import '../css/Chart.css';
+import { useState, useEffect } from 'react';
+
+// Tick 컴포넌트 정의
+const CustomTick = (props) => {
+    const { x, y, payload, selectedView, currentMonth, currentYear, today } = props;
+    const tickValue = parseInt(payload.value);
+    
+    let color = '#BDBDBD'; // 기본 색상
+    if ((selectedView === '월별' && tickValue === currentMonth) ||
+        (selectedView === '년도별' && tickValue === currentYear) ||
+        (selectedView === '일자별' && tickValue === today.getDate())) {
+        color = '#2E7AF2'; // 파란색으로 강조
+    }
+
+    return (
+        <text x={x} y={y + 10} fill={color} textAnchor="middle">
+            {payload.value}
+        </text>
+    );
+};
 
 export default function App() {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
@@ -76,11 +96,14 @@ export default function App() {
     };
 
     return (
-        <div>
+        <div className='work'>
             <div className="header-container">
-                <h2 className="title">완료된 작업현황</h2>
+                <h3 className="title">완료된 작업현황</h3>
                 <div className="controls">
                     <div className="dropdown-wrapper">
+                        <button onClick={refreshChart} className="refresh-button">
+                            <img src='/icons/Refresh_icon.svg' alt="refresh"></img>
+                        </button>
                         <button onClick={toggleDropdown} className="dropdown-button">
                             {selectedView}
                             <span className="dropdown-arrow"></span>
@@ -99,31 +122,35 @@ export default function App() {
                             </ul>
                         )}
                     </div>
-                    <button onClick={refreshChart} className="refresh-button">
-                        <img src='/icons/Refresh_icon.svg' alt="refresh"></img>
-                    </button>
                 </div>
             </div>
-            <ResponsiveContainer key={chartKey} width={436} height={423}>
-                <BarChart data={data}>
-                    <CartesianGrid strokeDasharray="none" horizontal={true} vertical={false} />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip 
-                        cursor={false} 
-                        formatter={(value) => [`${value}`, '작업 수']} 
-                        labelFormatter={() => ''} 
-                    />
-                    <Bar dataKey="num">
-                        {data.map((entry, index) => (
-                            <Cell
-                                key={`cell-${index}`}
-                                fill={parseInt(entry.name) === (selectedView === '월별' ? currentMonth : selectedView === '년도별' ? currentYear : today.getDate()) ? "#7C97FE" : "#D6D6D6"}
-                            />
-                        ))}
-                    </Bar>
-                </BarChart>
-            </ResponsiveContainer>
+            <div style={{marginTop: '5px'}}>
+                <ResponsiveContainer key={chartKey} width={400} height={330}>
+                    <BarChart data={data} margin={{bottom: 10}}>
+                        <CartesianGrid strokeDasharray="none" horizontal={true} vertical={false} />
+                        <XAxis 
+                            dataKey="name" 
+                            tick={<CustomTick selectedView={selectedView} currentMonth={currentMonth} currentYear={currentYear} today={today} />} 
+                            interval={0}
+                            padding={{bottom: 10}}
+                        />
+                        <YAxis tick={{ fill: "#BDBDBD" }}  />
+                        <Tooltip 
+                            cursor={false} 
+                            formatter={(value) => [`${value}`, '작업 수']} 
+                            labelFormatter={() => ''} 
+                        />
+                        <Bar dataKey="num" barSize={40}>
+                            {data.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={parseInt(entry.name) === (selectedView === '월별' ? currentMonth : selectedView === '년도별' ? currentYear : today.getDate()) ? "#7C97FE" : "#D6D6D6"}
+                                />
+                            ))}
+                        </Bar>
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
         </div>
     );
 }
