@@ -8,6 +8,7 @@ import Labelling from './pages/Labelling';
 import Login from './pages/Login';
 import MemberManagement from './pages/MemberManagement';
 import Mypage from './pages/Mypage';
+import Notice from './pages/Notice';
 // import Review from './pages/Review';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/member' element={<MemberManagement />} />
         <Route path='/mypage' element={<Mypage />} />
+        <Route path='/notice' element={<Notice />} />
         {/* <Route path='/review' element={<Review />} /> */}
       </Route>
     </Routes>
