@@ -1,11 +1,21 @@
+
+.work {
+    width: 436px;
+    height: 423px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #C4C4C4;
+}
+
 .header-container {
     display: flex;
     align-items: center; /* 수직 정렬 */
     margin-bottom: 20px;
-    padding: 10px;
+    padding: 20px;
 }
 
 .title {
+    color: #2F2F2F;
     font-weight: bold;
     margin: 0; /* 여백을 없애서 중앙에 딱 맞게 배치 */
 }
@@ -14,7 +24,7 @@
     display: flex;
     align-items: center;
     gap: 8px; /* 버튼 사이 간격 */
-    margin-left: 170px;
+    margin-left: 120px;
 }
 
 
@@ -25,7 +35,7 @@
 .dropdown-button {
     background-color: white;
     border: 1px solid #BCBCBC;
-    padding: 8px 12px;
+    padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
@@ -73,11 +83,13 @@
     background-color: white;
     color: #717171;
     border: 1px solid #BCBCBC;
-    padding: 10px 10px;
+    padding: 7px 10px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
+    margin-right: 8px;
 }
+
 
 .refresh-button:hover {
     background-color: #F5F5F5;
