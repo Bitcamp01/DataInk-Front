@@ -23,7 +23,7 @@ const Modal_addMember = ({ open, handleClose, email, setEmail }) => {
           maxWidth: 'none' 
         }
     }}>
-        <DialogTitle>멤버 추가
+        <DialogTitle style={{fontWeight: 'bolder', fontFamily:'Pretendard, Noto-sans KR'}}>멤버 추가
         <IconButton
             aria-label="close"
             onClick={handleClose}  // X 버튼을 클릭하면 모달 닫기
@@ -39,7 +39,9 @@ const Modal_addMember = ({ open, handleClose, email, setEmail }) => {
 
         </DialogTitle>
         <DialogContent>
-        <p style={{ marginBottom: '16px', fontSize: '16px', color: '#545454' }}>
+        <p style={{ marginBottom: '16px', fontSize: '16px', color: '#545454',  
+          fontFamily: 'Pretendard, Noto-sans KR', 
+        }}>
             멤버 이메일을 추가하면 새로운 멤버를 초대할 수 있습니다.
           </p>
           <TextField
@@ -81,7 +83,9 @@ const Modal_addMember = ({ open, handleClose, email, setEmail }) => {
                 padding: '0px 26px 15px 8px',  
               }}
               >
-          <Button onClick={handleClose} style={{ backgroundColor: '#7C97FE', color: 'white' , width: '100px'  }}>초대 하기</Button>   
+          <Button onClick={handleClose} style={{ backgroundColor: '#7C97FE', color: 'white' , width: '100px' ,
+          fontFamily: 'Pretendard, Noto-sans KR',  
+         }}>초대 하기</Button>   
         </DialogActions>
       </Dialog>
     </>

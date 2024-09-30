@@ -1,34 +1,5 @@
 
-
 /* 메인 콘텐츠 스타일 */
-.main-content {
-    margin-left: 260px;
-    padding: 20px;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.header__title {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.header__search {
-    padding: 8px;
-    font-size: 16px;
-}
-
-.header__profile-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
 /*탭 , 제목 스타일 */
 .member-list__title {
     font-size: 22px;
@@ -64,7 +35,7 @@
     cursor: pointer;
     width: 130px;
     height: 41px;
-    margin-right: 24px;
+    margin-right: 0px;
     margin-bottom: 10px;
 
    
