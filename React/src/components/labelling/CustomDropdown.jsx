@@ -15,8 +15,11 @@ const CustomDropdown = ({ label, options, name }) => {
   };
 
   return (
-    <div className={`custom-dropdown ${isActive ? 'active' : ''}`}>
-      <div className="custom-dropdown__selected" onClick={handleSelectClick}>
+     <div className={`custom-dropdown ${isActive ? 'active' : ''}`}>
+      <div
+        className={`custom-dropdown__selected ${isActive ? 'rotated' : ''}`} // isActive에 따라 class 추가
+        onClick={handleSelectClick}
+      >
         {selectedOption ? selectedOption.label : label}
       </div>
       <ul className="custom-dropdown__options">
