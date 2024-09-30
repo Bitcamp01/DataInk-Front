@@ -11,7 +11,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import Table_projectList_Modal from './Table_projectList_modal';
+import Table_projectList_modal from './Table_projectList_modal';
 
 
 const rows = [
