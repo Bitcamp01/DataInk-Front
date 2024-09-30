@@ -22,6 +22,15 @@
     flex-grow: 1;
 }
 
+/* .work-space {
+    width: 50%; 
+    display: flex;
+    flex-direction: column; 
+    flex-grow: 1;
+    padding: 10px;
+    box-sizing: border-box;
+} */
+
 .work-space {
     width: 50%; /* 작업 공간의 너비 설정 */
     display: flex;
@@ -29,6 +38,8 @@
     flex-grow: 1; /* 남은 공간 차지 */
     padding: 10px; /* 여백 추가 */
     box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+    max-height: calc(100vh - 4.625rem); /* 최대 높이 설정 (헤더 높이에 맞게 조정) */
+    overflow-y: auto; /* 수직 스크롤 바 활성화 */
 }
 
 .pdf-section {
@@ -49,66 +60,46 @@
     padding-bottom: 20px; /* 아래 여백 추가 */
 }
 
-
-
-.table {
-    width: 100%; /* 테이블 너비를 100%로 설정하여 컨테이너에 맞추기 */
-    border-collapse: separate; /* 모서리를 둥글게 하기 위해 separate 사용 */
-    border-spacing: 0; /* 셀 간의 간격을 없앰 */
-    border: 2px solid #3E3E3E; /* 테두리 색상을 #3E3E3E로 */
-    border-radius: 8px; /* 모서리를 약간 둥글게 */
+.table-container {
+    flex-grow: 1; /* 테이블이 공간을 차지하게 함 */
+    overflow-y: auto; /* 테이블 내에서도 스크롤 활성화 */
+    max-height: 40rem; /* 필요에 따라 최대 높이 설정 (예시로 30rem) */
 }
 
 
-.table tr {
-    height: 40px;
+.table-container {
+    border: 2px solid #3E3E3E;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.tree-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid transparent; /* 각 행의 테두리를 투명하게 설정 */
     padding: 8px;
-}
-
-.table td {
     border: 1px solid transparent;
-    padding: 8px;
-    flex: 1;
-    transition: background-color 0.3s ease; /* 배경색 변경 시 부드럽게 전환 */
+    transition: background-color 0.3s ease;
 }
 
-/* 클릭 시 적용될 클래스 */
-.table td.active {
-    background-color: rgba(255, 104, 104, 0.25); /* FF6868의 25% 투명도 */
-}
-
-.table .checked {
-    background-color: #e7f3ff;
-}
-
-.table .checked .icon {
-    color: green;
-}
-
-.table .warning {
-    background-color: #ffe7e7;
-}
-
-.table .warning .icon {
-    color: red;
-}
-
-
-.form-container {
-    width: 100%;
-    padding-top: 20px; /* 위 여백 추가 */
+.tree-item:hover {
+    background-color: #f0f0f0;
 }
 
 .form-container {
-    padding-top: 20px; /* 위 여백 추가 */
-    border: 1px solid #c1c1c1; /* 테두리 색상 설정 */
-    border-radius: 8px; /* 모서리를 둥글게 설정 (8px 정도) */
-    padding: 20px; /* 내용물과 테두리 간의 간격 */
-    background-color: #fff; /* 배경색을 흰색으로 설정 */
+    margin-top: 10px; /* 테이블과 폼 간의 여백 */
+    /* 필요시 높이 조정 */
+}
+
+/* 09.30수정 아니면 다시 갈아버릴 것 */
+.form-container {
+    width: 100%; /* 컨테이너 폭을 100%로 설정 */
+    padding-top: 20px;
+    border: 1px solid #c1c1c1;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-sizing: border-box; /* 패딩 포함 폭 계산 */
 }
 
 .checkboxes{
@@ -142,9 +133,11 @@
 
 .submit-container {
     display: flex;
-    /* flex-direction: column; */
-    gap: 10px;
-    margin: 2.25rem;
+    justify-content: center; /* 버튼들을 가운데 정렬 */
+    gap: 4rem; /* 버튼들 사이에 2rem 간격 추가 */
+    margin-top: 10px;
+    width: 100%; /* form-container와 동일한 폭 */
+    box-sizing: border-box; /* 패딩 포함 폭 계산 */
 }
 
 .submit-container button {
@@ -156,30 +149,22 @@
     border-radius: 4px;
 }
 
-.submit-container button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.submit-container button.reject-button,
+.submit-container button.apply-button {
+    width: 100%; /* 버튼 폭을 submit-container 폭에 맞춤 */
+    max-width: 13rem; /* 버튼의 최대 너비 설정 */
 }
 
 .submit-container button.reject-button {
-    border: #7C97FE 0.5rem;
-    border-radius: 5px;
     background-color: #f8f9fa;
     color: #7C97FE;
-    padding: 1rem;
-    text-align: center;
-    width: 13rem;
-    margin-left: 28rem;
+    border: 2px solid black; /* 검은색 테두리 */
+    border-radius: 4px;
 }
 
 .submit-container button.apply-button {
-    border: #7C97FE 0.5rem;
-    border-radius: 5px;
     background-color: #7C97FE;
     color: #ffffff;
-    padding: 1rem;
-    text-align: center;
-    width: 13rem;
 }
 
 .row-item {
@@ -192,3 +177,106 @@
     font-size: 16px;
 }
 
+
+/* 여기서 부터는 모달창 css */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 700px;
+    max-width: 90%; /* 화면이 너무 작을 경우 최대 90% 너비 제한 */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    margin-top: 10px;
+}
+
+.profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.report-section {
+    background-color: #dedede; /* 배경을 흰색으로 */
+    border-radius: 0.5rem; /* 모서리를 살짝 둥글게 */
+    padding: 2rem 1.5rem; /* 상하좌우 여백을 rem으로 추가 */
+    margin-bottom: 2rem; /* 아래쪽 여백 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+}
+
+.feedbackarea {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1.75rem;
+    border-radius: 0.5rem; /* 텍스트 영역의 모서리도 둥글게 */
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem; /* 상단에 여백 추가 */
+}
+
+.approve-button {
+    background-color: #7C97FE;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.modal-labelingname{
+    color: #7C97FE;
+}
+
+
+
+/* 테이블 원본 */
+.table {
+    width: 100%; /* 테이블 너비를 100%로 설정하여 컨테이너에 맞추기 */
+    border-collapse: separate; /* 모서리를 둥글게 하기 위해 separate 사용 */
+    border-spacing: 0; /* 셀 간의 간격을 없앰 */
+    border: 2px solid #3E3E3E; /* 테두리 색상을 #3E3E3E로 */
+    border-radius: 8px; /* 모서리를 약간 둥글게 */
+}
+
+
+.table tr {
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid transparent; /* 각 행의 테두리를 투명하게 설정 */
+    padding: 8px;
+}
+
+.table td {
+    border: 1px solid transparent;
+    padding: 8px;
+    flex: 1;
+    transition: background-color 0.3s ease; /* 배경색 변경 시 부드럽게 전환 */
+}
