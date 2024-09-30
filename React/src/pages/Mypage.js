@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Profile from '../components/Profile';
-import Workstatus from '../components/Workstatus';
-import Alarm from '../components/Alarm';
+import Profile from '../components/mypage/Profile';
+import Workstatus from '../components/mypage/Workstatus';
+import Alarm from '../components/mypage/Alarm';
 import '../css/profile.css';
 
 const Mypage = () => {
