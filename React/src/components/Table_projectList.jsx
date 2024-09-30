@@ -11,7 +11,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-
+import Table_projectList_Modal from './Table_projectList_modal';
 
 
 const rows = [
@@ -51,11 +51,11 @@ export default function Table_projectList() {
 
     { field: 'project_name', 
       headerName: '프로젝트 이름',
-       width: 250 },
+       width: 200 },
 
     { field: 'description', 
       headerName: '프로젝트 설명', 
-      width: 400 },
+      width: 300 },
 
     { field: 'regdate', 
       headerName: '프로젝트 생성일', 
@@ -63,7 +63,7 @@ export default function Table_projectList() {
 
     { field: 'member', 
       headerName: '프로젝트 참여자', 
-      width: 330 ,},
+      width: 300 },
 
     {
       field: 'actions',
@@ -83,8 +83,6 @@ export default function Table_projectList() {
 
   ],[]);
 
-
-
   return (
     <div style={{ width: '100%' }}>
     <Box sx={{ width: '100%',  maxWidth: '1300px', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
@@ -93,7 +91,9 @@ export default function Table_projectList() {
         columns={columns} 
         rowHeight={40} 
         headerHeight={50}
-        // 이것도 안먹음?? 왜??? 
+        sx={{
+          fontFamily: 'Pretendard, Noto-sans KR',  
+        }}
         autoHeight
         disableRowSelectionOnClick
         hideFooter
@@ -111,51 +111,15 @@ export default function Table_projectList() {
             <Pagination count={10} color="primary" />
         </Stack>
     </div>
+
       {/* 프로젝트 편집 모달창 */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Edit Project</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Project Name"
-            type="text"
-            fullWidth
-            value={selectedRow ? selectedRow.project_name : ''}
-            onChange={(e) =>
-              setSelectedRow({ ...selectedRow, project_name: e.target.value })
-            }
-          />
-          <TextField
-            margin="dense"
-            label="Description"
-            type="text"
-            fullWidth
-            value={selectedRow ? selectedRow.descrption : ''}
-            onChange={(e) =>
-              setSelectedRow({ ...selectedRow, descrption: e.target.value })
-            }
-          />
-          <TextField
-            margin="dense"
-            label="Member"
-            type="text"
-            fullWidth
-            value={selectedRow ? selectedRow.member : ''}
-            onChange={(e) =>
-              setSelectedRow({ ...selectedRow, member: e.target.value })
-            }
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            저장 하기
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {open && (
+      <Table_projectList_modal
+        open = {open}
+        onClose = {handleClose}
+        selectedRow = {selectedRow}
+      />
+      )}
 
     </div>
    

@@ -5,8 +5,6 @@ import  '../css/table.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-
-
 const columns = [
   { field: 'id',
     headerName: 'No',
@@ -75,9 +73,8 @@ export default function Table_memberListAll() {
         rowHeight={40} 
         headerHeight={50}
         sx={{
-          fontFamily: 'Pretendard, sans-serif',  
+          fontFamily: 'Pretendard, Noto-sans KR',  
         }}
-        // 이것도 안먹음?? 왜??? 
         autoHeight
         disableRowSelectionOnClick
         hideFooter
