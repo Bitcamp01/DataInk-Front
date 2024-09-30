@@ -4,7 +4,7 @@ const ReviewerTable = () => {
     return (
         <div className="table-container">
             <table className="table">
-                {[...Array(12)].map((_, index) => (
+                {[...Array(24)].map((_, index) => (
                     <tr key={index}>
                         <td className="row-item">Row name <span></span></td>
                     </tr>
