@@ -8,6 +8,7 @@ const WorkItemBlock = styled.div`
     justify-content: space-between;
     padding-top: 12px;
     height: 20px;
+    margin-bottom: 10px;
 `;
 
 const Circle = styled.div`

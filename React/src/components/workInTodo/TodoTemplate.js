@@ -34,12 +34,10 @@ const TotalTemplateBlock = styled.div`
     // max-height: 425px;
 
     background: white;
-    border-radius: 16px;
+    border-radius: 7px;
     border: 1px solid #C4C4C4;
 
     margin: 0 auto;
-
-    margin-top: 96px;
     display: flex;
     flex-direction: column;
     

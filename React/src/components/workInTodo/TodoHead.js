@@ -5,7 +5,7 @@ import { useTodoState } from './TodoContext';
 import TodoCreate from './TodoCreate';
 
 const TodoHeadBlock = styled.div`
-  padding-left: 32px;
+  padding-left: 5px;
   padding-right: 32px;
   border-bottom: 1px solid #e9exef;
   display: flex;
@@ -23,7 +23,7 @@ const TodoHeadBlock = styled.div`
 const AddButton = styled.button`
   background: #7C97FE;
   cursor: pointer;
-  width: 20px;  
+  width: 25px;  
   height: 20px; 
   display: flex;
   align-items: center;
