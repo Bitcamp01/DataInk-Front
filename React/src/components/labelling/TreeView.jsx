@@ -5,10 +5,12 @@ import '../../css/tree-view.css';
 const TreeView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isVisible, setIsVisible] = useState(true);
+  const [isRotated, setIsRotated] = useState(false);
 
   // 버튼 클릭 시 토글
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
+    setIsRotated(!isRotated);
   };
 
   const ITEMS = [
@@ -81,7 +83,13 @@ const TreeView = () => {
 
       {/* 버튼을 누르면 가시성을 토글 */}
       <button className="side-button" onClick={toggleVisibility}>
-        <img src="/icons/back_icon.svg" alt="Side Button" />
+        <img 
+          src="/icons/back_icon.svg" 
+          alt="Side Button"
+          style={{
+            transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)', // 클릭에 따라 회전 상태를 변경
+          }}
+        />
       </button>
     </div>
   );
