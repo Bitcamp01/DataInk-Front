@@ -30,8 +30,8 @@ const Mypage = () => {
                             <p className="profile-info__intro profile-info__intro--status">언제든지 편하게 연락해주세요 :)</p>
                         </div>
                         <div className="profile-buttons">
-                            <button className="follow-btn">Follow</button>
-                            <button className="meeting-btn">Schedule a meeting</button>
+                            <button className="group-btn">Follow</button>
+                            <button className="calendar-btn">Schedule a meeting</button>
                         </div>
                     </div>
                 </div>
