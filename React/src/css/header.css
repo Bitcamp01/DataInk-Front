@@ -80,3 +80,64 @@
     margin-left: 0.3125rem;
     margin-right: 3.75rem;
 }
+
+.header__icon-wrapper {
+    position: relative;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.notification-dropdown__header {
+    padding: 0.7rem 0rem 0.5rem 1.2rem;
+    font-weight: bold; /* 글자를 굵게 */
+    font-size: 1.2rem; /* 글자 크기를 조정 */
+    border-bottom: 1px solid #eee;
+}
+
+.notification-dropdown__content {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex; /* 프로필 사진과 내용을 가로로 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.notification-item__profile {
+    width: 40px; /* 프로필 사진 크기 */
+    height: 40px;
+    border-radius: 50%; /* 원형으로 만들기 */
+    margin-right: 10px; /* 내용과 사진 사이에 간격 추가 */
+}
+
+.notification-item__content {
+    flex-grow: 1; /* 내용이 가로로 확장되도록 */
+}
+
+.notification-item small {
+    color: #888;
+}
+
+.notification-dropdown__more {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: none;
+    border: none;
+    text-align: center;
+    color: blue;
+    cursor: pointer;
+}
