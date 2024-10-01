@@ -12,7 +12,7 @@ const ReviewModal = ({ isOpen, onClose }) => {
                     <button onClick={onClose} className="close-button">X</button> {/* 모달 닫기 버튼 */}
                 </div>
                 <div className="profile-section">
-                    <img src={`${process.env.PUBLIC_URL}/images/profile_img.png`} alt="Profile" className="profile-image" />
+                    <img src={`${process.env.PUBLIC_URL}/images/profile_img.png`} alt="Profile" className="review-profile-image" />
                     <div className="profile-details">
                         <p style={{ margin: '0 0 1rem 0' }}>
                             <strong className="modal-labelingname">고기천</strong>님의 작업입니다
