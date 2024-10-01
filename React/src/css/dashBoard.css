@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    /* overflow-y: hidden; */
 }
 
 .header {
@@ -18,13 +19,36 @@
     flex: 1;
 }
 
+@media (max-width: 1530px) {
+    .content {
+        transform: scale(0.8);
+        transform-origin: top left;
+    }
+}
+
+.work {
+    width: 436px;
+    height: 423px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #C4C4C4;
+}
+
+
 .total {
-    width: 1758px;
+    width: 100vw;
     height: 471px;
     margin-left: 20px;
     display: flex;
     gap: 40px;
 }
+
+@media (max-width: 1530px) {
+    .total {
+        height: 440px;
+    }
+}
+
 
 .project {
     margin-left: 20px;
@@ -44,6 +68,12 @@
     margin-top: 20px;
     height: 270px;
     overflow-y: scroll;
+}
+
+@media (max-width: 1530px) {
+    #card-container {
+        width: 127%;
+    }
 }
 
 #card-container::-webkit-scrollbar {

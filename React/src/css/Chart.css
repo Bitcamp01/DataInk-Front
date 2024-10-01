@@ -1,12 +1,4 @@
 
-.work {
-    width: 436px;
-    height: 423px;
-    background: white;
-    border-radius: 6px;
-    border: 1px solid #C4C4C4;
-}
-
 .header-container {
     display: flex;
     align-items: center; /* 수직 정렬 */
@@ -17,13 +9,14 @@
 .title {
     color: #2F2F2F;
     font-weight: bold;
-    margin: 0; /* 여백을 없애서 중앙에 딱 맞게 배치 */
+    font-size: 1.3rem;
+    margin-top: 5px;
 }
 
 .controls {
     display: flex;
     align-items: center;
-    gap: 8px; /* 버튼 사이 간격 */
+    gap: 8px;
     margin-left: 120px;
 }
 

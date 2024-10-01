@@ -66,7 +66,7 @@ const rows = [
 export default function Table_memberListAll() {
   return (
     <div style={{ width: '100%' }}>
-    <Box sx={{ width: '100%',  maxWidth: '1300px', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+    <Box sx={{ width: '100%',  maxWidth: '1135px', minWidth:'1135px' ,marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -74,6 +74,13 @@ export default function Table_memberListAll() {
         headerHeight={50}
         sx={{
           fontFamily: 'Pretendard, Noto-sans KR',  
+                            '& .MuiDataGrid-columnHeaders': {//컬럼 헤더의 폰트 설정               
+                    color: '#7C97FE',  
+                    fontWeight: 'bold',  
+                  },
+                  '& .MuiDataGrid-columnSeparator': {
+                    display: 'none',  // 컬럼 헤더의 분리선 제거 
+                  }, 
         }}
         autoHeight
         disableRowSelectionOnClick

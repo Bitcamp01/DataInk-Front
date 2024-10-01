@@ -1,21 +1,26 @@
-.container {
-    display: flex;
-    flex-direction: column; /* 테이블과 폼을 세로로 배치 */
-    height: 100%; /* 컨테이너 높이를 100%로 설정 */
+/* 공통 스타일: 특정 컨테이너 안에서만 적용되도록 수정 */
+.review-container * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.content {
+.review-content {
     display: flex; /* PDF 섹션과 작업 공간을 나란히 배치 */
     flex: 1; /* 남은 공간 차지 */
     width: 100%;
     padding: 1.25rem; /* 기존 여백 유지 */
     height: calc(100vh - 4.625rem); /* 헤더 높이를 제외한 전체 높이 */
-}
-
-.content {
-    display: flex; /* PDF 섹션과 작업 공간을 나란히 배치 */
     flex-grow: 1; /* 남은 공간을 차지 */
 }
+
+.review-work-container {
+    display: flex;
+    flex-direction: column; /* 테이블과 폼을 세로로 배치 */
+    height: 100%; /* 컨테이너 높이를 100%로 설정 */
+}
+
+
 
 .boxes {
     display: flex;
@@ -55,23 +60,17 @@
 }
 
 
-.table-container {
+.review-table-container {
     border-bottom: 1px solid #ddd; /* 아래 경계 추가 */
     padding-bottom: 20px; /* 아래 여백 추가 */
-}
-
-.table-container {
     flex-grow: 1; /* 테이블이 공간을 차지하게 함 */
     overflow-y: auto; /* 테이블 내에서도 스크롤 활성화 */
     max-height: 40rem; /* 필요에 따라 최대 높이 설정 (예시로 30rem) */
-}
-
-
-.table-container {
     border: 2px solid #3E3E3E;
     border-radius: 8px;
     padding: 10px;
 }
+
 
 .tree-item {
     display: flex;
@@ -131,7 +130,7 @@
     margin-right: 8px;
 }
 
-.submit-container {
+.review-submit-container {
     display: flex;
     justify-content: center; /* 버튼들을 가운데 정렬 */
     gap: 4rem; /* 버튼들 사이에 2rem 간격 추가 */
@@ -140,7 +139,7 @@
     box-sizing: border-box; /* 패딩 포함 폭 계산 */
 }
 
-.submit-container button {
+.review-submit-container button {
     padding: 8px 16px;
     background-color: #007bff;
     border: none;
@@ -149,31 +148,31 @@
     border-radius: 4px;
 }
 
-.submit-container button.reject-button,
-.submit-container button.apply-button {
-    width: 100%; /* 버튼 폭을 submit-container 폭에 맞춤 */
+.review-submit-container button.reject-button,
+.review-submit-container button.apply-button {
+    width: 100%; /* 버튼 폭을 review-submit-container 폭에 맞춤 */
     max-width: 13rem; /* 버튼의 최대 너비 설정 */
 }
 
-.submit-container button.reject-button {
+.review-submit-container button.reject-button {
     background-color: #f8f9fa;
     color: #7C97FE;
     border: 2px solid black; /* 검은색 테두리 */
     border-radius: 4px;
 }
 
-.submit-container button.apply-button {
+.review-submit-container button.apply-button {
     background-color: #7C97FE;
     color: #ffffff;
 }
 
-.row-item {
+.review-row-item {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 
-.row-item .icon {
+.review-row-item .icon {
     font-size: 16px;
 }
 
@@ -196,7 +195,7 @@
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 700px;
+    width: 750px;
     max-width: 90%; /* 화면이 너무 작을 경우 최대 90% 너비 제한 */
 }
 
@@ -206,7 +205,7 @@
     align-items: center;
 }
 
-.profile-image {
+.review-profile-image {
     width: 80px;
     height: 80px;
     border-radius: 50%;
@@ -216,7 +215,7 @@
 .profile-section {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     margin-top: 10px;
     gap: 1.75rem; /* Add gap of 3rem between profile-image and profile-details */
 }
@@ -226,6 +225,7 @@
     border-radius: 0.5rem; /* 모서리를 살짝 둥글게 */
     padding: 2rem 1.5rem; /* 상하좌우 여백을 rem으로 추가 */
     margin-left: 2rem;
+    margin-right: 2rem;
     margin-bottom: 2rem; /* 아래쪽 여백 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
 }
@@ -239,7 +239,7 @@
 
 .modal-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     margin-top: 2rem; /* 상단에 여백 추가 */
 }
 
@@ -249,6 +249,8 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
+    width: 100%; /* 버튼 폭을 review-submit-container 폭에 맞춤 */
+    max-width: 10rem; /* 버튼의 최대 너비 설정 */
 }
 
 .modal-labelingname{
@@ -258,7 +260,7 @@
 
 
 /* 테이블 원본 */
-.table {
+.review-table {
     width: 100%; /* 테이블 너비를 100%로 설정하여 컨테이너에 맞추기 */
     border-collapse: separate; /* 모서리를 둥글게 하기 위해 separate 사용 */
     border-spacing: 0; /* 셀 간의 간격을 없앰 */
@@ -267,7 +269,7 @@
 }
 
 
-.table tr {
+.review-table tr {
     height: 40px;
     display: flex;
     justify-content: space-between;
@@ -276,7 +278,7 @@
     padding: 8px;
 }
 
-.table td {
+.review-table td {
     border: 1px solid transparent;
     padding: 8px;
     flex: 1;

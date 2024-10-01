@@ -2,11 +2,11 @@ import React from 'react';
 
 const ReviewerTable = () => {
     return (
-        <div className="table-container">
-            <table className="table">
+        <div className="review-table-container">
+            <table className="review-table">
                 {[...Array(24)].map((_, index) => (
                     <tr key={index}>
-                        <td className="row-item">Row name <span></span></td>
+                        <td className="review-row-item">Row name <span></span></td>
                     </tr>
                 ))}
             </table>
