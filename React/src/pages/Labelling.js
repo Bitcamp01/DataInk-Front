@@ -1,54 +1,55 @@
 import React from 'react';
+import styled from 'styled-components';
 import SearchComponent from '../components/labelling/SearchComponent';
 import CustomTreeView from '../components/labelling/TreeView';
 import DataGridDemo from '../components/Table_label';
-import { Box } from '@mui/material';
+
+const LabellingContainer = styled.div`
+  display: flex;
+  overflow: auto;
+  height: calc(100% - 4.625rem);
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  position: relative;
+  margin: 2% 5%;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const SearchContainer = styled.div`
+   margin-bottom: 3%;
+`;
+
+const SidebarContainer = styled.div`
+  /* 사이드바 스타일을 추가할 수 있습니다 */
+`;
+
+const TableContainer = styled.div`
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+`;
 
 const Labelling = () => {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: 'calc(100vh - 4.625rem)',
-        overflowY: 'auto',  // Labelling.js 전체에 스크롤 적용
-      }}
-    >
-      
-      <Box
-        sx={{
-          position: 'sticky',  // SearchComponent를 고정
-          top: 20,
-          flexShrink: 0,
-          zIndex: 1000, 
-        }}
-      >
-        <SearchComponent />
-      </Box>
-
-      {/* 사이드바와 테이블을 배치하는 영역 */}
-      <Box sx={{ display: 'flex', flexGrow: 1, overflowX: 'hidden' }}>
-        
-        {/* 사이드바 영역 - 왼쪽에 고정 */}
-        <Box >
+    <LabellingContainer>
+      <SidebarContainer>
           <CustomTreeView />
-        </Box>
+      </SidebarContainer>
 
-        {/* 테이블 영역 - 중앙 정렬 및 좌우 스크롤 활성화 */}
-        <Box sx={{ 
-          flexGrow: 1, 
-          marginLeft: '2rem', 
-          marginTop: '8rem',
-          display: 'flex', 
-          justifyContent: 'center',  // 수평 가운데 정렬
-          overflowY: 'auto',
-        }}>
-          <Box sx={{ minWidth: '100%'}}> {/* 테이블 크기 설정으로 스크롤 유도 */}
+      <ContentContainer>
+        <SearchContainer>
+          <SearchComponent/>
+        </SearchContainer>
+
+        <TableContainer>
             <DataGridDemo />
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+        </TableContainer>
+      </ContentContainer>
+    </LabellingContainer>
   );
 };
 

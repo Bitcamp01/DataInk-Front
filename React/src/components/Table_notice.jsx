@@ -5,6 +5,10 @@ import  '../css/table.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+
+
+
+
 const columns = [
   { field: 'id',
     headerName: 'No',
@@ -63,7 +67,7 @@ const rows = [
   { id: 10, name: 'Roxie', department: 'Harvey', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
 ];
 
-export default function Table_memberListAll() {
+export default function Table_Notice() {
   return (
     <div style={{ width: '100%' }}>
     <Box sx={{ width: '100%',  maxWidth: '1300px', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
@@ -73,8 +77,9 @@ export default function Table_memberListAll() {
         rowHeight={40} 
         headerHeight={50}
         sx={{
-          fontFamily: 'Pretendard, Noto-sans KR',  
+          fontFamily: 'Pretendard, sans-serif',  
         }}
+        // 이것도 안먹음?? 왜??? 
         autoHeight
         disableRowSelectionOnClick
         hideFooter
@@ -92,12 +97,7 @@ export default function Table_memberListAll() {
             <Pagination count={10} color="primary" />
         </Stack>
     </div>
-
-
-    
     </div>
-
-    
 
     );
 }

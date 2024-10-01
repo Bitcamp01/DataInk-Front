@@ -4,7 +4,7 @@ import WorkItem from './WorkItem';
 import { useTodoState } from './TodoContext';
 
 const WorkInListBlock = styled.div`
-  padding-left: 35px;
+  padding-left: 20px;
   padding-bottom: 20px;
   flex: 1;
   overflow-y: auto; // 스크롤이 생기도록 설정

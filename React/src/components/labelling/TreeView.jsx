@@ -4,6 +4,14 @@ import '../../css/tree-view.css';
 
 const TreeView = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isVisible, setIsVisible] = useState(true);
+  const [isRotated, setIsRotated] = useState(false);
+
+  // 버튼 클릭 시 토글
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+    setIsRotated(!isRotated);
+  };
 
   const ITEMS = [
     {
@@ -50,20 +58,38 @@ const TreeView = () => {
   };
 
   return (
-    <div className="tree-container">
-      <div className="search-bar">
-        <img src={`/icons/label-search_icon.svg`} alt="Label Search Icon" className="label-search-icon" />
-        <input 
-          type="text" 
-          placeholder="Search" 
-          value={searchTerm} 
-          onChange={handleSearch} 
-          className="search-input"
+    <div
+      className="tree-container"
+      style={{
+        width: isVisible ? '15.6rem' : '0', // isVisible에 따라 width 제어
+      }}
+    >
+      {/* search-bar와 RichTreeView가 isVisible 값에 따라 렌더링 */}
+      {isVisible && (
+        <>
+          <div className="search-bar">
+            <img src={`/icons/label-search_icon.svg`} alt="Label Search Icon" className="label-search-icon" />
+            <input 
+              type="text" 
+              placeholder="Search" 
+              value={searchTerm} 
+              onChange={handleSearch} 
+              className="search-input"
+            />
+          </div>
+          <RichTreeView items={ITEMS} />
+        </>
+      )}
+
+      {/* 버튼을 누르면 가시성을 토글 */}
+      <button className="side-button" onClick={toggleVisibility}>
+        <img 
+          src="/icons/back_icon.svg" 
+          alt="Side Button"
+          style={{
+            transform: isRotated ? 'rotate(180deg)' : 'rotate(0deg)', // 클릭에 따라 회전 상태를 변경
+          }}
         />
-      </div>
-      <RichTreeView items={ITEMS} />
-      <button className="side-button">
-        <img src="/icons/back_icon.svg" alt="Side Button" />
       </button>
     </div>
   );
