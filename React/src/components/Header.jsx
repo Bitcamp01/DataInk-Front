@@ -1,24 +1,45 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 페이지 이동을 위한 훅
-import '../css/header.css'; // 헤더 전용 CSS 파일
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../css/header.css';
 
 function Header() {
     const [showNotifications, setShowNotifications] = useState(false);
-    const navi = useNavigate(); // 페이지 이동을 위한 설정
+    const navigate = useNavigate();
 
-    // 알람 드롭다운 열고 닫기
     const toggleNotifications = () => {
         setShowNotifications(!showNotifications);
     };
 
-    // "more" 클릭 시 알람 페이지로 이동
+    // 알림 외의 영역 클릭 시 알림 닫기
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!document.querySelector('.header__icon-wrapper').contains(event.target)) {
+                setShowNotifications(false);
+            }
+        };
+
+        // 이벤트 리스너 추가
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // 컴포넌트 언마운트 시 이벤트 리스너 제거
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // "뒤로가기" 버튼 클릭 시 이전 페이지로 이동
+    const handleBackClick = () => {
+      navigate(-1); // 뒤로가기
+  };
+
+    // "더 보기" 클릭 시 알림창 닫기 및 페이지 이동
     const handleMoreClick = () => {
-       navi('/mypage'); // '/mypage' 라우트로 이동
+        setShowNotifications(false); // 알림창 닫기
+        navigate('/mypage'); // 페이지 이동
     };
 
     return (
         <header className="header">
-            <div className="header__back-icon">
+            <div className="header__back-icon" onClick={handleBackClick}>
                 <img src="/icons/back_icon.svg" alt="뒤로가기" />
             </div>
             <div className="header__title">Data Labeling</div>
@@ -33,31 +54,30 @@ function Header() {
                         src="/icons/alert_icon.svg" 
                         alt="알람" 
                         className="header__icon header__icon--alert" 
-                        onClick={toggleNotifications} // 클릭 시 알람 드롭다운 토글
+                        onClick={toggleNotifications} 
                     />
-                    {/* 알람 드롭다운 */}
                     {showNotifications && (
                         <div className="notification-dropdown">
                             <div className="notification-dropdown__header">알림</div>
                             <div className="notification-dropdown__content">
-                            <div className="notification-item">
-                                <img src="/images/profile_img.png" alt="프로필" className="notification-item__profile" />
-                                <div className="notification-item__content">
-                                    <p>분류번호 002 작업에 배정되었습니다. 지금 바로 확인해보세요.</p>
-                                    <small>방금 전</small>
+                                <div className="notification-item">
+                                    <img src="/images/profile_img.png" alt="프로필" className="notification-item__profile" />
+                                    <div className="notification-item__content">
+                                        <p>분류번호 002 작업에 배정되었습니다. 지금 바로 확인해보세요.</p>
+                                        <small>방금 전</small>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="notification-item">
-                                <img src="/images/profile_img.png" alt="프로필" className="notification-item__profile" />
-                                <div className="notification-item__content">
-                                  <p>분류번호 001 작업 마감이 <strong>2일</strong> 남았습니다.</p>
-                                  <small>2시간 전</small>
+                                <div className="notification-item">
+                                    <img src="/images/profile_img.png" alt="프로필" className="notification-item__profile" />
+                                    <div className="notification-item__content">
+                                        <p>분류번호 001 작업 마감이 <strong>2일</strong> 남았습니다.</p>
+                                        <small>2시간 전</small>
+                                    </div>
                                 </div>
+                                <button onClick={handleMoreClick} className="notification-dropdown__more">
+                                    더 보기
+                                </button>
                             </div>
-                            <button onClick={handleMoreClick} className="notification-dropdown__more">
-                                더 보기
-                            </button>
-                          </div>
                         </div>
                     )}
                 </div>

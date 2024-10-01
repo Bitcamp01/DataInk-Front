@@ -19,6 +19,7 @@
     transform: translateY(-50%);
     width: 1.75rem;
     height: 1.75rem;
+    cursor: pointer;
 }
 
 .header__title {
@@ -66,6 +67,7 @@
     width: 1.6rem;
     height: 1.6rem;
     object-fit: contain;
+    cursor: pointer;
 }
 
 .header__icon--profile {
@@ -117,14 +119,16 @@
 }
 
 .notification-item__profile {
-    width: 40px; /* 프로필 사진 크기 */
-    height: 40px;
+    width: 2.2rem; /* 프로필 사진 크기 */
+    height: 2.2rem;
     border-radius: 50%; /* 원형으로 만들기 */
-    margin-right: 10px; /* 내용과 사진 사이에 간격 추가 */
+    margin-right: 0.8rem; /* 내용과 사진 사이에 간격 추가 */
 }
 
 .notification-item__content {
     flex-grow: 1; /* 내용이 가로로 확장되도록 */
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .notification-item small {
@@ -138,6 +142,7 @@
     background: none;
     border: none;
     text-align: center;
-    color: blue;
+    color: #3e3e3e;
     cursor: pointer;
+    text-decoration: underline; /* 밑줄 추가 */
 }
