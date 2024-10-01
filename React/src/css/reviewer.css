@@ -206,24 +206,26 @@
     align-items: center;
 }
 
+.profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 20px 0 2.25rem; /* Left margin increased to 1rem */
+}
+
 .profile-section {
     display: flex;
     align-items: center;
     margin-bottom: 30px;
     margin-top: 10px;
-}
-
-.profile-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-right: 20px;
+    gap: 1.75rem; /* Add gap of 3rem between profile-image and profile-details */
 }
 
 .report-section {
-    background-color: #dedede; /* 배경을 흰색으로 */
+    background-color: #f6f6f6; /* 배경을 흰색으로 */
     border-radius: 0.5rem; /* 모서리를 살짝 둥글게 */
     padding: 2rem 1.5rem; /* 상하좌우 여백을 rem으로 추가 */
+    margin-left: 2rem;
     margin-bottom: 2rem; /* 아래쪽 여백 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
 }

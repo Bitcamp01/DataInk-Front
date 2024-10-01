@@ -14,18 +14,20 @@ const ReviewModal = ({ isOpen, onClose }) => {
                 <div className="profile-section">
                     <img src={`${process.env.PUBLIC_URL}/images/profile_img.png`} alt="Profile" className="profile-image" />
                     <div className="profile-details">
-                        <p><strong class="modal-labelingname">고기천</strong>님의 작업입니다</p>
-                        <p>AI Clova | 인턴 (라벨러)</p>
-                        <p>참여중인 작업: 5건</p>
-                        <p>완료한 작업: 12503건</p>
+                        <p style={{ margin: '0 0 1rem 0' }}>
+                            <strong className="modal-labelingname">고기천</strong>님의 작업입니다
+                        </p>
+                        <p style={{ margin: '0.5rem 0' }}>AI Clova | 인턴 (라벨러)</p>
+                        <p style={{ margin: '0.5rem 0' }}>참여중인 작업: 5건</p>
+                        <p style={{ margin: '0.5rem 0' }}>완료한 작업: 12503건</p>
                     </div>
                 </div>
                 <div className="report-section">
-                    <h4>작업 특이사항</h4>
-                    <p>페이지 수: 5 페이지</p>
-                    <p>작업 소요시간: 0.38시간</p>
-                    <p>반려 횟수: 0회</p>
-                    <textarea placeholder="특이사항을 입력하세요" rows="5" class="feedbackarea"></textarea>
+                    <h4 style={{ color: '#7C97FE', margin: '0.5rem 0' }}>작업 특이사항</h4>
+                    <p style={{ margin: '0.5rem 0' }}>페이지 수: 5 페이지</p>
+                    <p style={{ margin: '0.5rem 0' }}>작업 소요시간: 0.38시간</p>
+                    <p style={{ margin: '0.5rem 0' }}>반려 횟수: 0회</p>
+                    <textarea placeholder="특이사항을 입력하세요" rows="5" className="feedbackarea"></textarea>
                 </div>
                 <div className="modal-footer">
                     <button className="approve-button">승인</button>
