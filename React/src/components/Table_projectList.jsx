@@ -43,27 +43,11 @@ export default function Table_projectList() {
   };
 
   const columns = React.useMemo (()=> [
-    { field: 'id', 
-      headerName: 'No',
-      width: 60, headerClassName: 'no-column-header', 
-      cellClassName: 'no-column-cell', 
-      resizable: false },
-
-    { field: 'project_name', 
-      headerName: '프로젝트 이름',
-       width: 200 },
-
-    { field: 'description', 
-      headerName: '프로젝트 설명', 
-      width: 300 },
-
-    { field: 'regdate', 
-      headerName: '프로젝트 생성일', 
-      width: 150 },
-
-    { field: 'member', 
-      headerName: '프로젝트 참여자', 
-      width: 300 },
+    { field: 'id', headerName: 'No', flex: 60 / 1160 },  // 약 0.052
+  { field: 'project_name', headerName: '프로젝트 이름', flex: 200 / 1160 },  // 약 0.172
+  { field: 'description', headerName: '프로젝트 설명', flex: 400 / 1160 },  // 약 0.345
+  { field: 'regdate', headerName: '프로젝트 생성일', flex: 150 / 1160 },  // 약 0.129
+  { field: 'member', headerName: '프로젝트 참여자', flex: 350 / 1160 },  // 약 0.302
 
     {
       field: 'actions',
@@ -84,21 +68,27 @@ export default function Table_projectList() {
   ],[]);
 
   return (
-    <div style={{ width: '100%' }}>
-    <Box sx={{ width: '100%',  maxWidth: '1135px', minWidth:'1135px', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+    <div style={{ width: '70%' }}>
+    <Box sx={{
+       maxWidth: '100%', 
+       minWidth:'1135px', 
+       marginBottom: '39px', 
+       boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+
       <DataGrid
         rows={rows}
         columns={columns} 
         rowHeight={40} 
         headerHeight={50}
         sx={{
+          background:'white',
           fontFamily: 'Pretendard, Noto-sans KR',  
-          '& .MuiDataGrid-columnHeaders': {//컬럼 헤더의 폰트 설정               
+          '& .MuiDataGrid-columnHeaders': {           
             color: '#7C97FE',  
             fontWeight: 'bold',  
           },
           '& .MuiDataGrid-columnSeparator': {
-            display: 'none',  // 컬럼 헤더의 분리선 제거 
+            display: 'none',  
           }, 
         }}
         autoHeight
@@ -111,13 +101,6 @@ export default function Table_projectList() {
       />
     </Box>
 
-
-    {/* 페이지네이션 */}
-    <div className="pagination-container">
-        <Stack spacing={2} sx={{ marginBottom: '80px' }}>
-            <Pagination count={10} color="primary" />
-        </Stack>
-    </div>
 
       {/* 프로젝트 편집 모달창 */}
       {open && (

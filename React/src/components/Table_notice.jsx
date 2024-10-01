@@ -4,46 +4,12 @@ import { DataGrid } from '@mui/x-data-grid';
 import  '../css/table.css';
 
 
-
-
-
-
 const columns = [
-  { field: 'id',
-    headerName: 'No',
-    width: 90,
-    headerClassName: 'no-column-header', 
-    cellClassName: 'no-column-cell', 
-    resizable: false,
-    
-   },
- 
-  {
-    field: 'title',
-    headerName: '제목',
-    width:580,
-   
-  },
-  {
-    field: 'writer',
-    headerName: '작성자',
-    width: 140,
-  },
-
-  {
-    field: 'department',
-    headerName: '소속(부서)',
-    width: 140,
-    
-  },
-  
-
-  {
-    field: 'regdate',
-    headerName: '작성일',
-    width: 150,
-    resizable: false,
-  },
+  { field: 'id', headerName: 'No', flex: 90 / 1100 }, 
+  { field: 'title', headerName: '제목', flex: 580 / 1100 },  
+  { field: 'writer', headerName: '작성자', flex: 140 / 1100 }, 
+  { field: 'department', headerName: '소속(부서)', flex: 140 / 1100 },  
+  { field: 'regdate', headerName: '작성일', flex: 150 / 1100 },  
 ];
 
 const rows = [
@@ -61,17 +27,22 @@ const rows = [
   
 export default function Table_Notice() {
   return (
-    <div style={{ width: '100%' }}>
-    <Box sx={{ width: '100%',  maxWidth: '1135px', minWidth:'1135px', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+    <div style={{ width: '70%' }}>
+    <Box sx={{ width: '100%',  
+      minWidth:'1135px', 
+      marginBottom: '39px', 
+      boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+
       <DataGrid
         rows={rows}
         columns={columns}
         rowHeight={40} 
         headerHeight={50}
         sx={{
+          backgroundColor:'white',
           fontFamily: 'Pretendard, NotoSansKR', 
           '& .MuiDataGrid-columnSeparator': {
-            display: 'none',  // 컬럼 헤더의 분리선 제거 
+            display: 'none',  
           },  
         }}
         autoHeight

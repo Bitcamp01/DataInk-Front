@@ -7,6 +7,8 @@
 padding-left: 20px !important; 
 }
 
+
+
 /* 텍스트 컬러 */
 .custom-cell {
     color: #3e3e3e; 
@@ -15,15 +17,6 @@ padding-left: 20px !important;
 .custom-header {
     color: #7785BE;
     font-weight: bolder !important ; 
-    /* 두께가 안먹음 ㅠㅠ 왜지? */
   }
 
-  /* 페이지네이션 */
 
-.pagination-container {
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    width: 100%; 
-    margin-top: 20px; 
-  }
