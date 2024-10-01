@@ -195,7 +195,7 @@
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 700px;
+    width: 750px;
     max-width: 90%; /* 화면이 너무 작을 경우 최대 90% 너비 제한 */
 }
 
@@ -215,7 +215,7 @@
 .profile-section {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     margin-top: 10px;
     gap: 1.75rem; /* Add gap of 3rem between profile-image and profile-details */
 }
@@ -225,6 +225,7 @@
     border-radius: 0.5rem; /* 모서리를 살짝 둥글게 */
     padding: 2rem 1.5rem; /* 상하좌우 여백을 rem으로 추가 */
     margin-left: 2rem;
+    margin-right: 2rem;
     margin-bottom: 2rem; /* 아래쪽 여백 */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
 }
@@ -238,7 +239,7 @@
 
 .modal-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     margin-top: 2rem; /* 상단에 여백 추가 */
 }
 
@@ -248,6 +249,8 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
+    width: 100%; /* 버튼 폭을 review-submit-container 폭에 맞춤 */
+    max-width: 10rem; /* 버튼의 최대 너비 설정 */
 }
 
 .modal-labelingname{
