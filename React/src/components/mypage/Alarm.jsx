@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField, Select, MenuItem, InputLabel, FormControl  } from '@mui/material';
+import { Box, TextField, Select, MenuItem, InputLabel, FormControl, createTheme  } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -55,6 +55,7 @@ const rows = [
     { id: 3, category: '작업공지', content: '네트워크 개선 작업 안내', level: 'info', time: '2024-09-10 23:00', status: '읽음' },
     { id: 4, category: '작업공지', content: '네트워크 개선 작업 안내', level: 'info', time: '2024-09-10 23:00', status: '읽지않음' },
 ];
+
     return (
         <div id="Alarm" className="tab-content">
         <h3>알림</h3>
@@ -63,13 +64,32 @@ const rows = [
             {/* 카테고리 필터 */}
             <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth size="small">
-                    <InputLabel className="alarm__filter-group">카테고리</InputLabel>
+                    <InputLabel className="alarm__filter-group"
+                    sx={{
+                        color: "#7785BE", // 라벨 폰트 색상
+                      }}
+                    >카테고리</InputLabel>
                     <Select 
                         className="alarm__filter-select"
                         value={category}
                         label="카테고리"
                         onChange={handleCategoryChange} // 변경 핸들러 추가
                         variant="outlined"
+                        sx={{
+                            color: "#7785BE", // 선택된 값의 폰트 색깔 변경
+                            ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // Select의 외곽선 색깔 변경
+                            },
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // 호버 시 외곽선 색깔 변경
+                            },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // 포커스된 상태에서의 외곽선 색상
+                            },
+                            ".MuiSelect-icon": {
+                                color: "#7785BE", // 드롭다운 아이콘의 색상 변경
+                            },
+                          }}
                     >
                         <MenuItem value=""></MenuItem>
                         <MenuItem value="all">전체</MenuItem>
@@ -85,13 +105,32 @@ const rows = [
             {/* 기간 필터 */}
             <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth size="small">
-                    <InputLabel className="alarm__filter-group">기간</InputLabel>
+                    <InputLabel className="alarm__filter-group"
+                    sx={{
+                        color: "#7785BE", // 라벨 폰트 색상
+                      }}
+                    >기간</InputLabel>
                     <Select
                         className="alarm__filter-select"
                         value={period}
                         label="period"
                         onChange={handlePeriodChange}
                         variant="outlined"
+                        sx={{
+                            color: "#7785BE", // 선택된 값의 폰트 색깔 변경
+                            ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // Select의 외곽선 색깔 변경
+                            },
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // 호버 시 외곽선 색깔 변경
+                            },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // 포커스된 상태에서의 외곽선 색상
+                            },
+                            ".MuiSelect-icon": {
+                                color: "#7785BE", // 드롭다운 아이콘의 색상 변경
+                            },
+                          }}
                     >
                         <MenuItem value=""></MenuItem>
                         <MenuItem value="all">기간전체</MenuItem>
@@ -157,13 +196,32 @@ const rows = [
              {/* 읽음 여부 필터 */}
             <Box sx={{ minWidth: 120 }}>
                 <FormControl fullWidth size="small">
-                    <InputLabel id="alarm__filter-group">읽음 여부</InputLabel>
+                    <InputLabel id="alarm__filter-group"
+                    sx={{
+                        color: "#7785BE", // 라벨 폰트 색상
+                      }}
+                    >읽음 여부</InputLabel>
                     <Select
                         labelId="alarm__filter-select"
                         value={status}
                         label="읽음 여부"
                         onChange={handleStatusChange}
                         variant="outlined"
+                        sx={{
+                            color: "#7785BE", // 선택된 값의 폰트 색깔 변경
+                            ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // Select의 외곽선 색깔 변경
+                            },
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // 호버 시 외곽선 색깔 변경
+                            },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#7785BE", // 포커스된 상태에서의 외곽선 색상
+                            },
+                            ".MuiSelect-icon": {
+                                color: "#7785BE", // 드롭다운 아이콘의 색상 변경
+                            },
+                          }}
                     >
                         <MenuItem value=""></MenuItem>
                         <MenuItem value="all">읽음 여부</MenuItem>
