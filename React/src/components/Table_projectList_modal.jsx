@@ -12,11 +12,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';  
 import CloseIcon from '@mui/icons-material/Close'; 
+import '../css/scrollbar.css';
 
 const columns = [
-  { field: 'id', headerName: '이름', width: 90, resizable: false  },
-  { field: 'department', headerName: '소속(부서)', width: 100 },
-  { field: 'role', headerName: '역할', width: 80},
+  { field: 'id', headerName: '이름', width: 120, resizable: false  },
+  { field: 'department', headerName: '소속(부서)', width: 150 },
+  { field: 'role', headerName: '역할', width: 150},
 ];
 
 const allMembersRows = [
@@ -44,14 +45,21 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   const [selectedAllMembers, setSelectedAllMembers] = React.useState([]);
   const [projectMembers, setProjectMembers] = React.useState([]);
 
+  //'전체 멤버'에서 선택된 멤버를 '프로젝트 참여 멤버'로 추가
   const handleAddMembers = () => {
     const newMembers = allMembersRows.filter((row) =>
-      selectedAllMembers.includes(row.id)
+      selectedAllMembers.includes(row.id) 
     );
+
+    const filteredNewMembers = newMembers.filter(
+      (newMember) => !projectMembers.some((projectMember) => projectMember.id === newMember.id)
+    );
+
     setProjectMembers((prev) => [...prev, ...newMembers]);
     setSelectedAllMembers([]);
   };
 
+  //'프로젝트 참여 멤버'에서 선택된 멤버 제거
   const handleRemoveMembers = () => {
     const remainingMembers = projectMembers.filter(
       (member) => !selectedAllMembers.includes(member.id)
@@ -60,60 +68,70 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     setSelectedAllMembers([]);
   };
 
+
   return (
-    <Dialog open={open} onClose={onClose}  sx={{ '& .MuiDialog-paper': { borderRadius:'10px',backgroundColor:'#f6f6f6', width: '80%', maxWidth: '1200px' ,padding: '0px 50px 30px 50px'} }}>
-       <IconButton
-            aria-label="close"
-            onClick={handleClose}  // X 버튼을 클릭하면 모달 닫기
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],  // X 버튼 색상
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
+
+
+  <Dialog open={open} onClose={onClose} 
+    sx={{ '& .MuiDialog-paper': { 
+      borderRadius:'10px',
+      backgroundColor:'#f6f6f6', 
+      maxWidth: '1400px' ,
+      padding: '0px 50px 30px 50px'} }}>
+
+       {/* 닫기버튼 */}
+      <IconButton
+          aria-label="close"
+          onClick={onClose}  
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],  // X 버튼 색상
+          }}
+        >
+          <CloseIcon />
+      </IconButton>
 
       <DialogContent sx={{ overflow: 'hidden' }}>
-        <Box sx={{ width: '100%', padding: '20px', height:'100%' }} >
+        <Box sx={{ width: '100%', padding: '20px',}} >
           <Grid container spacing={2}>
             <Grid item xs={5}>
               <h2 style={{color:'#3e3e3e', marginTop:'30px'}}>전체 멤버</h2>
-              <p style={{ marginBottom: '30px', marginTop: '15px', display: 'block', color:'#3e3e3e' }}>프로젝트에 참여시킬 멤버를 선택 후, 화살표 아이콘을 눌러 해당 프로젝트에 참여해주세요.</p>
+              <p style={{ marginBottom: '30px', marginTop: '15px', display: 'block', color:'#3e3e3e' }}>
+                프로젝트에 참여시킬 멤버를 선택 후, 화살표 아이콘을 눌러 해당 프로젝트에 참여해주세요.</p>
               <Box
                 sx={{
-                  height: 700,
+                  height: '540px',
                   overflow: 'hidden',  
-                  border: '0.2px solid #d2d2d2', 
-                  borderRadius: '10px',  // 모서리 둥글게
-                  backgroundColor: 'white',
+                  border: 'transparent', 
+                  borderRadius: '10px',  
+                  minWidth: '200px',
+                  width: '100%', 
+                  maxWidth: '100%',
+                  overflowY: 'auto', 
+        
                 }}
               >        
-                <Box
-                  sx={{
-                    height: '100%',  // 내부에서 스크롤을 적용
-                    overflowY: 'auto',
-                    '&::-webkit-scrollbar': {
-                    width: '8px',  // 스크롤바 너비 설정
-                    height: '2px',
-                    backgroundColor: '#f0f0f0',  // 스크롤 트랙 색상 (배경색)
-                    }
-                  }}
-                >
+                
                       
               <DataGrid
                 rows={allMembersRows}
                 columns={columns}
                 checkboxSelection
-                pageSize={5}
-                rowsPerPageOptions={[5]}
                 sx={{
+                  height:'100%',
                   fontFamily:'Pretendard',
                   color:'#3e3e3e',
-                  backgroundColor:'white',     
-                }}
-                autoHeight
+                  backgroundColor:'white',    
+                  '& .MuiDataGrid-columnHeaders': {//컬럼 헤더의 폰트 설정               
+                    color: '#7C97FE',  
+                    fontWeight: 'bold',  
+                  },
+                  '& .MuiDataGrid-columnSeparator': {
+                    display: 'none',  // 컬럼 헤더의 분리선 제거 
+                  }, 
+                }}            
                 hideFooterPagination 
                 hideFooter
                 onSelectionModelChange={(newSelection) => {
@@ -122,42 +140,110 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 selectionModel={selectedAllMembers}
               />
                 </Box>
-              </Box>
+              
             </Grid>
 
-            <Grid item xs={2} container alignItems="center" justifyContent="center">
-              <Stack spacing={2}>
-                <Button
-                  variant="contained"
-                  onClick={handleAddMembers}
-                  disabled={selectedAllMembers.length === 0}
-                >
-                  <ArrowForwardIcon />
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={handleRemoveMembers}
-                  disabled={selectedAllMembers.length === 0}
-                >
-                  <ArrowBackIcon />
-                </Button>
-              </Stack>
-            </Grid>
+
+            <Grid item xs={2} container alignItems="center" justifyContent="center" sx={{padding: '0px'}}>
+            <Stack spacing={2} direction="column" alignItems="center" sx={{ marginTop: '100px' }}>
+                  {/* 오른쪽 세모버튼 */}          
+                  <Button
+                    onClick={() => console.log('위쪽 화살표 클릭됨')}
+                    sx={{
+                      minWidth: 'auto',
+                      padding: 0, // 패딩을 제거하여 이미지 크기만큼 버튼이 나타나게  
+                      backgroundColor: 'transparent', // 버튼 배경색 제거
+                      '&:hover': {
+                        backgroundColor: 'transparent', // 호버 시 배경색 유지
+                      },
+                    }}
+                  >
+                    <img
+                      src="../../icons/button_arrow_right_icon.svg" 
+                      alt="왼쪽 화살표"
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                      }}
+                    />
+                  </Button>
+                     
+                    
+                  {/* 왼쪽 세모 버튼 */}
+                  <Button
+                    onClick={() => console.log('아래쪽 화살표 클릭됨')}
+                    sx={{
+                      padding: 0,
+                      minWidth: 'auto',
+                      backgroundColor: 'transparent',
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <img
+                      src="/icons/button_arrow_left_icon.svg"  
+                      alt="아래쪽 화살표"
+                      style={{
+                        width: '40px',
+                        height: '40px',
+                      }}
+                    />
+                  </Button>
+                </Stack>
+              </Grid>
+
 
             <Grid item xs={5}>
               <h2 style={{color:'#3e3e3e', marginTop: '30px'}}>프로젝트 참여 멤버</h2>
-              <p style={{ marginBottom: '30px', marginTop: '15px', display: 'block', color:'#3e3e3e' }}>프로젝트에서 제외할 멤버를 선택 후, 화살표 아이콘을 눌러 해당 프로젝트에서 제외해주세요.</p>
+              <p style={{ marginBottom: '30px', marginTop: '15px', display: 'block', color:'#3e3e3e' }}>
+                프로젝트에서 제외할 멤버를 선택 후, 화살표 아이콘을 눌러 해당 프로젝트에서 제외해주세요.</p>
+                <Box 
+                className="custom-scrollbar"
+                sx={{
+                  height: '540px',
+                  overflow: 'hidden',  
+                  border: 'transparent', 
+                  borderRadius: '10px',  
+                  minWidth: '200px',
+                  width: '100%', 
+                  maxWidth: '100%',
+                  overflowY: 'auto', 
+                  '&::-webkit-scrollbar': {
+                    width: '8px',  // 스크롤바 너비 설정
+                    height: '2px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#eef0f6',  // 스크롤 트랙 색상
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    borderRadius: '10px', 
+                    backgroundColor: '#7C97FE',  // 스크롤바 손잡이 색상
+                  },
+                  '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#5A7ECF',  // 호버 시 손잡이 색상 변경
+                  }       
+                }}
+              >    
+       
               <DataGrid
                 rows={projectMembers}
                 columns={columns}
                 checkboxSelection
                 pageSize={5}
                 rowsPerPageOptions={[5]}
-                autoHeight
                 sx={{
+                  height: '100%',
                   fontFamily:'Pretendard',
                   backgroundColor:'white',
-                  borderRadius:'10px'
+                  borderRadius:'10px',
+                  '& .MuiDataGrid-columnHeaders': {//컬럼 헤더의 폰트 설정               
+                    color: '#7C97FE',  
+                    fontWeight: 'bold',  
+                  },
+                  '& .MuiDataGrid-columnSeparator': {
+                    display: 'none',  // 컬럼 헤더의 분리선 제거 
+                  }, 
                 }}
                 hideFooter
                 hideFooterPagination 
@@ -166,12 +252,18 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 }}
                 selectionModel={selectedAllMembers}
               />
+              </Box>
             </Grid>
           </Grid>
+          
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained"  sx={{ margin: '30px 20px 5px 30px', width:'130px', fontFamily:'Pretendard', color: 'white',backgroundColor: '#7C97FE', '&:hover': { backgroundColor: '#5A7ECF' } }}>
+        <Button variant="contained"  
+        sx={{ margin: '20px 35px 5px 70px', 
+        width:'130px', fontFamily:'Pretendard', 
+        color: 'white',backgroundColor: '#7C97FE',
+        '&:hover': { backgroundColor: '#5A7ECF' } }}>
           저장
         </Button>
       </DialogActions>
