@@ -157,7 +157,6 @@
 .review-submit-container button.reject-button {
     background-color: #f8f9fa;
     color: #7C97FE;
-    border: 2px solid black; /* 검은색 테두리 */
     border-radius: 4px;
 }
 
@@ -295,10 +294,12 @@
 }
 
 .review-detail {
-    width: 40rem;
+    width: 30rem;
 }
 
-
+.review-detail.selected {
+    background-color: #b4d4b2; /* 초록색 배경 */
+}
 
 
 
