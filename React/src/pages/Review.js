@@ -1,28 +1,3 @@
-// import React from 'react';
-// import PdfViewer from './PdfViewer';
-// import SelectForm from './SelectForm'; 
-// import ReviewerTable from './ReviewerTable';
-
-// const Review = () => {
-//     return (
-//         <section className="content">
-//             <div className="pdf-section">
-//                 <PdfViewer />
-//             </div>
-//             <div className="work-space">
-//                 <div className="container">
-//                     <ReviewerTable />
-//                     <SelectForm />
-//                 </div>
-//             </div>
-//         </section>
-//     );
-// };
-
-// export default Review;
-
-
-
 import React from 'react';
 import PdfViewer from '../components/PdfViewer'; // PDF 뷰어 컴포넌트
 import SelectForm from '../components/SelectForm'; // SelectForm 컴포넌트
