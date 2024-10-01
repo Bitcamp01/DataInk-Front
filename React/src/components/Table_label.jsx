@@ -31,23 +31,33 @@ const rows = [
 
 export default function DataGridDemo() {
   return (
-    <div className="main-content">
-      <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)' }}>
+    <div style={{ width: '100%' }}>
+      <Box sx={{ width: '100%',  maxWidth: '1300px', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
         <DataGrid
           rows={rows}
           columns={columns}
           rowHeight={40} 
           headerHeight={50}
+          sx={{
+            fontFamily: 'Pretendard, Noto-sans KR',  
+          }}
           autoHeight
           disableRowSelectionOnClick
           hideFooter
+          classes={{
+              cell: 'custom-cell', 
+              columnHeader: 'custom-header', 
+            }}
         />
       </Box>
+
+
+      {/* 페이지네이션 */}
       <div className="pagination-container">
-        <Stack spacing={2} sx={{ marginBottom: '80px' }}>
-          <Pagination count={10} color="primary" />
-        </Stack>
-      </div>
+          <Stack spacing={2} sx={{ marginBottom: '80px' }}>
+              <Pagination count={10} color="primary" />
+          </Stack>
+      </div>    
     </div>
 
     );
