@@ -17,7 +17,7 @@
 }
 
 .profileCard {
-    width: 254px;
+    width: 235px;
     height: 421px;
     background: white;
     border-radius: 10px;
@@ -47,7 +47,7 @@
 
 .roleInfo {
     display: flex;
-    margin-left: 35px;
+    margin-left: 30px;
 }
 
 .Affiliation {
@@ -67,6 +67,7 @@
     width: 220px;
     height: 100px;
     margin-left: 6px;
+    margin-right: 6px;
     margin-top: 20px;
 }
 

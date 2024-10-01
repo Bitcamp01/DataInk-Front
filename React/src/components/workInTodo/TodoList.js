@@ -19,7 +19,8 @@ const TodoListBlock = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-      background: white;
+      background:
+       white;
   }
 `;
 
