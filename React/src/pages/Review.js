@@ -30,12 +30,14 @@ import ReviewerTable from '../components/ReviewerTable'; // ReviewerTable 컴포
 import '../css/reviewer.css';
 
 const Review = () => {
-    const pdfFilePath = 'D:/%%%  private  %%%/개인문서/SQLD합격증.pdf'; // 여기에 PDF 파일 경로를 설정합니다. 지금은 제 폴더 경로 적은거
+    // const pdfFilePath = 'D:/%%%  private  %%%/개인문서/SQLD합격증.pdf'; // 여기에 PDF 파일 경로를 설정합니다. 근데 절대경로를 곁들인
 
     return (
         <section className="content">
             <div className="pdf-section">
-                <PdfViewer fileUrl={pdfFilePath} />
+                <PdfViewer/>
+                {/* <PdfViewer fileUrl={pdfFilePath} /> */}
+                {/* 후자로 할 경우 이 형식으로 해야 함 */}
             </div>
             <div className="work-space">
                 <div className="container">
