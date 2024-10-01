@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../css/sidebar.css'; // CSS 파일 연결
+import { Link } from 'react-router-dom';
 
 function Sidebar() {
   const [isSidebarOpen, setSidebarOpen] = useState(false); // extra-sidebar의 열림 상태 관리
@@ -41,12 +42,12 @@ function Sidebar() {
 
       {/* extra-sidebar */}
       <aside className={`extra-sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <div className="extra-sidebar__menu">
-          <a href="/main" className="extra-sidebar__link">대시보드(Home)</a>
-          <a href="/data" className="extra-sidebar__link">데이터라벨링</a>
-          <a href="/member" className="extra-sidebar__link">멤버관리</a>
-          <a href="/" className="extra-sidebar__link">공지사항</a>
-        </div>
+          <div className="extra-sidebar__menu">
+              <Link to="/dashboard" className="extra-sidebar__link">대시보드(Home)</Link>
+              <Link to="/label" className="extra-sidebar__link">데이터라벨링</Link>
+              <Link to="/member" className="extra-sidebar__link">멤버관리</Link>
+              <Link to="/notice" className="extra-sidebar__link">공지사항</Link>
+          </div>
       </aside>
     </div>
   );
