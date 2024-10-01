@@ -2,52 +2,15 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import  '../css/table.css';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 
 const columns = [
-  { field: 'id',
-    headerName: 'No',
-    width: 60,
-    headerClassName: 'no-column-header', 
-    cellClassName: 'no-column-cell', 
-    resizable: false,
-    
-   },
- 
-  {
-    field: 'name',
-    headerName: '이름',
-    width: 150,
-   
-  },
-  {
-    field: 'department',
-    headerName: '소속(부서)',
-    width: 150,
-    
-  },
-  {
-    field: 'email',
-    headerName: '이메일',
-    width: 270,
-  },
-  {
-    field: 'tel',
-    headerName: '전화번호',
-    width: 190,
-  },
-  {
-    field: 'role',
-    headerName: '역할',
-    width: 130,
-  },
-  {
-    field: 'regdate',
-    headerName: '등록일',
-    width: 170,
-    resizable: false,
-  },
+  { field: 'id', headerName: 'No', flex: 60 / 1100 },  
+  { field: 'name', headerName: '이름', flex: 170 / 1100 },  
+  { field: 'department', headerName: '소속(부서)', flex: 180 / 1100 },  
+  { field: 'email', headerName: '이메일', flex: 250 / 1100 },  
+  { field: 'tel', headerName: '전화번호', flex: 170 / 1100 }, 
+  { field: 'role', headerName: '역할', flex: 100 / 1100 },  
+  { field: 'regdate', headerName: '등록일', flex: 170 / 1100 },  
 ];
 
 const rows = [
@@ -65,14 +28,22 @@ const rows = [
 
 export default function Table_memberListAll() {
   return (
-    <div style={{ width: '100%' }}>
-    <Box sx={{ width: '100%',  maxWidth: '1135px', minWidth:'1135px' ,marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+    <Box sx={{ 
+      width: '100%',  
+      maxWidth: '70%',
+      minWidth:'1135px' ,
+      marginBottom: '39px', 
+      boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', 
+      }}>
+
       <DataGrid
         rows={rows}
         columns={columns}
         rowHeight={40} 
         headerHeight={50}
         sx={{
+          background:'white',
           fontFamily: 'Pretendard, Noto-sans KR',  
                             '& .MuiDataGrid-columnHeaders': {//컬럼 헤더의 폰트 설정               
                     color: '#7C97FE',  
@@ -91,14 +62,6 @@ export default function Table_memberListAll() {
           }}
       />
     </Box>
-
-
-    {/* 페이지네이션 */}
-    <div className="pagination-container">
-        <Stack spacing={2} sx={{ marginBottom: '80px' }}>
-            <Pagination count={10} color="primary" />
-        </Stack>
-    </div>
 
 
     

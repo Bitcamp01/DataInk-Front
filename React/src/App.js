@@ -10,7 +10,6 @@ import Login from './pages/Login';
 import MemberManagement from './pages/MemberManagement';
 import Mypage from './pages/Mypage';
 import Notice from './pages/Notice';
-import Review from './pages/Review';
 import Notice_write from './pages/Notice_write';
 
 function App() {

@@ -4,6 +4,8 @@ import '../css/memberManagement.css';
 import FixedSizeGrid from '../components/Table_memberListAll'; 
 import Table_projectList from '../components/Table_projectList';
 import Modal_addMember from '../components/Modal_addMember';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const MemberManagement = () => {
   const [activeTab, setActiveTab] = useState('member');
@@ -71,10 +73,17 @@ const MemberManagement = () => {
           </div>
 
 
-            {/* 테이블 영역 */} 
-          
+            {/* 테이블 영역 */}
+            <div className='table-container'>
             {activeTab === 'member' ?  <FixedSizeGrid /> : <Table_projectList/>}
+            </div>
 
+            {/* 페이지네이션 */}
+            <div className="pagination-container">
+                <Stack spacing={2} sx={{ marginBottom: '80px' }}>
+                    <Pagination count={10} color="primary" />
+                </Stack>
+            </div>
 
 
           {/* 멤버 추가 모달창 */}

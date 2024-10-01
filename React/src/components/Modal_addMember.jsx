@@ -26,7 +26,7 @@ const Modal_addMember = ({ open, handleClose, email, setEmail }) => {
         <DialogTitle style={{fontWeight: 'bolder', fontFamily:'Pretendard, Noto-sans KR'}}>멤버 추가
         <IconButton
             aria-label="close"
-            onClick={handleClose}  // X 버튼을 클릭하면 모달 닫기
+            onClick={handleClose}  
             sx={{
               position: 'absolute',
               right: 8,
