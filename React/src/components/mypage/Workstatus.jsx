@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Select, MenuItem, TextField, Button, Divider } from '@mui/material';
+import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
@@ -38,61 +38,61 @@ const columns = [
             <div className="workstatus__filter-container">
             {/* 필터 그룹 1 */}
                 <div className="workstatus__filter-group">
-                <select className="workstatus__filter-select">
-                    <option value="date">기한일</option>
-                    {/* 추가 옵션 */}
-                </select>
-                <select className="workstatus__filter-select">
-                    <option value="worker">작업인원</option>
-                    {/* 추가 옵션 */}
-                </select>
+                    <select className="workstatus__filter-select">
+                        <option value="date">기한일</option>
+                        {/* 추가 옵션 */}
+                    </select>
+                    <select className="workstatus__filter-select">
+                        <option value="worker">작업인원</option>
+                        {/* 추가 옵션 */}
+                    </select>
                 </div>
 
-            {/* 구분선 */}
+                {/* 구분선 */}
                 <div className="workstatus__filter-divider"></div>
 
-            {/* 필터 그룹 2 */}
+                {/* 필터 그룹 2 */}
                 <div className="workstatus__filter-group">
-                <select className="workstatus__filter-select">
-                    <option value="category">대분류</option>
-                    {/* 추가 옵션 */}
-                </select>
-                <select className="workstatus__filter-select">
-                    <option value="subcategory">중분류</option>
-                    {/* 추가 옵션 */}
-                </select>
+                    <select className="workstatus__filter-select">
+                        <option value="category">대분류</option>
+                        {/* 추가 옵션 */}
+                    </select>
+                    <select className="workstatus__filter-select">
+                        <option value="subcategory">중분류</option>
+                        {/* 추가 옵션 */}
+                    </select>
                 </div>
 
-            {/* 검색 입력 */}
+                {/* 검색 입력 */}
                 <input type="text" className="workstatus__search-input" placeholder="검색어를 입력하세요." />
 
-            {/* 검색 버튼 */}
+                {/* 검색 버튼 */}
                 <button className="workstatus__search-btn">검색</button>
-        </div>
+            </div>
         
-        {/* 데이터 그리드 섹션 */}
-        <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)' }}>
-            <DataGrid
-            rows={rows}
-            columns={columns}
-            rowHeight={40}
-            headerHeight={50}
-            autoHeight
-            disableRowSelectionOnClick
-            hideFooter
-            classes={{
-                cell: 'custom-cell',
-                columnHeader: 'custom-header',
-            }}
-            />
-        </Box>
+            {/* 데이터 그리드 섹션 */}
+            <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)' }}>
+                <DataGrid
+                rows={rows}
+                columns={columns}
+                rowHeight={40}
+                headerHeight={50}
+                autoHeight
+                disableRowSelectionOnClick
+                hideFooter
+                classes={{
+                    cell: 'custom-cell',
+                    columnHeader: 'custom-header',
+                }}
+                />
+            </Box>
 
-        {/* 페이지네이션 섹션 */}
-        <div className="workstatus-pagination-container">
-            <Stack spacing={2} sx={{ marginBottom: '80px' }}>
-            <Pagination count={10} color="primary" />
-            </Stack>
-        </div>
+            {/* 페이지네이션 섹션 */}
+            <div className="workstatus-pagination-container">
+                <Stack spacing={2} sx={{ marginBottom: '80px' }}>
+                <Pagination count={10} color="primary" />
+                </Stack>
+            </div>
         </div>
     );
     };
