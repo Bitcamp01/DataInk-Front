@@ -47,7 +47,7 @@ const SelectForm = () => {
             </div>
 
             {/* form-container 밖으로 submit-container 이동 */}
-            <div className="submit-container">
+            <div className="review-submit-container">
                 <button className="reject-button">반려</button>
                 <button className="apply-button" onClick={handleApproveClick}>승인</button> {/* 승인 버튼 */}
             </div>
