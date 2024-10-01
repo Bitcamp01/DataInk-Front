@@ -5,11 +5,9 @@
     box-sizing: border-box;
 }
 
-body {
-    overflow-y: scroll;
-}
 
 /* 상단 프로필 배경 및 정보 */
+
 .profile-header {
     position: relative;
     height: 300px; /* 높이를 조금 더 키움 */
