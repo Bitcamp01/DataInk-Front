@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import  '../css/table-label.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import CommonButton from '../components/CommonButton'
 
 const columns = [
   { field: 'id', headerName: 'No', width: 90, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
@@ -33,24 +34,6 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end; /* 오른쪽 끝에 정렬 */
   width: 100%; /* 원하는 너비 설정 */
-`;
-
-const ReviewRequestButton = styled.button`
-    background-color: #7C97FE;
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 130px;
-    height: 41px;
-
-    &:hover {
-        background-color: #5b6eba;
-        color: white;
-    }
-  }
 `;
 
 
@@ -92,7 +75,7 @@ export default function DataGridDemo() {
             </Stack>
         </div>
         <ButtonContainer>
-            <ReviewRequestButton>검수 요청</ReviewRequestButton>
+            <CommonButton>검수 요청</CommonButton>
         </ButtonContainer>
     </div>
 
