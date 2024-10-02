@@ -22,7 +22,6 @@ function App() {
         <Route path='/label' element={<Labelling />} />
         <Route path='/login' element={<Login />} />
         <Route path='/member' element={<MemberManagement />} />
-        <Route path='/review' element={<Review />} />
         <Route path='/mypage' element={<Mypage />} />
         <Route path='/notice' element={<Notice />} />
         <Route path='/review' element={<Review />} />
