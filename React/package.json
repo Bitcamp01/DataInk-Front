@@ -1,49 +1,36 @@
 {
-<<<<<<< HEAD
-  "name": "final_project_front",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Bitcamp01/DataInk-Front.git"
-  },
-  "private": true,
-  "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^6.6.0",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "@mui/x-tree-view": "^7.18.0",
-    "react": "^18.3.1"
-=======
-  "name": "data-ink",
+  "name": "untitled1",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@fortawesome/fontawesome-free": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.1",
+    "@mui/x-charts": "^7.18.0",
     "@mui/x-data-grid": "^7.18.0",
-    "@mui/x-date-pickers-pro": "^7.18.0",
     "@mui/x-date-pickers": "^7.18.0",
     "@mui/x-tree-view": "^7.18.0",
+    "@react-spring/web": "^9.7.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@xyflow/react": "^12.3.0",
+    "bootstrap": "^5.3.3",
     "dayjs": "^1.11.13",
-    "icons": "^1.0.0",
-    "moment": "^2.30.1",
-    "pdfobject": "^2.3.0",
+    "gojs": "^3.0.11",
+    "gojs-react": "^1.1.2",
+    "interactjs": "^1.10.27",
     "react": "^18.3.1",
-    "react-calendar": "^5.0.0",
+    "react-bootstrap-icons": "^1.11.4",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.3.1",
-    "react-icons": "^5.3.0",
-    "react-router-dom": "^6.26.2",
-    "react-scripts": "^5.0.1",
-    "recharts": "^2.12.7",
+    "react-flow-renderer": "^10.3.17",
+    "react-scripts": "5.0.1",
     "styled-components": "^6.1.13",
     "web-vitals": "^2.1.4"
   },
@@ -70,6 +57,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
->>>>>>> 3f97c69014b019d25d2d94e0e564c4e20ef3d531
   }
 }

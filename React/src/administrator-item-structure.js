@@ -6,6 +6,7 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 const DynamicTable = () => {
     const [data, setData] = useState({});
+    const [rowCnt,setRowCnt] = useState(0);
     const changeTextFiled = (e, path) => {
         const newValue = e.target.value;
         const pathArray = path.split('.');
@@ -65,10 +66,11 @@ const DynamicTable = () => {
     };
 
     const addRow = (inputField = null) => {
-        const newKey = `새로운키${Object.keys(data).length + 1}`;
-        setData((prevData) => ({
-            ...prevData,
-            [newKey]: "",
+        setRowCnt(rowCnt+1)
+        const newKey = `새로운키${rowCnt}`;
+        setData((data) => ({
+            ...data,
+            [newKey]: ""
         }));
     };
 
