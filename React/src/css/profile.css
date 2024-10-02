@@ -274,7 +274,7 @@ h3 {
     font-size: 16px;
     transition: background-color 0.3s ease;
     display: block;
-    margin: 0 auto; /* 가운데 정렬 */
+    margin-left: 610px ;
     margin-top: 20px;
 }
 

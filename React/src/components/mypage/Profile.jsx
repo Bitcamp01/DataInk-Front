@@ -21,10 +21,10 @@ const Profile = () => {
           <label htmlFor="password">*비밀번호</label>
           <input type="password" id="password" name="password" placeholder="대소문자 숫자가 포함된 8-16자 이내" />
         </div>
-        <div className="profile-form__group">
+        {/* <div className="profile-form__group">
           <label htmlFor="confirm-password">*비밀번호 확인</label>
           <input type="password" id="confirm-password" name="confirm-password" placeholder="비밀번호를 동일하게 입력해주세요" />
-        </div>
+        </div> */}
         <div className="profile-form__group">
           <label htmlFor="email">*이메일</label>
           <input type="email" id="email" name="email" placeholder="이메일 주소를 입력해주세요" />
