@@ -20,16 +20,18 @@ function App() {
       {/* Layout이 모든 페이지에 공통으로 적용될 구조 */}
       <Route element={<Layout />}>
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/join' element={<Join />} />
         <Route path='/label/main' element={<LabellingMain />} />
         <Route path='/label/work' element={<Labelling />} />
-        <Route path='/login' element={<Login />} />
         <Route path='/member' element={<MemberManagement />} />
         <Route path='/mypage' element={<Mypage />} />
         <Route path='/notice' element={<Notice />} />
         <Route path='/review' element={<Review />} />
         <Route path="/notice_write" element={<Notice_write />} />
         <Route path="/notice_detail" element={<Notice_detail />} />
+      </Route>
+      <Route>
+      <Route path='/join' element={<Join />} />
+      <Route path='/login' element={<Login />} />
       </Route>
     </Routes>
   );
