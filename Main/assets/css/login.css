@@ -1,0 +1,296 @@
+/* 기본 스타일 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #DDE6F4; /* 배경색은 필요에 따라 조정하세요 */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 레이아웃 설정 */
+.layout {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* 메인 콘텐츠 스타일 */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* 콘텐츠 영역 */
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* 로그인 컨테이너 */
+.content .login-container {
+  width: 400px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 40px 20px; /* 패딩 추가로 내부 여백 확보 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 로고 및 제목 */
+.content .logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.content .logo img {
+  width: 22px;
+  height: 22px;
+}
+
+.content .title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+}
+
+/* 서브 타이틀 */
+.content .subtitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.content .login-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.content .welcome-text {
+  font-size: 12px;
+  font-weight: 300;
+  color: #0028FF;
+  margin-top: 5px;
+}
+
+/* 소셜 로그인 버튼 컨테이너 */
+.content .social-buttons-container {
+  width: 100%;
+  padding: 10px;
+  background-color: #DEE7F4;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.content .social-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content .social-buttons img {
+  margin: 0 10px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.content .social-buttons img:hover {
+  transform: scale(1.1);
+}
+
+/* 또는 아이디 로그인 */
+.content .or-login {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.content .line {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #948888;
+}
+
+.content .or-text {
+  font-size: 12px;
+  color: #625959;
+  white-space: nowrap;
+}
+
+/* 입력 필드 */
+.content .input-field {
+  width: 100%;
+  height: 40px;
+  background-color: #F3F6FB;
+  border-radius: 22px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.content .input-icon img {
+  width: 20px;
+  height: 20px;
+}
+
+.content .input-placeholder {
+  flex: 1;
+  border: none;
+  background: none;
+  padding-left: 10px;
+  font-size: 14px;
+  color: #9A99A2;
+}
+
+.content .input-placeholder:focus {
+  outline: none;
+}
+
+/* 이메일 기억하기와 아이디 비밀번호 찾기 통합 */
+.content .bottom-links {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.56);
+  margin-bottom: 20px;
+}
+
+.content .remember-email {
+  display: flex;
+  align-items: center;
+}
+
+.content .remember-email input {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.content .find-links .link-bold {
+  color: rgba(0, 25, 255, 0.56);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.content .find-links .link-bold:hover {
+  text-decoration: underline;
+}
+
+/* 로그인 버튼 */
+.content .login-button {
+  width: 100%;
+  height: 45px;
+  margin-bottom: 20px;
+}
+
+.content .login-button button {
+  width: 100%;
+  height: 100%;
+  background-color: #7C97FE;
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.content .login-button button:hover {
+  background-color: #6B85F5;
+}
+
+/* 회원가입 링크 */
+.content .signup-link {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #6A6666;
+}
+
+.content .signup-bold {
+  color: #0047FF;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.content .signup-bold:hover {
+  text-decoration: underline;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 450px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .main {
+    width: 100%;
+  }
+
+  .content .login-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .content .social-buttons-container {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  .content .social-buttons img {
+    width: 35px;
+    height: 35px;
+    margin: 0 5px;
+  }
+
+  .content .or-login {
+    margin-bottom: 15px;
+  }
+
+  .content .input-field {
+    height: 35px;
+    margin-bottom: 10px;
+  }
+
+  .content .bottom-links {
+    font-size: 10px;
+    margin-bottom: 15px;
+  }
+
+  .content .login-button {
+    height: 40px;
+    margin-bottom: 15px;
+  }
+
+  .content .signup-link {
+    font-size: 10px;
+  }
+}

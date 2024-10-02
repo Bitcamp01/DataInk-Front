@@ -1,0 +1,79 @@
+/* 전체 검색 및 필터 섹션 */
+.alarm__filter-container {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 0.7rem;
+    margin-bottom: 20px;
+}
+
+/* 구분선 스타일 */
+.alarm__filter-divider {
+    border-right: 1px dashed #909090;
+    height: 28px;
+    margin: 0 8px;
+}
+
+/* 데이터 그리드 셀 스타일 */
+.alarm__custom-cell {
+    color: #3e3e3e;
+}
+
+/* 데이터 그리드 헤더 스타일 */
+.alarm__custom-header {
+    color: #7785BE;
+    font-weight: bold !important;
+}
+
+/* 검색 입력 스타일 */
+.alarm__search-input {
+    margin-left: 50px;
+    background-color: #EAEAEA;
+    border: none;
+    border-radius: 5px;
+    min-width: 200px; /* 기본 크기 조정 */
+    padding: 8px 15px;
+    outline: none;
+}
+
+/* 검색 버튼 스타일 */
+.alarm__search-btn {
+    font-size: 16px;
+    padding: 8px 20px;
+    border-radius: 5px;
+    border: 1px solid #7785BE;
+    color: #7785BE;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.alarm__search-btn:hover {
+    background-color: #7785BE;
+    color: white;
+}
+
+/* 페이지네이션 컨테이너 */
+.alarm__pagination-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    margin-top: 20px;
+}
+
+/* 날짜 선택기 관련 스타일 */
+.alarm__date-picker-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 날짜 선택기 간격 조정 */
+}
+
+/* 텍스트 필드 및 선택창 크기 조정 */
+.alarm__filter-group {
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+}

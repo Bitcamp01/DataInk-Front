@@ -1,0 +1,103 @@
+
+.header-container {
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.title {
+    color: #2F2F2F;
+    font-weight: bold;
+    font-size: 1.3rem;
+    margin-top: 5px;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 140px;
+}
+
+@media (max-width: 1530px) {
+    .controls {
+        margin-left: 30%;
+    }
+}
+
+@media (max-width: 1400px) {
+    .controls {
+        margin-left: 30%;
+    }
+}
+
+
+.dropdown-wrapper {
+    display: inline-block;
+    position: relative; /* 드롭다운의 부모 컨테이너를 기준으로 드롭다운 메뉴가 위치 */
+}
+
+.dropdown-button {
+    background-color: white;
+    border: 1px solid #BCBCBC;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #717171;
+    display: inline-flex;
+    align-items: center;
+    z-index: 2; /* 드롭다운 버튼이 위에 표시되도록 z-index 설정 */
+}
+
+.dropdown-arrow {
+    display: inline-block;
+    margin-left: 8px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #7C97FE;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%; /* 드롭다운 버튼 바로 아래에 배치 */
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0; /* 드롭다운 메뉴가 약간 아래로 떨어지도록 */
+    z-index: 1;
+    margin-left: 5px;
+}
+
+.dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+}
+
+.dropdown-item.selected {
+    color: #007BFF;
+}
+
+.refresh-button {
+    background-color: white;
+    color: #717171;
+    border: 1px solid #BCBCBC;
+    padding: 7px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+
+.refresh-button:hover {
+    background-color: #F5F5F5;
+}

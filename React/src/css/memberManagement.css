@@ -1,0 +1,175 @@
+
+/* 메인 콘텐츠 스타일 */
+
+.member-list{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 60px auto 0 auto; 
+    
+  
+}
+
+/*탭 , 제목 스타일 */
+
+.member-list__title,
+.member-list__discription {
+    text-align: left; 
+    width: 70%; 
+   
+}
+
+.member-list__title {
+    font-size: 22px;
+    font-weight: bold;
+   
+}
+
+.member-list__discription {
+    margin: 20px 0px 40px 0px;
+    font-size: 16px;
+    color: #707070;
+    line-height: 24px;
+  
+}
+
+.member-list__tab_and_button {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 50px;
+    width: 70%;
+  
+    
+}
+
+
+.write-btn-container {
+    display: flex;
+    align-items: flex-end;
+    width: 70%;
+}
+
+
+.member-list__write-btn{
+    background-color: #7C97FE;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 130px;
+    height: 41px;
+    margin-bottom: 10px;
+    margin-left: auto;
+
+}
+
+
+.member-list__add-btn {
+    background-color: #7C97FE;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 130px;
+    height: 41px;
+    margin-right: 0px;
+    margin-bottom: 10px;
+
+   
+}
+
+
+.member-list__add-btn:hover {
+    background-color: #5b6eba;
+    color: white;
+ 
+
+   
+}
+
+.tab-section {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tab-section__tabs {
+    display: flex;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px; 
+ 
+    
+}
+
+.tab-section__tab {
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #a5aabf;
+    background-color: transparent;
+    cursor: pointer;
+    width: 185px;
+    height: 50px;
+    border: 1px solid #d6d6d6;
+    background-color: #F0F0F0;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px; 
+    border-bottom: none;
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+
+.tab-section__tab:hover {
+    color: #ffffff;
+    background-color:#b5c4ff ;
+}
+
+.tab-section__tab--active {
+    color: #7C97FE;
+    font-weight: bold;
+    width: 185px;
+    height: 50px;
+    border: 1px solid #d6d6d6;
+    background-color: #ffffff;
+    margin : 0px 10px 0px 10px;
+    border-bottom: 4px solid #7C97FE; 
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px; 
+
+}
+
+
+/* 테이블(멤버 리스트) 스타일 */
+
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto 0 auto; 
+
+}
+
+
+  /* 페이지네이션 */
+
+  .pagination-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    margin-top: 20px; 
+  }
+

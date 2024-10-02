@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Data Ink</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body>
+    <div class="layout">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <img class="sidebar__logo" src="assets/icons/dataink-logo_icon.svg" alt="데이터잉크 아이콘">
+            <div class="sidebar__menu">
+                <a href="/main" class="sidebar__icon sidebar__icon--active">
+                    <img src="assets/icons/main-home_icon.svg" alt="메인홈">
+                </a>
+                <a href="/data" class="sidebar__icon">
+                    <img src="assets/icons/data_icon.svg" alt="데이터라벨링">
+                </a>
+                <a href="/member" class="sidebar__icon">
+                    <img src="assets/icons/member_icon.svg" alt="멤버관리">
+                </a>
+                <a href="/" class="sidebar__icon">
+                    <img src="assets/icons/notice_icon.svg" alt="공지사항">
+                </a>
+            </div>
+        </aside>
+
+        <!-- 추가 사이드바 -->
+        <aside class="extra-sidebar">
+            <div class="extra-sidebar__menu">
+                <a href="/main" class="extra-sidebar__link">대시보드(Home)</a>
+                <a href="/data" class="extra-sidebar__link">데이터라벨링</a>
+                <a href="/member" class="extra-sidebar__link">멤버관리</a>
+                <a href="/" class="extra-sidebar__link">공지사항</a>
+            </div>  
+        </aside>
+
+        <!-- 메인(헤더 + 콘텐츠) 영역 -->
+        <div class="main">
+
+            <!-- 헤더 영역 -->
+            <header class="header">
+                <div class="header__back-icon">
+                    <img src="assets/icons/back_icon.svg" alt="뒤로가기">
+                </div>
+                <div class="header__title">Data Labeling</div>
+                <div class="header__search">
+                    <input type="text" class="header__search-input" placeholder="검색">
+                    <img src="assets/icons/search_icon.svg" alt="검색 아이콘" class="header__search-icon">
+                </div>
+                <div class="header__icons">
+                    <img src="assets/icons/chat_icon.svg" alt="채팅" class="header__icon header__icon--chat">
+                    <img src="assets/icons/alert_icon.svg" alt="알람" class="header__icon header__icon--alert">
+                    <img src="assets/images/profile_img.png" alt="프로필" class="header__icon header__icon--profile">
+                    <img src="assets/icons/profile-drop_icon.svg" alt="드롭다운" class="header__icon header__icon--dropdown">
+                </div>
+            </header>
+
+            <!-- 콘텐츠 영역 -->
+            <section class="content">
+                <div class="login-container">
+                    <div class="login-panel">
+                        <!-- 로고 및 제목 -->
+                        <div class="logo-title">
+                            <div class="logo">
+                                <img src="assets/icons/dataink-logo_icon.svg" alt="로고">
+                            </div>
+                            <div class="title">Data Ink</div>
+                        </div>
+
+                        <!-- 서브 타이틀 -->
+                        <div class="subtitle">
+                            <div class="login-text">계정에 로그인 하세요.</div>
+                            <div class="welcome-text">Data ink 방문을 환영합니다!</div>
+                        </div>
+
+                        <!-- 소셜 로그인 버튼들을 둥근 컨테이너로 감싸기 -->
+                        <div class="social-buttons-container">
+                            <div class="social-buttons">
+                                <img src="assets/icons/login-join-naver_icon.svg" alt="Naver" class="social-icon" aria-label="Naver로 로그인">
+                                <img src="assets/icons/login-join-kakao_icon.svg" alt="Kakao" class="social-icon" aria-label="Kakao로 로그인">
+                                <img src="assets/icons/login-join-google_icon.svg" alt="Google" class="social-icon" aria-label="Google로 로그인">
+                                <img src="assets/icons/login-join-facebook_icon.svg" alt="Facebook" class="social-icon" aria-label="Facebook으로 로그인">
+                            </div>
+                        </div>
+
+                        <!-- 또는 아이디 로그인 -->
+                        <div class="or-login">
+                            <div class="line"></div>
+                            <div class="or-text">또는 아이디 로그인</div>
+                            <div class="line"></div>
+                        </div>
+
+                        <!-- 아이디 입력 필드 -->
+                        <div class="input-field">
+                            <div class="input-icon">
+                                <img src="assets/icons/login-id_icon.svg" alt="아이디 아이콘">
+                            </div>
+                            <input type="text" class="input-placeholder" placeholder="아이디를 입력해주세요.">
+                        </div>
+
+                        <!-- 비밀번호 입력 필드 -->
+                        <div class="input-field">
+                            <div class="input-icon">
+                                <img src="assets/icons/login-password_icon.svg" alt="비밀번호 아이콘">
+                            </div>
+                            <input type="password" class="input-placeholder" placeholder="비밀번호를 입력해주세요.">
+                            <!-- 비밀번호 토글 제거 -->
+                        </div>
+
+                        <!-- 이메일 기억하기와 아이디 비밀번호 찾기 통합 -->
+                        <div class="bottom-links">
+                            <div class="remember-email">
+                                <input type="checkbox" id="remember-email">
+                                <label for="remember-email">아이디 기억</label>
+                            </div>
+                            <div class="find-links">
+                                <a href="#" class="link-bold">아이디&비밀번호 찾기</a>
+                            </div>
+                        </div>
+
+                        <!-- 로그인 버튼 -->
+                        <div class="login-button">
+                            <button type="submit">로그인</button>
+                        </div>
+
+                        <!-- 회원가입 링크 -->
+                        <div class="signup-link">
+                            <span class="signup-light">회원이 아니신가요?</span>
+                            <a href="join.html" class="signup-bold">지금 계정을 생성</a>
+                            <span class="signup-light">해보세요!</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="assets/scripts/sidebar.js"></script>
+</body>
+</html>
