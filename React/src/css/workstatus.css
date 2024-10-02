@@ -6,28 +6,8 @@
     padding: 8px 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    gap: 1rem;
+    gap: 0.7rem;
     margin-bottom: 20px;
-}
-
-/* 필터 그룹 */
-.workstatus__filter-group {
-    display: flex;
-    gap: 8px;
-}
-
-/* 필터 선택창 스타일 */
-.workstatus__filter-select {
-    padding: 4px 8px;
-    border-radius: 5px;
-    border: 1px solid #7785BE;
-    color: #7785BE;
-    min-width: 90px;
-    height: 36px;
-    font-size: 0.8rem;
-    background-color: white;    
-    outline: none;
-    cursor: pointer;
 }
 
 /* 구분선 스타일 */
@@ -50,7 +30,8 @@
 
 /* 검색 버튼 스타일 */
 .workstatus__search-btn {
-    padding: 8px 20px;
+    font-size: 16px;
+    padding: 8.5px 20px;
     border-radius: 5px;
     border: 1px solid #7785BE;
     color: #7785BE;
@@ -63,7 +44,6 @@
     background-color: #7785BE;
     color: white;
 }
-
 
 
 /* 데이터 그리드 헤더 스타일 */
