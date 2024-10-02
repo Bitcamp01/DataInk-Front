@@ -6,7 +6,7 @@ import { useTodoState } from './TodoContext';
 
 const TodoListBlock = styled.div`
   flex: 1;
-  padding-left: 35px;
+  padding-left: 20px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -19,7 +19,8 @@ const TodoListBlock = styled.div`
   }
 
   &::-webkit-scrollbar-track {
-      background: white;
+      background:
+       white;
   }
 `;
 

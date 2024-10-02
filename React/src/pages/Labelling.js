@@ -2,25 +2,25 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchComponent from '../components/labelling/SearchComponent';
 import CustomTreeView from '../components/labelling/TreeView';
-import DataGridDemo from '../components/Table_label';
+import DataGridDemo from '../components/TableLabel';
 
 const LabellingContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  height: calc(100vh - 4.625rem);
-  overflow-y: auto;
-`;
-
-const StickySearchContainer = styled.div`
-  position: sticky;
-  top: 20px;
-  flex-shrink: 0;
-  z-index: 1000;
+  overflow: auto;
+  height: calc(100% - 4.625rem);
 `;
 
 const ContentContainer = styled.div`
   display: flex;
+  position: relative;
+  margin: 2% 5%;
   flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const SearchContainer = styled.div`
+   margin-bottom: 3%;
 `;
 
 const SidebarContainer = styled.div`
@@ -29,33 +29,24 @@ const SidebarContainer = styled.div`
 
 const TableContainer = styled.div`
   flex-grow: 1;
-  margin-left: 2rem;
-  margin-right: 2rem;
-  margin-top: 8rem;
   display: flex;
   justify-content: center;
-`;
-
-const InnerTableContainer = styled.div`
-  min-width: 100%;
 `;
 
 const Labelling = () => {
   return (
     <LabellingContainer>
-      <StickySearchContainer>
-        <SearchComponent />
-      </StickySearchContainer>
+      <SidebarContainer>
+          <CustomTreeView />
+      </SidebarContainer>
 
       <ContentContainer>
-        <SidebarContainer>
-          <CustomTreeView />
-        </SidebarContainer>
+        <SearchContainer>
+          <SearchComponent/>
+        </SearchContainer>
 
         <TableContainer>
-          <InnerTableContainer>
             <DataGridDemo />
-          </InnerTableContainer>
         </TableContainer>
       </ContentContainer>
     </LabellingContainer>

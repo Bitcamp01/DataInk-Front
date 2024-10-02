@@ -10,11 +10,15 @@
   }
   
   body {
-    font-family: 'Pretendard', Arial, sans-serif;
+    font-family: 'Pretendard', 'NotoSansKR', sans-serif;
     color: #3E3E3E;
     background-color: #F6F6F6;
-    overflow: hidden;
+    -ms-overflow-style: none;
   }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
   
   /* 전체 레이아웃을 위한 기본 스타일 */
   .layout {

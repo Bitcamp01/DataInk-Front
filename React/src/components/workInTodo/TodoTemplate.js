@@ -31,18 +31,19 @@ const TodoTemplateBlock = styled.div`
 const TotalTemplateBlock = styled.div`
     width: 522px;
     height: 425px;
-    // max-height: 425px;
 
     background: white;
-    border-radius: 16px;
+    border-radius: 7px;
     border: 1px solid #C4C4C4;
 
     margin: 0 auto;
-
-    margin-top: 96px;
     display: flex;
     flex-direction: column;
     
+    @media (max-width: 1500px) { 
+        width: 400px; 
+        height: auto;
+    }
 `;
 
 const TodoTemplate = ({children}) => {

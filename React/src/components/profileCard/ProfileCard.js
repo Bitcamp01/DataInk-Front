@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/profile-card.css'
+import '../../css/profile-card.css'
 
 const ProfileCard = ({ profile, announcements }) => {
   return (
@@ -25,15 +25,15 @@ const ProfileCard = ({ profile, announcements }) => {
         </div>
         <div className="Announcement">
           <h5>
-            공지사항
-            <a className="Announcement-detail" href="/">
+            &lt;공지사항 &gt;
+            <a className="Announcement-detail" href="../Notice">
               더보기
             </a>
           </h5>
           {announcements.map((announcement, index) => (
               <div key={index} className="detail-info">
                 <img
-                  src={announcement.urgent ? '/icon/urgent-speaker_icon.png' : '/icon/speaker_icon.png'}
+                  src={announcement.urgent ? '/icons/urgent-speaker_icon.svg' : '/icons/speaker_icon.svg'}
                   alt={announcement.urgent ? '긴급아이콘' : '일반아이콘'}
                 />
                 <span style={announcement.urgent ? { color: '#F67171' } : { color: '#7C97FE' }}>

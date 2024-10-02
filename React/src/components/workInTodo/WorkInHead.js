@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import {useTodoState} from './TodoContext';
 
 const WorkInBlcok = styled.div`
-    padding-left: 32px;
+    padding-left: 5px;
     padding-right: 32px;
     border-bottom: 1px solid #e9exef;
 

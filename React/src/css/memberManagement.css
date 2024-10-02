@@ -1,35 +1,27 @@
 
-
 /* 메인 콘텐츠 스타일 */
-.main-content {
-    margin-left: 260px;
-    padding: 20px;
-}
 
-.header {
+.member-list{
+
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
-}
-
-.header__title {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.header__search {
-    padding: 8px;
-    font-size: 16px;
-}
-
-.header__profile-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 100%;
+    margin: 60px auto 0 auto; 
+    
+  
 }
 
 /*탭 , 제목 스타일 */
+
+.member-list__title,
+.member-list__discription {
+    text-align: left; 
+    width: 70%; 
+   
+}
+
 .member-list__title {
     font-size: 22px;
     font-weight: bold;
@@ -49,8 +41,32 @@
     justify-content: space-between;
     align-items: flex-end;
     height: 50px;
+    width: 70%;
   
     
+}
+
+
+.write-btn-container {
+    display: flex;
+    align-items: flex-end;
+    width: 70%;
+}
+
+
+.member-list__write-btn{
+    background-color: #7C97FE;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 130px;
+    height: 41px;
+    margin-bottom: 10px;
+    margin-left: auto;
+
 }
 
 
@@ -64,7 +80,7 @@
     cursor: pointer;
     width: 130px;
     height: 41px;
-    margin-right: 24px;
+    margin-right: 0px;
     margin-bottom: 10px;
 
    
@@ -134,50 +150,26 @@
 
 
 /* 테이블(멤버 리스트) 스타일 */
-.member-list {
-    margin: 82px 243px 0 243px;
-}
 
 
-.member-list__table {
+.table-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    border-collapse:  separate;;
-    background-color: #ffffff;
-    font-size: 14px;
-    border: 1px solid #ddd; 
-    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-   
-
+    margin: 0 auto 0 auto; 
 
 }
 
-.member-list__table th, 
-.member-list__table td {
-    /* border: 1px solid #ddd; */
-    background-color: #ffffff;
-    padding: 12px 12px 12px 22px;
-    text-align: left;
-    border: 1px solid transparent;
-    border-bottom: 1px solid #ddd; 
-}
 
-.member-list__table th {
-    background-color: #ffffff;
-    border-bottom: 1px solid #d9d9d9; 
-}
+  /* 페이지네이션 */
 
-
-#table_category th {
-    color: #7C97FE; 
-    font-size: 15px;
-    font-weight: 600;
-}
-
-#table__last td{
-    border-bottom: none;
-}
-
-
-
+  .pagination-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    margin-top: 20px; 
+  }
 

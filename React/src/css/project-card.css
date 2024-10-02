@@ -8,28 +8,6 @@ html {
     font-size: 16px;
 }
 
-#card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    margin-top: 20px;
-    height: 270px;
-    overflow-y: scroll;
-}
-
-#card-container::-webkit-scrollbar {
-    width: 10px;
-}
-
-#card-container::-webkit-scrollbar-thumb {
-    background: #7C97FE; /*스크롤바 색상*/
-    border-radius: 10px;   /*스크롤바 둥글게 */
-}
-
-#card-container::-webkit-scrollbar-track {
-    background: #F6F6F6;
-}
-
 .card {
     background: white;
     width: 404px;
@@ -38,6 +16,8 @@ html {
                 0 6px 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     border: 1px solid white;
+    margin-right: 30px;
+    margin-bottom: 35px;
 }
 
 .card:hover {

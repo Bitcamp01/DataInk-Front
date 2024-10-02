@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../project-card.css';
+import '../../css/project-card.css';
 
 const ProjectCard = ({ projects }) => {
 
@@ -12,7 +12,7 @@ const ProjectCard = ({ projects }) => {
         setIsBookmarked(!isBookmarked);
     }
   return (
-    <div id="card-container">
+    <div>
       {projects.map((project, index) => (
         <div className="card" key={index}>
           <div className="projectCard-header">

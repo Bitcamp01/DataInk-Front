@@ -5,11 +5,9 @@
     box-sizing: border-box;
 }
 
-body {
-    overflow-y: scroll;
-}
 
 /* 상단 프로필 배경 및 정보 */
+
 .profile-header {
     position: relative;
     height: 300px; /* 높이를 조금 더 키움 */
@@ -93,22 +91,22 @@ h3 {
     padding-top: 150px;
 }
 
-.follow-btn, .meeting-btn {
+.group-btn, .calendar-btn {
     width: 180px;
     height: 40px;
     padding: 10px 20px;
-    border: 1px solid #3498DB;
+    border: 1px solid #7785BE;
     border-radius: 5px;
     font-size: 14px;
     cursor: pointer;
     margin: 5px;
     background-color: white;
-    color: #3498DB;
+    color: #7785BE;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.follow-btn:hover, .meeting-btn:hover {
-    background-color: #3498DB;
+.group-btn:hover, .calendar-btn:hover {
+    background-color: #7785BE;
     color: white;
 }
 
@@ -243,7 +241,7 @@ h3 {
 
 .profile-form__button {
     padding: 10px;
-    background-color: #69b0df;
+    background-color: #7785BE;
     color: white;
     border: none;
     border-radius: 6px;
@@ -267,8 +265,8 @@ h3 {
 }
 
 .profile-form__submit {
-    padding: 12px;
-    background-color: #69b0df;
+    padding: 10px;
+    background-color: #7785BE;
     color: white;
     border: none;
     border-radius: 6px;
