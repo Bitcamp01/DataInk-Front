@@ -39,11 +39,6 @@ const TotalTemplateBlock = styled.div`
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    
-    @media (max-width: 1500px) { 
-        width: 400px; 
-        height: auto;
-    }
 `;
 
 const TodoTemplate = ({children}) => {

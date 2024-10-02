@@ -96,7 +96,7 @@ export default function App() {
     };
 
     return (
-        <div className='work'>
+        <div>
             <div className="header-container">
                 <h3 className="title">완료된 작업현황</h3>
                 <div className="controls">
