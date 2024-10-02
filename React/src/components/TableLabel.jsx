@@ -1,4 +1,5 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import  '../css/table-label.css';
@@ -28,8 +29,40 @@ const rows = [
   { id: 10, category1: '음성', category2: '대화 분석', category3: '뉴스 인터뷰', workname: '뉴스 인터뷰 대화 분석', worknum: 'W12354', deadline: '2024-04-25' },
 ];
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 끝에 정렬 */
+  width: 100%; /* 원하는 너비 설정 */
+`;
+
+const ReviewRequestButton = styled.button`
+    background-color: #7C97FE;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 130px;
+    height: 41px;
+
+    &:hover {
+        background-color: #5b6eba;
+        color: white;
+    }
+  }
+`;
+
 
 export default function DataGridDemo() {
+  const [open, setOpen] = React.useState(false);
+  const [selectedRow, setSelectedRow] = React.useState(null);
+  
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedRow(null);
+  };
+
   return (
     <div style={{ width: '100%' }}>
       <Box sx={{ width: '100%',  maxWidth: '1300px', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
@@ -53,11 +86,14 @@ export default function DataGridDemo() {
 
 
       {/* 페이지네이션 */}
-      <div className="pagination-container">
-          <Stack spacing={2} sx={{ marginBottom: '80px' }}>
-              <Pagination count={10} color="primary" />
-          </Stack>
-      </div>    
+        <div className="pagination-container">
+            <Stack spacing={2} sx={{ marginBottom: '20px' }}>
+                <Pagination count={10} color="primary" />
+            </Stack>
+        </div>
+        <ButtonContainer>
+            <ReviewRequestButton>검수 요청</ReviewRequestButton>
+        </ButtonContainer>
     </div>
 
     );

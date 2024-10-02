@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchComponent from '../components/labelling/SearchComponent';
 import CustomTreeView from '../components/labelling/TreeView';
-import DataGridDemo from '../components/Table_label';
+import DataGridDemo from '../components/TableLabel';
 
 const LabellingContainer = styled.div`
   display: flex;
