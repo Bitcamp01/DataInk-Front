@@ -12,7 +12,7 @@ const RenderProfileCard = () => {
   const announcements = [
     {
       department: 'AI',
-      notice: '사내 작업에 대한 규칙',
+      notice: '사내 작업에 대한 규칙 어쩌고저쩌고',
       urgent: true, // 긴급 여부
     },
     {

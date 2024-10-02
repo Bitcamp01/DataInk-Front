@@ -25,7 +25,7 @@ const ProfileCard = ({ profile, announcements }) => {
         </div>
         <div className="Announcement">
           <h5>
-            &lt;공지사항 &gt;
+            &lt;공지사항&gt;
             <a className="Announcement-detail" href="../Notice">
               더보기
             </a>
