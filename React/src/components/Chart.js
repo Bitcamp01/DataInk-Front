@@ -100,10 +100,12 @@ export default function App() {
             <div className="header-container">
                 <h3 className="title">완료된 작업현황</h3>
                 <div className="controls">
-                    <div className="dropdown-wrapper">
+                    <div className="refresh-button-wrapper">
                         <button onClick={refreshChart} className="refresh-button">
-                            <img src='/icons/Refresh_icon.svg' alt="refresh"></img>
+                            <img src='/icons/Refresh_icon.svg' alt="refresh" />
                         </button>
+                    </div>
+                    <div className="dropdown-wrapper">
                         <button onClick={toggleDropdown} className="dropdown-button">
                             {selectedView}
                             <span className="dropdown-arrow"></span>
