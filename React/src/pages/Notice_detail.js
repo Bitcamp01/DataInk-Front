@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const Notice_write = () => {
+const Notice_detail = () => {
   return (
   <>
     {/* 콘텐츠 영역 */}
@@ -125,4 +125,4 @@ const Notice_write = () => {
   );
 };
 
-export default Notice_write;
+export default Notice_detail;

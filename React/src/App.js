@@ -12,6 +12,7 @@ import MemberManagement from './pages/MemberManagement';
 import Mypage from './pages/Mypage';
 import Notice from './pages/Notice';
 import Notice_write from './pages/Notice_write';
+import Notice_detail from './pages/Notice_detail';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/notice' element={<Notice />} />
         <Route path='/review' element={<Review />} />
         <Route path="/notice_write" element={<Notice_write />} />
+        <Route path="/notice_detail" element={<Notice_detail />} />
       </Route>
     </Routes>
   );
