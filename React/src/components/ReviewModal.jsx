@@ -3,9 +3,18 @@ import '../css/memberManagement.css';
 import IconButton from '@mui/material/IconButton';  
 import CloseIcon from '@mui/icons-material/Close'; 
 import '../css/reviewer.css';
+import { useNavigate } from 'react-router-dom'; // useNavigate import
 
 const ReviewModal = ({ isOpen, onClose }) => {
+    const navigate = useNavigate(); // useNavigate 훅 사용
+
     if (!isOpen) return null; // 모달이 열리지 않았을 경우 렌더링하지 않음
+
+    const handleApplyClick = () => {
+        setTimeout(() => {
+            navigate('/label/work');
+        }, 1000); // 1초(1000ms) 지연
+    };
 
     return (
         <div className="modal-overlay">
@@ -48,7 +57,7 @@ const ReviewModal = ({ isOpen, onClose }) => {
                     ></textarea>
                 </div>
                 <div className="modal-footer">
-                    <button className="approve-button">승인</button>
+                    <button className="approve-button" onClick={handleApplyClick}>승인</button>
                 </div>
             </div>
         </div>

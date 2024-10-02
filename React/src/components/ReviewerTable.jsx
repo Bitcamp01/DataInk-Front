@@ -24,6 +24,14 @@ const ReviewerTable = () => {
     // 클릭한 셀의 상태를 저장할 객체
     const [activeCells, setActiveCells] = useState({});
 
+    // useEffect(() => {
+    //     // JSON 파일을 가져와 상태에 저장
+    //     fetch('/path/to/data.json') // **외부 JSON 파일 경로**
+    //         .then((response) => response.json())
+    //         .then((data) => setTableData(data)) // **가져온 데이터를 tableData에 저장**
+    //         .catch((error) => console.error('Error fetching table data:', error)); // **오류 처리**
+    // }, []);
+
     const handleCellClick = (rowIndex) => {
         const lastColIndex = tableData[rowIndex].cols.length - 1;
         const key = `${rowIndex}-${lastColIndex}`; // 행 인덱스와 열 인덱스를 합쳐 키 생성
@@ -37,12 +45,12 @@ const ReviewerTable = () => {
     return (
         <div className="review-table-container">
             <table className="review-table">
-                <thead>
-                    <tr className="review-table-header">
-                        <th colSpan="5">분류명</th>
-                        <th colSpan="5">내용</th>
-                    </tr>
-                </thead>
+            <thead>
+                <tr className="review-table-header">
+                    <th colSpan="5" className="main-font">분류명</th> {/* 클래스 추가 */}
+                    <th colSpan="5" className="main-font">내용</th> {/* 클래스 추가 */}
+                </tr>
+            </thead>
                 <tbody>
                     {Object.entries(tableData).map(([rowIndex, row]) => (
                         <tr key={rowIndex}>
