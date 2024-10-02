@@ -1,4 +1,24 @@
 /* 공통 스타일: 특정 컨테이너 안에서만 적용되도록 수정 */
+
+/* 글꼴 */
+* {
+    font-family: 'Pretendard', 'NotoSansKR', sans-serif;
+    color: #3E3E3E;
+    -ms-overflow-style: none;
+}
+
+.nh4 {
+    font-size: 1rem; /* 폰트 크기 조정 */
+    color: #3E3E3E; /* 텍스트 색상 */
+    margin-left: 0.5rem; /* h4와의 간격 조정 */
+}
+
+.nexttoh4 {
+    font-size: 0.75rem; /* 폰트 크기 조정 */
+    color: #3E3E3E; /* 텍스트 색상 */
+    margin-left: 0.5rem; /* h4와의 간격 조정 */
+}
+
 .review-container * {
     margin: 0;
     padding: 0;
@@ -74,7 +94,7 @@
 }
 
 .form-container {
-    margin-top: 10px; /* 테이블과 폼 간의 여백 */
+    margin-top: 1.5rem; /* 테이블과 폼 간의 여백 */
     /* 필요시 높이 조정 */
 }
 
@@ -120,7 +140,7 @@
 
 .review-submit-container {
     display: flex;
-    justify-content: center; /* 버튼들을 가운데 정렬 */
+    justify-content: right; /* 버튼들을 가운데 정렬 */
     gap: 4rem; /* 버튼들 사이에 2rem 간격 추가 */
     margin-top: 10px;
     width: 100%; /* form-container와 동일한 폭 */
@@ -146,6 +166,7 @@
     background-color: #f8f9fa;
     color: #7C97FE;
     border-radius: 4px;
+    border: #e7e7e7 1px solid;
 }
 
 .review-submit-container button.apply-button {
@@ -248,17 +269,12 @@
 /* review 테이블 */
 
 .review-table-container {
-    border-bottom: 1px solid #ddd; /* 아래 경계 추가 */
-    padding-bottom: 20px; /* 아래 여백 추가 */
     flex-grow: 1; /* 테이블이 공간을 차지하게 함 */
     max-height: 40rem; /* 필요에 따라 최대 높이 설정 (예시로 30rem) */
-    border: 2px solid #3E3E3E; /* 테두리 추가 */
-    border-radius: 8px; /* 모서리 둥글게 */
-    padding: 10px; /* 안쪽 여백 추가 */
-    margin: 20px; /* **수정**: 추가된 여백 */
     overflow-y: scroll; /* 세로 스크롤 가능하게 */
     overflow-x: scroll; /* 수평 스크롤 추가 */
     max-width: 100%; /* 컨테이너의 최대 너비 설정 */
+    border: #c1c1c1 1px solid;
 }
 
 .review-table {
@@ -294,7 +310,7 @@
 
 
 .review-divide.active {
-    background-color: rgb(209, 238, 209); /* 클릭 시 초록색 배경 */
+    background-color: #eef0f6;
 }
 
 
