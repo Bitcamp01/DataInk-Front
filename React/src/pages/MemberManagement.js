@@ -80,8 +80,23 @@ const MemberManagement = () => {
 
             {/* 페이지네이션 */}
             <div className="pagination-container">
-                <Stack spacing={2} sx={{ marginBottom: '80px' }}>
-                    <Pagination count={10} color="primary" />
+                <Stack spacing={2} sx={{ marginBottom: '80px',  }}>
+                    <Pagination count={10}  sx={{
+                      '& .MuiPaginationItem-root': {
+                        color: '#7c97fe', // 기본 페이지 버튼의 색상
+                      },
+                      '& .Mui-selected': {
+                        backgroundColor: '#7c97fe', // 선택된 페이지 속성
+                        color: '#ffffff', 
+                      },
+                      '& .MuiPaginationItem-root:not(.Mui-selected)': {
+                        color: '#3e3e3e', // 선택되지 않은 페이지 텍스트 색상 설정 (예: 검은색)
+                      },
+                      '& .MuiPaginationItem-ellipsis': {
+                        color: '#3e3e3e', // 페이지 사이의 점 색상
+                      },
+                    
+                    }} />
                 </Stack>
             </div>
 
