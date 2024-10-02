@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import '../css/reviewer.css';
 
 const ReviewerTable = () => {
-    const [selectedRows, setSelectedRows] = useState([]); // 선택된 행 상태
+    const [selectedRows, setSelectedRows] = useState([]); 
 
-    // 행 클릭 핸들러
+    
     const handleRowClick = (index) => {
         if (selectedRows.includes(index)) {
-            // 이미 선택된 행이라면 선택 해제
             setSelectedRows(selectedRows.filter((rowIndex) => rowIndex !== index));
         } else {
-            // 새로 선택된 행 추가
             setSelectedRows([...selectedRows, index]);
         }
     };
@@ -86,6 +84,7 @@ const ReviewerTable = () => {
 
 export default ReviewerTable;
 
+//이게 1001 최종본 테이블
 
 
 
