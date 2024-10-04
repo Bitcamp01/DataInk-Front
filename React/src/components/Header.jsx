@@ -23,7 +23,7 @@ function Header() {
         return () => {
             // 컴포넌트 언마운트 시 이벤트 리스너 제거
             document.removeEventListener('mousedown', handleClickOutside);
-        };
+        }; 
     }, []);
 
     // "뒤로가기" 버튼 클릭 시 이전 페이지로 이동
@@ -34,6 +34,11 @@ function Header() {
     // "더 보기" 클릭 시 알림창 닫기 및 페이지 이동
     const handleMoreClick = () => {
         setShowNotifications(false); // 알림창 닫기
+        navigate('/mypage'); // 페이지 이동
+    };
+
+    // 프로필 클릭 시 마이페이지 이동
+    const handleProfileClick = () => {
         navigate('/mypage'); // 페이지 이동
     };
 
@@ -81,7 +86,7 @@ function Header() {
                         </div>
                     )}
                 </div>
-                <img src="/images/profile_img.png" alt="프로필" className="header__icon header__icon--profile" />
+                <img src="/images/profile_img.png" alt="프로필" onClick={handleProfileClick} className="header__icon header__icon--profile" />
                 <img src="/icons/profile-drop_icon.svg" alt="드롭다운" className="header__icon header__icon--dropdown" />
             </div>
         </header>
