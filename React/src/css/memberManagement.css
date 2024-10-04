@@ -2,7 +2,7 @@
 /* 메인 콘텐츠 스타일 */
 
 .member-list{
-
+    font-family: 'pretendard';
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -173,3 +173,5 @@
     margin-top: 20px; 
   }
 
+
+  

@@ -43,11 +43,11 @@ export default function Table_projectList() {
   };
 
   const columns = React.useMemo (()=> [
-    { field: 'id', headerName: 'No', flex: 60 / 1160 },  // 약 0.052
-  { field: 'project_name', headerName: '프로젝트 이름', flex: 200 / 1160 },  // 약 0.172
-  { field: 'description', headerName: '프로젝트 설명', flex: 400 / 1160 },  // 약 0.345
-  { field: 'regdate', headerName: '프로젝트 생성일', flex: 150 / 1160 },  // 약 0.129
-  { field: 'member', headerName: '프로젝트 참여자', flex: 350 / 1160 },  // 약 0.302
+    { field: 'id', headerName: 'No', flex: 60 / 1160 , cellClassName: 'first-column', headerClassName: 'header-text' }, 
+  { field: 'project_name', headerName: '프로젝트 이름', flex: 200 / 1160 },  
+  { field: 'description', headerName: '프로젝트 설명', flex: 400 / 1160 }, 
+  { field: 'regdate', headerName: '프로젝트 생성일', flex: 150 / 1160 },  
+  { field: 'member', headerName: '프로젝트 참여자', flex: 350 / 1160 },  
 
     {
       field: 'actions',
@@ -57,7 +57,7 @@ export default function Table_projectList() {
       cellClassName: 'actions',
       getActions: (params) => [
         <GridActionsCellItem
-        icon={<EditIcon sx={{ color: '#7C97FE' }} />}// 편집 아이콘
+        icon={<EditIcon sx={{ color: '#7C97FE ' }} />}// 편집 아이콘
           label="Edit"
           onClick={() => handleEditClick(params.id)} // 아이콘 클릭 시 모달 열기
           color="inherit"
@@ -73,7 +73,8 @@ export default function Table_projectList() {
        maxWidth: '100%', 
        minWidth:'1135px', 
        marginBottom: '39px', 
-       boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+       boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', 
+       borderRadius: '10px'}}>
 
       <DataGrid
         rows={rows}
@@ -90,6 +91,17 @@ export default function Table_projectList() {
           '& .MuiDataGrid-columnSeparator': {
             display: 'none',  
           }, 
+          '& .first-column': {
+            paddingLeft: '20px', // 첫 번째 컬럼 셀에 왼쪽 공백 추가
+          },
+
+          '& .header-text': {
+            paddingLeft: '20px', // 첫 번째 컬럼 셀에 왼쪽 공백 추가
+            
+          },
+          '& .MuiDataGrid-columnHeaderTitle': {
+            color: '#7c97fe', // 헤더 텍스트 색상을 변경
+          },
         }}
         autoHeight
         disableRowSelectionOnClick
