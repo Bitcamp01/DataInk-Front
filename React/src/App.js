@@ -13,6 +13,7 @@ import Mypage from './pages/Mypage';
 import Notice from './pages/Notice';
 import Notice_write from './pages/Notice_write';
 import Notice_detail from './pages/Notice_detail';
+import FindAccount from './pages/FindAccount';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
       <Route>
       <Route path='/join' element={<Join />} />
       <Route path='/login' element={<Login />} />
+      <Route path='/findaccount' element={<FindAccount />} />
       </Route>
     </Routes>
   );

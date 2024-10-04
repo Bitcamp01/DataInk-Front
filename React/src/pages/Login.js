@@ -8,7 +8,7 @@ const Login = () => {
       <div className="login-modal">
         {/* 로고 섹션 */}
         <div className="logo-section">
-          <img src="https://via.placeholder.com/22x22" alt="로고" className="logo-image" />
+          <img src="/images/join/join-login-datainc_icon.svg" alt="데이터잉크-로고" className="logo" />
           <span className="logo-text">Data Inc</span>
         </div>
 
@@ -21,10 +21,10 @@ const Login = () => {
         {/* 소셜 로그인 */}
         <div className="social-login">
           <div className="social-buttons">
-            <img src="https://via.placeholder.com/25x25" alt="Social 1" className="social-icon" />
-            <img src="https://via.placeholder.com/25x25" alt="Social 2" className="social-icon" />
-            <img src="https://via.placeholder.com/25x25" alt="Social 3" className="social-icon" />
-            <img src="https://via.placeholder.com/25x25" alt="Social 4" className="social-icon" />
+            <img src="/images/login/login-naver_icon.svg" alt="네이버-소셜아이콘" className="social-icon" />
+            <img src="/images/login/login-google_icon.svg" alt="구글-소셜아이콘" className="social-icon" />
+            <img src="/images/login/login-kakao_icon.svg" alt="카카오-소셜아이콘" className="social-icon" />
+            <img src="/images/login/login-facebook_icon.svg" alt="페이스북-소셜아이콘" className="social-icon" />
           </div>
         </div>
 
@@ -37,7 +37,7 @@ const Login = () => {
 
         {/* 아이디 입력 필드 */}
         <div className="input-field">
-          <img src="https://via.placeholder.com/22x22" alt="아이디 아이콘" className="input-icon" />
+          <img src="/images/login/login-id-input_icon.svg" alt="아이디-아이콘" className="input-icon" />
           <input
             type="text"
             placeholder="아이디를 입력해주세요."
@@ -47,13 +47,13 @@ const Login = () => {
 
         {/* 비밀번호 입력 필드 */}
         <div className="input-field">
-          <img src="https://via.placeholder.com/22x22" alt="비밀번호 아이콘" className="input-icon" />
+          <img src="/images/login/login-password-input_icon.svg" alt="비밀번호 아이콘" className="input-icon" />
           <input
             type="password"
             placeholder="비밀번호를 입력해주세요."
             className="input"
           />
-          <img src="https://via.placeholder.com/22x22" alt="비밀번호 보기" className="input-icon-right" />
+          <img src="/images/login/login-password-input-hide_icon.svg" alt="비밀번호 보기" className="input-icon-right" />
         </div>
 
         {/* 아이디 기억 및 비밀번호 찾기 */}
@@ -63,8 +63,7 @@ const Login = () => {
             <label htmlFor="remember" className="remember-text">아이디를 기억하겠습니다.</label>
           </div>
           <div className="find-links">
-            <a href="#" className="find-link">아이디 찾기</a>
-            <a href="#" className="find-link">비밀번호 찾기</a>
+            <a href="http://localhost:3000/findaccount" className="find-link">아이디비밀번호 찾기</a>
           </div>
         </div>
 

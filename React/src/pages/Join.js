@@ -118,10 +118,10 @@ const Join = () => {
       <div className="join-container">
         {/* 로고 이미지 및 제목과 뒤로가기 버튼 */}
         <div className="logo-title">
-          <img src="/images/join/join-datainc_icon.svg" alt="로고" className="logo" />
+          <img src="/images/join/join-login-datainc_icon.svg" alt="데이터잉크 로고" className="logo" />
           <span className="title">DataInk</span>
           <button className="back-button" onClick={handleBack}>
-            <img src="/images/join/join-tothelogin(back)_icon.svg" alt="뒤로가기" />
+            <img src="/images/join/join-tothelogin(back)_icon.svg" alt="뒤로가기(로그인페이지로)" />
           </button>
         </div>
 
@@ -377,19 +377,6 @@ const Join = () => {
             </button>
           </div>
         </form>
-
-        {/* 소셜 가입 */}
-        <div className="social-container">
-          <div className="social-buttons">
-            <img src="/images/join/join-naver_icon.svg" alt="네이버" />
-            <img src="/images/join/join-kakao_icon.svg" alt="카카오" />
-            <img src="/images/join/join-google_icon.svg" alt="구글" />
-            <img src="/images/join/join-facebook_icon.svg" alt="페이스북" />
-          </div>
-          <div className="social-text">
-            또는 소셜계정으로 간편가입을 진행하실 수 있습니다.
-          </div>
-        </div>
       </div>
     </div>
   );
