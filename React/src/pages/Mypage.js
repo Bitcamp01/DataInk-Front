@@ -9,8 +9,7 @@ const Mypage = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [activeTab, setActiveTab] = useState('Profile');
     const [profileImage, setProfileImage] = useState('/images/dataInk_logo_sqr.png');
-    const [backgroundImage, setBackgroundImage] = useState('/images/profileBackground_img.jpg');
-
+    const [backgroundImage, setBackgroundImage] = useState('/images/dataInk_background_default.jpg');
 
     // 비밀번호 확인 완료 후 인증 상태 변경
     const handleAuthentication = () => {
