@@ -13,6 +13,8 @@ import Mypage from './pages/Mypage';
 import Notice from './pages/Notice';
 import Notice_write from './pages/Notice_write';
 import Notice_detail from './pages/Notice_detail';
+import Administrator_item_structure from './pages/Administrator_item_structure';
+import Administrator_project_structure from './pages/Administrator_project_structure';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
         <Route path='/review' element={<Review />} />
         <Route path="/notice_write" element={<Notice_write />} />
         <Route path="/notice_detail" element={<Notice_detail />} />
+        <Route path="/administrator_item_structure" element={<Administrator_item_structure/>}/>
+        <Route path="/administrator_project_structure" element={<Administrator_project_structure/>}/>
       </Route>
     </Routes>
   );
