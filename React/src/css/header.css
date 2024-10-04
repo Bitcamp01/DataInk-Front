@@ -70,6 +70,10 @@
     cursor: pointer;
 }
 
+.header__icon--alert {
+    margin-top: 0.3rem;
+}
+
 .header__icon--profile {
     width: 2.475rem;
     height: 2.475rem;
