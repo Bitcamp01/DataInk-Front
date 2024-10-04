@@ -6,6 +6,7 @@ import Table_projectList from '../components/Table_projectList';
 import Modal_addMember from '../components/Modal_addMember';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const MemberManagement = () => {
   const [activeTab, setActiveTab] = useState('member');
@@ -67,9 +68,25 @@ const MemberManagement = () => {
               </div>
               {/* 멤버 추가 버튼: activeTab이 'member'일 때만 보이게 */}
               {activeTab === 'member' && (
-                <button className="member-list__add-btn"  onClick={handleClickOpen}>멤버 추가</button>
-              )}
-            
+                    <Button
+                      variant="contained" 
+                      onClick={handleClickOpen}
+                      sx={{
+                        width:'130px',
+                        height:'42px',
+                        marginBottom:'10px',
+                        fontFamily: 'Pretendard', // 폰트 설정
+                        backgroundColor: '#7C97FE', // 버튼 배경 색상
+                        color: '#FFFFFF', // 버튼 텍스트 색상
+                        '&:hover': { 
+                          backgroundColor: '#6B88E6',
+                        },
+                      }}
+                      
+                    >
+                      멤버 추가
+                    </Button>
+                  )}
           </div>
 
 
@@ -79,18 +96,18 @@ const MemberManagement = () => {
             </div>
 
             {/* 페이지네이션 */}
-            <div className="pagination-container">
+            <div className="pagination-container custom-pagination">
                 <Stack spacing={2} sx={{ marginBottom: '80px',  }}>
                     <Pagination count={10}  sx={{
                       '& .MuiPaginationItem-root': {
-                        color: '#7c97fe', // 기본 페이지 버튼의 색상
+                        color: '#7c97fe !important', // 기본 페이지 버튼의 색상
                       },
                       '& .Mui-selected': {
                         backgroundColor: '#7c97fe', // 선택된 페이지 속성
                         color: '#ffffff', 
                       },
                       '& .MuiPaginationItem-root:not(.Mui-selected)': {
-                        color: '#3e3e3e', // 선택되지 않은 페이지 텍스트 색상 설정 (예: 검은색)
+                        color: '#3e3e3e', // 선택되지 않은 페이지 텍스트 색상 설정 
                       },
                       '& .MuiPaginationItem-ellipsis': {
                         color: '#3e3e3e', // 페이지 사이의 점 색상

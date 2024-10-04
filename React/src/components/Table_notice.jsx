@@ -5,7 +5,7 @@ import  '../css/table.css';
 
 
 const columns = [
-  { field: 'id', headerName: 'No', flex: 90 / 1100 }, 
+  { field: 'id', headerName: 'No', flex: 90 / 1100, cellClassName: 'first-column', headerClassName: 'header-text'  }, 
   { field: 'title', headerName: '제목', flex: 580 / 1100 },  
   { field: 'writer', headerName: '작성자', flex: 140 / 1100 }, 
   { field: 'department', headerName: '소속(부서)', flex: 140 / 1100 },  
@@ -31,7 +31,10 @@ export default function Table_Notice() {
     <Box sx={{ width: '100%',  
       minWidth:'1135px', 
       marginBottom: '39px', 
-      boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', }}>
+      boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)',
+      borderRadius: '10px', // 테두리 둥글게 설정
+      
+      }}>
 
       <DataGrid
         rows={rows}
@@ -44,6 +47,20 @@ export default function Table_Notice() {
           '& .MuiDataGrid-columnSeparator': {
             display: 'none',  
           },  
+          '& .MuiDataGrid-root': {
+            border: 'none', // 기본 DataGrid의 테두리 제거
+          },
+          '& .MuiDataGrid-cell': {
+            borderBottom: 'none', // 셀 아래쪽의 기본 테두리 제거
+          }, 
+          '& .first-column': {
+            paddingLeft: '20px', // 첫 번째 컬럼 셀에 왼쪽 공백 추가
+          },
+
+          '& .header-text': {
+            paddingLeft: '20px', // 첫 번째 컬럼 셀에 왼쪽 공백 추가
+          },
+
         }}
         autoHeight
         disableRowSelectionOnClick

@@ -105,7 +105,6 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                   height: '540px',
                   overflow: 'hidden',  
                   border: 'transparent', 
-                  borderRadius: '10px',  
                   minWidth: '200px',
                   width: '100%', 
                   maxWidth: '100%',
@@ -131,7 +130,11 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                   '& .MuiDataGrid-columnSeparator': {
                     display: 'none',  // 컬럼 헤더의 분리선 제거 
                   }, 
-                }}            
+                  '& .MuiDataGrid-columnHeaderTitle': {
+                    color: '#7c97fe', // 헤더 텍스트 색상을 변경
+                  },
+                
+                }} 
                 hideFooterPagination 
                 hideFooter
                 onSelectionModelChange={(newSelection) => {
@@ -203,8 +206,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 sx={{
                   height: '540px',
                   overflow: 'hidden',  
-                  border: 'transparent', 
-                  borderRadius: '10px',  
+                  border: 'transparent',
                   minWidth: '200px',
                   width: '100%', 
                   maxWidth: '100%',
@@ -222,7 +224,11 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                   },
                   '&::-webkit-scrollbar-thumb:hover': {
                     backgroundColor: '#5A7ECF',  // 호버 시 손잡이 색상 변경
-                  }       
+                  },  
+                  '& .MuiDataGrid-columnHeaderTitle': {
+                    color: '#7c97fe', // 헤더 텍스트 색상을 변경
+                  },
+                  
                 }}
               >    
        

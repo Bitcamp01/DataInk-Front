@@ -33,7 +33,7 @@ const Notice_detail = () => {
                 <Box display="flex" alignItems="center">
 
                   {/* 작성자 아바타 */}
-                  <Avatar alt="작성자" src="/path/to/avatar.jpg" sx={{ width: 48, height: 48, mr: 2 , mb:3}} />
+                  <Avatar alt="작성자" src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2 , mb:3}} />
                   <Box>
                     <Typography variant="body1" fontFamily="Pretendard">정소연</Typography>
                     <Typography variant="body2"  fontFamily="Pretendard" color="textSecondary" sx={{ mb: 3}}>2024.09.19 14:25</Typography>
