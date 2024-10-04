@@ -4,7 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import  '../css/table.css';
 
 const columns = [
-  { field: 'id', headerName: 'No', flex: 60 / 1100 },  
+  { field: 'id', headerName: 'No', flex: 60 / 1100 ,cellClassName: 'first-column', headerClassName: 'header-text'  },  
   { field: 'name', headerName: '이름', flex: 170 / 1100 },  
   { field: 'department', headerName: '소속(부서)', flex: 180 / 1100 },  
   { field: 'email', headerName: '이메일', flex: 250 / 1100 },  
@@ -26,6 +26,8 @@ const rows = [
   { id: 10, name: 'Roxie', department: 'Harvey', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
 ];
 
+
+
 export default function Table_memberListAll() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
@@ -35,6 +37,7 @@ export default function Table_memberListAll() {
       minWidth:'1135px' ,
       marginBottom: '39px', 
       boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', 
+      borderRadius: '10px'
       }}>
 
       <DataGrid
@@ -52,6 +55,16 @@ export default function Table_memberListAll() {
                   '& .MuiDataGrid-columnSeparator': {
                     display: 'none',  // 컬럼 헤더의 분리선 제거 
                   }, 
+                  '& .first-column': {
+                    paddingLeft: '20px', // 첫 번째 컬럼 셀에 왼쪽 공백 추가
+                  },
+
+                  '& .header-text': {
+                    paddingLeft: '20px', // 첫 번째 컬럼 셀에 왼쪽 공백 추가
+                  },
+                  '& .MuiDataGrid-columnHeaderTitle': {
+                    color: '#7c97fe', // 헤더 텍스트 색상을 변경
+                  },
         }}
         autoHeight
         disableRowSelectionOnClick
