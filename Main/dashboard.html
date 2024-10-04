@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboard</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+    <div class="layout">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <img class="sidebar__logo" src="assets/images/datalnk-logo.png" alt="데이터잉크 아이콘">
+            <div class="sidebar__menu">
+                <a href="/main" class="sidebar__icon sidebar__icon--active">
+                    <img src="assets/images/main-home-icon.png" alt="메인홈">
+                </a>
+                <a href="/data" class="sidebar__icon">
+                    <img src="assets/images/data-icon.png" alt="데이터라벨링">
+                </a>
+                <a href="/member" class="sidebar__icon">
+                    <img src="assets/images/member-icon.png" alt="멤버관리">
+                </a>
+                <a href="/" class="sidebar__icon">
+                    <img src="assets/images/notice-icon.png" alt="공지사항">
+                </a>
+            </div>
+        </aside>
+
+        <aside class="extra-sidebar">
+            <div class="extra-sidebar__menu">
+                <a href="/main" class="extra-sidebar__link">대시보드(Home)</a>
+                <a href="/data" class="extra-sidebar__link">데이터라벨링</a>
+                <a href="/member" class="extra-sidebar__link">멤버관리</a>
+                <a href="/" class="extra-sidebar__link">공지사항</a>
+            </div>
+        </aside>
+
+        <!-- 메인(헤더 + 콘텐츠) 영역 -->
+        <div class="main">
+
+            <!-- 헤더 영역 -->
+            <header class="header">
+                <div class="header__back-icon">
+                    <img src="assets/images/back-icon.png" alt="뒤로가기">
+                </div>
+                <div class="header__title">Dash Borad</div>
+                <div class="header__search">
+                    <input type="text" class="header__search-input">
+                    <img src="assets/images/search-icon.png" alt="검색 아이콘" class="header__search-icon">
+                </div>
+                <div class="header__icons">
+                    <img src="assets/images/chat.png" alt="채팅" class="header__icon header__icon--chat">
+                    <img src="assets/images/alert.png" alt="알람" class="header__icon header__icon--alert">
+                    <img src="assets/images/profile.png" alt="프로필" class="header__icon header__icon--profile">
+                    <img src="assets/images/profile-drop.png" alt="드롭다운" class="header__icon header__icon--dropdown">
+                </div>
+            </header>
+
+            <!-- ---------------------------------------------------------------- -->
+            
+            <!-- 콘텐츠 영역 -->
+            <section class="content">
+                <!-- Overview -->
+                 <div class="overView">
+                     <h2 id="overView-text">Overview</h2>
+                     <div class="total">
+                         <div class="profileCard">
+                            <div class="profile">
+                                <h4>좋은 하루입니다!</h4>
+                                <img src="assets/images/profile.png" alt="프로필 이미지">
+                                <h2 style="color: #7C97FE; font-weight: normal;">
+                                    정소연 <span style="font-size: 1rem; color: #2F2F2F;">님</span>
+                                </h2> 
+                            </div>
+                            <div class="statusInfo">
+                                <div class="roleInfo">
+                                    <div class="Affiliation">
+                                        <span style="color: #929292; font-size: 0.9rem;">소속</span>
+                                        <h4>AI clovar</h4>
+                                    </div>
+                                    <div class="role">
+                                        <span style="color: #929292; font-size: 0.9rem;">역할</span>
+                                        <h4>라벨러</h4>
+                                    </div>
+                                </div>
+                                <div class="Announcement">
+                                    <h5><공지사항> <a id="Announcement-detail" href="/" style="color: #929292; font-weight: normal; font-size: 0.8rem;">더보기</a></h5>
+                                    <div class="detail-info">
+                                        <img src="assets/images/urgent-speaker_icon.png" alt="스피커 아이콘">
+                                        <span style="color: #F67171; font-size: 0.8rem;">[AI부서] </span> <a href="/" style="font-size: 0.8rem;">사내 작업에 대한 규칙</a>
+                                    </div> 
+                                    <div class="detail-info">
+                                        <img src="assets/images/Speaker_icon.png" alt="스피커 아이콘">
+                                        <span style="color: #7C97FE; font-size: 0.8rem;">[AI부서] </span> <a href="/" style="font-size: 0.8rem;">사내 작업에 대한 규칙</a>
+                                    </div>   
+                                    <div class="detail-info">
+                                        <img src="assets/images/Speaker_icon.png" alt="스피커 아이콘">
+                                        <span style="color: #7C97FE; font-size: 0.8rem;">[AI부서] </span> <a href="/" style="font-size: 0.8rem;">사내 작업에 대한 규칙</a>
+                                    </div>                                      
+                                </div>
+                            </div>
+                         </div>
+                         <div class="work">
+                            <h3>완료된 작업현황</h3>
+                         </div>
+                         <div class="workIn-todo">
+                            <div class="workIn">
+                                <h3>Work In</h3>
+                                <div class="projectList">
+                                    <span>프로젝트1</span>
+                                    <span>프로젝트2</span>
+                                    <span>프로젝트3</span>
+                                    <span>프로젝트4</span>
+                                    <span>프로젝트5</span>
+                                    <span>프로젝트6</span>
+                                    <span>프로젝트7</span>
+                                    <span>프로젝트8</span>
+                                    <span>프로젝트9</span>
+                                    <span>프로젝트10</span>
+                                    <span>프로젝트11</span>
+                                    <span>프로젝트12</span>
+                                </div>
+                            </div>
+                            <div class="todo">
+                                <h3>To - do</h3>
+                                <div class="todoList">
+                                    <span>할일1</span>
+                                    <span>할일2</span>
+                                    <span>할일3</span>
+                                    <span>할일4</span>
+                                    <span>할일5</span>
+                                    <span>할일6</span>
+                                    <span>할일7</span>
+                                    <span>할일8</span>
+                                    <span>할일9</span>
+                                    <span>할일10</span>
+                                    <span>할일11</span>
+                                    <span>할일12</span>
+                                </div>
+                            </div>
+                         </div>
+                         <div class="calendar"></div>
+                     </div>
+                 </div>
+
+                <!-- 참여 중인 프로젝트 -->
+                <div class="project">
+                    <h2 class="project-header">
+                        참여 중인 프로젝트 <span class="project-count" style="color: #7C97FE;">10</span><span class="project-count">건</span>
+                    </h2>
+                    <!-- 참여중인 프로젝트를 카드 형식으로 표출 -->
+                    <div id="card-container">
+                        <div class="card">
+                            <div class="projectCard-header">
+                                <h2>프로젝트 이름</h2>
+                                <div class="deadline">D-2</div>
+                                <button class="bookmark">
+                                    <img src="../Main/assets/icons/pin-icon.svg" alt="즐겨찾기아이콘">
+                                </button>
+                            </div>
+                            <div class="projectDetails">
+                                <span class="explanation">프로젝트 설명입니다. 프로젝트 설명입니다. 프로젝트 설명입니다. 프로젝트 설명입니다.</span>
+                                <h4>
+                                    진행률
+                                    <span class="project-percent">95</span>%
+                                </h4>
+                                <div class="progress-container">
+                                    <span class="progress"></span>
+                                    <span class="progress-background"></span>
+                                </div>
+                            </div>
+                            <div class="members">
+                                <div class="manager">
+                                    <span>관리자</span>
+                                    <img src="../Main/assets/images/manager-profile_img.png" alt="관리자 프로필">
+                                </div>
+                                <div class="reviewer">
+                                    <span>검수자</span>
+                                    <img src="../Main/assets/images/reviewer-profile_img.png" alt="검수자 프로필">
+                                </div>
+                                <div class="labeler">
+                                    <span class="labeler-text">멤버</span>
+                                    <div class="labeler-profile">
+                                        <img style="width: 43px; height: 43px;" src="../Main/assets/images/profile_img.png" alt="라벨러프로필1">
+                                        <img src="../Main/assets/images/labeler-profile-01_img.png" alt="라벨러프로필2">
+                                        <img src="../Main/assets/images/labeler-profile-02_img.png" alt="라벨러프로필3">
+                                        <img src="../Main/assets/images/labeler-profile-03_img.png" alt="라벨러프로필3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+            </section>
+        </div>
+    </div>
+    <script src="assets/scripts/sidebar.js"></script>
+    <script src="assets/scripts/dashboard.js"></script>
+</body>
+</html>
+

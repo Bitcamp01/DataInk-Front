@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>member-management</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/member-management.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+</head>
+<body>
+    <div class="layout">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <img class="sidebar__logo" src="assets/images/datalnk-logo.png" alt="데이터잉크 아이콘">
+            <div class="sidebar__menu">
+                <a href="/main" class="sidebar__icon sidebar__icon--active">
+                    <img src="assets/images/main-home-icon.png" alt="메인홈">
+                </a>
+                <a href="/data" class="sidebar__icon">
+                    <img src="assets/images/data-icon.png" alt="데이터라벨링">
+                </a>
+                <a href="/member" class="sidebar__icon">
+                    <img src="assets/images/member-icon.png" alt="멤버관리">
+                </a>
+                <a href="/" class="sidebar__icon">
+                    <img src="assets/images/notice-icon.png" alt="공지사항">
+                </a>
+            </div>
+        </aside>
+
+        <aside class="extra-sidebar">
+            <div class="extra-sidebar__menu">
+                <a href="/main" class="extra-sidebar__link">대시보드(Home)</a>
+                <a href="/data" class="extra-sidebar__link">데이터라벨링</a>
+                <a href="/member" class="extra-sidebar__link">멤버관리</a>
+                <a href="/" class="extra-sidebar__link">공지사항</a>
+            </div>
+        </aside>
+
+        <!-- 메인(헤더 + 콘텐츠) 영역 -->
+        <div class="main">
+
+            <!-- 헤더 영역 -->
+            <header class="header">
+                <div class="header__back-icon">
+                    <img src="assets/images/back-icon.png" alt="뒤로가기">
+                </div>
+                <div class="header__title">Data Labeling</div>
+                <div class="header__search">
+                    <input type="text" class="header__search-input">
+                    <img src="assets/images/search-icon.png" alt="검색 아이콘" class="header__search-icon">
+                </div>
+                <div class="header__icons">
+                    <img src="assets/images/chat.png" alt="채팅" class="header__icon header__icon--chat">
+                    <img src="assets/images/alert.png" alt="알람" class="header__icon header__icon--alert">
+                    <img src="assets/images/profile.png" alt="프로필" class="header__icon header__icon--profile">
+                    <img src="assets/images/profile-drop.png" alt="드롭다운" class="header__icon header__icon--dropdown">
+                </div>
+            </header>
+
+            <!-- 콘텐츠 영역 -->
+
+                <!-- 멤버 리스트 -->
+                <section class="member-list">                 
+                    <div class="member-list__title">전체 멤버 리스트</div>  
+                    <div class="member-list__discription">가입한 멤버들의 리스트를 확인하고<br>
+                        멤버추가 버튼을 이용하여 새로운 멤버를 등록할 수 있습니다.</div>
+
+                    <div class="member-list__tab_and_button">
+                        
+                            <div class="tab-section__tabs">
+                                <button class="tab-section__tab tab-section__tab--active">멤버 리스트</button>
+                                <button class="tab-section__tab">프로젝트 관리</button>
+                            </div>
+                        <button class="member-list__add-btn">멤버 추가</button>
+                    </div>
+                    <table class="member-list__table">
+                        <thead>
+                            <tr id="table_category">
+                                <th>No</th>
+                                <th>이름</th>
+                                <th>소속(부서)</th>
+                                <th>이메일</th>
+                                <th>전화번호</th>
+                                <th>역할</th>
+                                <th>등록일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>
+                        </tbody>
+                        <tbody>
+                            <tr id="table__last">
+                                <td>1</td>
+                                <td>김영크</td>
+                                <td>소속(부서)</td>
+                                <td>bitcamp12@gmail.com</td>
+                                <td>010-1112-2334</td>
+                                <td>관리자</td>
+                                <td>2024.09.10 23:00</td>
+                            </tr>               
+                        </tbody>
+                    </table>
+
+                    <!-- 페이지네이션 -->
+                    <div class="pagination">
+                        <button class="pagination__btn">
+                           <img src="assets/icons/arrow_left_icon.svg" alt="이전">
+                        </button>
+                        <ul class="pagination__list">
+                            <li class="pagination__item pagination__item--active">1</li>
+                            <li class="pagination__item">2</li>
+                            <li class="pagination__item">3</li>
+                            <li class="pagination__item">4</li>
+                            <li class="pagination__item">5</li>
+                            <li class="pagination__item">...</li>
+                        </ul>
+                        <button class="pagination__btn">
+                            <img src="assets/icons/arrow_right_icon.svg" alt="다음">
+                        </button> 
+                    </div>
+                </section>
+            </main>
+
+        </div>
+    </div>
+    <script src="assets/scripts/sidebar.js"></script>
+</body>
+</html>

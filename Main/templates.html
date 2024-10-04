@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>templates</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <div class="layout">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <img class="sidebar__logo" src="assets/icons/dataink-logo_icon.svg" alt="데이터잉크 아이콘">
+            <div class="sidebar__menu">
+                <a href="/main" class="sidebar__icon sidebar__icon--active">
+                    <img src="assets/icons/main-home_icon.svg" alt="메인홈">
+                </a>
+                <a href="/data" class="sidebar__icon">
+                    <img src="assets/icons/data_icon.svg" alt="데이터라벨링">
+                </a>
+                <a href="/member" class="sidebar__icon">
+                    <img src="assets/icons/member_icon.svg" alt="멤버관리">
+                </a>
+                <a href="/" class="sidebar__icon">
+                    <img src="assets/icons/notice_icon.svg" alt="공지사항">
+                </a>
+            </div>
+        </aside>
+
+        <aside class="extra-sidebar">
+            <div class="extra-sidebar__menu">
+                <a href="/main" class="extra-sidebar__link">대시보드(Home)</a>
+                <a href="/data" class="extra-sidebar__link">데이터라벨링</a>
+                <a href="/member" class="extra-sidebar__link">멤버관리</a>
+                <a href="/" class="extra-sidebar__link">공지사항</a>
+            </div>  
+        </aside>
+
+        <!-- 메인(헤더 + 콘텐츠) 영역 -->
+        <div class="main">
+
+            <!-- 헤더 영역 -->
+            <header class="header">
+                <div class="header__back-icon">
+                    <img src="assets/icons/back_icon.svg" alt="뒤로가기">
+                </div>
+                <div class="header__title">Data Labeling</div>
+                <div class="header__search">
+                    <input type="text" class="header__search-input">
+                    <img src="assets/icons/search_icon.svg" alt="검색 아이콘" class="header__search-icon">
+                </div>
+                <div class="header__icons">
+                    <img src="assets/icons/chat_icon.svg" alt="채팅" class="header__icon header__icon--chat">
+                    <img src="assets/icons/alert_icon.svg" alt="알람" class="header__icon header__icon--alert">
+                    <img src="assets/images/profile_img.png" alt="프로필" class="header__icon header__icon--profile">
+                    <img src="assets/icons/profile-drop_icon.svg" alt="드롭다운" class="header__icon header__icon--dropdown">
+                </div>
+            </header>
+
+            <!-- 콘텐츠 영역 -->
+            <section class="content">
+                <h1>여기에 원하는 내용을 입력하세요.</h1>
+            </section>
+        </div>
+    </div>
+    <script src="assets/scripts/sidebar.js"></script>
+</body>
+</html>

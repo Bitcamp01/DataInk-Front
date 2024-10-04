@@ -1,0 +1,73 @@
+/* 사이드바 컨테이너 */
+.sidebar-container {
+    position: relative;
+    display: flex;
+  }
+
+/* 기본 사이드바 스타일 */
+.sidebar {
+    position: fixed;
+    width: 4.375rem;
+    padding: 0.625rem;
+    text-align: center;
+    box-sizing: border-box;
+    z-index: 20;
+    background: #1F253D;
+    height: 100vh;
+    transition: all 0.3s ease;
+}
+
+.sidebar__logo {
+    margin-bottom: 2.5rem;
+}
+
+.sidebar__menu {
+    display: grid;
+}
+
+.sidebar__icon {
+    margin-bottom: 1.25rem;
+    width: 3.125rem;
+    height: 3.125rem;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar__icon--active {
+    background-color: #4E5676;
+    border-radius: 15%;
+    height: 3rem;
+}
+
+/* 엑스트라 사이드바 스타일 */
+.extra-sidebar {
+    z-index: 10;
+    position: fixed;
+    left: -10.625rem;
+    width: 10.625rem;
+    height: 100vh;
+    background-color: #1F253D;
+    transition: left 0.3s ease;
+}
+
+/* 엑스트라 사이드바가 열렸을 때 */
+.extra-sidebar.open {
+    left: 4.375rem; /* 사이드바 너비만큼 이동 */
+}
+
+.extra-sidebar__menu {
+    margin-top: 6.8rem; /* 메뉴 상단 간격 조정 */
+}
+
+.extra-sidebar__link {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin-left: 1.25rem; /* 아이콘과 텍스트 사이의 간격을 줄임 */
+    margin-bottom: 2.12rem; /* 링크들 간의 간격 조정 */
+    width: 7rem; /* 링크 너비 */
+    padding: 0.5rem 0; /* 텍스트와 아이콘 간격 조정 */
+    line-height: normal; /* line-height 제거로 기본 텍스트 높이 적용 */
+}

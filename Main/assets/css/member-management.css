@@ -1,0 +1,245 @@
+
+
+/* 메인 콘텐츠 스타일 */
+.main-content {
+    margin-left: 260px;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header__title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.header__search {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.header__profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/*탭 , 제목 스타일 */
+.member-list__title {
+    font-size: 22px;
+    font-weight: bold;
+   
+}
+
+.member-list__discription {
+    margin: 20px 0px 40px 0px;
+    font-size: 16px;
+    color: #707070;
+    line-height: 24px;
+  
+}
+
+.member-list__tab_and_button {
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-end;
+  
+    
+}
+
+
+.member-list__add-btn {
+    background-color: #7C97FE;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 130px;
+    height: 41px;
+    margin-bottom: 15px;
+
+   
+}
+
+.tab-section {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tab-section__tabs {
+    display: flex;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px; 
+
+    
+}
+
+.tab-section__tab {
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #a5aabf;
+    background-color: transparent;
+    cursor: pointer;
+    width: 185px;
+    height: 50px;
+    border: 1px solid #d6d6d6;
+    background-color: #F0F0F0;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px; 
+    border-bottom: none;
+
+}
+
+.tab-section__tab:hover {
+    color: #ffffff;
+    background-color:#b5c4ff ;
+}
+
+.tab-section__tab--active {
+    color: #7C97FE;
+    font-weight: bold;
+    width: 185px;
+    height: 50px;
+    border: 1px solid #d6d6d6;
+    background-color: #ffffff;
+    margin : 0px 10px 0px 10px;
+    border-bottom: 4px solid #7C97FE; 
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px; 
+
+}
+
+
+/* 테이블(멤버 리스트) 스타일 */
+.member-list {
+    margin: 82px 243px 0 243px;
+}
+
+
+.member-list__table {
+    width: 100%;
+    border-collapse:  separate;;
+    background-color: #ffffff;
+    font-size: 14px;
+    border: 1px solid #ddd; 
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+   
+
+
+}
+
+.member-list__table th, 
+.member-list__table td {
+    /* border: 1px solid #ddd; */
+    background-color: #ffffff;
+    padding: 12px 12px 12px 22px;
+    text-align: left;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #ddd; 
+}
+
+.member-list__table th {
+    background-color: #ffffff;
+    border-bottom: 1px solid #d9d9d9; 
+}
+
+
+#table_category th {
+    color: #7C97FE; 
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#table__last td{
+    border-bottom: none;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination__btn {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination__list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 10px;
+}
+
+.pagination__item {
+    margin: 0 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.pagination__item--active {
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+/* 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+
+}
+
+.pagination__btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #555;
+}
+
+.pagination__list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 10px;
+}
+
+.pagination__item {
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #555;
+    font-size: 16px;
+}
+
+.pagination__item:hover {
+    background-color: #d6e0ff;
+}
+
+.pagination__item--active {
+    background-color: #658eff;
+    color: white;
+    font-weight: bold;
+    pointer-events: none;
+}

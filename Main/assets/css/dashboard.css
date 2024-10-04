@@ -1,0 +1,381 @@
+/* 콘텐츠 영역 스타일 */
+.content {
+    padding: 1.25rem;
+    flex: 1;
+}
+
+.overView h2 {
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.total {
+    width: 1758px;
+    height: 471px;
+    margin-left: 20px;
+    display: flex;
+    gap: 40px;
+}
+
+.profileCard {
+    width: 254px;
+    height: 421px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #C4C4C4;
+}
+
+.profile {
+    text-align: center;
+}
+
+.profile img {
+    width: 130px;
+    height: 130px;
+}
+
+.profile h4 {
+    color: #7C97FE;
+    font-weight: normal;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.profile h2 {
+    margin: 10px;
+    border-bottom: 1px solid #D0D0D0;
+    padding-bottom: 10px;
+}
+
+.roleInfo {
+    display: flex;
+    margin-left: 35px;
+}
+
+.Affiliation {
+    padding-right: 30px;
+    border-right: 1px dotted #D0D0D0;
+    margin-right: 30px;
+    text-align: center;
+}
+
+.role {
+    text-align: center;
+}
+
+.Announcement {
+    border: 1px dotted #DBDBDB;
+    background: #F6F8FF;
+    width: 220px;
+    height: 100px;
+    margin-left: 15px;
+    margin-top: 20px;
+}
+
+.detail-info {
+    display: inline-flex;
+}
+
+.detail-info img {
+    width: 9.82px;
+    height: 14.59px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.detail-info a {
+    text-decoration: none;
+    color: #2F2F2F;
+    margin-left: 5px;
+}
+
+#Announcement-detail {
+    margin-top: 5px;
+    margin-left: 100px;
+    text-decoration: none;
+}
+
+.Announcement h5 {
+    margin-top: 5px;
+    margin-left: 8px;
+}
+
+.detail-info {
+    align-items: center;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.detail-info span {
+    margin: 0;
+}
+
+
+.work {
+    width: 436px;
+    height: 423px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #C4C4C4;
+}
+
+.workIn-todo {
+    width: 522px;
+    height: 425px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #C4C4C4;
+}
+
+.workIn h3 {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #DFDFDF;
+}
+.workIn span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.workIn {
+    width: 466px;
+    height: 177px;
+    margin-top: 30px;
+    margin-left: 20px;
+}
+
+.projectList {
+    margin-top: 10px;
+    margin-left: 15px;
+    width: 464px;
+    height: 140px;
+    overflow-y: scroll;
+}
+
+.projectList::-webkit-scrollbar {
+    width: 10px;
+}
+
+.projectList::-webkit-scrollbar-thumb {
+    background: #E7E7E7;
+    border-radius: 10px;
+}
+
+.projectList::-webkit-scrollbar-track {
+    background: white;
+}
+
+.todo {
+    width: 466px;
+    height: 177px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.todo h3 {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #DFDFDF;
+}
+
+.todo span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.todoList {
+    margin-top: 10px;
+    margin-left: 15px;
+    width: 464px;
+    height: 140px;
+    overflow-y: scroll;
+}
+
+.todoList::-webkit-scrollbar {
+    width: 10px;
+}
+
+.todoList::-webkit-scrollbar-thumb {
+    background: #E7E7E7;
+    border-radius: 10px;
+}
+
+.todoList::-webkit-scrollbar-track {
+    background: white;
+}
+
+.calendar {
+    width: 445px;
+    height: 426px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #C4C4C4;
+}
+
+.project {
+    margin-left: 20px;
+}
+
+#card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 20px;
+    height: 270px;
+    overflow-y: scroll;
+}
+
+#card-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+#card-container::-webkit-scrollbar-thumb {
+    background: #7C97FE; /*스크롤바 색상*/
+    border-radius: 10px;   /*스크롤바 둥글게 */
+}
+
+#card-container::-webkit-scrollbar-track {
+    background: #F6F6F6;
+}
+
+.card {
+    background: white;
+    width: 404px;
+    height: 255px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+                0 6px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: 1px solid white;
+}
+
+.card:hover {
+    border: 1px solid #2E7AF2;
+}
+
+.projectCard-header {
+    display: flex;
+    margin-bottom: 20px;
+    padding-top: 18px;
+    padding-left: 20px;
+}
+
+.bookmark {
+    background: none;
+    border: none;
+    margin-left: 130px;
+}
+
+.explanation {
+    display: flex;
+    color: #797979;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.projectDetails {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.project-percent {
+    color: #2E7AF2;
+}
+
+.progress-container {
+    position: relative;
+    margin-bottom: 30px;
+    margin-top: 8px;
+}
+
+.progress {
+    display: block;
+    position: absolute;
+    height: 10px;
+    width: 95%;
+    background: #7C97FE;
+    border-radius: 5px;
+    z-index: 2;
+}
+
+.progress-background {
+    position: absolute;
+    display: block;
+    height: 10px;
+    width: 100%;
+    background: #CEE0FB;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.deadline {
+    width: 64px;
+    height: 26px;
+    background: #FD5B5B;
+    border-radius: 15px;
+    color: white;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    margin-left: 13px;
+}
+
+.members img{
+    border: 2px solid #2E7AF2;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+
+.members {
+    display: flex;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.manager {
+    display: flex;
+    font-size: 13px;
+    text-align: center;
+    flex-direction: column;
+    color: #616161;
+    border-right: 1px dotted #D0D0D0;
+    height: 60px;
+    padding-right: 10px;
+}
+
+.reviewer {
+    display: flex;
+    font-size: 13px;
+    text-align: center;
+    flex-direction: column;
+    color: #616161;
+    border-right: 1px dotted #D0D0D0;
+    height: 60px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.labeler {
+    position: relative;
+    align-items: center;
+    font-size: 13px;
+    color: #616161;
+    margin-left: 10px;
+}
+
+.labeler img:first-child {
+    margin-left: 0;
+    /* 첫 번째 이미지는 음수 마진을 적용하지 않음 */
+}
+
+.labeler img {
+    margin-left: -20px;
+    /* 각 이미지가 서로 겹치도록 음수 마진 사용 */
+    /* 나머지 이미지와의 간격을 설정 */
+}
+
+
+.project-count {
+    font-size: 1.2rem;
+    margin-left: 5px;
+    font-weight: normal;
+}
