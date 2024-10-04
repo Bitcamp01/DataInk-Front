@@ -1,7 +1,6 @@
-import React from 'react';
+// Join.js
+import React, { useState, useEffect } from 'react';
 import '../css/join.css';
-import { useState } from 'react';
-import { useEffect } from 'react';
 
 const Join = () => {
   // 상태 관리
@@ -15,7 +14,7 @@ const Join = () => {
 
   // 유효성 검사 상태
   const [usernameValid, setUsernameValid] = useState({
-    lettersOnly: false,
+    lettersAndNumbersOnly: false,
     minLength: false,
     hasNumber: false,
   });
@@ -40,10 +39,10 @@ const Join = () => {
 
   // 유효성 검사 함수
   const validateUsername = (value) => {
-    const lettersOnly = /^[A-Za-z]+$/.test(value);
+    const lettersAndNumbersOnly = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/.test(value);
     const minLength = value.length >= 6;
     const hasNumber = /\d/.test(value);
-    setUsernameValid({ lettersOnly, minLength, hasNumber });
+    setUsernameValid({ lettersAndNumbersOnly, minLength, hasNumber });
   };
 
   const validateEmail = (value) => {
@@ -94,7 +93,8 @@ const Join = () => {
     isPasswordValidField &&
     isConfirmPasswordValidField &&
     isCarrierValid &&
-    isPhoneValid;
+    isPhoneValid &&
+    isBirthdateValid;
 
   // 폼 제출 핸들러
   const handleSubmit = (e) => {
@@ -108,19 +108,27 @@ const Join = () => {
     }
   };
 
+  // 뒤로가기 핸들러
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
     <div className="join-modal">
       <div className="join-container">
-        {/* 로고 이미지 및 제목 */}
+        {/* 로고 이미지 및 제목과 뒤로가기 버튼 */}
         <div className="logo-title">
-          <img src="/images/join/join-datainc_icon.svg" alt="로고" className="logo" />
-          <span className="title">Data Ink</span>
+          <img src="/images/join/join-login-datainc_icon.svg" alt="데이터잉크 로고" className="logo" />
+          <span className="title">DataInk</span>
+          <button className="back-button" onClick={handleBack}>
+            <img src="/images/join/join-tothelogin(back)_icon.svg" alt="뒤로가기(로그인페이지로)" />
+          </button>
         </div>
 
         {/* 회원가입 제목 */}
         <div className="signup-title">
           <h1>회원가입</h1>
-          <p>Data Ink의 회원이 되실 수 있습니다.</p>
+          <p>DataInk의 회원이 되실 수 있습니다.</p>
         </div>
 
         {/* 회원가입 폼 */}
@@ -141,6 +149,7 @@ const Join = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 onFocus={() => setFocusedField('username')}
                 onBlur={() => setFocusedField('')}
+                className={isUsernameValid ? 'valid' : ''}
               />
               {isUsernameValid && (
                 <img src="/images/join/join-check_icon.svg" alt="체크 아이콘" className="input-icon visible" />
@@ -150,8 +159,8 @@ const Join = () => {
 
           {/* 부가 설명 메시지 - 아이디 */}
           <div className={`validation-messages ${focusedField === 'username' && !isUsernameValid ? 'visible' : ''}`}>
-            <p className={usernameValid.lettersOnly ? 'valid' : 'invalid'}>
-              영문자만 사용 가능합니다.
+            <p className={usernameValid.lettersAndNumbersOnly ? 'valid' : 'invalid'}>
+              영문자와 숫자의 조합만 사용 가능합니다.
             </p>
             <p className={usernameValid.minLength ? 'valid' : 'invalid'}>
               6글자 이상이어야 합니다.
@@ -177,6 +186,7 @@ const Join = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 onFocus={() => setFocusedField('email')}
                 onBlur={() => setFocusedField('')}
+                className={isEmailValidField ? 'valid' : ''}
               />
               {isEmailValidField && (
                 <img src="/images/join/join-check_icon.svg" alt="체크 아이콘" className="input-icon visible" />
@@ -196,7 +206,7 @@ const Join = () => {
             <label htmlFor="birthdate">
               <span className="required">*</span>생년월일
             </label>
-            <div className="input-wrapper">
+            <div className="input-wrapper date-input">
               <input
                 type="date"
                 id="birthdate"
@@ -206,6 +216,7 @@ const Join = () => {
                 onChange={(e) => setBirthdate(e.target.value)}
                 onFocus={() => setFocusedField('birthdate')}
                 onBlur={() => setFocusedField('')}
+                className={isBirthdateValid ? 'valid' : ''}
               />
               {isBirthdateValid && (
                 <img src="/images/join/join-check_icon.svg" alt="체크 아이콘" className="input-icon visible" />
@@ -216,26 +227,27 @@ const Join = () => {
           {/* 부가 설명 메시지 - 생년월일 */}
           <div className={`validation-messages ${focusedField === 'birthdate' && !isBirthdateValid ? 'visible' : ''}`}>
             <p className={isBirthdateValid ? 'valid' : 'invalid'}>
-              생년월일이 입력되었습니다.
+              생년월일을 선택해주세요.
             </p>
           </div>
 
-          {/* 암호 필드 */}
+          {/* 비밀번호 필드 */}
           <div className={`form-group ${focusedField === 'password' ? 'active' : ''}`}>
             <label htmlFor="password">
-              <span className="required">*</span>암호
+              <span className="required">*</span>비밀번호
             </label>
             <div className="input-wrapper">
               <input
                 type="password"
                 id="password"
                 name="password"
-                placeholder="암호를 입력하세요"
-                aria-label="암호 입력"
+                placeholder="비밀번호를 입력하세요"
+                aria-label="비밀번호 입력"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onFocus={() => setFocusedField('password')}
                 onBlur={() => setFocusedField('')}
+                className={isPasswordValidField ? 'valid' : ''}
               />
               {isPasswordValidField && (
                 <img src="/images/join/join-check_icon.svg" alt="체크 아이콘" className="input-icon visible" />
@@ -243,7 +255,7 @@ const Join = () => {
             </div>
           </div>
 
-          {/* 부가 설명 메시지 - 암호 */}
+          {/* 부가 설명 메시지 - 비밀번호 */}
           <div className={`validation-messages ${focusedField === 'password' && !isPasswordValidField ? 'visible' : ''}`}>
             <p className={passwordValid.hasSpecialChar ? 'valid' : 'invalid'}>
               특수문자를 하나 이상 포함해주세요.
@@ -259,22 +271,23 @@ const Join = () => {
             </p>
           </div>
 
-          {/* 암호확인 필드 */}
+          {/* 비밀번호확인 필드 */}
           <div className={`form-group ${focusedField === 'confirmPassword' ? 'active' : ''}`}>
             <label htmlFor="confirm-password">
-              <span className="required">*</span>암호확인
+              <span className="required">*</span>비밀번호확인
             </label>
             <div className="input-wrapper">
               <input
                 type="password"
                 id="confirm-password"
                 name="confirm-password"
-                placeholder="암호를 재입력해주세요"
-                aria-label="암호확인 입력"
+                placeholder="비밀번호를 재입력해주세요"
+                aria-label="비밀번호확인 입력"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 onFocus={() => setFocusedField('confirmPassword')}
                 onBlur={() => setFocusedField('')}
+                className={isConfirmPasswordValidField ? 'valid' : ''}
               />
               {isConfirmPasswordValidField && (
                 <img src="/images/join/join-check_icon.svg" alt="체크 아이콘" className="input-icon visible" />
@@ -282,10 +295,10 @@ const Join = () => {
             </div>
           </div>
 
-          {/* 부가 설명 메시지 - 암호확인 */}
+          {/* 부가 설명 메시지 - 비밀번호확인 */}
           <div className={`validation-messages ${focusedField === 'confirmPassword' && !isConfirmPasswordValidField ? 'visible' : ''}`}>
             <p className={confirmPasswordValid.matches ? 'valid' : 'invalid'}>
-              암호와 일치합니다.
+            비밀번호와 일치시켜주세요.
             </p>
           </div>
 
@@ -303,11 +316,15 @@ const Join = () => {
                 onChange={(e) => setCarrier(e.target.value)}
                 onFocus={() => setFocusedField('carrier')}
                 onBlur={() => setFocusedField('')}
+                className={isCarrierValid ? 'valid' : ''}
               >
-                <option value="">통신사를 골라주세요</option>
-                <option value="carrier1">통신사 1</option>
-                <option value="carrier2">통신사 2</option>
-                <option value="carrier3">통신사 3</option>
+                <option value="">통신사를 선택해주세요</option>
+                <option value="SK">SK</option>
+                <option value="KT">KT</option>
+                <option value="LG">LG</option>
+                <option value="SK알뜰">SK알뜰</option>
+                <option value="KT알뜰">KT알뜰</option>
+                <option value="LG알뜰">LG알뜰</option>
               </select>
               {isCarrierValid && (
                 <img src="/images/join/join-check_icon.svg" alt="체크 아이콘" className="input-icon visible" />
@@ -318,7 +335,7 @@ const Join = () => {
           {/* 부가 설명 메시지 - 통신사 */}
           <div className={`validation-messages ${focusedField === 'carrier' && !isCarrierValid ? 'visible' : ''}`}>
             <p className={isCarrierValid ? 'valid' : 'invalid'}>
-              통신사가 선택되었습니다.
+              통신사를 클릭해주세요.
             </p>
           </div>
 
@@ -338,6 +355,7 @@ const Join = () => {
                 onChange={(e) => setPhone(e.target.value)}
                 onFocus={() => setFocusedField('phone')}
                 onBlur={() => setFocusedField('')}
+                className={isPhoneValid ? 'valid' : ''}
               />
               {isPhoneValid && (
                 <img src="/images/join/join-check_icon.svg" alt="체크 아이콘" className="input-icon visible" />
@@ -359,19 +377,6 @@ const Join = () => {
             </button>
           </div>
         </form>
-
-        {/* 소셜 가입 */}
-        <div className="social-container">
-          <div className="social-buttons">
-            <img src="/images/join/join-naver_icon.svg" alt="네이버" />
-            <img src="/images/join/join-kakao_icon.svg" alt="카카오" />
-            <img src="/images/join/join-google_icon.svg" alt="구글" />
-            <img src="/images/join/join-facebook_icon.svg" alt="페이스북" />
-          </div>
-          <div className="social-text">
-            또는 <span>소셜계정으로 간편가입을</span> 진행하실 수 있습니다.
-          </div>
-        </div>
       </div>
     </div>
   );
