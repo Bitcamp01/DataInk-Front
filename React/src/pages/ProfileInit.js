@@ -16,7 +16,8 @@ const ProfileInit = ({onAuthenticate}) => {
     return (
         <div className="profileinit-content">
             <div className="profileinit-header-title">
-                <h3>비공개 페이지 입니다. 비밀번호를 눌러주세요.</h3>
+                <h3>비공개 페이지 입니다.</h3>
+                <h3>비밀번호를 입력해주세요.</h3>
             </div>
 
             <form className="profileinit-form" onSubmit={handlePasswordSubmit}>
@@ -24,10 +25,7 @@ const ProfileInit = ({onAuthenticate}) => {
                     <label htmlFor="password">비밀번호</label>
                     <input type="password" id="password" name="password" placeholder="대소문자 숫자가 포함된 8-16자 이내" />
                 </div>
-
-                <div className="profileinit-form__group">
-                    <button type="submit" className="profile-form__submit">확인</button>
-                </div>
+                <button type="submit" className="profileinit-form__submit">확인</button>
             </form>
         </div>
     )

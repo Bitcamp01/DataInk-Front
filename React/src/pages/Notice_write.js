@@ -54,7 +54,7 @@ const Notice_write = () => {
             <Box display="flex" justifyContent="space-between" alignItems="flex-start">
               <Box display="flex" alignItems="center">
                 {/* 작성자 아바타 */}
-                <Avatar alt="작성자" src="/path/to/avatar.jpg" sx={{ width: 38, height: 38, mr: 2, mb: 3 }} />
+                <Avatar alt="작성자" src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
                 <Box>
                   <Typography variant="body1" fontFamily="Pretendard">정소연</Typography>
                   <Typography variant="body2" fontFamily="Pretendard" color="textSecondary" sx={{ mb: 3 }}>2024.09.19 14:25</Typography>
@@ -95,8 +95,24 @@ const Notice_write = () => {
         </Paper>
 
         {/* 등록 버튼 */}
-        <Box display="flex" justifyContent="center" mt={2} maxWidth="800px" width="100%">
-          <Button sx={{ mr: 2, fontFamily: 'Pretendard', color: "#7C97FE" }}>등록</Button>
+        <Box display="flex" justifyContent="flex-end" mt={2} maxWidth="110%" width="103%">
+          <Button 
+            variant="contained"
+            sx={{ 
+              fontSize:'15px',
+              width:'150px',
+              height: '45px',
+              mr: 2, 
+              fontFamily: 'Pretendard', 
+              backgroundColor: "#7C97FE", // 배경 색상 설정
+              color: "#FFFFFF",           // 텍스트 색상 설정
+              '&:hover': {                // hover 시 색상 변경
+                backgroundColor: "#6B88E6", // hover 상태의 배경 색상
+              }
+            }}
+          >
+          등록
+        </Button>
         </Box>
       </Box>
     </section>

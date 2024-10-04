@@ -11,6 +11,7 @@
     font-weight: bold;
     font-size: 1.3rem;
     margin-top: 5px;
+    width: 140px;
 }
 
 .controls {
@@ -49,6 +50,8 @@
     display: inline-flex;
     align-items: center;
     z-index: 2; /* 드롭다운 버튼이 위에 표시되도록 z-index 설정 */
+    width: 80px;
+    text-align: center;
 }
 
 .dropdown-arrow {
@@ -72,7 +75,6 @@
     padding: 0;
     margin: 8px 0 0; /* 드롭다운 메뉴가 약간 아래로 떨어지도록 */
     z-index: 1;
-    margin-left: 5px;
 }
 
 .dropdown-item {
@@ -81,6 +83,8 @@
     font-size: 12px;
     color: #333;
     border-bottom: 1px solid #ddd;
+    width: 80px;
+    text-align: center;
 }
 
 .dropdown-item.selected {
