@@ -8,7 +8,7 @@ import '../css/profile.css';
 const Mypage = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [activeTab, setActiveTab] = useState('Profile');
-    const [profileImage, setProfileImage] = useState('/images/jeolmi_img.jpg');
+    const [profileImage, setProfileImage] = useState('/images/dataInk_logo_sqr.png');
     const [backgroundImage, setBackgroundImage] = useState('/images/profileBackground_img.jpg');
 
 
