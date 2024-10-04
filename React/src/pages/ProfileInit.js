@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import '../css/profileInit.css';
-import axios from 'axios';
+// import axios from 'axios';
 
 const ProfileInit = ({onAuthenticate}) => {
     const navigate = useNavigate();
