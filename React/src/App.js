@@ -13,8 +13,12 @@ import Mypage from './pages/Mypage';
 import Notice from './pages/Notice';
 import Notice_write from './pages/Notice_write';
 import Notice_detail from './pages/Notice_detail';
+<<<<<<< HEAD
 import Administrator_item_structure from './pages/Administrator_item_structure';
 import Administrator_project_structure from './pages/Administrator_project_structure';
+=======
+import FindAccount from './pages/FindAccount';
+>>>>>>> e3cad2e1839d343ac2361f0deea49b723287c953
 
 function App() {
   return (
@@ -22,10 +26,8 @@ function App() {
       {/* Layout이 모든 페이지에 공통으로 적용될 구조 */}
       <Route element={<Layout />}>
         <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/join' element={<Join />} />
         <Route path='/label/main' element={<LabellingMain />} />
         <Route path='/label/work' element={<Labelling />} />
-        <Route path='/login' element={<Login />} />
         <Route path='/member' element={<MemberManagement />} />
         <Route path='/mypage' element={<Mypage />} />
         <Route path='/notice' element={<Notice />} />
@@ -34,6 +36,11 @@ function App() {
         <Route path="/notice_detail" element={<Notice_detail />} />
         <Route path="/administrator_item_structure" element={<Administrator_item_structure/>}/>
         <Route path="/administrator_project_structure" element={<Administrator_project_structure/>}/>
+      </Route>
+      <Route>
+      <Route path='/join' element={<Join />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/findaccount' element={<FindAccount />} />
       </Route>
     </Routes>
   );
