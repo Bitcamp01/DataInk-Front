@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/reviewer.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.6/pdfobject.min.js"></script>
+</head>
+<body>
+    <div class="layout">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <img class="sidebar__logo" src="assets/images/datalnk-logo.png" alt="데이터잉크 아이콘">
+            <div class="sidebar__menu">
+                <a href="/main" class="sidebar__icon sidebar__icon--active">
+                    <img src="assets/images/main-home-icon.png" alt="메인홈">
+                </a>
+                <a href="/data" class="sidebar__icon">
+                    <img src="assets/images/data-icon.png" alt="데이터라벨링">
+                </a>
+                <a href="/member" class="sidebar__icon">
+                    <img src="assets/images/member-icon.png" alt="멤버관리">
+                </a>
+                <a href="/" class="sidebar__icon">
+                    <img src="assets/images/notice-icon.png" alt="공지사항">
+                </a>
+            </div>
+        </aside>
+
+        <aside class="extra-sidebar">
+            <div class="extra-sidebar__menu">
+                <a href="/main" class="extra-sidebar__link">대시보드(Home)</a>
+                <a href="/data" class="extra-sidebar__link">데이터라벨링</a>
+                <a href="/member" class="extra-sidebar__link">멤버관리</a>
+                <a href="/" class="extra-sidebar__link">공지사항</a>
+            </div>
+        </aside>
+
+        <!-- 메인(헤더 + 콘텐츠) 영역 -->
+        <div class="main">
+
+            <!-- 헤더 영역 -->
+            <header class="header">
+                <div class="header__back-icon">
+                    <img src="assets/images/back-icon.png" alt="뒤로가기">
+                </div>
+                <div class="header__title">Data Labeling</div>
+                <div class="header__search">
+                    <input type="text" class="header__search-input">
+                    <img src="assets/images/search-icon.png" alt="검색 아이콘" class="header__search-icon">
+                </div>
+                <div class="header__icons">
+                    <img src="assets/images/chat.png" alt="채팅" class="header__icon header__icon--chat">
+                    <img src="assets/images/alert.png" alt="알람" class="header__icon header__icon--alert">
+                    <img src="assets/images/profile.png" alt="프로필" class="header__icon header__icon--profile">
+                    <img src="assets/images/profile-drop.png" alt="드롭다운" class="header__icon header__icon--dropdown">
+                </div>
+            </header>
+
+            <!-- 콘텐츠 영역 -->
+            <section class="content">
+                <div class="pdf-section">
+                    <div id="pdf-viewer" style="width: 100%; height: 100%;"></div>
+                </div>
+                <div class="work-space">
+                    <div class="container">
+                        <!-- Table Section -->
+                        <div class="table-container">
+                            <table class="table">
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="row-item">Row name <span></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    
+                        <!-- Form Section -->
+                        <div class="form-container">
+                            <h4>변경 사유 (여러 사유 선택)</h4>
+                            <div class="boxes">
+                                <div class="checkboxes">
+                                    <label><input type="checkbox"> 오타</label>
+                                    <label><input type="checkbox"> 내용 부족</label>
+                                    <label><input type="checkbox"> 내용 불일치</label>
+                                    <label><input type="checkbox"> 관리자 별도 입력</label>
+                                </div>
+                                <div class="detailboxes">
+                                    <label><textarea cols="30" rows="5"></textarea></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-container">
+                            <button class="reject-button">반려</button>
+                            <button class="apply-button">승인</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="assets/scripts/sidebar.js"></script>
+    <script src="assets/scripts/reviewer.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+

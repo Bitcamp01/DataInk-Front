@@ -1,0 +1,72 @@
+/* 공통 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.profileinit-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 수평 중앙 정렬 */
+    height: 85vh; /* 화면 전체 높이 사용 */
+    justify-content: center; /* 수직 중앙 정렬 */
+}
+
+h3 {
+    color: #3751B4;
+    font-size: x-large;
+    margin-bottom: 10px;
+}
+
+/* 상단 프로필 배경 및 정보 */
+.profileinit-header-title {
+    margin-bottom: 50px;
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.profileinit-form {
+    display: flex;
+    align-items: center; /* 수평 중앙 정렬 */
+}
+
+/* 프로필 수정 폼 */
+.profileinit-form__group {
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    margin-right: 10px;
+}
+
+.profileinit-form label {
+    font-size: 15px;
+    margin-right: 10px; /* 라벨과 입력 필드 사이 간격 */
+    width: auto; /* 라벨의 고정 너비 해제 */
+    font-weight: bold;
+    color: #3751B4;
+}
+
+.profileinit-form input {
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 300px; /* 인풋 너비 조정 */
+    height: 43px;
+    background-color: #fff;
+    margin-right: 10px; /* 인풋과 버튼 사이 간격 */
+}
+
+.profileinit-form__submit {
+    padding: 10px 20px;
+    background-color: #7785BE;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.profileinit-form__submit:hover {
+    background-color: #2980B9;
+}

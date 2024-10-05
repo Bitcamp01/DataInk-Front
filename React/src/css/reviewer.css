@@ -1,0 +1,317 @@
+/* 공통 스타일: 특정 컨테이너 안에서만 적용되도록 수정 */
+
+/* 글꼴 */
+* {
+    font-family: 'Pretendard', 'NotoSansKR', sans-serif;
+    color: #3E3E3E;
+    -ms-overflow-style: none;
+}
+
+.nh4 {
+    font-size: 1rem; /* 폰트 크기 조정 */
+    color: #3E3E3E; /* 텍스트 색상 */
+    margin-left: 0.5rem; /* h4와의 간격 조정 */
+}
+
+.nexttoh4 {
+    font-size: 0.75rem; /* 폰트 크기 조정 */
+    color: #3E3E3E; /* 텍스트 색상 */
+    margin-left: 0.5rem; /* h4와의 간격 조정 */
+}
+
+.review-container * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.review-content {
+    display: flex; /* PDF 섹션과 작업 공간을 나란히 배치 */
+    flex: 1; /* 남은 공간 차지 */
+    width: 100%;
+    padding: 1.25rem; /* 기존 여백 유지 */
+    height: calc(100vh - 4.625rem); /* 헤더 높이를 제외한 전체 높이 */
+    flex-grow: 1; /* 남은 공간을 차지 */
+}
+
+.review-work-container {
+    display: flex;
+    flex-direction: column; /* 테이블과 폼을 세로로 배치 */
+    height: 100%; /* 컨테이너 높이를 100%로 설정 */
+}
+
+
+
+.boxes {
+    display: flex;
+    flex-grow: 1;
+}
+
+/* .work-space {
+    width: 50%; 
+    display: flex;
+    flex-direction: column; 
+    flex-grow: 1;
+    padding: 10px;
+    box-sizing: border-box;
+} */
+
+.work-space {
+    width: 50%; /* 작업 공간의 너비 설정 */
+    display: flex;
+    flex-direction: column; /* 위아래로 배치 */
+    flex-grow: 1; /* 남은 공간 차지 */
+    padding: 10px; /* 여백 추가 */
+    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+    max-height: calc(100vh - 4.625rem); /* 최대 높이 설정 (헤더 높이에 맞게 조정) */
+    overflow-y: auto; /* 수직 스크롤 바 활성화 */
+}
+
+.pdf-section {
+    width: 50%; /* PDF 섹션의 너비 설정 */
+    padding: 10px; /* 여백 추가 */
+    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+}
+
+#pdf-canvas {
+    border: 1px solid #ddd; /* 테스트용으로 테두리 추가 */
+    display: block;
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+
+.tree-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid transparent;
+    transition: background-color 0.3s ease;
+}
+
+.tree-item:hover {
+    background-color: #f0f0f0;
+}
+
+.form-container {
+    margin-top: 1.5rem; /* 테이블과 폼 간의 여백 */
+    /* 필요시 높이 조정 */
+}
+
+/* 09.30수정 아니면 다시 갈아버릴 것 */
+.form-container {
+    width: 100%; /* 컨테이너 폭을 100%로 설정 */
+    padding-top: 20px;
+    border: 1px solid #c1c1c1;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    box-sizing: border-box; /* 패딩 포함 폭 계산 */
+}
+
+.checkboxes{
+    flex: 1; /* 각 박스가 같은 비율로 공간을 차지하도록 설정 */
+    padding: 10px; /* 여백 추가 (필요에 따라 조정) */
+    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+}
+
+.detailboxes {
+    flex: 2; /* 각 박스가 같은 비율로 공간을 차지하도록 설정 */
+    padding: 10px; /* 여백 추가 (필요에 따라 조정) */
+    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+}
+
+.detailboxes textarea {
+    width: calc(100% - 2rem); /* 좌우 1rem의 여백을 고려 */
+    height: calc(100% - 1rem); /* 상하 2rem의 여백을 고려 */
+    padding: 1rem; /* 내부 여백 설정 */
+    box-sizing: border-box; /* 패딩을 포함하여 너비 계산 */
+    resize: none; /* 사용자가 크기를 조정하지 못하도록 설정 (필요시) */
+}
+
+.checkboxes label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.checkboxes input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.review-submit-container {
+    display: flex;
+    justify-content: right; /* 버튼들을 가운데 정렬 */
+    gap: 4rem; /* 버튼들 사이에 2rem 간격 추가 */
+    margin-top: 10px;
+    width: 100%; /* form-container와 동일한 폭 */
+    box-sizing: border-box; /* 패딩 포함 폭 계산 */
+}
+
+.review-submit-container button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.review-submit-container button.reject-button,
+.review-submit-container button.apply-button {
+    width: 100%; /* 버튼 폭을 review-submit-container 폭에 맞춤 */
+    max-width: 13rem; /* 버튼의 최대 너비 설정 */
+}
+
+.review-submit-container button.reject-button {
+    background-color: #f8f9fa;
+    color: #7C97FE;
+    border-radius: 4px;
+    border: #e7e7e7 1px solid;
+}
+
+.review-submit-container button.apply-button {
+    background-color: #7C97FE;
+    color: #ffffff;
+}
+
+.review-row-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.review-row-item .icon {
+    font-size: 16px;
+}
+
+
+/* 여기서 부터는 모달창 css */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 750px;
+    max-width: 90%; /* 화면이 너무 작을 경우 최대 90% 너비 제한 */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 20px 0 2.25rem; /* Left margin increased to 1rem */
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    margin-top: 10px;
+    gap: 1.75rem; /* Add gap of 3rem between profile-image and profile-details */
+}
+
+.report-section {
+    background-color: #f6f6f6; /* 배경을 흰색으로 */
+    border-radius: 0.5rem; /* 모서리를 살짝 둥글게 */
+    padding: 2rem 1.5rem; /* 상하좌우 여백을 rem으로 추가 */
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom: 2rem; /* 아래쪽 여백 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+}
+
+.feedbackarea {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1.75rem;
+    border-radius: 0.5rem; /* 텍스트 영역의 모서리도 둥글게 */
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem; /* 상단에 여백 추가 */
+}
+
+.approve-button {
+    background-color: #7C97FE;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 100%; /* 버튼 폭을 review-submit-container 폭에 맞춤 */
+    max-width: 10rem; /* 버튼의 최대 너비 설정 */
+}
+
+.modal-labelingname{
+    color: #7C97FE;
+}
+
+
+/* review 테이블 */
+
+.review-table-container {
+    flex-grow: 1; /* 테이블이 공간을 차지하게 함 */
+    max-height: 40rem; /* 필요에 따라 최대 높이 설정 (예시로 30rem) */
+    overflow-y: scroll; /* 세로 스크롤 가능하게 */
+    overflow-x: scroll; /* 수평 스크롤 추가 */
+    max-width: 100%; /* 컨테이너의 최대 너비 설정 */
+    border: #c1c1c1 1px solid;
+}
+
+.review-table {
+    width: auto; /* 자동 너비 설정 */
+    min-width: 100%; /* 테이블이 컨테이너를 넘을 때 스크롤 가능하게 함 */
+    border-collapse: collapse; /* 테이블 경계 접기 */
+    background-color: #f1f6f9; /* 배경색 설정 */
+    table-layout: auto; /* 자동 레이아웃 설정 */
+}
+
+
+.review-table th,
+.review-table td {
+    padding: 12px 15px; /* 셀 안쪽 여백 */
+    border: 1px solid #A7A7A7; /* 셀의 테두리 색상 설정 */
+    text-align: center; /* 텍스트 왼쪽 정렬 */
+    word-break: break-word; /* 단어가 길면 자동으로 줄 바꿈 */
+    white-space: normal; /* 텍스트가 셀 안에서 자동으로 줄 바꿈 되도록 설정 */
+}
+
+.review-table-header {
+    background-color: #7C97FE; /* 헤더 배경색 */
+    color: #333; /* 헤더 텍스트 색상 */
+}
+
+.review-table td {
+    background-color: #ffffff; /* 기본 셀 배경색 */
+}
+
+.review-divide {
+    background-color: #DEE5FF;
+}
+
+
+.review-divide.active {
+    background-color: #eef0f6;
+}
+
+
+
