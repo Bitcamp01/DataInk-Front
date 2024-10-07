@@ -62,7 +62,7 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="profile-form__group">
-                    <label htmlFor="birthdate">생년월일</label>
+                    <label htmlFor="birthdate">*생년월일</label>
                     <input type="text" id="birthdate" name="birthdate" placeholder="생년월일 6자리" />
                 </div>
                 <div className="profile-form__group">
