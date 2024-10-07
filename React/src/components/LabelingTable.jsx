@@ -39,7 +39,7 @@ const ReviewerTable = () => {
     };
 
     return (
-        <div className="review-table-container">
+        <div className="label-table-container">
             <table className="review-table">
                 <thead>
                     <tr className="review-table-header">
@@ -79,3 +79,5 @@ const ReviewerTable = () => {
 };
 
 export default ReviewerTable;
+
+
