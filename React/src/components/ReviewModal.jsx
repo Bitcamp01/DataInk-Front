@@ -16,6 +16,16 @@ const ReviewModal = ({ isOpen, onClose }) => {
         }, 1000); // 1초(1000ms) 지연
     };
 
+    // **X 버튼을 클릭할 때 호출되는 함수**
+    const handleCloseClick = () => {
+        const confirmLeave = window.confirm("저장되지 않는데 계속하겠습니까?");
+        if (confirmLeave) {
+            navigate('/label/work'); // **'진행'을 누르면 이동**
+        } else {
+            onClose(); // **'아니오'를 누르면 모달 닫기**
+        }
+    };
+
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -23,7 +33,7 @@ const ReviewModal = ({ isOpen, onClose }) => {
                     <h3></h3>
                     <IconButton
                         aria-label="close"
-                        onClick={onClose}  // X 버튼을 클릭하면 모달 닫기
+                        onClick={handleCloseClick}  
                         sx={{
                             position: 'relative',
                             right: 8,
