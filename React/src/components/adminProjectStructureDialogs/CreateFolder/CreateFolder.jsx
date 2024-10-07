@@ -12,13 +12,13 @@ function FormDialog({ handleClose, handleSave, open, value }) {
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-create-folder" fullWidth maxWidth="sm">
       <form>
-        <DialogTitle id="form-dialog-create-folder">Create folder</DialogTitle>
+        <DialogTitle id="form-dialog-create-folder">Project create</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             fullWidth
             margin="dense"
-            label="Folder name"
+            label="project name"
             type="text"
             defaultValue={value}
           />

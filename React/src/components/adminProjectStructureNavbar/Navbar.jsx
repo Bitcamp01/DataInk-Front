@@ -29,28 +29,30 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),  // fade 대신 alpha 사용
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    border: `1px solid ${alpha(theme.palette.common.white, 0.75)}`,
     '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.35),
     },
     marginLeft: 0,
     width: '100%',
-    display: 'none',
+    display: 'flex', // Flexbox로 내부 정렬을 처리
+    alignItems: 'center',
+    boxShadow: `0px 0px 5px ${alpha(theme.palette.common.black, 0.5)}`,
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),  // spacing.unit 대신 spacing 사용
+      marginLeft: theme.spacing(1),
       width: 'auto',
-      display: 'block',
     },
   },
+  
   searchIcon: {
-    width: theme.spacing(9),  // spacing.unit 대신 spacing 사용
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
+    marginLeft: 'auto',  // 오른쪽 끝에 배치
+    paddingRight: theme.spacing(1), // 아이콘과 입력 필드 간격 조정
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
   inputRoot: {
     color: 'inherit',
     width: '100%',
@@ -77,25 +79,14 @@ function SearchAppBar(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      
         <Toolbar>
-          <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-            <BreadcrumbText
-              path={path}
-              handleClickPath={handleClickPath}
-              handleGoBack={handleGoBack}
-              canGoBack={canGoBack}
-              rootTitle="React Filemanager"
-            />
-          </Typography>
           <div className={classes.grow} />
-
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
               value={value}
               onChange={handleChange}
               classes={{
@@ -106,7 +97,7 @@ function SearchAppBar(props) {
           </div>
           <ThreeDotsMenu />
         </Toolbar>
-      </AppBar>
+      
     </div>
   );
 }

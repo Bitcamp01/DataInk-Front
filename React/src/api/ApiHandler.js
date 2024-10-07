@@ -1,4 +1,4 @@
-import * as API from './Api.js';
+import * as API from './adminApis.js';
 import config from './../config.js';
 
 const messageTranslation = {

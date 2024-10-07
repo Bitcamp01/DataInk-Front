@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   close: {
-    padding: theme.spacing(0.5),  // 최신 spacing 방식으로 변경
+    padding: theme.spacing(0.5),  // 최신 spacing 방식으로 변경s
   },
 }));
 
@@ -21,7 +21,7 @@ const DynamicSnackbar = (props) => {
       <Snackbar
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'right',
         }}
         open={open}
         autoHideDuration={notificationDuration}
