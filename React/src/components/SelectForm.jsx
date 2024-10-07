@@ -49,7 +49,7 @@ const SelectForm = () => {
                     <div className="detailboxes">
                         <label>
                             <textarea
-                                cols="30"
+                                cols="60"
                                 rows="5"
                                 disabled={!isAdminInputChecked} // 체크박스가 선택되지 않으면 비활성화
                             />
