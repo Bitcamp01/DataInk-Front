@@ -8,13 +8,11 @@ const LabelSelectForm = () => {
     const navigate = useNavigate(); // 페이지 이동을 위한 navigate 함수
 
 
-    const handleRejectClick = () => {
-        const userConfirmed = window.confirm('검수자에게 검수 요청하시겠습니까??'); // 반려 확인 메시지
-        if (userConfirmed) {
-            navigate('/label/work');
-        } else {
-            navigate('/label/detail');
-        }
+    const handlePrevClick = () => {
+        navigate('/label/detail');
+    };
+    const handleNextClick = () => {
+        navigate('/label/detail');
     };
 
     return (
@@ -22,10 +20,16 @@ const LabelSelectForm = () => {
             {/* form-container 밖으로 submit-container 이동 */}
             <div className="review-submit-container" style={{padding:'1rem'}}>
                 <button
-                    className="approve-button"
-                    onClick={handleRejectClick} // 반려 버튼 클릭 시 동작
+                    className="prev-button"
+                    onClick={handlePrevClick} // 반려 버튼 클릭 시 동작
                 >
-                    검수요청
+                    이전 작업으로 이동
+                </button>
+                <button
+                    className="next-button"
+                    onClick={handleNextClick} // 반려 버튼 클릭 시 동작
+                >
+                    다음 작업으로 이동
                 </button>
             </div>
         </>
