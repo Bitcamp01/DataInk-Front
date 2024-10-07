@@ -4,10 +4,15 @@ import '../css/header.css';
 
 function Header() {
     const [showNotifications, setShowNotifications] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false); // 프로필 메뉴 토글 상태
     const navigate = useNavigate();
 
     const toggleNotifications = () => {
         setShowNotifications(!showNotifications);
+    };
+
+    const toggleProfileMenu = () => {
+        setShowProfileMenu(!showProfileMenu);
     };
 
     // 알림 외의 영역 클릭 시 알림 닫기
@@ -16,12 +21,13 @@ function Header() {
             if (!document.querySelector('.header__icon-wrapper').contains(event.target)) {
                 setShowNotifications(false);
             }
+            if (!document.querySelector('.header__profile-wrapper').contains(event.target)) {
+                setShowProfileMenu(false); // 프로필 메뉴도 외부 클릭 시 닫기
+            }
         };
 
-        // 이벤트 리스너 추가
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
-            // 컴포넌트 언마운트 시 이벤트 리스너 제거
             document.removeEventListener('mousedown', handleClickOutside);
         }; 
     }, []);
@@ -29,7 +35,7 @@ function Header() {
     // "뒤로가기" 버튼 클릭 시 이전 페이지로 이동
     const handleBackClick = () => {
       navigate(-1); // 뒤로가기
-  };
+    };
 
     // "더 보기" 클릭 시 알림창 닫기 및 페이지 이동
     const handleMoreClick = () => {
@@ -37,9 +43,14 @@ function Header() {
         navigate('/mypage'); // 페이지 이동
     };
 
-    // 프로필 클릭 시 마이페이지 이동
-    const handleProfileClick = () => {
-        navigate('/mypage'); // 페이지 이동
+    // 프로필 메뉴에서 선택 시 이동 처리
+    const handleProfileSelect = (option) => {
+        setShowProfileMenu(false); // 프로필 메뉴 닫기
+        if (option === 'mypage') {
+            navigate('/mypage'); // 마이페이지로 이동
+        } else if (option === 'mytasks') {
+            navigate('/mypage?section=tasks'); // 내 작업으로 이동 (쿼리 파라미터로 구분)
+        }
     };
 
     return (
@@ -86,8 +97,19 @@ function Header() {
                         </div>
                     )}
                 </div>
-                <img src="/images/profile_img.png" alt="프로필" onClick={handleProfileClick} className="header__icon header__icon--profile" />
-                <img src="/icons/profile-drop_icon.svg" alt="드롭다운" className="header__icon header__icon--dropdown" />
+                <div className="header__profile-wrapper">
+                    <img src="/images/profile_img.png" alt="프로필" onClick={toggleProfileMenu} className="header__icon header__icon--profile" />
+                    <img src="/icons/profile-drop_icon.svg" alt="드롭다운" className="header__icon header__icon--dropdown" onClick={toggleProfileMenu} />
+                    {showProfileMenu && (
+                        <div className="profile-dropdown">
+                            <div className="profile-dropdown__header">프로필 옵션</div>
+                            <div className="profile-dropdown__content">
+                                <div onClick={() => handleProfileSelect('mypage')} className="profile-dropdown__item">마이페이지</div>
+                                <div onClick={() => handleProfileSelect('mytasks')} className="profile-dropdown__item">내 작업</div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </header>
     );
