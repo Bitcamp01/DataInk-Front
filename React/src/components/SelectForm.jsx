@@ -11,6 +11,12 @@ const SelectForm = () => {
     const handleApproveClick = () => {
         setIsModalOpen(true); // "승인" 버튼 클릭 시 모달 열기
     };
+    const handlePrevClick = () => {
+        navigate('/review');
+    };
+    const handleNextClick = () => {
+        navigate('/review');
+    };
 
     const handleCloseModal = () => {
         setIsModalOpen(false); // 모달 닫기
@@ -60,6 +66,7 @@ const SelectForm = () => {
 
             {/* form-container 밖으로 submit-container 이동 */}
             <div className="review-submit-container">
+                <button className="apply-button" onClick={handlePrevClick}>이전 작업으로</button> {/* 승인 버튼 */}
                 <button
                     className="reject-button"
                     onClick={handleRejectClick} // 반려 버튼 클릭 시 동작
@@ -67,6 +74,7 @@ const SelectForm = () => {
                     반려
                 </button>
                 <button className="apply-button" onClick={handleApproveClick}>승인</button> {/* 승인 버튼 */}
+                <button className="apply-button" onClick={handleNextClick}>다음 작업으로</button> {/* 승인 버튼 */}
             </div>
 
             <ReviewModal isOpen={isModalOpen} onClose={handleCloseModal} /> {/* 모달 렌더링 */}
