@@ -16,6 +16,8 @@ import Notice_detail from './pages/Notice_detail';
 import Administrator_item_structure from './pages/AdministratorItemStructure';
 import Administrator_project_structure from './pages/AdministratorProjectStructure';
 import FindAccount from './pages/FindAccount';
+import LabellingDetail from './pages/LabellingDetail';
+
 function App() {
   return (
     <Routes>
@@ -26,6 +28,7 @@ function App() {
         <Route path='/label/main' element={<LabellingMain />} />
         <Route path='/label/work' element={<Labelling />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/label/detail' element={<LabellingDetail />} />
         <Route path='/member' element={<MemberManagement />} />
         <Route path='/mypage' element={<Mypage />} />
         <Route path='/notice' element={<Notice />} />

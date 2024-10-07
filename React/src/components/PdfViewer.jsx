@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 import PDFObject from 'pdfobject';
 
-const PdfViewer = () => {
+const PdfViewer = ({ fileUrl }) => { // fileUrl prop을 받음
     useEffect(() => {
-        // 경로에서 public은 생략하고 /Sample.pdf처럼 절대 경로를 사용합니다.
-        // 상대경로로 지정을 하면 무조건 cors 정책에 위배되며
-        // public에 있는 상태에서 불러내야 하며 파일명은 되도록이면...아니 그냥 무조건 영어로, 특수기호 없이 하셔야 합니다.
-        PDFObject.embed("/practice.pdf", "#pdf-viewer");
-    }, []);
+        // 전달된 fileUrl을 사용하여 PDF 파일 임베드
+        PDFObject.embed(fileUrl, "#pdf-viewer");
+    }, [fileUrl]); // fileUrl이 변경될 때마다 실행
 
     return <div id="pdf-viewer" style={{ width: '100%', height: '100%' }}></div>;
 };
 
 export default PdfViewer;
+
 
 // import React, { useEffect } from 'react';
 // import PDFObject from 'pdfobject';

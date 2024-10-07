@@ -4,7 +4,7 @@ import SelectForm from '../components/SelectForm'; // SelectForm 컴포넌트
 import ReviewerTable from '../components/ReviewerTable'; // ReviewerTable 컴포넌트
 import '../css/reviewer.css';
 
-const Review = () => {
+const LabellingDetail = () => {
     // PDF 파일 경로를 여기에 설정
     const pdfFilePath = '/practice.pdf'; // 상대 경로 설정
 
@@ -24,4 +24,4 @@ const Review = () => {
     );
 };
 
-export default Review;
+export default LabellingDetail;
