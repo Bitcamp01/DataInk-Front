@@ -1,7 +1,7 @@
 import React from 'react';
 import PdfViewer from '../components/PdfViewer'; // PDF 뷰어 컴포넌트
 import LabelSelectForm from '../components/LabelSelectForm'; // LabelSelectForm 컴포넌트
-import ReviewerTable from '../components/ReviewerTable'; // ReviewerTable 컴포넌트
+import LabelingTable from '../components/LabelingTable'; // LabelingTable 컴포넌트
 import '../css/reviewer.css';
 
 const LabellingDetail = () => {
@@ -16,7 +16,7 @@ const LabellingDetail = () => {
             </div>
             <div className="work-space">
                 <div className="review-work-container">
-                    <ReviewerTable />
+                    <LabelingTable />
                     <LabelSelectForm />
                 </div>
             </div>
