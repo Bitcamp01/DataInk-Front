@@ -16,14 +16,14 @@ import '../File.css';
 
 // 스타일 정의
 const useStyles = makeStyles((theme) => ({
-  avatar: (isSelected) => ({
+  avatar: ({isSelected}) => ({
     backgroundColor: isSelected ? blue['A200'] : null,
   }),
 }));
 
 function FileSublist(props) {
   const { type, name, handleClick, isSelected, handleDoubleClick } = props;
-  const classes = useStyles(isSelected);
+  const classes = useStyles({isSelected});
 
   return (
     <div className="File" onClick={handleClick} data-selected={isSelected} onDoubleClick={handleDoubleClick}>

@@ -5,18 +5,16 @@ import ContextMenu from '../components/projectStructure/adminProjectStructureCon
 import Dialogs from '../components/projectStructure/adminProjectStructureDialogs/Dialogs.jsx';
 
 
-import { ThemeProvider as MaterialUI, createTheme } from '@mui/material';
+import {ThemeProvider as MaterialUI, createTheme, Button} from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { connect } from 'react-redux';
-import { setContextMenuVisible, refreshFileList } from '../actions/Actions.js';
+import {connect} from 'react-redux';
+import {setContextMenuVisible, refreshFileList, goToParentDirectory} from '../actions/Actions.js';
 import DynamicSnackbar from '../components/projectStructure/adminProjectStructureNotification/DynamicSnackbar.jsx';
+import TreeView from "../components/projectStructure/adminProjectStructureTreeView/TreeView";
 
 const theme = createTheme({
     palette: {
         primary: blue,
-    },
-    typography: {
-        useNextVariants: true, // 이 옵션은 더 이상 필요하지 않습니다.
     }
 });
 
@@ -28,15 +26,19 @@ class AdministratorProjectStructure extends Component {
 
     render() {
         return (
-            <MaterialUI theme={theme}>
-                <div onClick={this.props.handleHideContextMenu} onContextMenu={this.props.handleHideContextMenu}>
-                    <Navbar />
-                    <FileList />
-                    <ContextMenu />
-                    <DynamicSnackbar />
-                    <Dialogs />
-                </div>
-            </MaterialUI>
+                <MaterialUI theme={theme}>
+                    <div onClick={this.props.handleHideContextMenu} onContextMenu={this.props.handleHideContextMenu}>
+                        <Navbar />
+                        <Button variant="outlined" onClick={this.props.goToParentDirectory}>
+                            상위 폴더로 이동
+                        </Button>
+                        {/*<TreeView/>*/}
+                        <FileList />
+                        <ContextMenu />
+                        <DynamicSnackbar />
+                        <Dialogs />
+                    </div>
+                </MaterialUI>
         );
     }
 }
@@ -51,7 +53,9 @@ const mapDispatchToProps = (dispatch) => {
         init: () => {
             dispatch(refreshFileList());
         },
-
+        goToParentDirectory: () => {
+            dispatch(goToParentDirectory());  // 상위 폴더 이동 액션 디스패치
+        },
         handleHideContextMenu: (event) => {
             if (! (event.target.tagName === 'INPUT' || /label/i.test(event.target.className))) {
                 event.preventDefault();

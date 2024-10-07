@@ -24,6 +24,17 @@ export const uploadFiles = (fileList) => (dispatch, getState) => {
         dispatch(setLoading(false));
     });
 };
+// 상위 폴더로 이동하는 액션 생성자
+export const goToParentDirectory = () => (dispatch, getState) => {
+    const { path } = getState();
+
+    if (path.length > 0) {
+        // 현재 경로에서 마지막 폴더를 제거하고 상위 경로로 이동
+        const newPath = path.slice(0, -1);
+        dispatch(setPath(newPath));
+        dispatch(refreshFileList());  // 새로운 경로에 맞는 파일 리스트 갱신
+    }
+};
 
 /**
  * Request API to get file list for the selected path then refresh UI
