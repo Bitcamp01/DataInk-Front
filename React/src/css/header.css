@@ -150,3 +150,46 @@
     cursor: pointer;
     text-decoration: underline; /* 밑줄 추가 */
 }
+
+.header__profile-wrapper {
+    display: flex; /* 아이콘을 수평으로 배치 */
+    align-items: center; /* 수직 중앙 정렬 */
+    position: relative; /* 부모 요소의 기준을 정해줌 */
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 100%; /* 부모 요소의 아래쪽 경계선에 맞춤 */
+    right: 0; /* 오른쪽 끝에 맞춤 */
+    width: 12.5rem; /* 200px -> 12.5rem */
+    background-color: white;
+    box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.1); /* 0px 4px 10px -> rem 변환 */
+    z-index: 100;
+    border-radius: 0.5rem; /* 8px -> 0.5rem */
+}
+
+.profile-dropdown__header {
+    padding: 0.625rem; /* 10px -> 0.625rem */
+    background-color: #f0f0f0;
+    font-weight: bold;
+    border-bottom: 0.0625rem solid #ddd; /* 1px -> 0.0625rem */
+}
+
+.profile-dropdown__content {
+    padding: 0.625rem; /* 10px -> 0.625rem */
+}
+
+.profile-dropdown__item {
+    padding: 0.625rem; /* 10px -> 0.625rem */
+    cursor: pointer;
+    border-bottom: 0.0625rem solid #ddd; /* 1px -> 0.0625rem */
+}
+
+.profile-dropdown__item:hover {
+    background-color: #f7f7f7;
+}
+
+.profile-dropdown__item:last-child {
+    border-bottom: none;
+}
+
