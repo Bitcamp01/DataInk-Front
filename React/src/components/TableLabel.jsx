@@ -14,21 +14,21 @@ const columns = [
   { field: 'category2', headerName: '중분류', width: 150 },
   { field: 'category3', headerName: '소분류', width: 150 },
   { field: 'workname', headerName: '작업명', width: 300 },
-  { field: 'worknum', headerName: '작업번호', width: 170 },
+  { field: 'workstatus', headerName: '작업상태', width: 170 },
   { field: 'deadline', headerName: '마감일', width: 250 },
 ];
 
 const rows = [
-  { id: 1, category1: '텍스트', category2: 'OCR', category3: '영수증', workname: '영수증 인식 작업', worknum: 'W12345', deadline: '2024-03-15' },
-  { id: 2, category1: '이미지', category2: '객체 탐지', category3: '교통표지판', workname: '교통표지판 인식 작업', worknum: 'W12346', deadline: '2024-03-20' },
-  { id: 3, category1: '음성', category2: '음성 변환', category3: '인터뷰', workname: '인터뷰 음성 라벨링 작업', worknum: 'W12347', deadline: '2024-03-25' },
-  { id: 4, category1: '텍스트', category2: '번역', category3: '기술문서', workname: '기술문서 번역 라벨링', worknum: 'W12348', deadline: '2024-03-30' },
-  { id: 5, category1: '이미지', category2: '분류', category3: '상품 이미지', workname: '상품 이미지 분류 작업', worknum: 'W12349', deadline: '2024-04-01' },
-  { id: 6, category1: '음성', category2: '음성 인식', category3: '콜센터 대화', workname: '콜센터 대화 음성 인식', worknum: 'W12350', deadline: '2024-04-05' },
-  { id: 7, category1: '텍스트', category2: '기술문서', category3: '리뷰', workname: '리뷰 분석 라벨링', worknum: 'W12351', deadline: '2024-04-10' },
-  { id: 8, category1: '이미지', category2: '객체 탐지', category3: '교통표지판', workname: '추가 교통표지판 라벨링', worknum: 'W12352', deadline: '2024-04-15' },
-  { id: 9, category1: '텍스트', category2: '감정 분석', category3: 'SNS 데이터', workname: 'SNS 데이터 감정 분석', worknum: 'W12353', deadline: '2024-04-20' },
-  { id: 10, category1: '음성', category2: '대화 분석', category3: '뉴스 인터뷰', workname: '뉴스 인터뷰 대화 분석', worknum: 'W12354', deadline: '2024-04-25' },
+  { id: 1, category1: '텍스트', category2: 'OCR', category3: '영수증', workname: '영수증 인식 작업', workstatus: '진행중', deadline: '2024-03-15' },
+  { id: 2, category1: '이미지', category2: '객체 탐지', category3: '교통표지판', workname: '교통표지판 인식 작업', workstatus: '진행중', deadline: '2024-03-20' },
+  { id: 3, category1: '음성', category2: '음성 변환', category3: '인터뷰', workname: '인터뷰 음성 라벨링 작업', workstatus: '진행중', deadline: '2024-03-25' },
+  { id: 4, category1: '텍스트', category2: '번역', category3: '기술문서', workname: '기술문서 번역 라벨링', workstatus: '진행중', deadline: '2024-03-30' },
+  { id: 5, category1: '이미지', category2: '분류', category3: '상품 이미지', workname: '상품 이미지 분류 작업', workstatus: '반려됨', deadline: '2024-04-01' },
+  { id: 6, category1: '음성', category2: '음성 인식', category3: '콜센터 대화', workname: '콜센터 대화 음성 인식', workstatus: '반려됨', deadline: '2024-04-05' },
+  { id: 7, category1: '텍스트', category2: '기술문서', category3: '리뷰', workname: '리뷰 분석 라벨링', workstatus: '반려됨', deadline: '2024-04-10' },
+  { id: 8, category1: '이미지', category2: '객체 탐지', category3: '교통표지판', workname: '추가 교통표지판 라벨링', workstatus: '반려됨', deadline: '2024-04-15' },
+  { id: 9, category1: '텍스트', category2: '감정 분석', category3: 'SNS 데이터', workname: 'SNS 데이터 감정 분석', workstatus: '반려됨', deadline: '2024-04-20' },
+  { id: 10, category1: '음성', category2: '대화 분석', category3: '뉴스 인터뷰', workname: '뉴스 인터뷰 대화 분석', workstatus: '반려됨', deadline: '2024-04-25' },
 ];
 
 const ButtonContainer = styled.div`
@@ -43,6 +43,7 @@ export default function DataGridDemo() {
 
   const [open, setOpen] = React.useState(false);
   const [selectedRow, setSelectedRow] = React.useState(null);
+  const [rowSelectionModel, setRowSelectionModel] = React.useState([]); // 선택된 행을 관리하는 상태
   
   const handleClose = () => {
     setOpen(false);
@@ -54,11 +55,37 @@ export default function DataGridDemo() {
     navigate(`/review`);
   };
 
+  const handleCellClick = (params, event) => {
+    if (params.field === 'id') {
+      event.stopPropagation(); // No 컬럼 클릭 시 기존 이벤트 막기
+  
+      // 체크박스 선택/해제 로직
+      const isSelected = rowSelectionModel.includes(params.id);
+      let newSelectionModel = [];
+  
+      if (isSelected) {
+        // 이미 선택된 경우 -> 선택 해제
+        newSelectionModel = rowSelectionModel.filter((id) => id !== params.id);
+      } else {
+        // 선택되지 않은 경우 -> 선택 추가
+        newSelectionModel = [...rowSelectionModel, params.id];
+      }
+  
+      setRowSelectionModel(newSelectionModel); // 상태 업데이트
+    }
+  };
+
+  const handleSubmit = () => {
+    // 선택된 행들의 ID를 검수 요청 처리
+    console.log("선택된 행 ID:", rowSelectionModel);
+    // 여기에 서버로 요청을 보내는 로직을 추가할 수 있습니다.
+  };
+
   return (
     <div style={{ width: '100%' }}>
       <Box sx={{ 
       width: '100%',  
-      maxWidth: '70%',
+      maxWidth: '100%',
       minWidth:'1135px' ,
       marginBottom: '39px', 
       boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', 
@@ -70,7 +97,13 @@ export default function DataGridDemo() {
         columns={columns}
         rowHeight={40} 
         headerHeight={50}
+        checkboxSelection
+        rowSelectionModel={rowSelectionModel}  // 선택된 행의 ID를 상태로 관리
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelectionModel(newRowSelectionModel);  // 새로운 선택 값을 상태로 업데이트
+        }}
         onRowClick={handleRowClick}
+        onCellClick={handleCellClick} // 셀 클릭 핸들러, 체크박스 옆에 실수로 눌렀을 때 이동 방지
         sx={{
           background:'white',
           fontFamily: 'Pretendard, Noto-sans KR',  
@@ -120,7 +153,7 @@ export default function DataGridDemo() {
             </Stack>
         </div>
         <ButtonContainer>
-            <CommonButton>검수 요청</CommonButton>
+            <CommonButton onClick={handleSubmit}>검수 요청</CommonButton>
         </ButtonContainer>
     </div>
 
