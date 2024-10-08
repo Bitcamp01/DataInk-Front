@@ -1,29 +1,68 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Button, TextField, Typography, Container, Grid } from '@mui/material';
-import '../../css/profile.css';
+import { Button, TextField, Typography, Grid } from '@mui/material';
+import styled from 'styled-components';
+
+// Styled components
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+`;
+
+const ModalButtons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+`;
+
+const PrimaryButton = styled(Button)`
+  background-color: #7785be !important;
+  color: white !important;
+  &:hover {
+    background-color: #2980b9 !important;
+  }
+`;
+
+const SecondaryButton = styled(Button)`
+  background-color: #e6e6e6 !important;
+  color: #333 !important;
+`;
 
 // 유저 정보 관리 컴포넌트
 const PasswordChangeModal = ({ isOpen, onClose, userPassword }) => {
-    // 유저 정보 상태 관리
     const [userInfo, setUserInfo] = useState({
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: ''
     });
 
-    // 실제 현재 비밀번호 (추후 실제 API 응답에서 가져올 것으로 가정)
     const actualCurrentPassword = userPassword || "!dkdlxl1234";
 
-    // 비밀번호 유효성 검사 함수 (useCallback 사용)
     const validatePassword = useCallback(() => {
         const regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*+=-]).{9,}$/;
         return regex.test(userInfo.newPassword);
     }, [userInfo.newPassword]);
 
-    // 유효성 검사 결과 메모이제이션
     const isPasswordValid = useMemo(() => validatePassword(), [validatePassword]);
 
-    // 비밀번호 변경 핸들러 (useCallback 사용)
     const handlePasswordChange = useCallback(() => {
         const { currentPassword, newPassword, confirmNewPassword } = userInfo;
 
@@ -40,13 +79,10 @@ const PasswordChangeModal = ({ isOpen, onClose, userPassword }) => {
             return;
         }
 
-        // API 호출 로직 (비밀번호 변경 요청)
-        // 예시: axios.post('/api/change-password', { newPassword })
         alert('비밀번호가 성공적으로 변경되었습니다!');
         onClose();
     }, [userInfo, actualCurrentPassword, isPasswordValid, onClose]);
 
-    // 입력 필드 변경 핸들러 (useCallback 사용)
     const handleInputChange = useCallback((e) => {
         const { name, value } = e.target;
         setUserInfo((prev) => ({ ...prev, [name]: value }));
@@ -55,13 +91,12 @@ const PasswordChangeModal = ({ isOpen, onClose, userPassword }) => {
     if (!isOpen) return null;
 
     return (
-        <Container className="password-modal-overlay">
-            <div className="password-modal">
+        <ModalOverlay>
+            <ModalContent>
                 <Typography variant="h5" gutterBottom>
                     비밀번호 변경
                 </Typography>
                 <Grid container spacing={2}>
-                    {/* 현재 비밀번호 입력 */}
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
@@ -81,7 +116,6 @@ const PasswordChangeModal = ({ isOpen, onClose, userPassword }) => {
                                 : userInfo.currentPassword ? "현재 비밀번호가 일치하지 않습니다." : ""}
                         </Typography>
                     </Grid>
-                    {/* 새 비밀번호 입력 */}
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
@@ -101,7 +135,6 @@ const PasswordChangeModal = ({ isOpen, onClose, userPassword }) => {
                                 : "비밀번호는 특수문자, 영문자, 숫자 조합의 9자리 이상으로 지정하세요."}
                         </Typography>
                     </Grid>
-                    {/* 새 비밀번호 확인 입력 */}
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
@@ -121,17 +154,19 @@ const PasswordChangeModal = ({ isOpen, onClose, userPassword }) => {
                                 : "비밀번호가 일치하지 않습니다."}
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} className="password-modal-buttons">
-                        <Button variant="contained" color="primary" onClick={handlePasswordChange}>
-                            변경하기
-                        </Button>
-                        <Button variant="outlined" color="secondary" onClick={onClose}>
-                            취소
-                        </Button>
+                    <Grid item xs={12}>
+                        <ModalButtons>
+                            <PrimaryButton variant="contained" onClick={handlePasswordChange}>
+                                변경하기
+                            </PrimaryButton>
+                            <SecondaryButton variant="outlined" onClick={onClose}>
+                                취소
+                            </SecondaryButton>
+                        </ModalButtons>
                     </Grid>
                 </Grid>
-            </div>
-        </Container>
+            </ModalContent>
+        </ModalOverlay>
     );
 };
 
