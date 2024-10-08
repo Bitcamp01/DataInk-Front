@@ -49,7 +49,7 @@ function Header() {
         if (option === 'mypage') {
             navigate('/mypage'); // 마이페이지로 이동
         } else if (option === 'mytasks') {
-            navigate('/mypage?section=tasks'); // 내 작업으로 이동 (쿼리 파라미터로 구분)
+            navigate('/mypage?section=workstatus'); // 내 작업으로 이동 (쿼리 파라미터로 구분)
         }
     };
 
