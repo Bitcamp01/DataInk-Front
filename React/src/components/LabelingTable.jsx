@@ -27,8 +27,6 @@ const LabelingTable = () => {
 
     // 셀 클릭 시 활성화
     const handleCellClick = (rowIndex, colIndex) => {
-        if (colIndex !== tableData[rowIndex].cols.length - 1) return;
-
         const key = `${rowIndex}-${colIndex}`;
         setActiveCells((prev) => ({
             ...prev,
@@ -53,7 +51,7 @@ const LabelingTable = () => {
             newData[rowIndex].cols[colIndex].text = cellInput[key] || '';  // 빈 값도 허용
             return newData;
         });
-        // 셀이 수정되었음을 기록하여 색상을 흰색으로 변경할 수 있도록 설정
+        // 셀이 수정되었음을 기록하여 색상을 #F2F2F2로 변경
         setEditedCells((prev) => ({
             ...prev,
             [key]: true
@@ -71,14 +69,11 @@ const LabelingTable = () => {
     // 셀의 색상을 설정하는 함수
     const getCellStyle = (rowIndex, colIndex, text) => {
         const key = `${rowIndex}-${colIndex}`;
-        // 각 행의 마지막 셀에 대해서만 색상을 설정
-        if (colIndex === tableData[rowIndex].cols.length - 1) {
-            // 셀에 텍스트가 있고 수정된 적이 없으면 회색(#EDEDED)으로 표시
-            if (text && !editedCells[key]) {
-                return { backgroundColor: '#EDEDED' };
-            }
+        // 셀이 수정되었거나 내용이 있는 경우 #F2F2F2로 설정
+        if (text || editedCells[key]) {
+            return { backgroundColor: '#F2F2F2' };
         }
-        // 엔터를 눌러 저장된 셀은 흰색으로 유지
+        // 그렇지 않으면 흰색
         return { backgroundColor: 'white' };
     };
 
