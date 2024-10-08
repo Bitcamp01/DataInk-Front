@@ -52,7 +52,7 @@ export default function DataGridDemo() {
 
   const handleRowClick = (params) => {
     // const { id } = params.row;
-    navigate(`/review`);
+    navigate(`/label/detail`);
   };
 
   const handleCellClick = (params, event) => {
