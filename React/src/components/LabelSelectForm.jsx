@@ -23,13 +23,13 @@ const LabelSelectForm = () => {
                     className="prev-button"
                     onClick={handlePrevClick} // 반려 버튼 클릭 시 동작
                 >
-                    이전 작업으로 이동
+                    이전 작업
                 </button>
                 <button
                     className="next-button"
                     onClick={handleNextClick} // 반려 버튼 클릭 시 동작
                 >
-                    다음 작업으로 이동
+                    다음 작업
                 </button>
             </div>
         </>
