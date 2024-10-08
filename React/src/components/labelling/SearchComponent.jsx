@@ -4,11 +4,11 @@ import '../../css/labelling-search.css'; // CSS 파일 연결
 
 const SearchComponent = () => {
   const dateOptions = [
-    { label: 'Today', value: 'today' },
-    { label: 'This week', value: 'this-week' },
-    { label: 'This month', value: 'this-month' },
-    { label: 'This year', value: 'this-year' },
-    { label: 'Set up', value: 'set-up' },
+    { label: '기간전체', value: 'all' },
+    { label: '최근 1일', value: 'today' },
+    { label: '최근 1주일', value: 'this-week' },
+    { label: '최근 1개월', value: 'this-month' },
+    { label: '최근 1년', value: 'this-year' },
   ];
 
   const workerOptions = [
