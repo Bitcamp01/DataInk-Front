@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
@@ -38,12 +39,19 @@ const ButtonContainer = styled.div`
 
 
 export default function DataGridDemo() {
+  const navigate = useNavigate();
+
   const [open, setOpen] = React.useState(false);
   const [selectedRow, setSelectedRow] = React.useState(null);
   
   const handleClose = () => {
     setOpen(false);
     setSelectedRow(null);
+  };
+
+  const handleRowClick = (params) => {
+    // const { id } = params.row;
+    navigate(`/review`);
   };
 
   return (
@@ -62,10 +70,12 @@ export default function DataGridDemo() {
         columns={columns}
         rowHeight={40} 
         headerHeight={50}
+        onRowClick={handleRowClick}
         sx={{
           background:'white',
           fontFamily: 'Pretendard, Noto-sans KR',  
-                            '& .MuiDataGrid-columnHeaders': {//컬럼 헤더의 폰트 설정               
+          cursor: 'pointer', // 마우스 포인터를 변경
+                  '& .MuiDataGrid-columnHeaders': {//컬럼 헤더의 폰트 설정               
                     color: '#7C97FE',  
                     fontWeight: 'bold',  
                   },
@@ -81,6 +91,15 @@ export default function DataGridDemo() {
                   },
                   '& .MuiDataGrid-columnHeaderTitle': {
                     color: '#7c97fe', // 헤더 텍스트 색상을 변경
+                  },
+                  '& .MuiDataGrid-root': {
+                    outline: 'none', // 파란색 테두리 제거
+                  },
+                  '& .MuiDataGrid-cell:focus': {
+                    outline: 'none', // 셀 클릭 시 포커스 outline 제거
+                  },
+                  '& .MuiDataGrid-row:focus-within': {
+                    outline: 'none', // 행 포커스 제거
                   },
         }}
         autoHeight
