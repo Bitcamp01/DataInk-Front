@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import '../../css/project-card.css';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectCard = ({ projects }) => {
+
+    const navigate = useNavigate(); // navigate 함수 정의 (병주)
 
     // 북마크 상태 관리, 기본은 false, 즉 비활성화된 상태
     const [isBookmarked, setIsBookmarked] = useState(false);
@@ -11,10 +14,17 @@ const ProjectCard = ({ projects }) => {
         // 클릭하면 상태를 반대로 변화시킴
         setIsBookmarked(!isBookmarked);
     }
+
+    // 카드 클릭 핸들러 (병주)
+    const handleCardClick = (projectId) => {
+      navigate(`/label/work`); // 프로젝트 ID 생기면 아래처럼 경로로 전달, 지금은 없어서 받기만 하고 전달 x (병주)
+      // navigate(`/label/work/${projectId}`);
+    }
+
   return (
     <div>
       {projects.map((project, index) => (
-        <div className="card" key={index}>
+        <div className="card" key={index} onClick={() => handleCardClick(project.id)}>
           <div className="projectCard-header">
             <h2>{project.name}</h2>
             <div className="deadline">D-{project.deadline}</div>
