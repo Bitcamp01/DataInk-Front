@@ -7,23 +7,25 @@ const LabelingTable = () => {
         1: { cols: [{ colSpan: 5, text: '사건번호' }, { colSpan: 5, text: 'asvsasssssssssssssssssssssssssssssssssssv' }] },
         2: { cols: [{ colSpan: 5, text: '제출일자' }, { colSpan: 5, text: 'savdavad' }] },
         3: { cols: [{ colSpan: 2, rowSpan: 4, text: '이유' }, { colSpan: 3, text: '이유1' }, { colSpan: 5, text: 'advadvda' }] },
-        4: { cols: [{ colSpan: 3, text: '이유2' }, { colSpan: 5, text: '' }] },  // 빈 셀
+        4: { cols: [{ colSpan: 3, text: '이유2' }, { colSpan: 5, text: '' }] },
         5: { cols: [{ colSpan: 3, text: '이유3' }, { colSpan: 5, text: 'zxvdzv' }] },
         6: { cols: [{ colSpan: 3, text: '이유4' }, { colSpan: 5, text: 'advdav' }] },
         7: { cols: [{ colSpan: 2, rowSpan: 2, text: '사건명' }, { colSpan: 3, text: '한글' }, { colSpan: 5, text: 'zxvdvvz' }] },
         8: { cols: [{ colSpan: 3, text: '영어' }, { colSpan: 5, text: 'advdvaad' }] },
-        9: { cols: [{ colSpan: 2, rowSpan: 7, text: '참조' }, { colSpan: 3, text: '참조1' }, { colSpan: 5, text: '' }] }, // 빈 셀
-        10: { cols: [{ colSpan: 3, text: '참조2' }, { colSpan: 5, text: '' }] }, // 빈 셀
+        9: { cols: [{ colSpan: 2, rowSpan: 7, text: '참조' }, { colSpan: 3, text: '참조1' }, { colSpan: 5, text: '' }] },
+        10: { cols: [{ colSpan: 3, text: '참조2' }, { colSpan: 5, text: '' }] },
         11: { cols: [{ colSpan: 3, text: '참조3' }, { colSpan: 5, text: 'davdavxda' }] },
-        12: { cols: [{ colSpan: 3, text: '참조4' }, { colSpan: 5, text: '' }] }, // 빈 셀
+        12: { cols: [{ colSpan: 3, text: '참조4' }, { colSpan: 5, text: '' }] },
         13: { cols: [{ colSpan: 3, text: '참조5' }, { colSpan: 5, text: '테스트' }] },
-        14: { cols: [{ colSpan: 3, text: '참조6' }, { colSpan: 5, text: '' }] }, // 빈 셀
+        14: { cols: [{ colSpan: 3, text: '참조6' }, { colSpan: 5, text: '' }] },
         15: { cols: [{ colSpan: 3, text: '참조7' }, { colSpan: 5, text: 'dvdasvdav' }] }
     });
 
     const [activeCells, setActiveCells] = useState({});
     const [cellInput, setCellInput] = useState({});
+    const [editedCells, setEditedCells] = useState({});
 
+    // 셀 클릭 시 활성화
     const handleCellClick = (rowIndex, colIndex) => {
         if (colIndex !== tableData[rowIndex].cols.length - 1) return;
 
@@ -34,6 +36,7 @@ const LabelingTable = () => {
         }));
     };
 
+    // 입력 변화 처리
     const handleInputChange = (e, rowIndex, colIndex) => {
         const key = `${rowIndex}-${colIndex}`;
         setCellInput((prev) => ({
@@ -42,6 +45,7 @@ const LabelingTable = () => {
         }));
     };
 
+    // 엔터를 눌러서 수정된 내용을 저장
     const saveInput = (rowIndex, colIndex) => {
         const key = `${rowIndex}-${colIndex}`;
         setTableData((prevData) => {
@@ -49,17 +53,33 @@ const LabelingTable = () => {
             newData[rowIndex].cols[colIndex].text = cellInput[key] || '';  // 빈 값도 허용
             return newData;
         });
+        // 셀이 수정되었음을 기록하여 색상을 흰색으로 변경할 수 있도록 설정
+        setEditedCells((prev) => ({
+            ...prev,
+            [key]: true
+        }));
         setActiveCells((prev) => ({ ...prev, [key]: false }));
     };
 
+    // 엔터 키 이벤트 처리
     const handleKeyDown = (e, rowIndex, colIndex) => {
         if (e.key === 'Enter') {
             saveInput(rowIndex, colIndex);
         }
     };
 
-    const calculateContentColSpan = (classificationColSpan) => {
-        return classificationColSpan * 2;
+    // 셀의 색상을 설정하는 함수
+    const getCellStyle = (rowIndex, colIndex, text) => {
+        const key = `${rowIndex}-${colIndex}`;
+        // 각 행의 마지막 셀에 대해서만 색상을 설정
+        if (colIndex === tableData[rowIndex].cols.length - 1) {
+            // 셀에 텍스트가 있고 수정된 적이 없으면 회색(#EDEDED)으로 표시
+            if (text && !editedCells[key]) {
+                return { backgroundColor: '#EDEDED' };
+            }
+        }
+        // 엔터를 눌러 저장된 셀은 흰색으로 유지
+        return { backgroundColor: 'white' };
     };
 
     return (
@@ -78,7 +98,7 @@ const LabelingTable = () => {
                                 const isActive = activeCells[`${rowIndex}-${colIndex}`];
                                 const key = `${rowIndex}-${colIndex}`;
                                 const adjustedColSpan = colIndex === row.cols.length - 1
-                                    ? calculateContentColSpan(row.cols[0].colSpan)
+                                    ? col.colSpan * 2
                                     : col.colSpan;
 
                                 return (
@@ -87,6 +107,8 @@ const LabelingTable = () => {
                                         colSpan={adjustedColSpan}
                                         rowSpan={col.rowSpan || 1}
                                         onClick={() => handleCellClick(rowIndex, colIndex)}
+                                        // 셀 색상을 설정하는 함수 호출
+                                        style={getCellStyle(rowIndex, colIndex, col.text)}
                                     >
                                         {isActive ? (
                                             <input
@@ -94,10 +116,10 @@ const LabelingTable = () => {
                                                 className="input-field"
                                                 value={cellInput[key] !== undefined ? cellInput[key] : col.text}  // undefined일 때만 col.text 사용
                                                 onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-                                                onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)} // 엔터 키 이벤트만 처리
+                                                onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
                                             />
                                         ) : (
-                                            col.text || '' // 빈 셀도 처리
+                                            col.text || ''  // 빈 셀도 처리
                                         )}
                                     </td>
                                 );
