@@ -7,17 +7,17 @@ const LabelingTable = () => {
         1: { cols: [{ colSpan: 5, text: '사건번호' }, { colSpan: 5, text: 'asvsasssssssssssssssssssssssssssssssssssv' }] },
         2: { cols: [{ colSpan: 5, text: '제출일자' }, { colSpan: 5, text: 'savdavad' }] },
         3: { cols: [{ colSpan: 2, rowSpan: 4, text: '이유' }, { colSpan: 3, text: '이유1' }, { colSpan: 5, text: 'advadvda' }] },
-        4: { cols: [{ colSpan: 3, text: '이유2' }, { colSpan: 5, text: '' }] },
+        4: { cols: [{ colSpan: 3, text: '이유2' }, { colSpan: 5, text: '' }] },  // 빈 셀
         5: { cols: [{ colSpan: 3, text: '이유3' }, { colSpan: 5, text: 'zxvdzv' }] },
         6: { cols: [{ colSpan: 3, text: '이유4' }, { colSpan: 5, text: 'advdav' }] },
         7: { cols: [{ colSpan: 2, rowSpan: 2, text: '사건명' }, { colSpan: 3, text: '한글' }, { colSpan: 5, text: 'zxvdvvz' }] },
         8: { cols: [{ colSpan: 3, text: '영어' }, { colSpan: 5, text: 'advdvaad' }] },
-        9: { cols: [{ colSpan: 2, rowSpan: 7, text: '참조' }, { colSpan: 3, text: '참조1' }, { colSpan: 5, text: '' }] },
-        10: { cols: [{ colSpan: 3, text: '참조2' }, { colSpan: 5, text: '' }] },
+        9: { cols: [{ colSpan: 2, rowSpan: 7, text: '참조' }, { colSpan: 3, text: '참조1' }, { colSpan: 5, text: '' }] }, // 빈 셀
+        10: { cols: [{ colSpan: 3, text: '참조2' }, { colSpan: 5, text: '' }] }, // 빈 셀
         11: { cols: [{ colSpan: 3, text: '참조3' }, { colSpan: 5, text: 'davdavxda' }] },
-        12: { cols: [{ colSpan: 3, text: '참조4' }, { colSpan: 5, text: '' }] },
-        13: { cols: [{ colSpan: 3, text: '참조5' }, { colSpan: 5, text: '테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트' }] },
-        14: { cols: [{ colSpan: 3, text: '참조6' }, { colSpan: 5, text: '' }] },
+        12: { cols: [{ colSpan: 3, text: '참조4' }, { colSpan: 5, text: '' }] }, // 빈 셀
+        13: { cols: [{ colSpan: 3, text: '참조5' }, { colSpan: 5, text: '테스트' }] },
+        14: { cols: [{ colSpan: 3, text: '참조6' }, { colSpan: 5, text: '' }] }, // 빈 셀
         15: { cols: [{ colSpan: 3, text: '참조7' }, { colSpan: 5, text: 'dvdasvdav' }] }
     });
 
@@ -25,6 +25,8 @@ const LabelingTable = () => {
     const [cellInput, setCellInput] = useState({});
 
     const handleCellClick = (rowIndex, colIndex) => {
+        if (colIndex !== tableData[rowIndex].cols.length - 1) return;
+
         const key = `${rowIndex}-${colIndex}`;
         setActiveCells((prev) => ({
             ...prev,
@@ -44,14 +46,10 @@ const LabelingTable = () => {
         const key = `${rowIndex}-${colIndex}`;
         setTableData((prevData) => {
             const newData = { ...prevData };
-            newData[rowIndex].cols[colIndex].text = cellInput[key] || '';
+            newData[rowIndex].cols[colIndex].text = cellInput[key] || '';  // 빈 값도 허용
             return newData;
         });
         setActiveCells((prev) => ({ ...prev, [key]: false }));
-    };
-
-    const handleInputBlur = (rowIndex, colIndex) => {
-        saveInput(rowIndex, colIndex);
     };
 
     const handleKeyDown = (e, rowIndex, colIndex) => {
@@ -94,13 +92,12 @@ const LabelingTable = () => {
                                             <input
                                                 type="text"
                                                 className="input-field"
-                                                value={cellInput[key] || col.text}
+                                                value={cellInput[key] !== undefined ? cellInput[key] : col.text}  // undefined일 때만 col.text 사용
                                                 onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-                                                onBlur={() => handleInputBlur(rowIndex, colIndex)}
-                                                onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)} // 엔터 키 이벤트 추가
+                                                onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)} // 엔터 키 이벤트만 처리
                                             />
                                         ) : (
-                                            col.text
+                                            col.text || '' // 빈 셀도 처리
                                         )}
                                     </td>
                                 );
