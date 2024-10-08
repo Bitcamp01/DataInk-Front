@@ -56,11 +56,6 @@ const Mypage = () => {
         }
     };
 
-    // 인증되지 않은 경우 ProfileInit을 렌더링
-    if (!isAuthenticated) {
-        return <ProfileInit onAuthenticate={handleAuthentication} />;
-    }
-
     // 쿼리 파라미터에서 섹션을 읽어서 activeTab 상태를 설정
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -69,6 +64,11 @@ const Mypage = () => {
             setActiveTab(section === 'workstatus' ? 'Workstatus' : 'Profile'); // section에 따라 탭 변경
         }
     }, [location.search]); // location.search가 변경될 때마다 실행
+
+    // 인증되지 않은 경우 ProfileInit을 렌더링
+    if (!isAuthenticated) {
+        return <ProfileInit onAuthenticate={handleAuthentication} />;
+    }
 
     const renderComponent = () => {
         if (activeTab === 'Profile') return <Profile />;
