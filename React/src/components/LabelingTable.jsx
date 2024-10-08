@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import '../css/reviewer.css';
 
-const ReviewerTable = () => {
+const LabelingTable = () => {
     const [tableData, setTableData] = useState({
         0: { cols: [{ colSpan: 5, text: '사건명' }, { colSpan: 5, text: 'as' }] },
-        1: { cols: [{ colSpan: 5, text: '사건번호' }, { colSpan: 5, text: 'asvsasssssssssssssssssssssssssssssssv' }] },
+        1: { cols: [{ colSpan: 5, text: '사건번호' }, { colSpan: 5, text: 'asvsasssssssssssssssssssssssssssssssssssv' }] },
         2: { cols: [{ colSpan: 5, text: '제출일자' }, { colSpan: 5, text: 'savdavad' }] },
         3: { cols: [{ colSpan: 2, rowSpan: 4, text: '이유' }, { colSpan: 3, text: '이유1' }, { colSpan: 5, text: 'advadvda' }] },
         4: { cols: [{ colSpan: 3, text: '이유2' }, { colSpan: 5, text: '' }] },
@@ -16,45 +16,65 @@ const ReviewerTable = () => {
         10: { cols: [{ colSpan: 3, text: '참조2' }, { colSpan: 5, text: '' }] },
         11: { cols: [{ colSpan: 3, text: '참조3' }, { colSpan: 5, text: 'davdavxda' }] },
         12: { cols: [{ colSpan: 3, text: '참조4' }, { colSpan: 5, text: '' }] },
-        13: { cols: [{ colSpan: 3, text: '참조5' }, { colSpan: 5, text: '테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트' }] },
+        13: { cols: [{ colSpan: 3, text: '참조5' }, { colSpan: 5, text: '테스트' }] },
         14: { cols: [{ colSpan: 3, text: '참조6' }, { colSpan: 5, text: '' }] },
         15: { cols: [{ colSpan: 3, text: '참조7' }, { colSpan: 5, text: 'dvdasvdav' }] }
     });
 
     const [activeCells, setActiveCells] = useState({});
     const [cellInput, setCellInput] = useState({});
+    const [editedCells, setEditedCells] = useState({});
 
-    // 셀 클릭 이벤트 핸들러
+    // 셀 클릭 시 활성화
     const handleCellClick = (rowIndex, colIndex) => {
         const key = `${rowIndex}-${colIndex}`;
         setActiveCells((prev) => ({
             ...prev,
-            [key]: true // 셀 클릭 시 입력 필드를 표시하도록 상태를 true로 설정
+            [key]: true
         }));
     };
 
-    // 입력 필드의 값 변경 이벤트 핸들러
+    // 입력 변화 처리
     const handleInputChange = (e, rowIndex, colIndex) => {
         const key = `${rowIndex}-${colIndex}`;
         setCellInput((prev) => ({
             ...prev,
-            [key]: e.target.value // 입력한 값을 상태에 저장
+            [key]: e.target.value
         }));
     };
 
-    // 입력 필드 포커스 아웃 시 실행되는 이벤트 핸들러
-    const handleInputBlur = (rowIndex, colIndex) => {
+    // 엔터를 눌러서 수정된 내용을 저장
+    const saveInput = (rowIndex, colIndex) => {
         const key = `${rowIndex}-${colIndex}`;
         setTableData((prevData) => {
             const newData = { ...prevData };
-            newData[rowIndex].cols[colIndex].text = cellInput[key] || newData[rowIndex].cols[colIndex].text; // 입력된 값 저장
+            newData[rowIndex].cols[colIndex].text = cellInput[key] || '';  // 빈 값도 허용
             return newData;
         });
-        setActiveCells((prev) => ({ ...prev, [key]: false })); // 입력 필드 비활성화
+        // 셀이 수정되었음을 기록하여 색상을 #F2F2F2로 변경
+        setEditedCells((prev) => ({
+            ...prev,
+            [key]: true
+        }));
+        setActiveCells((prev) => ({ ...prev, [key]: false }));
     };
 
-    const calculateContentColSpan = (classificationColSpan) => {
-        return classificationColSpan * 2; // 분류명의 colSpan에 2배로 설정
+    // 엔터 키 이벤트 처리
+    const handleKeyDown = (e, rowIndex, colIndex) => {
+        if (e.key === 'Enter') {
+            saveInput(rowIndex, colIndex);
+        }
+    };
+
+    // 셀의 색상을 설정하는 함수
+    const getCellStyle = (rowIndex, colIndex, text) => {
+        const key = `${rowIndex}-${colIndex}`;
+        // 셀이 수정되었거나 내용이 있는 경우 #F2F2F2로 설정
+        if (text || editedCells[key]) {
+            return { backgroundColor: '#F2F2F2' };
+        }
+        // 그렇지 않으면 흰색
+        return { backgroundColor: 'white' };
     };
 
     return (
@@ -63,20 +83,17 @@ const ReviewerTable = () => {
                 <thead>
                     <tr className="review-table-header">
                         <th colSpan="5" className="main-font">분류명</th>
-                        <th colSpan="10" className="main-font">내용</th> {/* 내용은 2배로 설정 */}
+                        <th colSpan="10" className="main-font">내용</th>
                     </tr>
                 </thead>
                 <tbody>
                     {Object.entries(tableData).map(([rowIndex, row]) => (
                         <tr key={rowIndex}>
                             {row.cols.map((col, colIndex) => {
-                                const isLastCol = colIndex === row.cols.length - 1; // 마지막 셀 여부 확인
-                                const isActive = activeCells[`${rowIndex}-${colIndex}`]; // 셀 클릭 상태 확인
+                                const isActive = activeCells[`${rowIndex}-${colIndex}`];
                                 const key = `${rowIndex}-${colIndex}`;
-                                
-                                // 마지막 열일 경우, 분류명의 colSpan의 2배 적용
-                                const adjustedColSpan = isLastCol
-                                    ? calculateContentColSpan(row.cols[0].colSpan)
+                                const adjustedColSpan = colIndex === row.cols.length - 1
+                                    ? col.colSpan * 2
                                     : col.colSpan;
 
                                 return (
@@ -84,17 +101,20 @@ const ReviewerTable = () => {
                                         key={colIndex}
                                         colSpan={adjustedColSpan}
                                         rowSpan={col.rowSpan || 1}
-                                        onClick={() => handleCellClick(rowIndex, colIndex)} // 셀 클릭 시 핸들러 호출
+                                        onClick={() => handleCellClick(rowIndex, colIndex)}
+                                        // 셀 색상을 설정하는 함수 호출
+                                        style={getCellStyle(rowIndex, colIndex, col.text)}
                                     >
                                         {isActive ? (
                                             <input
                                                 type="text"
-                                                value={cellInput[key] || col.text} // 입력된 값이 있으면 해당 값 사용
-                                                onChange={(e) => handleInputChange(e, rowIndex, colIndex)} // 입력 값 변경 시 실행
-                                                onBlur={() => handleInputBlur(rowIndex, colIndex)} // 포커스 아웃 시 실행
+                                                className="input-field"
+                                                value={cellInput[key] !== undefined ? cellInput[key] : col.text}  // undefined일 때만 col.text 사용
+                                                onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
+                                                onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
                                             />
                                         ) : (
-                                            col.text // 일반 텍스트 출력
+                                            col.text || ''  // 빈 셀도 처리
                                         )}
                                     </td>
                                 );
@@ -107,4 +127,4 @@ const ReviewerTable = () => {
     );
 };
 
-export default ReviewerTable;
+export default LabelingTable;
