@@ -1,0 +1,544 @@
+*   [33m8f0c341[m[33m ([m[1;35mrefs/stash[m[33m)[m WIP on develop: 6513138 Merge pull request #88 from Bitcamp01/feat/labelling-labeler
+[31m|[m[32m\[m  
+[31m|[m * [33m8acea80[m index on develop: 6513138 Merge pull request #88 from Bitcamp01/feat/labelling-labeler
+[31m|[m[31m/[m  
+[31m|[m *   [33m5727abc[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/login[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mdevelop[m[33m)[m Merge pull request #105 from Bitcamp01/feat/labelling-reviewer
+[31m|[m [33m|[m[34m\[m  
+[31m|[m [33m|[m * [33m26bfe6e[m[33m ([m[1;31morigin/feat/labelling-reviewer[m[33m)[m Modify : 1008 마태림 버튼 수정
+[31m|[m [33m|[m[33m/[m  
+[31m|[m *   [33mbb8bdca[m[33m ([m[1;31morigin/feat/mypage[m[33m)[m Merge pull request #104 from Bitcamp01/feat/mypage
+[31m|[m [35m|[m[36m\[m  
+[31m|[m [35m|[m *   [33m2819104[m Merge remote-tracking branch 'origin/feat/mypage' into feat/mypage
+[31m|[m [35m|[m [1;31m|[m[1;32m\[m  
+[31m|[m [35m|[m [1;31m|[m * [33mff70270[m Modify: 생년월일 필수로 수정
+[31m|[m * [1;31m|[m [1;32m|[m   [33m2f5998b[m Merge pull request #103 from Bitcamp01/feat/labelling-labeler
+[31m|[m [1;33m|[m[1;34m\[m [1;31m\[m [1;32m\[m  
+[31m|[m [1;33m|[m * [1;31m\[m [1;32m\[m   [33mad4b3bf[m[33m ([m[1;31morigin/feat/labelling-labeler[m[33m)[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/labelling-labeler
+[31m|[m [1;33m|[m [1;35m|[m[1;33m\[m [1;31m\[m [1;32m\[m  
+[31m|[m [1;33m|[m [1;35m|[m[1;33m/[m [1;31m/[m [1;32m/[m  
+[31m|[m [1;33m|[m[1;33m/[m[1;35m|[m [1;31m|[m [1;32m|[m   
+[31m|[m * [1;35m|[m [1;31m|[m [1;32m|[m   [33m87119a1[m Merge pull request #102 from Bitcamp01/feat/labelling-reviewer
+[31m|[m [1;31m|[m[32m\[m [1;35m\[m [1;31m\[m [1;32m\[m  
+[31m|[m [1;31m|[m [32m|[m[1;31m_[m[1;35m|[m[1;31m/[m [1;32m/[m  
+[31m|[m [1;31m|[m[1;31m/[m[32m|[m [1;35m|[m [1;32m|[m   
+[31m|[m [1;31m|[m * [1;35m|[m [1;32m|[m [33m64ad1e5[m Modify : 1007 마태림 버튼 수정
+[31m|[m [1;31m|[m[1;31m/[m [1;35m/[m [1;32m/[m  
+[31m|[m [1;31m|[m * [1;32m/[m [33m1b5d250[m Modify: 1007 라벨링 테이블 클릭 디테일 수정
+[31m|[m [1;31m|[m[1;31m/[m [1;32m/[m  
+[31m|[m [1;31m|[m [1;32m|[m *   [33m2c48ed3[m[33m ([m[1;31morigin/feat/labelling-admin[m[33m)[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/labelling-admin
+[31m|[m [1;31m|[m [1;32m|[m [33m|[m[1;31m\[m  
+[31m|[m [1;31m|[m [1;32m|[m[1;31m_[m[33m|[m[1;31m/[m  
+[31m|[m [1;31m|[m[1;31m/[m[1;32m|[m [33m|[m   
+[31m|[m * [1;32m|[m [33m|[m   [33meb70975[m Merge pull request #101 from Bitcamp01/feat/labelling-reviewer
+[31m|[m [35m|[m[36m\[m [1;32m\[m [33m\[m  
+[31m|[m [35m|[m * [1;32m|[m [33m|[m [33mae2877b[m Modify : 1007 마태림 라벨링 상세보기 페이지 텍스트 입력 가능
+[31m|[m [35m|[m[35m/[m [1;32m/[m [33m/[m  
+[31m|[m * [1;32m|[m [33m|[m   [33md1ff417[m Merge pull request #100 from Bitcamp01/feat/labelling-labeler
+[31m|[m [1;32m|[m[1;32m\[m [1;32m\[m [33m\[m  
+[31m|[m [1;32m|[m [1;32m|[m[1;32m/[m [33m/[m  
+[31m|[m [1;32m|[m[1;32m/[m[1;32m|[m [33m|[m   
+[31m|[m [1;32m|[m * [33m|[m [33m410ab51[m Add: 1007 김병주 헤더 프로필 드롭다운 이벤트 추가
+[31m|[m [1;32m|[m[1;32m/[m [33m/[m  
+[31m|[m * [33m|[m   [33m2e7ff9f[m[33m ([m[1;31morigin/feat/member-management[m[33m)[m Merge pull request #99 from Bitcamp01/feat/mypage
+[31m|[m [1;33m|[m[1;34m\[m [33m\[m  
+[31m|[m [1;33m|[m * [33m|[m [33m9f459ac[m Add: 소개글 (상태) 수정 모달 추가
+[31m|[m [1;33m|[m[1;33m/[m [33m/[m  
+[31m|[m [1;33m|[m * [33m0367a18[m no message
+[31m|[m [1;33m|[m *   [33m8109883[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/labelling-admin
+[31m|[m [1;33m|[m [1;35m|[m[1;33m\[m  
+[31m|[m [1;33m|[m [1;35m|[m[1;33m/[m  
+[31m|[m [1;33m|[m[1;33m/[m[1;35m|[m   
+[31m|[m * [1;35m|[m   [33m91fc0c6[m Merge pull request #98 from Bitcamp01/feat/labelling-reviewer
+[31m|[m [31m|[m[32m\[m [1;35m\[m  
+[31m|[m [31m|[m * [1;35m|[m [33m5cc7aba[m Modify : 1007 마태림 라벨링 상세보기 추가 및 오류 수정
+[31m|[m [31m|[m[31m/[m [1;35m/[m  
+[31m|[m [31m|[m * [33mc2266fb[m ADD 파일 추가
+[31m|[m [31m|[m * [33me02cc97[m MOD app 라우터 주소 추가
+[31m|[m [31m|[m[31m/[m  
+[31m|[m *   [33mc0e194c[m Merge pull request #94 from Bitcamp01/feat/labelling-reviewer
+[31m|[m [33m|[m[34m\[m  
+[31m|[m [33m|[m * [33m383b78a[m Modify : 1007 마태림 x 버튼 수정 및 라벨러 상세보기 부분 생성. pdf뷰어 부분은 pages js에서 경로 조절 할 수 있도록 코드 수정(그래야 각각 따로따로 사용 가능하니까)
+[31m|[m [33m|[m[33m/[m  
+[31m|[m [33m|[m *   [33m2c3e849[m[33m ([m[1;31morigin/main[m[33m)[m Merge pull request #93 from Bitcamp01/develop
+[31m|[m [33m|[m [35m|[m[33m\[m  
+[31m|[m [33m|[m [35m|[m[33m/[m  
+[31m|[m [33m|[m[33m/[m[35m|[m   
+[31m|[m * [35m|[m   [33me3cad2e[m Merge pull request #92 from Bitcamp01/feat/mypage
+[31m|[m [1;31m|[m[1;32m\[m [35m\[m  
+[31m|[m [1;31m|[m * [35m|[m [33mdae4711[m Add: 프로필 배경화면 디폴트 이미지 추가 및 마이페이지에서 디폴트이미지 변경
+[31m|[m [1;31m|[m[1;31m/[m [35m/[m  
+[31m|[m * [35m|[m   [33md885085[m Merge pull request #91 from Bitcamp01/feat/mypage
+[31m|[m [1;33m|[m[1;34m\[m [35m\[m  
+[31m|[m [1;33m|[m * [35m|[m [33mb997069[m Modify: axios 주석처리
+[31m|[m [1;33m|[m[1;33m/[m [35m/[m  
+[31m|[m * [35m|[m   [33m00b280b[m Merge pull request #90 from Bitcamp01/feat/mypage
+[31m|[m [1;35m|[m[1;36m\[m [35m\[m  
+[31m|[m [1;35m|[m * [35m|[m [33m584eee5[m Add: 프로필 기본이미지 및 배경화면 추가 및 비밀번호 수정모달 추가
+[31m|[m [1;35m|[m[1;35m/[m [35m/[m  
+[31m|[m * [35m|[m [33m3d333d8[m Merge pull request #89 from Bitcamp01/feat/login
+[31m|[m[31m/[m[32m|[m [35m|[m 
+[31m|[m * [35m|[m [33mcf30ee7[m[33m ([m[1;31morigin/feat/login[m[33m)[m 241004 ADD : 김시표 아이디,비번찾기,로그인 완료
+[31m|[m * [35m|[m   [33mc7ae79e[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/login
+[31m|[m [33m|[m[31m\[m [35m\[m  
+[31m|[m [33m|[m[31m/[m [35m/[m  
+[31m|[m[31m/[m[33m|[m [35m|[m   
+* [33m|[m [35m|[m   [33m6513138[m Merge pull request #88 from Bitcamp01/feat/labelling-labeler
+[35m|[m[36m\[m [33m\[m [35m\[m  
+[35m|[m * [33m|[m [35m|[m [33m8372e8d[m Delete: 1004 김병주 필요없는 트라아이템 컴포넌트 삭제
+[35m|[m * [33m|[m [35m|[m [33m298023c[m Add: 1004 김병주 라벨창 검색바 마이페이지 버전도 일단 초안 복붙
+[35m|[m * [33m|[m [35m|[m [33m22b2ae0[m Modify: 1004 김병주 헤더 알람 아이콘 변경 및 위치 수정, 테이블 최신화
+[35m|[m[35m/[m [33m/[m [35m/[m  
+* [33m|[m [35m|[m   [33me51d492[m Modify: 241004 오유빈 Dashboard 배율 조정 불가 추가 + Chart.css 수정
+[1;31m|[m[1;32m\[m [33m\[m [35m\[m  
+[1;31m|[m * [33m|[m [35m|[m [33m130308e[m[33m ([m[1;31morigin/feat/dashboard[m[33m)[m Modify: 241004 오유빈 Dashboard 배율 조정 불가 추가 + Chart.css 수정
+* [1;32m|[m [33m|[m [35m|[m   [33m8341ff7[m Merge pull request #86 from Bitcamp01/feat/member-management
+[1;33m|[m[1;34m\[m [1;32m\[m [33m\[m [35m\[m  
+[1;33m|[m * [1;32m|[m [33m|[m [35m|[m [33ma9ad6a1[m Modify:김화영 10.04 table 첫번쨰컬럼 간격조정, 왜 체크박스, 페이지네이션 색상 다 안먹지? 슬퍼요... 원인불명
+[1;33m|[m[1;33m/[m [1;32m/[m [33m/[m [35m/[m  
+* [1;32m|[m [33m|[m [35m|[m   [33m3a72f39[m Merge pull request #85 from Bitcamp01/feat/mypage
+[1;35m|[m[1;36m\[m [1;32m\[m [33m\[m [35m\[m  
+[1;35m|[m * [1;32m|[m [33m|[m [35m|[m [33md61538f[m Modify: password confirm기능 추가
+[1;35m|[m[1;35m/[m [1;32m/[m [33m/[m [35m/[m  
+[1;35m|[m [1;32m|[m * [35m/[m [33m8b4e1f6[m 241002 ADD : 김시표 회원가입 완성, 로그인 초안
+[1;35m|[m [1;32m|[m[1;35m/[m [35m/[m  
+[1;35m|[m[1;35m/[m[1;32m|[m [35m|[m   
+* [1;32m|[m [35m|[m   [33ma7fac4f[m Merge pull request #84 from Bitcamp01/feat/labelling-reviewer
+[31m|[m[32m\[m [1;32m\[m [35m\[m  
+[31m|[m * [1;32m|[m [35m|[m [33m8cb9ae7[m Modify : 1002 마태림 검수자 페이지 디자인 수정, 네비게이션 구축
+[31m|[m[31m/[m [1;32m/[m [35m/[m  
+* [1;32m|[m [35m|[m [33m1515bf9[m Modify: 241002_오유빈_드롭다운메뉴 코드 수정
+[33m|[m[1;32m\[m[1;32m|[m [35m|[m 
+[33m|[m * [35m|[m [33m6d444f6[m Modify: 241002_오유빈_드롭다운메뉴 코드 수정
+* [34m|[m [35m|[m [33m8c4d0b6[m Modify: 241002_오유빈_코드 수정
+[35m|[m[34m\[m[34m|[m [35m|[m 
+[35m|[m * [35m|[m [33m4ce982c[m Modify: 241002_오유빈_코드 수정
+* [36m|[m [35m|[m   [33m91299f8[m Merge pull request #81 from Bitcamp01/feat/mypage
+[1;31m|[m[1;32m\[m [36m\[m [35m\[m  
+[1;31m|[m * [36m|[m [35m|[m [33m9123bad[m Modify: 프로필 서치바 수정 및 비밀번호 입력 후 프로필 들어올 수 있게 시도
+* [1;32m|[m [36m|[m [35m|[m   [33mbaea03f[m Merge pull request #80 from Bitcamp01/feat/member-management
+[1;32m|[m[1;34m\[m [1;32m\[m [36m\[m [35m\[m  
+[1;32m|[m [1;34m|[m[1;32m/[m [36m/[m [35m/[m  
+[1;32m|[m[1;32m/[m[1;34m|[m [36m|[m [35m|[m   
+[1;32m|[m * [36m|[m [35m|[m [33m1797ddb[m Add: 김화영 10.02 notice_detail 추가
+* [1;34m|[m [36m|[m [35m|[m [33m52c1af4[m Merge pull request #79 from Bitcamp01/feat/member-management
+[1;35m|[m[1;34m\[m[1;34m|[m [36m|[m [35m|[m 
+[1;35m|[m * [36m|[m [35m|[m [33m1471004[m Modify:김화영 10.02 pagenation, table 상세 스타일 변경, notice detail, write 추가
+[1;35m|[m[1;35m/[m [36m/[m [35m/[m  
+* [36m|[m [35m|[m   [33m0d92ecc[m Merge pull request #78 from Bitcamp01/feat/login
+[31m|[m[32m\[m [36m\[m [35m\[m  
+[31m|[m * [36m|[m [35m|[m [33m4d987e0[m 241002 Add : 김시표 리액트 Join(회원가입)
+[31m|[m * [36m|[m [35m|[m   [33m13fe3a7[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/login
+[31m|[m [33m|[m[31m\[m [36m\[m [35m\[m  
+[31m|[m [33m|[m[31m/[m [36m/[m [35m/[m  
+[31m|[m[31m/[m[33m|[m [36m|[m [35m|[m   
+* [33m|[m [36m|[m [35m|[m   [33m06a33e8[m Merge pull request #77 from Bitcamp01/feat/labelling-reviewer
+[35m|[m[36m\[m [33m\[m [36m\[m [35m\[m  
+[35m|[m * [33m|[m [36m|[m [35m|[m [33mf9bfda1[m Modify : 1002 마태림 검수자 테이블 병합 분할 축소 편리화 완료 / 디자인은 아직
+[35m|[m[35m/[m [33m/[m [36m/[m [35m/[m  
+* [33m|[m [36m|[m [35m|[m   [33m654d7ca[m Merge pull request #76 from Bitcamp01/feat/labelling-labeler
+[1;31m|[m[1;32m\[m [33m\[m [36m\[m [35m\[m  
+[1;31m|[m * [33m|[m [36m|[m [35m|[m [33maa87b8f[m Modify: 1002 김병주 사이드바, App.js 링크 연결 수정
+[1;31m|[m * [33m|[m [36m|[m [35m|[m [33m5244869[m Feat: 1002 김병주 라벨링 메인 페이지 추가 및 버튼 연결
+[1;31m|[m * [33m|[m [36m|[m [35m|[m [33m89bf66e[m Feat: 1002 김병주 공통 버튼 컴포넌트 추가
+[1;31m|[m * [33m|[m [36m|[m [35m|[m [33m596744c[m Modify: 1002 김병주 라벨링 페이지 버튼 추가, css 이름 변경
+[1;31m|[m[1;31m/[m [33m/[m [36m/[m [35m/[m  
+* [33m|[m [36m|[m [35m|[m   [33m8740160[m Merge pull request #75 from Bitcamp01/feat/labelling-reviewer
+[1;33m|[m[1;34m\[m [33m\[m [36m\[m [35m\[m  
+[1;33m|[m * [33m|[m [36m|[m [35m|[m [33m04a229c[m Modify : 1002 마태림 App.js에 review 중복 제거
+[1;33m|[m[1;33m/[m [33m/[m [36m/[m [35m/[m  
+* [33m|[m [36m|[m [35m|[m   [33m8bb14f6[m Merge pull request #74 from Bitcamp01/feat/member-management
+[1;35m|[m[1;36m\[m [33m\[m [36m\[m [35m\[m  
+[1;35m|[m * [33m|[m [36m|[m [35m|[m [33m5e245b1[m Modify:김화영 10.01 notice_write코드 변경, 모든 table css변경, 모든페이지 정렬 수정
+* [1;36m|[m [33m|[m [36m|[m [35m|[m   [33m3fa6e48[m Merge pull request #73 from Bitcamp01/feat/labelling-labeler
+[31m|[m[32m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[31m|[m * [1;36m|[m [33m|[m [36m|[m [35m|[m [33mb5c4df2[m Modify: 1001 김병주 알람 검색바 색깔 변경
+[31m|[m[31m/[m [1;36m/[m [33m/[m [36m/[m [35m/[m  
+* [1;36m|[m [33m|[m [36m|[m [35m|[m   [33me6a3f0a[m Merge pull request #72 from Bitcamp01/feat/labelling-reviewer
+[33m|[m[34m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[33m|[m * [1;36m|[m [33m|[m [36m|[m [35m|[m [33mf944cd2[m Modify : 1001 마태림 테이블 선택 기능 추가 / 테이블 확장 및 축소 기능은 미정
+[33m|[m[33m/[m [1;36m/[m [33m/[m [36m/[m [35m/[m  
+* [1;36m|[m [33m|[m [36m|[m [35m|[m   [33m8481727[m Merge pull request #71 from Bitcamp01/feat/labelling-reviewer
+[35m|[m[36m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[35m|[m * [1;36m|[m [33m|[m [36m|[m [35m|[m [33m79dd19b[m Modify 1001 마태림 검수페이지 테이블 완성 / 데이터를 받았을 때 테이블 확장 및 축소 기능 편리화는 아직입니다
+[35m|[m[35m/[m [1;36m/[m [33m/[m [36m/[m [35m/[m  
+* [1;36m|[m [33m|[m [36m|[m [35m|[m   [33m3028906[m Merge pull request #70 from Bitcamp01/feat/labelling-labeler
+[1;31m|[m[1;32m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[1;31m|[m * [1;36m\[m [33m\[m [36m\[m [35m\[m   [33mfb455d6[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/labelling-labeler
+[1;31m|[m [1;33m|[m[1;31m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[1;31m|[m [1;33m|[m[1;31m/[m [1;36m/[m [33m/[m [36m/[m [35m/[m  
+[1;31m|[m[1;31m/[m[1;33m|[m [1;36m|[m [33m|[m [36m|[m [35m|[m   
+* [1;33m|[m [1;36m|[m [33m|[m [36m|[m [35m|[m   [33m9708267[m Merge pull request #69 from Bitcamp01/feat/labelling-reviewer
+[1;35m|[m[1;36m\[m [1;33m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[1;35m|[m * [1;33m|[m [1;36m|[m [33m|[m [36m|[m [35m|[m [33m91cfc35[m Modify 1001 마태림 리뷰어 모달창에 닫기 버튼 수정
+[1;35m|[m[1;35m/[m [1;33m/[m [1;36m/[m [33m/[m [36m/[m [35m/[m  
+* [1;33m|[m [1;36m|[m [33m|[m [36m|[m [35m|[m   [33m712a7d0[m Merge pull request #68 from Bitcamp01/feat/labelling-labeler
+[31m|[m[32m\[m [1;33m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[31m|[m [32m|[m * [1;36m|[m [33m|[m [36m|[m [35m|[m [33mb79a19c[m Add: 1001 김병주 사이드바 링크 연결
+[31m|[m [32m|[m[32m/[m [1;36m/[m [33m/[m [36m/[m [35m/[m  
+[31m|[m * [1;36m/[m [33m/[m [36m/[m [35m/[m [33m0b80108[m Add: 1001 김병주 헤더 뒤로가기, 알림 모달창 구현
+[31m|[m[31m/[m [1;36m/[m [33m/[m [36m/[m [35m/[m  
+* [1;36m|[m [33m|[m [36m|[m [35m|[m   [33m34939de[m Merge pull request #67 from Bitcamp01/feat/labelling-labeler
+[33m|[m[34m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[33m|[m * [1;36m|[m [33m|[m [36m|[m [35m|[m [33m31b128b[m Add: 1001 김병주 헤더 알람 간단하게 구현
+* [34m|[m [1;36m|[m [33m|[m [36m|[m [35m|[m   [33mac47e98[m Modify: 241001_오유빈_전체적인 코드 수정
+[34m|[m[36m\[m [34m\[m [1;36m\[m [33m\[m [36m\[m [35m\[m  
+[34m|[m [36m|[m[34m/[m [1;36m/[m [33m/[m [36m/[m [35m/[m  
+[34m|[m[34m/[m[36m|[m [1;36m|[m [33m|[m [36m/[m [35m/[m   
+[34m|[m [36m|[m [1;36m|[m[36m_[m[33m|[m[36m/[m [35m/[m    
+[34m|[m [36m|[m[36m/[m[1;36m|[m [33m|[m [35m|[m     
+[34m|[m * [1;36m|[m [33m|[m [35m|[m [33m7206a66[m Modify: 241001_오유빈_전체적인 코드 수정
+* [36m|[m [1;36m|[m [33m|[m [35m|[m   [33me35f5f2[m Merge pull request #65 from Bitcamp01/feat/member-management
+[1;31m|[m[1;36m\[m [36m\[m [1;36m\[m [33m\[m [35m\[m  
+[1;31m|[m [1;36m|[m [36m|[m[1;36m/[m [33m/[m [35m/[m  
+[1;31m|[m [1;36m|[m[1;36m/[m[36m|[m [33m|[m [35m|[m   
+[1;31m|[m * [36m|[m [33m|[m [35m|[m   [33m54693a8[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/member-management
+[1;31m|[m [1;33m|[m[1;31m\[m [36m\[m [33m\[m [35m\[m  
+[1;31m|[m [1;33m|[m[1;31m/[m [36m/[m [33m/[m [35m/[m  
+[1;31m|[m[1;31m/[m[1;33m|[m [36m|[m [33m|[m [35m|[m   
+* [1;33m|[m [36m|[m [33m|[m [35m|[m   [33m6f71d47[m Merge pull request #64 from Bitcamp01/feat/labelling-reviewer
+[1;35m|[m[1;36m\[m [1;33m\[m [36m\[m [33m\[m [35m\[m  
+[1;35m|[m * [1;33m|[m [36m|[m [33m|[m [35m|[m [33mccaba42[m Modify 1001 마태림 review와 mypage 충돌 해결 css 겹치는 부분 해소
+* [1;36m|[m [1;33m|[m [36m|[m [33m|[m [35m|[m   [33m48c1f6d[m Merge pull request #63 from Bitcamp01/feat/mypage
+[1;36m|[m[32m\[m [1;36m\[m [1;33m\[m [36m\[m [33m\[m [35m\[m  
+[1;36m|[m [32m|[m[1;36m/[m [1;33m/[m [36m/[m [33m/[m [35m/[m  
+[1;36m|[m[1;36m/[m[32m|[m [1;33m|[m [36m|[m [33m|[m [35m|[m   
+[1;36m|[m * [1;33m|[m [36m|[m [33m|[m [35m|[m [33m2832cc6[m Modify: 스크롤안보이고 기능만 유지하게하고 body 스크롤 삭제
+[1;36m|[m[1;36m/[m [1;33m/[m [36m/[m [33m/[m [35m/[m  
+[1;36m|[m * [36m/[m [33m/[m [35m/[m [33m979cc36[m Modify:김화영10.01 notice_wirte 생성, 모든 table style 변경
+[1;36m|[m[1;36m/[m [36m/[m [33m/[m [35m/[m  
+* [36m|[m [33m|[m [35m|[m   [33m2fe34f4[m Merge pull request #62 from Bitcamp01/feat/mypage
+[33m|[m[34m\[m [36m\[m [33m\[m [35m\[m  
+[33m|[m * [36m|[m [33m|[m [35m|[m [33m8d26418[m Add: mypage/alarm 관련 추가 및 기존 mypage 관련된 컴포넌트 수정
+[33m|[m[33m/[m [36m/[m [33m/[m [35m/[m  
+* [36m|[m [33m|[m [35m|[m   [33m8d9d53f[m Merge pull request #61 from Bitcamp01/feat/labelling-labeler
+[35m|[m[36m\[m [36m\[m [33m\[m [35m\[m  
+[35m|[m * [36m|[m [33m|[m [35m|[m [33m96c6e85[m Modify: 1001 김병주 라벨링 페이지 배치 조정 완료
+[35m|[m[35m/[m [36m/[m [33m/[m [35m/[m  
+* [36m|[m [33m|[m [35m|[m   [33m8aae217[m Merge pull request #60 from Bitcamp01/feat/labelling-reviewer
+[1;31m|[m[1;32m\[m [36m\[m [33m\[m [35m\[m  
+[1;31m|[m * [36m|[m [33m|[m [35m|[m [33m6d0c34f[m Modify 1001 마태림 모달창 글자 간격 띄고 pdf뷰어 간소화 및 코드 이분화
+[1;31m|[m[1;31m/[m [36m/[m [33m/[m [35m/[m  
+* [36m|[m [33m|[m [35m|[m   [33m8dad78e[m Merge pull request #59 from Bitcamp01/feat/labelling-reviewer
+[1;33m|[m[1;34m\[m [36m\[m [33m\[m [35m\[m  
+[1;33m|[m * [36m|[m [33m|[m [35m|[m [33m213e6bd[m Modify 1001 마태림 검수자 피드백 체크박스 기능 추가
+[1;33m|[m[1;33m/[m [36m/[m [33m/[m [35m/[m  
+* [36m|[m [33m|[m [35m|[m [33m2285cce[m Modify: 240930_오유빈_빼먹은 코드 및 코드 재업로드
+[1;35m|[m[36m\[m[36m|[m [33m|[m [35m|[m 
+[1;35m|[m * [33m|[m [35m|[m [33mf092de0[m Modify: 240930_오유빈_빼먹은 코드 및 코드 재업로드
+* [1;36m|[m [33m|[m [35m|[m [33mccc060b[m Modify: 240930_오유빈_RenderWorkInTodo 컴포넌트 추가
+[31m|[m[1;36m\[m[1;36m|[m [33m|[m [35m|[m 
+[31m|[m * [33m|[m [35m|[m [33m7b61408[m Modify: 240930_오유빈_RenderWorkInTodo 컴포넌트 추가
+* [32m|[m [33m|[m [35m|[m [33m9a2a328[m Modify: 240930_오유빈_Dash Board 페이지 리액트로 옮김
+[33m|[m[32m\[m[32m|[m [33m|[m [35m|[m 
+[33m|[m * [33m|[m [35m|[m [33mb590668[m Modify: 240930_오유빈_Dash Board 페이지 리액트로 옮김
+* [34m|[m [33m|[m [35m|[m   [33m77ebdb8[m Merge pull request #55 from Bitcamp01/feat/member-management
+[35m|[m[36m\[m [34m\[m [33m\[m [35m\[m  
+[35m|[m * [34m|[m [33m|[m [35m|[m [33m399d633[m Add:김화영 0930 table.css추가
+[35m|[m[35m/[m [34m/[m [33m/[m [35m/[m  
+* [34m|[m [33m|[m [35m|[m   [33m53cd260[m Merge pull request #54 from Bitcamp01/feat/member-management
+[1;31m|[m[1;32m\[m [34m\[m [33m\[m [35m\[m  
+[1;31m|[m * [34m\[m [33m\[m [35m\[m   [33mdc43de2[m Merge branch 'feat/member-management' of https://github.com/Bitcamp01/DataInk-Front into feat/member-management
+[1;31m|[m [1;33m|[m[1;34m\[m [34m\[m [33m\[m [35m\[m  
+[1;31m|[m [1;33m|[m * [34m|[m [33m|[m [35m|[m [33m68802a6[m Delete React/src/css/Table.css
+[1;31m|[m [1;33m|[m * [34m|[m [33m|[m [35m|[m [33m18997d9[m Rename MemberManagement.css to memberManagement.css
+[1;31m|[m * [1;34m|[m [34m|[m [33m|[m [35m|[m   [33m211ee4f[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/member-management
+[1;31m|[m [1;35m|[m[1;31m\[m [1;34m\[m [34m\[m [33m\[m [35m\[m  
+[1;31m|[m [1;35m|[m[1;31m/[m [1;34m/[m [34m/[m [33m/[m [35m/[m  
+[1;31m|[m[1;31m/[m[1;35m|[m [1;34m|[m [34m|[m [33m|[m [35m|[m   
+* [1;35m|[m [1;34m|[m [34m|[m [33m|[m [35m|[m   [33maa152ea[m Merge pull request #53 from Bitcamp01/feat/labelling-reviewer
+[31m|[m[32m\[m [1;35m\[m [1;34m\[m [34m\[m [33m\[m [35m\[m  
+[31m|[m * [1;35m|[m [1;34m|[m [34m|[m [33m|[m [35m|[m [33m87ece44[m Modify : 0930 마태림 리뷰 페이지 구현 수정 및 pdf뷰어 우회 표출 및 모달창 구현 완료
+[31m|[m[31m/[m [1;35m/[m [1;34m/[m [34m/[m [33m/[m [35m/[m  
+[31m|[m * [1;34m|[m [34m|[m [33m|[m [35m|[m [33m71575c0[m Modify:김화영 0930 Table_projectList_modal 변경, 파일이름 변경 등
+[31m|[m * [1;34m|[m [34m|[m [33m|[m [35m|[m   [33m0552562[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/member-management
+[31m|[m [1;34m|[m[31m\[m [1;34m\[m [34m\[m [33m\[m [35m\[m  
+[31m|[m [1;34m|[m[31m/[m [1;34m/[m [34m/[m [33m/[m [35m/[m  
+[31m|[m[31m/[m[1;34m|[m [1;34m/[m [34m/[m [33m/[m [35m/[m   
+[31m|[m [1;34m|[m[1;34m/[m [34m/[m [33m/[m [35m/[m    
+* [1;34m|[m [34m|[m [33m|[m [35m|[m [33m1472f06[m Delete React/src/css/Table.css
+* [1;34m|[m [34m|[m [33m|[m [35m|[m [33m5c4b350[m Rename MemberManagement.css to memberManagement.css
+[34m|[m * [34m|[m [33m|[m [35m|[m [33m4399331[m Modify:김화영 0930 Table,모달 변경
+[34m|[m[34m/[m [34m/[m [33m/[m [35m/[m  
+[34m|[m [34m|[m * [35m|[m   [33mebde6f0[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/login
+[34m|[m [34m|[m [35m|[m[34m\[m [35m\[m  
+[34m|[m [34m|[m[34m_[m[35m|[m[34m/[m [35m/[m  
+[34m|[m[34m/[m[34m|[m [35m|[m [35m|[m   
+* [34m|[m [35m|[m [35m|[m [33m9b92ed6[m Modify: 240930_오유빈_Chart 컴포넌트 파일 옮기고 폴더 삭제
+[1;31m|[m[34m\[m[34m|[m [35m|[m [35m|[m 
+[1;31m|[m * [35m|[m [35m|[m [33m4e0e6cc[m Modify: 240930_오유빈_Chart 컴포넌트 파일 옮기고 폴더 삭제
+[1;31m|[m[1;31m/[m [35m/[m [35m/[m  
+* [35m|[m [35m|[m   [33m096b73a[m Feat: 240930_오유빈_dashboard 페이지 중 필요한 Chart컴포넌트 제작 완료
+[1;33m|[m[1;34m\[m [35m\[m [35m\[m  
+[1;33m|[m * [35m|[m [35m|[m [33mc275ef8[m Feat: 240930_오유빈_dashboard 페이지 중 필요한 Chart컴포넌트 제작 완료
+* [1;34m|[m [35m|[m [35m|[m   [33m4c359d3[m Merge pull request #50 from Bitcamp01/feat/labelling-labeler
+[1;35m|[m[1;36m\[m [1;34m\[m [35m\[m [35m\[m  
+[1;35m|[m * [1;34m|[m [35m|[m [35m|[m [33m63ce416[m Modify: 0930 김병주 드롭다운 방향 변경 적용
+[1;35m|[m[1;35m/[m [1;34m/[m [35m/[m [35m/[m  
+* [1;34m|[m [35m|[m [35m|[m   [33m86ea842[m Merge pull request #49 from Bitcamp01/feat/labelling-labeler
+[31m|[m[32m\[m [1;34m\[m [35m\[m [35m\[m  
+[31m|[m * [1;34m|[m [35m|[m [35m|[m [33m27fe9b8[m Add: 0930 김병주 사이드바 접고 펴기 추가(디테일 개선 필요)
+[31m|[m * [1;34m|[m [35m|[m [35m|[m [33mcc795ca[m Modify: 0930 김병주 라벨링 페이지 styled-components로 변경
+* [32m|[m [1;34m|[m [35m|[m [35m|[m   [33m2405059[m Merge pull request #48 from Bitcamp01/feat/member-management
+[32m|[m[34m\[m [32m\[m [1;34m\[m [35m\[m [35m\[m  
+[32m|[m [34m|[m[32m/[m [1;34m/[m [35m/[m [35m/[m  
+[32m|[m[32m/[m[34m|[m [1;34m|[m [35m|[m [35m|[m   
+[32m|[m * [1;34m|[m [35m|[m [35m|[m [33m032291d[m Modify:김화영 09.30 Notice추가, 모달 변경
+[32m|[m[32m/[m [1;34m/[m [35m/[m [35m/[m  
+[32m|[m [1;34m|[m * [35m/[m [33m7284d65[m add 240930 김시표 로그인 페이지
+[32m|[m [1;34m|[m[32m/[m [35m/[m  
+[32m|[m[32m/[m[1;34m|[m [35m|[m   
+* [1;34m|[m [35m|[m   [33m3f97c69[m Merge pull request #47 from Bitcamp01/feat/login
+[35m|[m[36m\[m [1;34m\[m [35m\[m  
+[35m|[m * [1;34m|[m [35m|[m [33m9567ad4[m Add 240927_김시표_회원가입 완성직전(각종 사진파일 추가했음)
+[35m|[m[35m/[m [1;34m/[m [35m/[m  
+* [1;34m|[m [35m|[m   [33mf4c1778[m Merge pull request #46 from Bitcamp01/feat/mypage
+[1;31m|[m[1;32m\[m [1;34m\[m [35m\[m  
+[1;31m|[m * [1;34m|[m [35m|[m [33meafe13b[m Modify: App.js에서 Review안되서 import, router 주석처리
+[1;31m|[m[1;31m/[m [1;34m/[m [35m/[m  
+* [1;34m|[m [35m|[m   [33m8eba23f[m Merge pull request #45 from Bitcamp01/feat/mypage
+[1;33m|[m[1;34m\[m [1;34m\[m [35m\[m  
+[1;33m|[m * [1;34m|[m [35m|[m [33mc06ecf5[m Modify: 240927 - 수민 : 병주가 올린거로 리엑트 작업환경 변경
+* [1;34m|[m [1;34m|[m [35m|[m   [33m8dfb999[m Merge pull request #44 from Bitcamp01/feat/labelling-labeler
+[1;34m|[m[1;36m\[m [1;34m\[m [1;34m\[m [35m\[m  
+[1;34m|[m [1;36m|[m[1;34m/[m [1;34m/[m [35m/[m  
+[1;34m|[m[1;34m/[m[1;36m|[m [1;34m|[m [35m|[m   
+[1;34m|[m * [1;34m|[m [35m|[m [33m6c6c12e[m Modify: 0927 리액트 폴더구조 변경 및 맴버관리 페이지 주석처리
+[1;34m|[m[1;34m/[m [1;34m/[m [35m/[m  
+* [1;34m|[m [35m|[m   [33mbee6083[m Merge pull request #43 from Bitcamp01/feat/login
+[31m|[m[32m\[m [1;34m\[m [35m\[m  
+[31m|[m * [1;34m\[m [35m\[m   [33m7060510[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/login
+[31m|[m [33m|[m[31m\[m [1;34m\[m [35m\[m  
+[31m|[m [33m|[m[31m/[m [1;34m/[m [35m/[m  
+[31m|[m[31m/[m[33m|[m [1;34m|[m [35m|[m   
+* [33m|[m [1;34m|[m [35m|[m   [33m6b0a494[m Merge pull request #42 from Bitcamp01/feat/mypage
+[35m|[m[36m\[m [33m\[m [1;34m\[m [35m\[m  
+[35m|[m * [33m|[m [1;34m|[m [35m|[m [33m0f0a852[m Modify: 파일 경로 수정 및 workstatus 수정
+[35m|[m[35m/[m [33m/[m [1;34m/[m [35m/[m  
+* [33m|[m [1;34m|[m [35m|[m   [33m92958e1[m Feat: 240927_오유빈_dashboard 페이지 중 필요한 ProfileCard컴포넌트 제작 완료
+[1;31m|[m[1;34m\[m [33m\[m [1;34m\[m [35m\[m  
+[1;31m|[m [1;34m|[m [33m|[m[1;34m/[m [35m/[m  
+[1;31m|[m [1;34m|[m[1;34m/[m[33m|[m [35m|[m   
+[1;31m|[m * [33m|[m [35m|[m [33m7667681[m Feat: 240927_오유빈_dashboard 페이지 중 필요한 ProfileCard컴포넌트 제작 완료
+* [1;32m|[m [33m|[m [35m|[m   [33ma796023[m Merge pull request #40 from Bitcamp01/feat/labelling-labeler
+[1;33m|[m[1;34m\[m [1;32m\[m [33m\[m [35m\[m  
+[1;33m|[m * [1;32m|[m [33m|[m [35m|[m [33mda8cc1c[m Modify: 0927 김병주 라벨러 테이블 수정
+[1;33m|[m[1;33m/[m [1;32m/[m [33m/[m [35m/[m  
+* [1;32m|[m [33m|[m [35m|[m   [33m87fed9e[m Merge pull request #39 from Bitcamp01/feat/labelling-labeler
+[1;35m|[m[1;36m\[m [1;32m\[m [33m\[m [35m\[m  
+[1;35m|[m * [1;32m|[m [33m|[m [35m|[m [33m4d80650[m Modify: 0926 김병주 버튼 사라지는 문제 수정
+[1;35m|[m * [1;32m|[m [33m|[m [35m|[m [33m868344f[m Modify: 0926 김병주 라벨링 테이블 동적으로 변경
+[1;35m|[m[1;35m/[m [1;32m/[m [33m/[m [35m/[m  
+* [1;32m|[m [33m|[m [35m|[m   [33mfe84a79[m Merge pull request #38 from Bitcamp01/feat/labelling-labeler
+[31m|[m[32m\[m [1;32m\[m [33m\[m [35m\[m  
+[31m|[m * [1;32m|[m [33m|[m [35m|[m [33m60c04cd[m Feat: 0926 김병주 테이블 컴포넌트 부활
+* [32m|[m [1;32m|[m [33m|[m [35m|[m   [33m1c764da[m Merge pull request #37 from Bitcamp01/feat/mypage
+[33m|[m[34m\[m [32m\[m [1;32m\[m [33m\[m [35m\[m  
+[33m|[m * [32m|[m [1;32m|[m [33m|[m [35m|[m [33m051e705[m Modify: 이미지 파일 이름 수정
+[33m|[m[33m/[m [32m/[m [1;32m/[m [33m/[m [35m/[m  
+* [32m|[m [1;32m|[m [33m|[m [35m|[m   [33m0836576[m Feat: 240926_오유빈_ProjectCard 컴포넌트에 필요한 CSS 추가 업로드
+[35m|[m[1;32m\[m [32m\[m [1;32m\[m [33m\[m [35m\[m  
+[35m|[m [1;32m|[m [32m|[m[1;32m/[m [33m/[m [35m/[m  
+[35m|[m [1;32m|[m[1;32m/[m[32m|[m [33m|[m [35m|[m   
+[35m|[m * [32m|[m [33m|[m [35m|[m [33m4aa81cc[m Feat: 240926_오유빈_ProjectCard 컴포넌트에 필요한 CSS 추가 업로드
+* [36m|[m [32m|[m [33m|[m [35m|[m   [33mae427e1[m Merge pull request #35 from Bitcamp01/feat/mypage
+[32m|[m[1;32m\[m [36m\[m [32m\[m [33m\[m [35m\[m  
+[32m|[m [1;32m|[m[32m_[m[36m|[m[32m/[m [33m/[m [35m/[m  
+[32m|[m[32m/[m[1;32m|[m [36m|[m [33m|[m [35m|[m   
+[32m|[m * [36m|[m [33m|[m [35m|[m [33m8e8f6e8[m Add: img add 240926
+* [1;32m|[m [36m|[m [33m|[m [35m|[m   [33m9449d81[m Feat: 240926_오유빈_ProjectCard 컴포넌트 제작 완료, 필요한 이미지/아이콘 추가
+[1;33m|[m[36m\[m [1;32m\[m [36m\[m [33m\[m [35m\[m  
+[1;33m|[m [36m|[m [1;32m|[m[36m/[m [33m/[m [35m/[m  
+[1;33m|[m [36m|[m[36m/[m[1;32m|[m [33m|[m [35m|[m   
+[1;33m|[m * [1;32m|[m [33m|[m [35m|[m [33mc2f72f5[m Feat: 240926_오유빈_dashboard 페이지 중 필요한 ProjectCard 컴포넌트 제작 완료
+* [1;34m|[m [1;32m|[m [33m|[m [35m|[m   [33m25dc927[m Merge pull request #33 from Bitcamp01/feat/labelling-labeler
+[1;32m|[m[1;36m\[m [1;34m\[m [1;32m\[m [33m\[m [35m\[m  
+[1;32m|[m [1;36m|[m[1;32m_[m[1;34m|[m[1;32m/[m [33m/[m [35m/[m  
+[1;32m|[m[1;32m/[m[1;36m|[m [1;34m|[m [33m|[m [35m|[m   
+[1;32m|[m * [1;34m|[m [33m|[m [35m|[m [33m68244e9[m Feat: 0926 김병주 라벨링 페이지 거의 완성
+[1;32m|[m * [1;34m|[m [33m|[m [35m|[m [33m02cf9f2[m Modify: 0926 김병주 컴포넌트 라벨링 하위 폴더 생성
+[1;32m|[m[1;32m/[m [1;34m/[m [33m/[m [35m/[m  
+[1;32m|[m [1;34m|[m * [35m/[m [33m2f60751[m Feat: 0927 김시표 회원가입 틀 작성 중
+[1;32m|[m [1;34m|[m[1;32m/[m [35m/[m  
+[1;32m|[m[1;32m/[m[1;34m|[m [35m|[m   
+* [1;34m|[m [35m|[m   [33m348c8b0[m Merge pull request #32 from Bitcamp01/feat/member-management
+[31m|[m[32m\[m [1;34m\[m [35m\[m  
+[31m|[m * [1;34m|[m [35m|[m [33m19acc67[m Add:김화영 09.26 Table 컴포넌트 수정/ 추가, tab기능 활성화 추가
+[31m|[m[31m/[m [1;34m/[m [35m/[m  
+* [1;34m|[m [35m|[m   [33m61e8a93[m Merge pull request #31 from Bitcamp01/feat/labelling-reviewer
+[33m|[m[34m\[m [1;34m\[m [35m\[m  
+[33m|[m * [1;34m|[m [35m|[m [33m42ba91a[m Modify : 0926 마태림 Review.js 경로 수정
+[33m|[m[33m/[m [1;34m/[m [35m/[m  
+* [1;34m|[m [35m|[m   [33m0b16ace[m Merge pull request #30 from Bitcamp01/feat/labelling-reviewer
+[35m|[m[36m\[m [1;34m\[m [35m\[m  
+[35m|[m * [1;34m|[m [35m|[m [33m4e73916[m Add 0926 마태림 검수자페이지 리엑트로 변환. 오류 있을 수도 있음
+[35m|[m[35m/[m [1;34m/[m [35m/[m  
+* [1;34m|[m [35m|[m   [33me11380b[m Merge pull request #29 from Bitcamp01/feat/labelling-reviewer
+[1;31m|[m[1;32m\[m [1;34m\[m [35m\[m  
+[1;31m|[m * [1;34m|[m [35m|[m [33ma37fed7[m Modify 0926 마태림 pdf뷰어 스크립트를 reviewer.js에 옮김
+[1;31m|[m[1;31m/[m [1;34m/[m [35m/[m  
+* [1;34m|[m [35m|[m [33m60672d5[m Feat: 240926_오유빈_WorkIn-Todo 컴포넌트와 Calendar 컴포넌트 제작 후 추가
+[1;33m|[m[1;34m\[m[1;34m|[m [35m|[m 
+[1;33m|[m * [35m|[m [33mca543f0[m Feat: 240926_오유빈_dashboard 페이지 중 필요한 WorkIn-Todo 컴포넌트와 Calendar 컴포넌트 제작하여 추가
+* [1;34m|[m [35m|[m   [33m5d3ca3d[m Merge pull request #27 from Bitcamp01/feat/labelling-reviewer
+[1;35m|[m[1;36m\[m [1;34m\[m [35m\[m  
+[1;35m|[m * [1;34m|[m [35m|[m [33m96b33f5[m Modify : 0926 마태림 검수자 페이지 pdf 뷰어 수정
+* [1;36m|[m [1;34m|[m [35m|[m   [33mad08e5e[m Merge pull request #26 from Bitcamp01/feat/member-management
+[31m|[m[32m\[m [1;36m\[m [1;34m\[m [35m\[m  
+[31m|[m * [1;36m|[m [1;34m|[m [35m|[m [33m7bbd97b[m Modify: 김화영09.26 리액트 table 컴포넌트 추가, 소문자변경
+[31m|[m[31m/[m [1;36m/[m [1;34m/[m [35m/[m  
+* [1;36m|[m [1;34m|[m [35m|[m   [33m87a5fc9[m Merge pull request #25 from Bitcamp01/feat/dashboard
+[33m|[m[1;34m\[m [1;36m\[m [1;34m\[m [35m\[m  
+[33m|[m [1;34m|[m [1;36m|[m[1;34m/[m [35m/[m  
+[33m|[m [1;34m|[m[1;34m/[m[1;36m|[m [35m|[m   
+[33m|[m * [1;36m|[m [35m|[m [33m4be1ba3[m Modify: 240926_오유빈_dashboard 프로젝트 카드 작업 완료 / 필요한 아이콘, 이미지 추가
+* [34m|[m [1;36m|[m [35m|[m   [33m254df03[m Merge pull request #24 from Bitcamp01/feat/mypage
+[35m|[m[36m\[m [34m\[m [1;36m\[m [35m\[m  
+[35m|[m * [34m|[m [1;36m|[m [35m|[m [33m411ee8a[m Modify: 240925_ㅡㅡmypage 수정
+[35m|[m[35m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33mfcb49f3[m Merge pull request #23 from Bitcamp01/feat/labelling-labeler
+[1;31m|[m[1;32m\[m [34m\[m [1;36m\[m [35m\[m  
+[1;31m|[m * [34m|[m [1;36m|[m [35m|[m [33mc46f924[m Feat: 0925 김병주 리액트 라벨링 필터링 구현
+[1;31m|[m * [34m|[m [1;36m|[m [35m|[m [33m9f6cb01[m Modify: 0925 김병주 icon 하나 svg 파일로 변경
+[1;31m|[m[1;31m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33m57aabc2[m Merge pull request #22 from Bitcamp01/feat/mypage
+[1;33m|[m[1;34m\[m [34m\[m [1;36m\[m [35m\[m  
+[1;33m|[m * [34m|[m [1;36m|[m [35m|[m [33mb3bd6ac[m Feat: 240925_mypage_react연결 - profile
+[1;33m|[m[1;33m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33me7968a1[m Merge pull request #21 from Bitcamp01/feat/member-management
+[1;35m|[m[1;36m\[m [34m\[m [1;36m\[m [35m\[m  
+[1;35m|[m * [34m|[m [1;36m|[m [35m|[m [33m919977f[m "Feat: (김화영) 09.25 리액트로 변환 추가"
+[1;35m|[m[1;35m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33m9ea7e9f[m Merge pull request #20 from Bitcamp01/feat/labelling-labeler
+[31m|[m[32m\[m [34m\[m [1;36m\[m [35m\[m  
+[31m|[m * [34m|[m [1;36m|[m [35m|[m [33ma28467a[m Modify: 0925 김병주 리액트 사이드바 z-index 수정
+[31m|[m[31m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33m9b0acbd[m Merge pull request #19 from Bitcamp01/feat/mypage
+[33m|[m[34m\[m [34m\[m [1;36m\[m [35m\[m  
+[33m|[m * [34m|[m [1;36m|[m [35m|[m [33m761da41[m Add: 240925_src/css에 profile.css 추가
+[33m|[m[33m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33me84b916[m Merge pull request #18 from Bitcamp01/feat/labelling-labeler
+[35m|[m[36m\[m [34m\[m [1;36m\[m [35m\[m  
+[35m|[m * [34m|[m [1;36m|[m [35m|[m [33m0941b8f[m Feat: 0925 김병주 리액트 폴더 구조 생성 및 공통부분 작성
+[35m|[m[35m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33mb9eb136[m Merge pull request #17 from Bitcamp01/feat/labelling-admin
+[1;31m|[m[1;32m\[m [34m\[m [1;36m\[m [35m\[m  
+[1;31m|[m * [34m|[m [1;36m|[m [35m|[m [33mbd68d73[m ADD 스타일 조정
+[1;31m|[m[1;31m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33mf0a06e5[m Merge pull request #16 from Bitcamp01/feat/labelling-labeler
+[1;33m|[m[1;34m\[m [34m\[m [1;36m\[m [35m\[m  
+[1;33m|[m * [34m|[m [1;36m|[m [35m|[m [33m35e6d5d[m Delete: 0925 김병주 명명규칙 불일치 및 svg로 변환한 이미지 삭제
+[1;33m|[m * [34m|[m [1;36m|[m [35m|[m [33m127019d[m Feat: 0925 icon들 svg파일로 변경 및 변경 내용 반영
+[1;33m|[m[1;33m/[m [34m/[m [1;36m/[m [35m/[m  
+* [34m|[m [1;36m|[m [35m|[m   [33mcb5b71b[m Merge pull request #15 from Bitcamp01/feat/labelling-reviewer
+[1;35m|[m[1;36m\[m [34m\[m [1;36m\[m [35m\[m  
+[1;35m|[m [1;36m|[m [34m|[m[1;36m/[m [35m/[m  
+[1;35m|[m [1;36m|[m[1;36m/[m[34m|[m [35m|[m   
+[1;35m|[m * [34m|[m [35m|[m [33mb2505a8[m Modify : 0925 마태림 화영누나 테이블 스타일대로 수정
+[1;35m|[m[1;35m/[m [34m/[m [35m/[m  
+* [34m|[m [35m|[m   [33mc1d9ad2[m Merge pull request #14 from Bitcamp01/feat/labelling-admin
+[31m|[m[32m\[m [34m\[m [35m\[m  
+[31m|[m * [34m|[m [35m|[m [33m1060c3f[m Modify 스타일 수정
+[31m|[m * [34m|[m [35m|[m   [33maa18eff[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/labelling-admin
+[31m|[m [33m|[m[34m\[m [34m\[m [35m\[m  
+[31m|[m * [34m\[m [34m\[m [35m\[m   [33mc6bd475[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into feat/labelling-admin
+[31m|[m [35m|[m[36m\[m [34m\[m [34m\[m [35m\[m  
+[31m|[m * [36m|[m [34m|[m [34m|[m [35m|[m [33m08189f3[m 2024-09-24 Feat,항목 구조 시각화
+* [36m|[m [36m|[m [34m|[m [34m|[m [35m|[m   [33m297c7f2[m Merge pull request #13 from Bitcamp01/feat/labelling-reviewer
+[34m|[m[1;32m\[m [36m\[m [36m\[m [34m\[m [34m\[m [35m\[m  
+[34m|[m [1;32m|[m[34m_[m[36m|[m[34m_[m[36m|[m[34m/[m [34m/[m [35m/[m  
+[34m|[m[34m/[m[1;32m|[m [36m|[m [36m|[m [34m|[m [35m|[m   
+[34m|[m * [36m|[m [36m|[m [34m|[m [35m|[m   [33m763d86e[m Merge branch 'develop' of https://github.com/Bitcamp01/DataInk-Front into develop
+[34m|[m [1;33m|[m[1;34m\[m [36m\[m [36m\[m [34m\[m [35m\[m  
+[34m|[m * [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33m88ac4e1[m Feat : 0924 마태림 검수자리스트화면 검수자작업화면 틀 만들어라
+* [1;34m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m   [33m2f74f23[m Merge pull request #12 from Bitcamp01/feat/labelling-labeler
+[1;35m|[m[1;36m\[m [1;34m\[m [1;34m\[m [36m\[m [36m\[m [34m\[m [35m\[m  
+[1;35m|[m * [1;34m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33m9245d38[m Add: 0925 김병주 검색바 관련 js 추가
+[1;35m|[m * [1;34m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33m437c2e5[m Modify: 0925 김병주 검색바 선택지 옵션 수정
+[1;35m|[m[1;35m/[m [1;34m/[m [1;34m/[m [36m/[m [36m/[m [34m/[m [35m/[m  
+* [1;34m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m   [33m195970e[m main.css 헤더 길이 수정 후 머지
+[31m|[m[32m\[m [1;34m\[m [1;34m\[m [36m\[m [36m\[m [34m\[m [35m\[m  
+[31m|[m * [1;34m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33md5def96[m Modify: main.css 헤더 길이 수정
+* [32m|[m [1;34m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m   [33m5f6b848[m Merge pull request #10 from Bitcamp01/feat/mypage
+[1;34m|[m[34m\[m [32m\[m [1;34m\[m [1;34m\[m [36m\[m [36m\[m [34m\[m [35m\[m  
+[1;34m|[m [34m|[m[1;34m_[m[32m|[m[1;34m_[m[1;34m|[m[1;34m/[m [36m/[m [36m/[m [34m/[m [35m/[m  
+[1;34m|[m[1;34m/[m[34m|[m [32m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m   
+[1;34m|[m * [32m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33m68d8583[m Modify: profile
+[1;34m|[m[1;34m/[m [32m/[m [1;34m/[m [36m/[m [36m/[m [34m/[m [35m/[m  
+* [32m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33mb95f6b9[m Modify: 0924 김병주 알람 테스트용 변경
+[35m|[m[32m\[m[32m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m 
+[35m|[m * [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33mb9cccf6[m Modify: 0924 김병주 알람 테스트용 변경
+* [36m|[m [1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33ma12d895[m Modify: 0924 김병주 알람 파일 수정
+[1;34m|[m [36m|[m[1;34m/[m [36m/[m [36m/[m [34m/[m [35m/[m  
+[1;34m|[m[1;34m/[m[36m|[m [36m|[m [36m|[m [34m|[m [35m|[m   
+* [36m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33madad119[m Modify: 0924 김병주 검색바 간격 조절
+[1;31m|[m[36m\[m[36m|[m [36m|[m [36m|[m [34m|[m [35m|[m 
+[1;31m|[m * [36m|[m [36m|[m [34m|[m [35m|[m [33m89c446c[m Modify: 0924 김병주 검색바 간격 조절
+* [1;32m|[m [36m|[m [36m|[m [34m|[m [35m|[m [33m232744a[m Add: 0924 김병주 slack-notification.yml 추가
+* [1;32m|[m [36m|[m [36m|[m [34m|[m [35m|[m   [33m10eb6da[m Merge pull request #7 from Bitcamp01/feat/mypage
+[1;32m|[m[1;34m\[m [1;32m\[m [36m\[m [36m\[m [34m\[m [35m\[m  
+[1;32m|[m [1;34m|[m[1;32m/[m [36m/[m [36m/[m [34m/[m [35m/[m  
+[1;32m|[m[1;32m/[m[1;34m|[m [36m|[m [36m|[m [34m|[m [35m|[m   
+[1;32m|[m * [36m|[m [36m|[m [34m|[m [35m|[m [33me6ba725[m Modify: 20240924: profile.css, html수정
+[1;32m|[m[1;32m/[m [36m/[m [36m/[m [34m/[m [35m/[m  
+* [36m|[m [36m|[m [34m|[m [35m|[m   [33mcefc908[m Merge pull request #6 from Bitcamp01/feat/dashboard
+[36m|[m[34m\[m [36m\[m [36m\[m [34m\[m [35m\[m  
+[36m|[m [34m|[m[36m_[m[36m|[m[36m/[m [34m/[m [35m/[m  
+[36m|[m[36m/[m[34m|[m [36m|[m [34m/[m [35m/[m   
+[36m|[m [34m|[m [36m|[m[34m/[m [35m/[m    
+[36m|[m [34m|[m[34m/[m[36m|[m [35m|[m     
+[36m|[m * [36m|[m [35m|[m   [33m0b78cf1[m Merge branch 'develop' into feat/dashboard
+[36m|[m [31m|[m[36m\[m [36m\[m [35m\[m  
+[36m|[m [31m|[m[36m/[m [36m/[m [35m/[m  
+[36m|[m[36m/[m[31m|[m [36m|[m [35m|[m   
+* [31m|[m [36m|[m [35m|[m   [33m224afde[m Merge pull request #5 from Bitcamp01/feat/member-management
+[33m|[m[34m\[m [31m\[m [36m\[m [35m\[m  
+[33m|[m * [31m|[m [36m|[m [35m|[m [33m8b65393[m Feat: 0924 멤버관리 css, html 추가
+[33m|[m * [31m|[m [36m|[m [35m|[m   [33m364bf36[m Merge remote-tracking branch 'origin/develop' into feat/member-management
+[33m|[m [35m|[m[33m\[m [31m\[m [36m\[m [35m\[m  
+[33m|[m [35m|[m[33m/[m [31m/[m [36m/[m [35m/[m  
+[33m|[m[33m/[m[35m|[m [31m|[m [36m|[m [35m|[m   
+* [35m|[m [31m|[m [36m|[m [35m|[m   [33m50bb692[m Merge pull request #4 from Bitcamp01/feat/mypage
+[36m|[m[1;32m\[m [35m\[m [31m\[m [36m\[m [35m\[m  
+[36m|[m [1;32m|[m[36m_[m[35m|[m[36m_[m[31m|[m[36m/[m [35m/[m  
+[36m|[m[36m/[m[1;32m|[m [35m|[m [31m|[m [35m|[m   
+[36m|[m * [35m|[m [31m|[m [35m|[m   [33mf81b791[m Merge pull request #3 from Bitcamp01/develop
+[36m|[m [35m|[m[36m\[m [35m\[m [31m\[m [35m\[m  
+[36m|[m [35m|[m[36m/[m [35m/[m [31m/[m [35m/[m  
+[36m|[m[36m/[m[35m|[m [35m|[m [31m|[m [35m/[m   
+[36m|[m [35m|[m [35m|[m[35m_[m[31m|[m[35m/[m    
+[36m|[m [35m|[m[35m/[m[35m|[m [31m|[m     
+* [35m|[m [35m|[m [31m|[m   [33m2ceed66[m Merge pull request #2 from Bitcamp01/feat/labelling-labeler
+[1;35m|[m[1;36m\[m [35m\[m [35m\[m [31m\[m  
+[1;35m|[m * [35m|[m [35m|[m [31m|[m [33m9a3d4af[m Modify: 0924 이미지 파일 이름, templates.html 수정
+[1;35m|[m[1;35m/[m [35m/[m [35m/[m [31m/[m  
+* [35m|[m [35m|[m [31m|[m   [33mbf4f474[m Merge pull request #1 from Bitcamp01/feat/dashboard
+[35m|[m[32m\[m [35m\[m [35m\[m [31m\[m  
+[35m|[m [32m|[m[35m/[m [35m/[m [31m/[m  
+[35m|[m[35m/[m[32m|[m [35m|[m [31m|[m   
+[35m|[m [32m|[m * [31m|[m [33mcafdb97[m Feat: html css 생성
+[35m|[m [32m|[m[35m/[m [31m/[m  
+[35m|[m[35m/[m[32m|[m [31m|[m   
+[35m|[m [32m|[m * [33m5181411[m Modify: 240924_오유빈_dashboard css, js, html 수정 / 필요한 아이콘 이미지 추가
+[35m|[m [32m|[m[32m/[m  
+[35m|[m * [33mafcce9c[m Modify:240924_오유빈_dashboard css, js 추가, html 수정
+[35m|[m[35m/[m  
+* [33m4ea9e0c[m[33m ([m[1;31morigin/feat/notice[m[33m)[m Modify: 240924_profile관련 css, html수정
+* [33m6e3d5ae[m Modify: 09.23 김병주 header 아이콘 수정
+* [33me43b4c3[m Delete: 09.23 김병주 잘못 복사한 html 삭제
+* [33m36bb474[m Add: 09.23 김병주 labelling-search 추가, main.css 수정
+* [33me939ddc[m Modify: 240923 마이페이지 덮어쓰기
+* [33mdfe18f9[m 240923 최수민 profile 파일
+* [33m34072d3[m Modify: 09.23 김병주 사이드바 수정
+* [33m4f52259[m Modify: 09.23 김병주 README 수정
+* [33m57312de[m 2024-09-23 1.사이드바 커버 수정
+* [33m3a539ce[m Modify: 09.23 김병주 사이드바, 헤더 이미지 크기수정
+* [33mccfbce0[m Modify: 0923 김병주 css 및 js 파일 px 단위 rem으로 수정, readme 조금 수정
+* [33m84c1c1a[m Add: 09.23 김병주 templates.html 기반으로 필요한 페이지들 복붙해서 추가, readme와 templates 코드 수정 아주 조금 있음
+* [33m7055b24[m Delete .vscode directory
+* [33m8df0c32[m Modify: 09.23 김병주 사이드바 유빈님 것과 통합 및 readme 수정
+* [33m60c79aa[m Modify: readme 파일 수정(김병주)
+* [33m33d4a17[m 24.09.19 김병주 파일 이름 규칙에 맞춰 수정
+* [33mdb03bee[m 24.09.19 김병주 readme 오타 수정
+* [33m673222b[m 24.09.19 김병주 파일 이름 수정 및 readme에 지침 작성중
+* [33me6b4a7e[m 24.09.18 김병주 사이드바 및 헤더 초안 작성
+* [33mbf74853[m Initial commit

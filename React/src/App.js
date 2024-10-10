@@ -36,9 +36,9 @@ function App() {
           <Route path="/main_grid" element={<MainGrid />} />
       </Route>
       <Route>
-      <Route path='/join' element={<Join />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/findaccount' element={<FindAccount />} />
+        <Route path='/join' element={<Join />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/findaccount' element={<FindAccount />} />
       </Route>
     </Routes>
   );
