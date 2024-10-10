@@ -13,22 +13,46 @@ const columns = [
   { field: 'regdate', headerName: '등록일', flex: 170 / 1100 },  
 ];
 
-const rows = [
-  { id: 1, name: 'Snow', department: 'Jon', email: 'bitcamp@gamil.com' , tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
-  { id: 2, name: 'Lannister', department: 'Cersei', email: 'bitcamp@gamil.com' ,tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
-  { id: 3, name: 'Lannister', department: 'Jaime', email: 'bitcamp@gamil.com' ,tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
-  { id: 4, name: 'Stark', department: 'Arya', email: 'bitcamp@gamil.com' ,tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
-  { id: 5, name: 'Targaryen', department: 'Daenerys', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
-  { id: 6, name: 'Melisandre', department: 'Ai', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
-  { id: 7, name: 'Clifford', department: 'Ferrara', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
-  { id: 8, name: 'Frances', department: 'Rossini', email: 'bitcamp@gamil.com' , tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
-  { id: 9, name: 'Roxie', department: 'Harvey', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
-  { id: 10, name: 'Roxie', department: 'Harvey', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
-];
+// const rows = [
+//   { id: 1, name: 'Snow', department: 'Jon', email: 'bitcamp@gamil.com' , tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
+//   { id: 2, name: 'Lannister', department: 'Cersei', email: 'bitcamp@gamil.com' ,tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
+//   { id: 3, name: 'Lannister', department: 'Jaime', email: 'bitcamp@gamil.com' ,tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
+//   { id: 4, name: 'Stark', department: 'Arya', email: 'bitcamp@gamil.com' ,tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
+//   { id: 5, name: 'Targaryen', department: 'Daenerys', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
+//   { id: 6, name: 'Melisandre', department: 'Ai', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
+//   { id: 7, name: 'Clifford', department: 'Ferrara', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
+//   { id: 8, name: 'Frances', department: 'Rossini', email: 'bitcamp@gamil.com' , tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15'},
+//   { id: 9, name: 'Roxie', department: 'Harvey', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
+//   { id: 10, name: 'Roxie', department: 'Harvey', email: 'bitcamp@gamil.com', tel:'010-0000-1111', role :'관리자', regdate: '2024-03-15' },
+// ];
 
 
 
 export default function Table_memberListAll() {
+  const [rows, setRows] = useState([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get('/api/users', { params: { page: 0, size: 15 } });
+          const data = response.data.content.map((item) => ({
+            id: item.userId,
+            name: item.name,
+            dep: item.dep,
+            email: item.email,
+            tel: item.tel,
+            authen: item.authen,
+            regdate: item.regdate,
+          }));
+          setRows(data);
+        } catch (error) {
+          console.error("데이터 가져오기 에러:", error);
+        }
+      };
+
+      fetchData();
+    }, []);
+ 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
     <Box sx={{ 
@@ -45,6 +69,20 @@ export default function Table_memberListAll() {
         columns={columns}
         rowHeight={40} 
         headerHeight={50}
+        checkboxSelection
+        componentsProps={{
+          baseCheckbox: {
+            sx: {
+              color: '#7C97FE', 
+              '&.Mui-checked': {
+                color: '#7C97FE', 
+              },
+              '&:hover': {
+                color: '#7C97FE', 
+              },
+            },
+          },
+        }}
         sx={{
           background:'white',
           fontFamily: 'Pretendard, Noto-sans KR',  

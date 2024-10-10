@@ -1,267 +1,306 @@
+/* src/css/findAccount.css */
+
+/* 전체 스타일 초기화 */
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'pretendard', 'NotoSansKR';
-  }
-  
-  .find-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(96, 117, 235, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-  
-  .tab-menu {
-    margin-right: 20.5rem;
-    position: relative;
-    z-index: 2;
-    display: flex;
-  }
-  
-  .tab-menu .tab {
-    padding: 10px 20px;
-    background-color: #f2f2f2;
-    border: none;
-    border-radius: 10px 10px 0 0;
-    cursor: pointer;
-    font-size: 16px;
-    color: #8E8989;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .tab-menu .tab.active {
-    background-color: #7C97FE;;
-    color: white;
-  }
-  
-  .tab-menu .tab + .tab {
-    margin-left: 2px;
-  }
-  
-  .find-container {
-    position: relative;
-    max-width: 600px;
-    width: 90%;
-    background-color: white;
-    border-radius: 15px;
-    padding: 40px 20px 40px 20px;
-    box-sizing: border-box;
-    max-height: 100vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-  }
-  
-  .logo-title {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-  }
-  
-  .back-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-left: auto;
-    padding: 0;
-  }
-  
-  .back-button img {
-    margin-right: 30px;
-    position: relative;
-    width: 24px;
-    height: 24px;
-    transition: opacity 0.3s ease;
-  }
-  
-  .back-button:hover img {
-    opacity: 0.7;
-  }
-  
-  .logo-title .logo {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
-  }
-  
-  .logo-title .title {
-    margin-bottom: 10px;
-    font-size: 34px;
-    font-weight: 700;
-    color: black;
-  }
-  
-  .find-title {
-    text-align: left;
-    margin-bottom: 30px;
-  }
-  
-  .find-title h1 {
-    margin: 0;
-    font-size: 30px;
-    font-weight: 700;
-  }
-  
-  .find-title p {
-    margin: 5px 0 0 0;
-    font-size: 16px;
-    font-weight: 300;
-    color: #72737B;
-  }
-  
-  .find-form .form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    transition: margin-bottom 0.3s ease;
-  }
-  
-  .find-form .form-group.active {
-    margin-bottom: 20px;
-  }
-  
-  .find-form .form-group label {
-    width: 120px;
-    font-size: 16px;
-    color: #6988fb;
-    display: flex;
-    align-items: center;
-  }
-  
-  .find-form .form-group .required {
-    color: #3751B4;
-    font-size: 14px;
-    margin-right: 4px;
-  }
-  
-  .find-form .input-wrapper {
-    flex: 1;
-    position: relative;
-  }
-  
-  .find-form .form-group input {
-    width: 100%;
-    padding: 10px 40px 10px 12px;
-    border: none;
-    border-bottom: 1px solid #525252;
-    font-size: 16px;
-    color: #8E8989;
-    transition: border-bottom 0.3s ease;
-  }
-  
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus, 
-  input:-webkit-autofill:active  {
-    -webkit-box-shadow: 0 0 0 1000px white inset !important;
-    -webkit-text-fill-color: #8E8989 !important;
-    box-shadow: 0 0 0 1000px white inset !important;
-  }
-  
-  .find-form .form-group input::placeholder {
-    text-align: left;
-  }
-  
-  .find-form .form-group input:focus {
-    outline: none;
-    border-bottom: 2px solid #3751B4;
-  }
-  
-  .input-wrapper.date-input input[type="date"]::-webkit-calendar-picker-indicator {
-    position: absolute;
-    right: 35px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    opacity: 0.6;
-  }
-  
-  .input-wrapper.date-input input[type="date"]::-webkit-calendar-picker-indicator:hover {
-    opacity: 1;
-  }
-  
-  .input-wrapper.date-input input[type="date"] {
-    padding-right: 40px;
-  }
-  
-  .find-form .submit-button {
-    text-align: center;
-    margin-top: 30px;
-  }
-  
-  .find-form .submit-button button {
-    width: 50%;
-    padding: 12px 0;
-    background-color: #7C97FE;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .find-form .submit-button button:hover {
-    background-color: #0041ff;
-  }
-  
-  @media (max-width: 768px) {
-    .find-container {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Pretendard', 'NotoSansKR', sans-serif;
+}
+
+/* 모달 오버레이 */
+.find__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(96, 117, 235, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* 탭 메뉴 */
+.find__tab-menu {
+  margin-right: 20.5rem;
+  position: relative;
+  z-index: 2;
+  display: flex;
+}
+
+.find__tab {
+  padding: 10px 20px;
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  font-size: 16px;
+  color: #8E8989;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.find__tab.active {
+  background-color: #7C97FE;
+  color: white;
+}
+
+.find__tab + .find__tab {
+  margin-left: 2px;
+}
+
+/* 컨테이너 */
+.find__container {
+  position: relative;
+  max-width: 600px;
+  width: 90%;
+  background-color: white;
+  border-radius: 15px;
+  padding: 40px 20px 40px 20px;
+  box-sizing: border-box;
+  max-height: 100vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* 로고 및 제목, 뒤로가기 버튼 */
+.find__logo-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.find__logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.find__title {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 700;
+  color: black;
+}
+
+.find__back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 0;
+}
+
+.find__back-button img {
+  width: 24px;
+  height: 24px;
+  transition: opacity 0.3s ease;
+}
+
+.find__back-button:hover img {
+  opacity: 0.7;
+}
+
+/* 아이디/비밀번호 찾기 제목 */
+.find__title-section {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.find__title-section h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.find__title-section p {
+  margin: 5px 0 0 0;
+  font-size: 16px;
+  font-weight: 300;
+  color: #72737B;
+}
+
+/* 폼 그룹 */
+.find__form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  transition: margin-bottom 0.3s ease;
+}
+
+.find__form-group.active {
+  margin-bottom: 20px;
+}
+
+.find__form-group label {
+  width: 120px;
+  font-size: 16px;
+  color: #6988fb;
+  display: flex;
+  align-items: center;
+}
+
+.find__required {
+  color: #3751B4;
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+/* 입력 래퍼 */
+.find__input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.find__date-input {
+  /* 추가적인 스타일이 필요한 경우 여기에 작성 */
+}
+
+/* 입력 필드 */
+.find__form-group input {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  border: none;
+  border-bottom: 1px solid #525252;
+  font-size: 16px;
+  color: #8E8989;
+  transition: border-bottom 0.3s ease;
+}
+
+.find__form-group input::placeholder {
+  text-align: left;
+}
+
+.find__form-group input:focus {
+  outline: none;
+  border-bottom: 2px solid #3751B4;
+}
+
+/* 입력 아이콘 */
+.find__input-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.find__input-icon.visible {
+  opacity: 1;
+}
+
+/* 유효성 검사 메시지 */
+.find__validation-messages {
+  position: relative;
+  margin-left: 120px;
+  margin-bottom: 20px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.find__validation-messages.visible {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.find__validation-messages p {
+  margin: 2px 0;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.find__validation-messages p.valid {
+  color: #3751B4;
+}
+
+.find__validation-messages p.invalid {
+  color: #8E8989;
+}
+
+/* 제출 버튼 */
+.find__submit-button {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.find__submit-button button {
+  width: 50%;
+  padding: 12px 0;
+  background-color: #7C97FE;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.find__submit-button button:hover {
+  background-color: #0041ff;
+}
+
+/* 유효성 검사에 따른 스타일 */
+.find__form-group input.valid {
+  border-bottom: 2px solid #3751B4;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .find__container {
       width: 90%;
       padding: 60px 20px 20px 20px;
-    }
-  
-    .tab-menu {
+  }
+
+  .find__tab-menu {
       margin-bottom: -40px;
       justify-content: center;
-    }
-  
-    .find-title {
+  }
+
+  .find__title-section {
       text-align: center;
-    }
-  
-    .find-form .form-group {
+  }
+
+  .find__form-group {
       flex-direction: column;
       align-items: flex-start;
       margin-bottom: 10px;
-    }
-  
-    .find-form .form-group.active {
+  }
+
+  .find__form-group.active {
       margin-bottom: 20px;
-    }
-  
-    .find-form .form-group label {
+  }
+
+  .find__form-group label {
       width: 100%;
       margin-bottom: 5px;
-    }
-  
-    .find-form .submit-button button {
+  }
+
+  .find__submit-button button {
       width: 100%;
-    }
-  
-    .logo-title {
+  }
+
+  .find__logo-title {
       flex-direction: column;
       align-items: center;
       margin-top: 10px;
-    }
-  
-    .back-button {
+  }
+
+  .find__back-button {
       position: absolute;
       top: 10px;
       right: 20px;
-    }
-  
-    .back-button img {
-      margin-right: 0;
-    }
   }
-  
+
+  .find__back-button img {
+      margin-right: 0;
+  }
+}

@@ -37,9 +37,9 @@ function App() {
           <Route path="/item_structure" element={<ItemStructure />} />
       </Route>
       <Route>
-      <Route path='/join' element={<Join />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/findaccount' element={<FindAccount />} />
+        <Route path='/join' element={<Join />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/findaccount' element={<FindAccount />} />
       </Route>
     </Routes>
   );
