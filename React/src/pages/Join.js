@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { join } from '../apis/userApis'
 import '../css/join.css';
 
 const Join = () => {
@@ -10,6 +9,7 @@ const Join = () => {
 
     // 상태 관리
     const [username, setUsername] = useState('');
+    const [name, setname] = useState('');
     const [email, setEmail] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [password, setPassword] = useState('');
@@ -22,6 +22,11 @@ const Join = () => {
         lettersAndNumbersOnly: false,
         minLength: false,
         hasNumber: false,
+    });
+
+    const [nameValid, setnameValid] = useState({
+        notEmpty: false,
+        isValidFormat: false,
     });
 
     const [emailValid, setEmailValid] = useState({
@@ -53,6 +58,12 @@ const Join = () => {
         setUsernameValid({ lettersAndNumbersOnly, minLength, hasNumber });
     };
 
+    const validatename = (value) => { 
+        const notEmpty = value.trim() !== '';
+        const isValidFormat = /^[가-힣\s]+$/.test(value);
+        setnameValid({ notEmpty, isValidFormat });
+    };
+
     const validateEmail = (value) => {
         const format = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
         setEmailValid({ format });
@@ -77,6 +88,10 @@ const Join = () => {
     }, [username]);
 
     useEffect(() => {
+        validatename(name);
+    }, [name]);
+
+    useEffect(() => {
         validateEmail(email);
     }, [email]);
 
@@ -87,6 +102,7 @@ const Join = () => {
 
     // 필드 유효성 검사
     const isUsernameValid = Object.values(usernameValid).every(Boolean);
+    const isnameValid = Object.values(nameValid).every(Boolean);
     const isEmailValidField = Object.values(emailValid).every(Boolean);
     const isPasswordValidField = Object.values(passwordValid).every(Boolean);
     const isConfirmPasswordValidField = Object.values(confirmPasswordValid).every(Boolean);
@@ -97,6 +113,7 @@ const Join = () => {
     // 전체 폼 유효성 검사
     const isFormValid =
         isUsernameValid &&
+        isnameValid &&
         isEmailValidField &&
         isPasswordValidField &&
         isConfirmPasswordValidField &&
@@ -112,6 +129,7 @@ const Join = () => {
                 // 요청 페이로드 준비
                 const payload = {
                     id: username,
+                    name: name,
                     email: email,
                     birthdate: birthdate,
                     password: password,
@@ -213,6 +231,45 @@ const Join = () => {
                         </p>
                         <p className={usernameValid.hasNumber ? 'valid' : 'invalid'}>
                             숫자를 하나 이상 조합해주세요.
+                        </p>
+                    </div>
+
+                    {/* 실명 필드 */}
+                    <div className={`join__form-group ${focusedField === 'name' ? 'active' : ''}`}>
+                        <label htmlFor="ame">
+                            <span className="join__required">*</span>이름
+                        </label>
+                        <div className="join__input-wrapper">
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="성함을 입력하세요"
+                                aria-label="성함 입력"
+                                value={name}
+                                onChange={(e) => setname(e.target.value)}
+                                onFocus={() => setFocusedField('name')}
+                                onBlur={() => setFocusedField('')}
+                                className={isnameValid ? 'valid' : ''}
+                                required
+                            />
+                            {isnameValid && (
+                                <img
+                                    src="../images/join/join-check_icon.svg"
+                                    alt="체크 아이콘"
+                                    className="join__input-icon visible"
+                                />
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 부가 설명 메시지 - 실명 */}
+                    <div className={`join__validation-messages ${focusedField === 'name' && !isnameValid ? 'visible' : ''}`}>
+                        <p className={nameValid.notEmpty ? 'valid' : 'invalid'}>
+                            성함을 입력해주세요.
+                        </p>
+                        <p className={nameValid.isValidFormat ? 'valid' : 'invalid'}>
+                            한글과 공백만 사용 가능합니다.
                         </p>
                     </div>
 
