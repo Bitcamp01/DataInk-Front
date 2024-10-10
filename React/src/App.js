@@ -15,7 +15,9 @@ import Notice_write from './pages/Notice_write';
 import Notice_detail from './pages/Notice_detail';
 import FindAccount from './pages/FindAccount';
 import LabellingDetail from './pages/LabellingDetail';
-
+import ItemStructure from "./pages/ItemStructure";
+import ProjectStructure from './pages/ProjectStructure';
+import MainGrid from "./pages/MainGrid";
 function App() {
   return (
     <Routes>
@@ -31,6 +33,7 @@ function App() {
         <Route path='/review' element={<Review />} />
         <Route path="/notice_write" element={<Notice_write />} />
         <Route path="/notice_detail" element={<Notice_detail />} />
+          <Route path="/main_grid" element={<MainGrid />} />
       </Route>
       <Route>
         <Route path='/join' element={<Join />} />

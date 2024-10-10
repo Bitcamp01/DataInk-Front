@@ -1,46 +1,106 @@
 import React, { useState } from 'react';
-import '../../css/profile.css';
+import styled from 'styled-components';
+
+// Styled components
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  max-width: 400px;
+  width: 100%;
+`;
+
+const ModalTitle = styled.h2`
+  margin-bottom: 15px;
+`;
+
+const StatusInput = styled.input`
+  width: 350px;
+  height: 30px;
+  padding: 10px;
+  font-size: medium;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+`;
+
+const ModalButtons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+`;
+
+const PrimaryButton = styled.button`
+  padding: 10px 20px;
+  background-color: #7785be;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: #2980b9;
+  }
+`;
+
+const SecondaryButton = styled.button`
+  padding: 10px 20px;
+  background-color: #e6e6e6;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #ccc;
+  }
+`;
 
 const StatusEditModal = ({ isOpen, onClose, onSave }) => {
     const [status, setStatus] = useState('');
 
-    // 상태 변경 핸들러
     const handleStatusChange = (e) => {
         setStatus(e.target.value);
     };
 
-    // 저장 버튼 클릭 시
     const handleSave = () => {
         onSave(status);
         onClose();
     };
 
-    // 모달이 열려있지 않으면 렌더링하지 않음
     if (!isOpen) return null;
 
     return (
-        <div className="status_modal">
-            <div className="status_modal--content">
-                <h2>상태 수정</h2>
-                <input
+        <ModalOverlay>
+            <ModalContent>
+                <ModalTitle>상태 수정</ModalTitle>
+                <StatusInput
                     type="text"
                     value={status}
                     onChange={handleStatusChange}
-                    className="profile-form__input-container"
                     placeholder="새 상태를 입력하세요"
                 />
-                <div className="status-modal-buttons">
-                    {/* 저장 버튼 */}
-                    <button className="profile-form__button" onClick={handleSave}>
-                        저장
-                    </button>
-                    {/* 취소 버튼 */}
-                    <button className="profile-form__button" onClick={onClose}>
-                        취소
-                    </button>
-                </div>
-            </div>
-        </div>
+                <ModalButtons>
+                    <PrimaryButton onClick={handleSave}>저장</PrimaryButton>
+                    <SecondaryButton onClick={onClose}>취소</SecondaryButton>
+                </ModalButtons>
+            </ModalContent>
+        </ModalOverlay>
     );
 };
 

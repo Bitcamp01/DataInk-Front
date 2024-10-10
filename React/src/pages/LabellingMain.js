@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import RendarProjectCard from '../components/projectCard/RendarProjectCard'
 import CommonButton from '../components/CommonButton';
+import {useNavigate} from "react-router-dom";
 
 const ProjectContainer = styled.div`
     margin-left: 3.3rem;
@@ -28,13 +29,17 @@ const NewProjectButton = styled(CommonButton)`
 `;
 
 const Labelling = () => {
+    const navi=useNavigate();
+    const handleNewProject = () => {
+        navi('/main_grid');
+    };
   return (
     <ProjectContainer>
         <h2 className='project-header'>
             참여 중인 프로젝트 <span className='project-count'>10</span><span>건</span>
         </h2>
         <ButtonContainer>
-            <NewProjectButton>프로젝트 추가</NewProjectButton>
+            <NewProjectButton onClick={handleNewProject}>프로젝트 추가</NewProjectButton>
         </ButtonContainer>
         <ParentContainer>
             <RendarProjectCard />
