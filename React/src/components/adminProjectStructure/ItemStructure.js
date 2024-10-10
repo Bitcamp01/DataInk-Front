@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import {useParams} from "react-router-dom";
 
-
-const DynamicTable = () => {
+const ItemStructure = () => {
+    const { itemId } = useParams();
     const [data, setData] = useState({});
     const [rowCnt,setRowCnt] = useState(0);
+    const [itemName, setItemName] = useState('');
     const changeTextFiled = (e, path) => {
         const newValue = e.target.value;
         const pathArray = path.split('.');
@@ -19,7 +22,18 @@ const DynamicTable = () => {
             setData(newData);
         }
     };
-
+    useEffect(() => {
+        if (itemId) {
+            // 서버나 상태에서 해당 itemId를 기반으로 데이터를 가져오기
+            // 여기서는 예시로 더미 데이터를 사용
+            const fetchedItem = {
+                id: itemId,
+                label: `항목 ${itemId}`,
+                details: '이것은 항목의 세부 정보입니다.'
+            };
+            setData(fetchedItem);
+        }
+    }, [itemId]);
     const calculateDepth = (obj, depth = 1) => {
         if (typeof obj === 'object' && obj !== null) {
             return Math.max(...Object.values(obj).map(value => calculateDepth(value, depth + 1)));
@@ -125,9 +139,38 @@ const DynamicTable = () => {
             </tr>
         ));
     };
+    const handleSave = async () => {
+        try {
+            if (itemId) {
+                // 기존 아이템 업데이트 로직 (서버로 PUT 요청 등)
+                console.log('아이템 업데이트:', itemId);
+            } else {
+                // 새로운 아이템 생성 로직 (서버로 POST 요청 등)
+                console.log('새로운 아이템 생성:', itemId);
+                const response = await axios.post("http://localhost:9090/item/create",data,{
+                    headers: {
+                        'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+                    }
+                })
 
+            }
+        } catch (error) {
+            console.error('Error saving data:', error);
+        }
+    };
     return (
         <div className="container mt-5">
+            <div className="mb-3">
+                <label htmlFor="itemName" className="form-label">항목 이름</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    id="itemName"
+                    value={itemName}
+                    onChange={(e) => setItemName(e.target.value)}
+                    placeholder="항목 이름을 입력하세요"
+                />
+            </div>
             <table className="table table-bordered">
                 <thead>
                 <tr>
@@ -139,18 +182,18 @@ const DynamicTable = () => {
                 <tr>
                     <td className="text-center" colSpan={setColspan()}>
                         <button className="btn btn-success btn-sm" onClick={addRow}>
-                            <FontAwesomeIcon icon={faPlus} /> 추가
+                            <FontAwesomeIcon icon={faPlus}/> 추가
                         </button>
                     </td>
                 </tr>
                 </tfoot>
             </table>
-            <button className="btn btn-success btn-sm" onClick={() => console.log(data)}>
+            <button className="btn btn-success btn-sm" onClick={handleSave}>
                 저장
             </button>
         </div>
     );
 };
 
-export default DynamicTable;
+export default ItemStructure;
     

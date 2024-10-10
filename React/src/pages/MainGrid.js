@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import CustomizedTreeView from '../components/adminProjectStructure/CustomizedTreeView';
 import CustomizedDataGrid from '../components/adminProjectStructure/CustomizedDataGrid';
-
+import axios from "axios";
 
 
 // 트리 데이터를 Flat 데이터로 변환하는 함수
@@ -14,11 +14,13 @@ export function flattenTree(treeData, parentId = null) {
   treeData.forEach((item) => {
     flatData.push({
       id: item.id,
-      parentId: parentId,
+      parentId: parentId, // 트리 구조를 평탄화할 때 계산된 parentId
       label: item.label,
       isFolder: item.isFolder,
-      lastModifiedBy:item.lastModifiedBy,
-      lastModifiedDate:item.lastModifiedDate
+      itemId: item.itemId, // 추가된 필드
+      lastModifiedUserId: item.lastModifiedUserId, // 추가된 필드
+      lastModifiedDate: item.lastModifiedDate,
+      finished: item.finished, // 추가된 필드
     });
     if (item.children && item.children.length > 0) {
       flatData = flatData.concat(flattenTree(item.children, item.id));
@@ -34,7 +36,10 @@ export function unflatten(flatData) {
   let lookup = {};
 
   flatData.forEach(item => {
-    lookup[item.id] = { ...item, children: [] }; 
+    lookup[item.id] = {
+      ...item,
+      children: []  // 트리 구조로 변환할 때 자식 노드를 위한 배열 추가
+    };
   });
 
   flatData.forEach(item => {
@@ -61,8 +66,61 @@ export default function MainGrid() {
   const [flatFolderData,setFlatFolderData] = React.useState([]);// folderData를 대신해 전체 구조를 표현하고 관리할 부분
   const [shouldUpdateTree, setShouldUpdateTree] = React.useState(false); // 트리 갱신 필요 여부
   //초기화면 구성시 서버로부터 프로젝트 구조 가져오기, 백엔드 구현시 요청하는 코드로 변경 필요
+  const getInitFolderData= async () =>{
+    try {
+      const response=await axios.get("http://localhost:9090/project",{
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+        }
+      })
+      if (response.status === 200){
+        setFolderData(response.data.items);
+      }
+    }
+    catch(err){
+
+    }
+  }
+  //flatData업데이트 할 때 새로운 정보를 반영하기 위한 부분, 동일한 아이디
+  const updateFlatFolderData = (newData) => {
+    setFlatFolderData((prevFlatData) => {
+      // 새로운 데이터에 대한 lookup을 생성하여 기존 데이터에 반영하기 쉽게 만듭니다.
+      const lookup = new Map(prevFlatData.map(item => [item.id, item]));
+
+      // 서버에서 가져온 새 데이터의 각 항목을 순회하면서 처리합니다.
+      newData.forEach((newItem) => {
+        if (lookup.has(newItem.id)) {
+          // 기존 데이터에 동일한 ID가 있을 경우 해당 데이터를 덮어씁니다.
+          lookup.set(newItem.id, { ...lookup.get(newItem.id), ...newItem });
+        } else {
+          // 기존 데이터에 없는 새로운 데이터의 경우 추가합니다.
+          lookup.set(newItem.id, newItem);
+        }
+      });
+
+      // Map을 다시 배열로 변환하여 상태를 업데이트합니다.
+      return Array.from(lookup.values());
+    });
+  };
+
+// 서버에서 데이터를 가져오는 함수에서 이 함수를 사용하도록 업데이트합니다.
+  const getSelectedFolderData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:9090/project/${selectedFolder}`, {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
+        }
+      });
+      if (response.status === 200) {
+        // 서버로부터 받아온 데이터가 response.data.items라고 가정하고 업데이트합니다.
+        updateFlatFolderData(response.data.items);
+      }
+    } catch (err) {
+      console.error("Error fetching selected folder data:", err);
+    }
+  };
   React.useEffect(()=>{
-    setFolderData(initialFolderData);
+    getInitFolderData();
   },[])
 
   React.useEffect(()=>{
@@ -80,10 +138,10 @@ export default function MainGrid() {
     }
   };
   return (
-    <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
-      <Grid container spacing={2} columns={12}>
-      <Grid size={{ xs: 12, lg: 3 }}>
-          <Stack gap={2} direction={{ xs: 'column', sm: 'row', lg: 'column' }}>
+      <Box sx={{ width: '100%', maxWidth: '100%', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Grid container spacing={2} columns={12} sx={{ flexGrow: 1 }}>
+          <Grid size={{ xs: 12, lg: 3 }} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <Stack gap={2} direction={{ xs: 'column', sm: 'row', lg: 'column' }}>
             {/* folderData는 전체 폴더 구조를 출력해야하는 트리뷰 입장에서 필요,setFlattenFolderData는 새로운 프로젝트 추가시 폴더 구조의 변경이 일어나는데 평탄화된
             폴더구조와 트리구조로 된 폴더 구조를 일치시키기 위해 사용, folderSelect는 선택한 폴더를 알아야 해당 부분의 정보를 datagrid와 공유 가능,
             setfolderData는 새로운 폴더 추가시 변경되는 폴더 구조 적용을 위해 사용  */}
@@ -91,7 +149,7 @@ export default function MainGrid() {
 
           </Stack>
         </Grid>
-        <Grid size={{ md: 12, lg: 9 }}>
+          <Grid size={{ md: 12, lg: 9 }} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           {/* 메인 그리드가 초기에 받아와 관리하는 전체 구조, 트리뷰와 데이터 그리드의 동기화에 사용될 선택된 폴더,폴더 , 폴더 데이터 변경에 사용할 set함수  */}
           <CustomizedDataGrid folderData={folderData} setFolderData={setFolderData} selectedFolder={selectedFolder} setSelectedFolder={setSelectedFolder} 
            flatFolderData={flatFolderData} setFlatFolderData={setFlatFolderData} setShouldUpdateTree={setShouldUpdateTree}/>

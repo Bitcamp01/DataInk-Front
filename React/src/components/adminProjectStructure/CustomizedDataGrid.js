@@ -36,7 +36,7 @@ const columns = [
    }
 ];
 // 메인 컴포넌트
-export default function CustomizedDataGrid({selectedFolder = null,setSelectedFolder,flatFolderData,setFlatFolderData,setShouldUpdateTree}) {
+export default function CustomizedDataGrid({folderData,selectedFolder = null,setSelectedFolder,flatFolderData,setFlatFolderData,setShouldUpdateTree}) {
   const apiRef = useGridApiRef();
   // 현재 선택된 폴더의 정보를 가지게 될 상태
   const [rows, setRows] = useState([]);
@@ -434,7 +434,7 @@ const handlePaste = () => {
           파일 업로드
           <input type="file" hidden multiple accept=".pdf" onChange={handleFileUpload} />
         </Button>
-        <Button variant="contained" component="label" sx={{ m: 1 }} onClick={handleCreateNewFolder}>
+        <Button variant="contained" component="label" disabled={selectedFolder === null} sx={{ m: 1 }} onClick={handleCreateNewFolder}>
           새 폴더
         </Button>
         <Button variant="contained" component="label" sx={{ m: 1 }} onClick={handlePaste} disabled={cutRows < 1 && copyRows < 1}>
@@ -452,6 +452,9 @@ const handlePaste = () => {
         <Button variant="contained" onClick={handleOpenConversionModal}>
           변환 목록
         </Button>
+        <Button variant="contained" onClick={()=>console.log(folderData)}>
+          현재 폴더 구조
+        </Button>
       </GridToolbarContainer>
     );
   };
@@ -461,8 +464,8 @@ const handlePaste = () => {
 
   return (
     <>
-      <Box display="flex" flexDirection="row" height="40rem">
-        <Box flexGrow={1}>
+      <Box sx={{ display: 'flex', flexDirection: 'column',height: 'calc(100vh - 100px)' }}>
+        <Box flexGrow={1} height="100%">
           <DataGrid
             apiRef={apiRef}
             checkboxSelection
@@ -502,7 +505,7 @@ const handlePaste = () => {
               },
             }}
             sx={{
-              height: "40rem",  // 고정된 높이 설정
+              height: "100%",
               '& .MuiDataGrid-virtualScroller': {
                 overflowY: 'scroll',
               },
