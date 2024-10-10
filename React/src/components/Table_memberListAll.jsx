@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import  '../css/table.css';
+import axios from 'axios';
 
 const columns = [
   { field: 'id', headerName: 'No', flex: 60 / 1100 ,cellClassName: 'first-column', headerClassName: 'header-text'  },  
@@ -29,9 +30,9 @@ const columns = [
 
 
 export default function Table_memberListAll() {
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = React.useState([]);
 
-    useEffect(() => {
+    React.useEffect(() => {
       const fetchData = async () => {
         try {
           const response = await axios.get('/api/users', { params: { page: 0, size: 15 } });
