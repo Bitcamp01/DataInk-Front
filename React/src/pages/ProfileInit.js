@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import '../css/profileInit.css';
+import { useSelector } from 'react-redux';
 // import axios from 'axios';
 
 const ProfileInit = ({onAuthenticate}) => {
     const navigate = useNavigate();
     const [password, setPassword] = useState(''); // 비밀번호 상태 추가
     const [errorMessage, setErrorMessage] = useState(''); // 오류 메시지 상태 추가
+
+    // const isLogin = useSelector(state => state.user.isLogin);
+
+    // useEffect(() => {
+        
+    //     if(!isLogin) {
+    //         navigate('/login');
+    //     }
+    // }, []);
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value); // 입력된 비밀번호 상태 업데이트

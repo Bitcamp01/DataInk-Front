@@ -5,13 +5,13 @@ const userSlice = createSlice({
     name: 'users',
     initialState: {
         isLogin: false,
-        id: 0,
-        username: ''
+        userId: 0,
+        id: ''
     },
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(join.fulfilled, (state, action) => {
-            alert(`${action.payload.username}님 DataInk 가입을 축하드립니다.`);
+            alert(`${action.payload.id}님 DataInk 가입을 축하드립니다.`);
             window.location.href = '/login';
             return state;
         });
@@ -20,20 +20,20 @@ const userSlice = createSlice({
             return state;
         });
         builder.addCase(login.fulfilled, (state, action) => {
-            alert(`${action.payload.username}님 환영합니다.`);
+            alert(`${action.payload.id}님 환영합니다.`);
             sessionStorage.setItem('ACCESS_TOKEN', action.payload.token);
 
             return {
                 ...state,
                 isLogin: true,
+                userId: action.payload.userId,
                 id: action.payload.id,
-                username: action.payload.username,
             };
         });
         builder.addCase(login.rejected, (state, action) => {
-            if (action.payload?.response?.data?.statusMessage === 'username not exist') {
+            if (action.payload.response.data.statusMessage === 'id not exist') {
                 alert("존재하지 않는 아이디입니다.");
-            } else if (action.payload?.response?.data?.statusMessage === 'wrong password') {
+            } else if (action.payload.response.data.statusMessage === 'wrong password') {
                 alert("잘못된 비밀번호입니다.");
             } else {
                 alert("로그인 중 에러가 발생했습니다.");
@@ -47,8 +47,8 @@ const userSlice = createSlice({
             return {
                 ...state,
                 isLogin: false,
-                id: 0,
-                username: '',    
+                userId: 0,
+                id: '',    
             };
         });
         builder.addCase(logout.rejected, (state, action) => {
