@@ -1,255 +1,270 @@
-.login-overlay {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(96, 117, 235, 0.5);
-  }
-  
-  .login-modal {
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 420px;
-    padding: 2rem;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .logo-section {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .logo-image {
-    width: 1.375rem;
-    height: 1.375rem;
-    object-fit: cover;
-  }
-  
-  .logo-text {
-    margin-left: 0.3125rem;
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #000000;
-  }
-  
-  .welcome-text {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .main-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #000000;
-  }
-  
-  .sub-text {
-    margin-top: 0.3125rem;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.625rem;
-    font-weight: 300;
-    color: #0028ff;
-  }
-  
-  .social-login {
-    background-color: #dde6f4;
-    border-radius: 20px;
-    padding: 0.4rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 70%;
-    margin-bottom: 1.5rem;
+/* src/css/login.css */
+
+/* 오버레이 */
+.login__overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(96, 117, 235, 0.5);
 }
-  
-  .social-buttons {
-    display: flex;
-    gap: 0.9375rem;
+
+/* 모달 */
+.login__modal {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 420px;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 로고 섹션 */
+.login__logo-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.login__logo {
+  width: 1.375rem;
+  height: 1.375rem;
+  object-fit: cover;
+}
+
+.login__logo-text {
+  margin-left: 0.3125rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+/* 환영 메시지 */
+.login__welcome-text {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login__main-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.login__sub-text {
+  margin-top: 0.3125rem;
+  font-size: 0.625rem;
+  font-weight: 300;
+  color: #0028ff;
+}
+
+/* 소셜 로그인 */
+.login__social-login {
+  background-color: #dde6f4;
+  border-radius: 20px;
+  padding: 0.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  margin-bottom: 1.5rem;
+}
+
+.login__social-buttons {
+  display: flex;
+  gap: 0.9375rem;
+}
+
+.login__social-icon {
+  width: 1.5625rem;
+  height: 1.5625rem;
+  object-fit: contain;
+}
+
+/* 구분선 */
+.login__divider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.login__line {
+  flex: 1;
+  height: 1px;
+  background-color: #948888;
+}
+
+.login__divider-text {
+  margin: 0 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 100;
+  color: #625959;
+}
+
+/* 입력 필드 */
+.login__input-field {
+  display: flex;
+  align-items: center;
+  background-color: #f3f6fb;
+  border-radius: 1.375rem;
+  padding: 0.75rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.login__input-icon {
+  width: 1.375rem;
+  height: 1.375rem;
+  object-fit: cover;
+}
+
+.login__input {
+  flex: 1;
+  margin-left: 0.625rem;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 100;
+  background-color: transparent;
+  color: #000000;
+}
+
+/* 입력 필드 포커스 시 아웃라인 제거 */
+.login__input:focus {
+  outline: none;
+}
+
+/* 플래이스홀더 색상 */
+.login__input::placeholder {
+  color: #9a99a2;
+}
+
+/* 비밀번호 표시/숨기기 아이콘 */
+.login__input-icon--right {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0.625rem;
+  display: flex;
+  align-items: center;
+}
+
+.login__input-icon--right img {
+  width: 1.375rem;
+  height: 1.375rem;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.login__input-icon--right:hover img {
+  opacity: 0.7;
+}
+
+/* 로그인 옵션 */
+.login__options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.login__remember-me {
+  display: flex;
+  align-items: center;
+}
+
+.login__checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  margin-right: 0.25rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.login__remember-text {
+  font-size: 0.75rem;
+  font-weight: 100;
+  color: rgba(0, 0, 0, 0.56);
+}
+
+.login__find-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login__find-link {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0047ff;
+  text-decoration: none;
+}
+
+.login__find-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* 로그인 버튼 */
+.login__button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.login__button button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #0047ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login__button button:hover {
+  background-color: #0031d1;
+}
+
+/* 회원가입 유도 메시지 */
+.login__register-prompt {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 100;
+  color: #6a6666;
+}
+
+.login__register-link {
+  font-weight: 700;
+  color: #0047ff;
+  text-decoration: none;
+}
+
+.login__register-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .login__modal {
+      padding: 1.5rem;
   }
-  
-  .social-icon {
-    width: 1.5625rem;
-    height: 1.5625rem;
-    object-fit: cover;
+
+  .login__social-login {
+      width: 90%;
   }
-  
-  .divider {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 1.5rem;
-  }
-  
-  .line {
-    flex: 1;
-    height: 1px;
-    background-color: #948888;
-  }
-  
-  .divider-text {
-    margin: 0 0.625rem;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 100;
-    color: #625959;
-  }
-  
-  .input-field {
-    display: flex;
-    align-items: center;
-    background-color: #f3f6fb;
-    border-radius: 1.375rem;
-    padding: 0.75rem;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  
-  .input-icon {
-    width: 1.375rem;
-    height: 1.375rem;
-    object-fit: cover;
-  }
-  
-  .input {
-    flex: 1;
-    margin-left: 0.625rem;
-    border: none;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 100;
-    color: #000000;
-  }
-  
-  .input::placeholder {
-    color: #9a99a2;
-  }
-  
-  .input-icon-right {
-    width: 1.375rem;
-    height: 1.375rem;
-    object-fit: cover;
-    margin-left: 0.625rem;
-  }
-  
-  .options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 1.5rem;
-  }
-  
-  .remember-me {
-    display: flex;
-    align-items: center;
-  }
-  
-  .checkbox {
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 1px solid #000000;
-    border-radius: 4px;
-    margin-right: 0.25rem;
-    cursor: pointer;
-    position: relative;
-  }
-  
-  .checkbox input {
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-  }
-  
-  .checkbox input:checked + label::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0.75rem;
-    height: 0.75rem;
-    background-color: #0047ff;
-    border-radius: 2px;
-    transform: translate(-50%, -50%);
-  }
-  
-  .remember-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 100;
-    color: rgba(0, 0, 0, 0.56);
-  }
-  
-  .find-links {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .find-link {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #0047ff;
-    text-decoration: none;
-  }
-  
-  .find-link:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
-  .login-button {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-bottom: 1.5rem;
-  }
-  
-  .button {
-    width: 100%;
-    max-width: 130px;
-    height: 2.1875rem;
-    background-color: #7c97fe;
-    border: none;
-    border-radius: 1.375rem;
-    color: #ffffff;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
-    background-color: #6b85fa;
-  }
-  
-  .register-prompt {
-    text-align: center;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 100;
-    color: #6a6666;
-  }
-  
-  .register-link {
-    font-weight: 700;
-    color: #0047ff;
-    text-decoration: none;
-  }
-  
-  .register-link:hover {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
+}

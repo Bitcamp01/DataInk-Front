@@ -1,11 +1,7 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'pretendard', 'NotoSansKR';
-}
+/* src/css/join.css */
 
-.join-modal {
+/* 모달 오버레이 */
+.join__modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -17,7 +13,8 @@ body, html {
   align-items: center;
 }
 
-.join-container {
+/* 컨테이너 */
+.join__container {
   max-width: 600px;
   width: 500px;
   background-color: white;
@@ -30,14 +27,28 @@ body, html {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.logo-title {
+/* 로고 및 제목, 뒤로가기 버튼 */
+.join__logo-title {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 20px;
 }
 
-.back-button {
+.join__logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.join__title {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 700;
+  color: black;
+}
+
+.join__back-button {
   background: none;
   border: none;
   cursor: pointer;
@@ -45,61 +56,48 @@ body, html {
   padding: 0;
 }
 
-.back-button img {
-  margin-right: 30px;
-  position: relative;
+.join__back-button img {
   width: 24px;
   height: 24px;
   transition: opacity 0.3s ease;
 }
 
-.back-button:hover img {
+.join__back-button:hover img {
   opacity: 0.7;
 }
 
-.logo-title .logo {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
-}
-
-.logo-title .title {
-  margin-bottom: 10px;
-  font-size: 34px;
-  font-weight: 700;
-  color: black;
-}
-
-.signup-title {
+/* 회원가입 제목 */
+.join__signup-title {
   text-align: left;
   margin-bottom: 30px;
 }
 
-.signup-title h1 {
+.join__signup-title h1 {
   margin: 0;
   font-size: 30px;
   font-weight: 700;
 }
 
-.signup-title p {
+.join__signup-title p {
   margin: 5px 0 0 0;
   font-size: 16px;
   font-weight: 300;
   color: #72737B;
 }
 
-.join-form .form-group {
+/* 폼 그룹 */
+.join__form-group {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
   transition: margin-bottom 0.3s ease;
 }
 
-.join-form .form-group.active {
+.join__form-group.active {
   margin-bottom: 20px;
 }
 
-.join-form .form-group label {
+.join__form-group label {
   position: relative;
   width: 120px;
   font-size: 16px;
@@ -108,19 +106,25 @@ body, html {
   align-items: center;
 }
 
-.join-form .form-group .required {
+.join__required {
   color: #3751B4;
   font-size: 14px;
   margin-right: 4px;
 }
 
-.input-wrapper {
+/* 입력 래퍼 */
+.join__input-wrapper {
   position: relative;
   flex: 1;
 }
 
-.join-form .form-group input,
-.join-form .form-group select {
+.join__date-input {
+  /* 추가적인 스타일이 필요한 경우 여기에 작성 */
+}
+
+/* 입력 필드 */
+.join__form-group input,
+.join__form-group select {
   width: 90%;
   padding: 10px 40px 10px 12px;
   border: none;
@@ -130,26 +134,17 @@ body, html {
   transition: border-bottom 0.3s ease;
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active  {
-  -webkit-box-shadow: 0 0 0 1000px white inset !important;
-  -webkit-text-fill-color: #8E8989 !important;
-  box-shadow: 0 0 0 1000px white inset !important;
-}
-
-.join-form .form-group input::placeholder,
-.join-form .form-group select::placeholder {
+.join__form-group input::placeholder,
+.join__form-group select::placeholder {
   text-align: left;
 }
 
-.join-form .form-group input:focus,
-.join-form .form-group select:focus {
+.join__form-group input:focus,
+.join__form-group select:focus {
   outline: none;
 }
 
-.input-wrapper .input-icon {
+.join__input-icon {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -160,28 +155,11 @@ input:-webkit-autofill:active  {
   transition: opacity 0.3s ease;
 }
 
-.input-wrapper .input-icon.visible {
+.join__input-icon.visible {
   opacity: 1;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-  position: absolute;
-  right: 35px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  opacity: 0.6;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-}
-
-.input-wrapper.date-input .input-icon {
-  right: 10px;
-}
-
-.validation-messages {
+.join__validation-messages {
   position: relative;
   margin-left: 120px;
   margin-bottom: 20px;
@@ -191,31 +169,32 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   transition: max-height 0.5s ease, opacity 0.5s ease;
 }
 
-.validation-messages.visible {
+.join__validation-messages.visible {
   max-height: 500px;
   opacity: 1;
 }
 
-.validation-messages p {
+.join__validation-messages p {
   margin: 2px 0;
   font-size: 14px;
   transition: color 0.3s ease;
 }
 
-.validation-messages p.valid {
+.join__validation-messages p.valid {
   color: #3751B4;
 }
 
-.validation-messages p.invalid {
+.join__validation-messages p.invalid {
   color: #8E8989;
 }
 
-.join-form .submit-button {
+/* 제출 버튼 */
+.join__submit-button {
   text-align: center;
   margin-top: 30px;
 }
 
-.join-form .submit-button button {
+.join__submit-button button {
   width: 50%;
   padding: 12px 0;
   background-color: #cccccc;
@@ -228,67 +207,69 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   transition: background-color 0.3s ease;
 }
 
-.join-form .submit-button button:enabled {
+.join__submit-button button:enabled {
   background-color: #7C97FE;
   cursor: pointer;
 }
 
-.join-form .submit-button button:hover:enabled {
+.join__submit-button button:hover:enabled {
   background-color: #0041ff;
 }
 
-.join-form .submit-button button:disabled {
+.join__submit-button button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
+/* 유효성 검사에 따른 스타일 */
+.join__form-group input.valid,
+.join__form-group select.valid {
+  border-bottom: 2px solid #3751B4;
+}
+
+/* 반응형 디자인 */
 @media (max-width: 768px) {
-  .join-container {
-    width: 90%;
-    padding: 20px;
+  .join__container {
+      width: 90%;
+      padding: 20px;
   }
 
-  .signup-title {
-    text-align: left;
+  .join__signup-title {
+      text-align: left;
   }
 
-  .join-form .form-group {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 10px;
+  .join__form-group {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 10px;
   }
 
-  .join-form .form-group.active {
-    margin-bottom: 20px;
+  .join__form-group.active {
+      margin-bottom: 20px;
   }
 
-  .join-form .form-group label {
-    width: 100%;
-    margin-bottom: 5px;
+  .join__form-group label {
+      width: 100%;
+      margin-bottom: 5px;
   }
 
-  .validation-messages {
-    margin-left: 0;
+  .join__validation-messages {
+      margin-left: 0;
   }
 
-  .join-form .submit-button button {
-    width: 100%;
+  .join__submit-button button {
+      width: 100%;
   }
 
-  .social-buttons {
-    flex-wrap: wrap;
+  .join__social-buttons {
+      flex-wrap: wrap;
   }
 
   input[type="date"]::-webkit-calendar-picker-indicator {
-    right: 35px;
+      right: 35px;
   }
 
-  .input-wrapper.date-input .input-icon {
-    right: 10px;
+  .join__input-wrapper.join__date-input .join__input-icon {
+      right: 10px;
   }
-}
-
-.join-form .form-group input.valid,
-.join-form .form-group select.valid {
-  border-bottom: 2px solid #3751B4;
 }
