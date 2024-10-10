@@ -10,17 +10,11 @@ import { store } from './store/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-<<<<<<< HEAD
   <Provider store={store}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
   </Provider>
-=======
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>
->>>>>>> 3004042883b5aa34d6b0c62193bae75a806db988
 );
 
 // If you want to start measuring performance in your app, pass a function
