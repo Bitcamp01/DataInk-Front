@@ -204,6 +204,7 @@ const Join = () => {
                                 name="username"
                                 placeholder="아이디를 입력하세요"
                                 aria-label="아이디 입력"
+                                autoComplete="off"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 onFocus={() => setFocusedField('username')}
@@ -356,6 +357,7 @@ const Join = () => {
                                 name="password"
                                 placeholder="비밀번호를 입력하세요"
                                 aria-label="비밀번호 입력"
+                                autoComplete="new-password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 onFocus={() => setFocusedField('password')}
