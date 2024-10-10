@@ -1,45 +1,49 @@
 // src/components/Login.js
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../apis/userApis'
 import '../css/login.css';
 import { useDispatch } from 'react-redux';
 
 const Login = () => {
-    const navigate = useNavigate();
+    const [loginForm, setLoginForm] = useState({
+        id: '',
+        password: ''
+    });
+
+    const navi = useNavigate();
     const dispatch = useDispatch();
 
     // 비밀번호 표시 상태
     const [showPassword, setShowPassword] = useState(false);
-
-    // 로그인 입력 상태
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
 
     // 비밀번호 표시/숨기기 토글 핸들러
     const toggleShowPassword = () => {
         setShowPassword((prevState) => !prevState);
     };
 
-// 로그인 핸들러
-const handleLogin = async (e) => {
-    e.preventDefault();
+    // 입력값 변화 시 loginForm 상태 업데이트
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setLoginForm((prevForm) => ({
+            ...prevForm,
+            [name]: value,
+        }));
+    };
 
-    if (id.trim() === '' || password.trim() === '') {
-        setMessage('아이디와 비밀번호를 입력해주세요.');
-        return;
-    }
+    // 로그인 핸들러
+    const handleLogin = useCallback((e) => {
+        e.preventDefault();
 
-    try {
-        const resultLoginAction = await dispatch(login({ id, password }));
-        if (login.fulfilled.match(resultLoginAction)) {
-            navigate('/mypage');
+        // dispatch의 비동기 처리가 제대로 완료됐을 때는 then 메소드의 state에 
+        // action 객체가 하나 넘어오고 에러가 발생했을 때는 에러 action 객체가 담긴다.
+        dispatch(login(loginForm)).then((action) => {
+            if(action.type === 'users/login/fulfilled') {
+                navi("/dashboard");
         }
-    } catch (error) {
-        console.error('로그인 중 에러 발생:', error);
-    }
-};
+    });
+
+}, [loginForm, dispatch, navi]);
 
     return (
         <div className="login__overlay" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
@@ -107,9 +111,9 @@ const handleLogin = async (e) => {
                             placeholder="아이디를 입력해주세요."
                             className="login__input"
                             aria-label="아이디 입력"
-                            autoComplete="off"
-                            value={id}
-                            onChange={(e) => setId(e.target.value)}
+                            name="id"
+                            value={loginForm.id}
+                            onChange={handleInputChange}
                             required
                         />
                     </div>
@@ -126,9 +130,9 @@ const handleLogin = async (e) => {
                             placeholder="비밀번호를 입력해주세요."
                             className="login__input"
                             aria-label="비밀번호 입력"
-                            autoComplete="new-password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            name="password"
+                            value={loginForm.password}
+                            onChange={handleInputChange}
                             required
                         />
                         <button
@@ -166,7 +170,7 @@ const handleLogin = async (e) => {
                 </form>
 
                 {/* 메시지 표시 */}
-                {message && <p className="login__message">{message}</p>}
+                {/* {message && <p className="login__message">{message}</p>} */}
 
                 {/* 회원가입 유도 메시지 */}
                 <div className="login__register-prompt">

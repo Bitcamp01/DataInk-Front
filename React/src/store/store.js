@@ -1,8 +1,35 @@
-import { configureStore } from '@reduxjs/toolkit';
-import userSlice from '../slices/userSlice'; // userSlice를 임포트
+import {configureStore, combineReducers} from '@reduxjs/toolkit';
+import userSlice from '../slices/userSlice';
+
+import {
+    persistReducer,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER
+} from 'redux-persist';
+
+import storageSession from 'redux-persist/es/storage/session';
+
+const reducers = combineReducers({
+    userSlice
+});
+
+const persistConfig = {
+    key: 'root',
+    storage: storageSession
+};
+
+const persistreducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
-    reducer: {
-        user: userSlice, // userSlice를 스토어에 연결
-    },
+    reducer: persistreducer,
+    middleware: (getDefaultMiddleware) => 
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoreActions: [FLUSH, PAUSE, PERSIST, PURGE, REHYDRATE, REGISTER]
+            }
+        })
 });
