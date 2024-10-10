@@ -17,6 +17,7 @@ import FindAccount from './pages/FindAccount';
 import LabellingDetail from './pages/LabellingDetail';
 import ItemStructure from "./pages/ItemStructure";
 import ProjectStructure from './pages/ProjectStructure';
+import MainGrid from "./pages/MainGrid";
 function App() {
   return (
     <Routes>
@@ -32,8 +33,7 @@ function App() {
         <Route path='/review' element={<Review />} />
         <Route path="/notice_write" element={<Notice_write />} />
         <Route path="/notice_detail" element={<Notice_detail />} />
-          <Route path="/item_structure" element={<ItemStructure />} />
-          <Route path="/project_structure" element={<ProjectStructure />} />
+          <Route path="/main_grid" element={<MainGrid />} />
       </Route>
       <Route>
       <Route path='/join' element={<Join />} />
