@@ -44,7 +44,7 @@ h3 {
     background-color: #e6e6e6;
     color: #96A2CF;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     padding: 5px 10px;
     z-index: 10;
@@ -171,7 +171,7 @@ h3 {
 
 .tab-links:hover {
     background-color: #e6f2ff;
-    color: #3498DB;
+    color: #535db1;
 }
 
 .tab-links.active {
@@ -263,11 +263,11 @@ h3 {
 }
 
 .profile-form__button {
-    padding: 12px 12px;
+    padding: 10px 10px;
     background-color: #7785BE;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
@@ -284,16 +284,17 @@ h3 {
 }
 
 .profile-form__button:hover {
-    background-color: #2980B9;
+    background-color: #535db1;
 }
 
 /* 공통 버튼 스타일 */
 .button {
     height: 40px;
+    padding: 10px 10px;
     background-color: #7785BE;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
@@ -307,7 +308,7 @@ h3 {
 
 /* 마우스 오버 시 색상 변경 */
 .button:hover {
-    background-color: #2980B9;
+    background-color: #535db1;
 }
 
 .profile-form__submit {
@@ -317,4 +318,34 @@ h3 {
 
 .profile-password__submit {
     margin-left: 10px;
+}
+
+/* 두 개의 인풋 필드를 가로로 정렬 */
+.postcode-container {
+    width: 512px;
+    display: flex;
+    gap: 29px; /* 두 인풋 사이의 간격 설정 */
+}
+
+/* 우편 번호 입력 필드 크기 조절 */
+.postcode-number {
+    width: 65% !important; /* !important로 우선순위 높임 */
+    padding: 10px !important;
+    font-size: 14px !important;
+}
+
+/* 우편번호 찾기 버튼 크기 조절 */
+.postcode-search {
+    padding: 10px 10px;
+    width: 25% !important; /* !important로 우선순위 높임 */
+    padding: 10px !important;
+    font-size: 14px !important;
+    background-color: #7785BE;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+.postcode-search:hover {
+    background-color: #535db1;
 }
