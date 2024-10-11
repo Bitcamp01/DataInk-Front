@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import '../css/profileInit.css';
+import styled from 'styled-components';
+import '../../css/profileInit.css';
 import { useSelector } from 'react-redux';
 // import axios from 'axios';
+
+
+const BackgroundContainer = styled.div`
+    font-family: 'Pretendard', 'NotoSansKR', sans-serif;
+    background-color: white; /* 배경을 흰색으로 설정 */
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 const ProfileInit = ({onAuthenticate}) => {
     const navigate = useNavigate();
@@ -53,32 +64,36 @@ const ProfileInit = ({onAuthenticate}) => {
 
 
     return (
-        <div className="profileinit-content">
-            <div className="profileinit-header-title">
-                <h3>비공개 페이지 입니다.</h3>
-                <h3>비밀번호를 입력해주세요.</h3>
-            </div>
+        <BackgroundContainer>
+            <div className="profileinit-content">
+                <div className='profileinit-box'>
+                    <div className="profileinit-header-title">
+                        <h3>비공개 페이지 입니다.</h3>
+                        <h3>비밀번호를 입력해주세요.</h3>
+                    </div>
 
-            <form className="profileinit-form" onSubmit={handlePasswordSubmit}>
-                <div className="profileinit-form__group">
-                    <label htmlFor="password">비밀번호</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="대소문자 숫자가 포함된 8-16자 이내"
-                        value={password}
-                        onChange={handlePasswordChange}
-                    />
+                    <form className="profileinit-form" onSubmit={handlePasswordSubmit}>
+                        <div className="profileinit-form__group">
+                            <label htmlFor="password">비밀번호</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="대소문자 숫자가 포함된 8-16자 이내"
+                                value={password}
+                                onChange={handlePasswordChange}
+                            />
+                        </div>
+                        <button type="submit" className="profileinit-form__submit">확인</button>
+                    </form>
+
+                    {/* 비밀번호 검증 실패 시 오류 메시지 표시 */}
+                    {errorMessage && (
+                        <p style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</p>
+                    )}
                 </div>
-                <button type="submit" className="profileinit-form__submit">확인</button>
-            </form>
-
-            {/* 비밀번호 검증 실패 시 오류 메시지 표시 */}
-            {errorMessage && (
-                <p style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</p>
-            )}
-        </div>
+            </div>
+        </BackgroundContainer>
     )
 }
 
