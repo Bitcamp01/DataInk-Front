@@ -6,6 +6,14 @@
     justify-content: center; /* 수직 중앙 정렬 */
 }
 
+.profileinit-box {
+    background-color: #f9f9f9; /* 원래 사용하던 배경색 */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* 내부 텍스트와 콘텐츠를 중앙 정렬 */
+}
+
 h3 {
     color: #3751B4;
     font-size: x-large;
