@@ -161,7 +161,7 @@
 }
 
 .review-submit-container button.apply-button {
-    background-color: #4466E6;
+    background-color: #5272e4;
     color: #ffffff;
 }
 
@@ -240,6 +240,16 @@
     display: flex;
     justify-content: center;
     margin-top: 2rem; /* 상단에 여백 추가 */
+}
+
+.select-button {
+    background-color: #f0f0f0;
+    width: 50%;
+    border: #c1c1c1 1px solid;
+    margin-top: 0.3rem;
+    font-size: xx-small;
+    padding: 0.2rem;
+    border-radius: 3px;
 }
 
 .approve-button {

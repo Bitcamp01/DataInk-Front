@@ -12,10 +12,10 @@ const SelectForm = () => {
         setIsModalOpen(true); // "승인" 버튼 클릭 시 모달 열기
     };
     const handlePrevClick = () => {
-        navigate('/review');
+        navigate('/review'); // 이전 작업으로
     };
     const handleNextClick = () => {
-        navigate('/review');
+        navigate('/review'); // 다음 작업으로
     };
 
     const handleCloseModal = () => {
@@ -51,6 +51,7 @@ const SelectForm = () => {
                             />
                             관리자 별도 입력
                         </label>
+                        <button className="select-button" onClick={handlePrevClick}>입력</button>
                     </div>
                     <div className="detailboxes">
                         <label>

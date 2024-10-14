@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/header.css';
 
-function Header() {
+function Header({ title }) {
     const [showNotifications, setShowNotifications] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false); // 프로필 메뉴 토글 상태
     const navigate = useNavigate();
@@ -58,7 +58,7 @@ function Header() {
             <div className="header__back-icon" onClick={handleBackClick}>
                 <img src="/icons/back_icon.svg" alt="뒤로가기" />
             </div>
-            <div className="header__title">Data Labeling</div>
+            <div className="header__title">{title}</div>
             <div className="header__search">
                 <input type="text" className="header__search-input" />
                 <img src="/icons/search_icon.svg" alt="검색 아이콘" className="header__search-icon" />
