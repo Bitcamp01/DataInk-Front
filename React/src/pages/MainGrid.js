@@ -81,32 +81,33 @@ export default function MainGrid() {
 
     }
   }
-  //flatData업데이트 할 때 새로운 정보를 반영하기 위한 부분, 동일한 아이디
   const updateFlatFolderData = (newData) => {
     setFlatFolderData((prevFlatData) => {
-      // 새로운 데이터에 대한 lookup을 생성하여 기존 데이터에 반영하기 쉽게 만듭니다.
       const lookup = new Map(prevFlatData.map(item => [item.id, item]));
 
-      // 서버에서 가져온 새 데이터의 각 항목을 순회하면서 처리합니다.
+      // 기존에 있던 데이터와 새로 받아온 데이터의 병합
       newData.forEach((newItem) => {
         if (lookup.has(newItem.id)) {
-          // 기존 데이터에 동일한 ID가 있을 경우 해당 데이터를 덮어씁니다.
           lookup.set(newItem.id, { ...lookup.get(newItem.id), ...newItem });
         } else {
-          // 기존 데이터에 없는 새로운 데이터의 경우 추가합니다.
           lookup.set(newItem.id, newItem);
         }
       });
 
-      // Map을 다시 배열로 변환하여 상태를 업데이트합니다.
-      return Array.from(lookup.values());
+      // 새로 받아온 데이터에는 없고 기존 데이터에는 있는 항목들을 제거
+      const updatedFlatData = Array.from(lookup.values()).filter(item =>
+          newData.some(newItem => newItem.id === item.id)
+      );
+
+      return updatedFlatData;
     });
   };
 
-// 서버에서 데이터를 가져오는 함수에서 이 함수를 사용하도록 업데이트합니다.
-  const getSelectedFolderData = async () => {
+
+
+  const getSelectedFolderData = async (selectFolder) => {
     try {
-      const response = await axios.get(`http://localhost:9090/project/${selectedFolder}`, {
+      const response = await axios.get(`http://localhost:9090/project/${selectFolder}`, {
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
         }
@@ -145,14 +146,25 @@ export default function MainGrid() {
             {/* folderData는 전체 폴더 구조를 출력해야하는 트리뷰 입장에서 필요,setFlattenFolderData는 새로운 프로젝트 추가시 폴더 구조의 변경이 일어나는데 평탄화된
             폴더구조와 트리구조로 된 폴더 구조를 일치시키기 위해 사용, folderSelect는 선택한 폴더를 알아야 해당 부분의 정보를 datagrid와 공유 가능,
             setfolderData는 새로운 폴더 추가시 변경되는 폴더 구조 적용을 위해 사용  */}
-            <CustomizedTreeView handleTreeViewMouseEnter={handleTreeViewMouseEnter} folderData={folderData}  setSelectedFolder={setSelectedFolder} setFolderData={setFolderData} setFlatFolderData={setFlatFolderData}/>
+            <CustomizedTreeView getSelectedFolderData={getSelectedFolderData}
+                                handleTreeViewMouseEnter={handleTreeViewMouseEnter}
+                                folderData={folderData}
+                                setSelectedFolder={setSelectedFolder}
+                                setFolderData={setFolderData}
+                                setFlatFolderData={setFlatFolderData}/>
 
           </Stack>
         </Grid>
           <Grid size={{ md: 12, lg: 9 }} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           {/* 메인 그리드가 초기에 받아와 관리하는 전체 구조, 트리뷰와 데이터 그리드의 동기화에 사용될 선택된 폴더,폴더 , 폴더 데이터 변경에 사용할 set함수  */}
-          <CustomizedDataGrid folderData={folderData} setFolderData={setFolderData} selectedFolder={selectedFolder} setSelectedFolder={setSelectedFolder} 
-           flatFolderData={flatFolderData} setFlatFolderData={setFlatFolderData} setShouldUpdateTree={setShouldUpdateTree}/>
+          <CustomizedDataGrid getSelectedFolderData={getSelectedFolderData}
+                              folderData={folderData}
+                              setFolderData={setFolderData}
+                              selectedFolder={selectedFolder}
+                              setSelectedFolder={setSelectedFolder}
+                              flatFolderData={flatFolderData}
+                              setFlatFolderData={setFlatFolderData}
+                              setShouldUpdateTree={setShouldUpdateTree}/>
         </Grid>
       </Grid>
     </Box>

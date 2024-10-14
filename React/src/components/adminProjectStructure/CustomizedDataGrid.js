@@ -23,7 +23,8 @@ import {
   ListItemText
 } from '@mui/material'; // 누락된 컴포넌트들 import
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'; // Remove 아이콘 import
-import InfiniteScroll from 'react-infinite-scroll-component'; // InfiniteScroll 컴포넌트 import
+import InfiniteScroll from 'react-infinite-scroll-component';
+import axios from "axios"; // InfiniteScroll 컴포넌트 import
 
 // columns 정의, 추후 날짜,용량 등의 정보를 추가할 예정
 const columns = [
@@ -36,7 +37,7 @@ const columns = [
    }
 ];
 // 메인 컴포넌트
-export default function CustomizedDataGrid({folderData,selectedFolder = null,setSelectedFolder,flatFolderData,setFlatFolderData,setShouldUpdateTree}) {
+export default function CustomizedDataGrid({getSelectedFolderData,folderData,selectedFolder = null,setSelectedFolder,flatFolderData,setFlatFolderData,setShouldUpdateTree}) {
   const apiRef = useGridApiRef();
   // 현재 선택된 폴더의 정보를 가지게 될 상태
   const [rows, setRows] = useState([]);
@@ -195,7 +196,7 @@ const handleFileUpload = (event) => {
     isFolder: false,
     children: [],
     parentId:selectedFolder,
-    lastModifiedBy:"A",
+    lastModifiedUserId:"A",
     lastModifiedDate: new Date().toISOString()
   }));
 
@@ -291,6 +292,7 @@ const handlePaste = () => {
   const handleRowDoubleClick=(params)=>{
     const row = params.row;
     if (row.isFolder) {
+      getSelectedFolderData(params.id);
       setSelectedFolder(params.id);
     } else {
       // 파일인 경우: 사이드 패널에 표시
@@ -317,45 +319,38 @@ const handlePaste = () => {
   const processRowUpdate = async(newRow) => {
     console.log("processRowUpdate")
     try {
-      // PUT 요청을 보내서 수정된 행 정보를 백엔드에 전송
-      const response = await fetch(`backend-api/rename-endpoint/${newRow.id}`, {
-        method: 'PUT',
+      const response = await axios.post(`project/name-modify`, {
+        label: newRow.label,
+        id: newRow.id
+      }, {
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          label: newRow.label, // 편집된 이름을 전송
-        }),
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+        }
       });
   
-      if (!response.ok) {
-        throw new Error('Failed to update the row');
+      if (response.status === 200) {
+        // 백엔드에서 받은 최신 데이터로 로우와 flatFolderData 업데이트
+        const updatedRow = {
+          ...newRow,
+          lastModifiedUserId: response.data.item.lastModifiedUserId,
+          lastModifiedDate: response.data.item.lastModifiedDate,
+        };
+
+        // flatFolderData 상태 업데이트
+        setFlatFolderData((prevFlatData) =>
+            prevFlatData.map((item) =>
+                item.id === updatedRow.id ? { ...item, ...updatedDataFromBackend } : item
+            )
+        );
+
+        // 입력 후 벗어나면 view 모드로 변경
+        setRowModesModel((prev) => ({
+          ...prev,
+          [newRow.id]: { mode: GridRowModes.View },
+        }));
+
+        return updatedRow;
       }
-  
-      const updatedDataFromBackend = await response.json();
-  
-      // 백엔드에서 받은 최신 데이터로 로우와 flatFolderData 업데이트
-      const updatedRow = {
-        ...newRow,
-        label: updatedDataFromBackend.label,
-        lastModifiedBy: updatedDataFromBackend.lastModifiedBy,
-        lastModifiedDate: updatedDataFromBackend.lastModifiedDate,
-      };
-  
-      // flatFolderData 상태 업데이트
-      setFlatFolderData((prevFlatData) =>
-        prevFlatData.map((item) =>
-          item.id === updatedRow.id ? { ...item, ...updatedDataFromBackend } : item
-        )
-      );
-  
-      // 입력 후 벗어나면 view 모드로 변경
-      setRowModesModel((prev) => ({
-        ...prev,
-        [newRow.id]: { mode: GridRowModes.View },
-      }));
-  
-      return updatedRow;
     } catch (error) {
       console.error('Error updating row:', error);
       return newRow; // 실패 시 기존의 newRow 반환
@@ -365,49 +360,86 @@ const handlePaste = () => {
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-  const handleCreateNewFolder = ()=>{
+
+  const handleCreateNewFolder = async ()=>{
     // 새 폴더 만들기는 두번의 요청으로 이루어지게 함
     // 단순히 get요청으로 현재 폴더 위치에 default폴더를 생성
     //edit모드가 풀릴때 다시 요청 보내는 방식
     //const response ~~~
-    const newFolder = {
-      id: String(new Date().getTime()), // 사용할 아이디를 백단에서 받아옴, 지금은 임시 값
-      label: 'New Folder', // 기본 폴더 이름
-      isFolder: true,
-      parentId:selectedFolder
-    };
+    try {
+      let select=selectedFolder;
+      if (selectedFolder === null){
+        select=0
+      }
+      const response=await axios.post("http://localhost:9090/project/create-folder",select,{
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
+        }
+      });
+      if (response.status === 200){
+        // rows 상태 업데이트, flatdata가 비동기 업데이트기 때문에 우선 포커스 용으로 row상태 업데이트
+        setRows([...rows, response.data.item]);
+        setFlatFolderData([...flatFolderData,response.data.item]);
+        // 체크박스 선택 상태 초기화
+        setRowSelectionModel([response.data.item.id]); // 새로 생성한 폴더 선택
 
-    // rows 상태 업데이트, flatdata가 비동기 업데이트기 때문에 우선 포커스 용으로 row상태 업데이트
-    setRows([...rows, newFolder]);
-    setFlatFolderData([...flatFolderData,newFolder]);
-    // 체크박스 선택 상태 초기화
-    setRowSelectionModel([newFolder.id]); // 새로 생성한 폴더 선택
+        // 새 폴더 행을 편집 모드로 설정
+        setRowModesModel((prevModel) => ({
+          ...prevModel,
+          [response.data.item.id]: { mode: GridRowModes.Edit }, // 편집 모드로 전환
+        }));
 
-    // 새 폴더 행을 편집 모드로 설정
-    setRowModesModel((prevModel) => ({
-      ...prevModel,
-      [newFolder.id]: { mode: GridRowModes.Edit }, // 편집 모드로 전환
-    }));
-    
-    
-    apiRef.current.setCellFocus(newFolder.id, 'label');
-    // 컨텍스트 메뉴 닫기
-    handleClose();
-  }
-  const handleDelete = (e)=>{
-    if (rowSelectionModel.length > 0) {
-      //백엔드 요청 보내고 성공시 클라이언트에 반영, 백엔드로 부터 성공 여부만 받음
-      const selectedIds = rowSelectionModel;
-  
-      // flatFolderData 상태에서 선택된 항목들을 제거
-      setFlatFolderData(prevFlatData => prevFlatData.filter(item => !selectedIds.includes(item.id)));
-      // 삭제 후 선택된 행 초기화
-      setRowSelectionModel([]);
+
+        apiRef.current.setCellFocus(response.data.item.id, 'label');
+      }
     }
-  
+    catch(error){
+
+    }
+    // const newFolder = {
+    //   id: String(new Date().getTime()), // 사용할 아이디를 백단에서 받아옴, 지금은 임시 값
+    //   label: 'New Folder', // 기본 폴더 이름
+    //   isFolder: true,
+    //   parentId:selectedFolder
+    // };
+
+
     // 컨텍스트 메뉴 닫기
     handleClose();
   }
+  const handleDelete = async (e) => {
+    if (rowSelectionModel.length > 0) {
+      try {
+        // 삭제 요청을 POST로 보냄,삭제 데이터가 여러개
+        const response = await axios.post('project/delete', {
+          ids: rowSelectionModel, // 선택된 폴더의 ID들을 data로 넘김
+        }, {
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+          },
+        });
+
+        if (response.status === 200) {
+          // 성공적으로 삭제된 경우, 클라이언트에도 반영
+          const selectedIds = rowSelectionModel;
+
+          // flatFolderData 상태에서 선택된 항목들을 제거
+          setFlatFolderData(prevFlatData =>
+              prevFlatData.filter(item => !selectedIds.includes(item.id))
+          );
+
+          // 삭제 후 선택된 행 초기화
+          setRowSelectionModel([]);
+        }
+      } catch (error) {
+        console.error('Error deleting folders:', error);
+      }
+
+      // 컨텍스트 메뉴 닫기
+      handleClose();
+    }
+  };
+
 
   const handleGoToParentFolder = () => {
     if (selectedFolder !== null) {

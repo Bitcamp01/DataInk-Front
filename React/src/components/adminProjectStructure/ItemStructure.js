@@ -22,16 +22,22 @@ const ItemStructure = () => {
             setData(newData);
         }
     };
+    const getItem= async ()=>{
+        try {
+            const response=await axios.get(`http://localhost:9090/item/${itemId}`,{
+                headers: {
+                    'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+                }
+            })
+            return response;
+        }
+        catch(err){
+
+        }
+    }
     useEffect(() => {
-        if (itemId) {
-            // 서버나 상태에서 해당 itemId를 기반으로 데이터를 가져오기
-            // 여기서는 예시로 더미 데이터를 사용
-            const fetchedItem = {
-                id: itemId,
-                label: `항목 ${itemId}`,
-                details: '이것은 항목의 세부 정보입니다.'
-            };
-            setData(fetchedItem);
+        if (itemId !== null) {
+            setData(getItem().data.item);
         }
     }, [itemId]);
     const calculateDepth = (obj, depth = 1) => {
@@ -141,13 +147,25 @@ const ItemStructure = () => {
     };
     const handleSave = async () => {
         try {
-            if (itemId) {
+
+            if (itemId !== null) {
+                const payload = {
+                    itemId: itemId,
+                    itemName: itemName,
+                    data: data,
+                };
                 // 기존 아이템 업데이트 로직 (서버로 PUT 요청 등)
                 console.log('아이템 업데이트:', itemId);
+                const response = await axios.post("http://localhost:9090/item/update",payload,{
+                    headers : { 'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`}
+                })
             } else {
-                // 새로운 아이템 생성 로직 (서버로 POST 요청 등)
+                const payload = {
+                    itemName: itemName,
+                    data: data,
+                };
                 console.log('새로운 아이템 생성:', itemId);
-                const response = await axios.post("http://localhost:9090/item/create",data,{
+                const response = await axios.post("http://localhost:9090/item/create",payload,{
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                     }

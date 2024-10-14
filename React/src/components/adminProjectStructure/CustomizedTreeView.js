@@ -138,15 +138,14 @@ CustomTreeItem.propTypes = {
   onDoubleClick: PropTypes.func.isRequired,
 };
 
-export default function CustomizedTreeView({ folderData, setSelectedFolder, setFolderData, setFlatFolderData, handleTreeViewMouseEnter }) {
+export default function CustomizedTreeView({ folderData, setSelectedFolder, setFolderData, setFlatFolderData, handleTreeViewMouseEnter,getSelectedFolderData }) {
   const [open, setOpen] = React.useState(false);
   const [newProjectName, setNewProjectName] = React.useState('');
   const [newProjectDec, setNewProjectDec] = React.useState('');
   const [newProjectDueDate, setNewProjectDueDate] = React.useState(''); // 마감일자 상태 추가
 
   const handleFolderDoubleClick = (folder) => {
-    console.log(folder.id);
-
+    getSelectedFolderData(folder.id)
     setSelectedFolder(folder.id);
   };
 
@@ -158,22 +157,37 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder, setF
     setOpen(false);
   };
 
-  const createNewProject = (e) => {
-    const response = 'ok';
+  const createNewProject = async (e) => {
+    e.preventDefault();
+    const newRootFolder = {
+      // id: new Date().getTime().toString(),
+      label: newProjectName,
+      description: newProjectDec,
+      isFolder: true,
+      parentId: null,
+      // lastModifiedBy: 'A',
+      // lastModifiedDate: new Date().toISOString(),
+      itemId: null,
+      dueDate: newProjectDueDate, // 마감일자 추가
+    };
+    try {
+      // 백엔드로 데이터 전송
+      const response = await axios.post('/project/create', newRootFolder,{
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
+        }
+      });
 
-    if (response === 'ok') {
-      const newRootFolder = {
-        id: new Date().getTime().toString(),
-        label: newProjectName,
-        isFolder: true,
-        parentId: null,
-        lastModifiedBy: 'A',
-        lastModifiedDate: new Date().toISOString(),
-        itemId: 0,
-        dueDate: newProjectDueDate, // 마감일자 추가
-      };
-      setFolderData((prevData) => [...prevData, newRootFolder]);
-      setFlatFolderData((prevData) => [...prevData, newRootFolder]);
+      if (response.status === 200) {
+        // 성공적으로 데이터를 생성하면 로컬 상태 업데이트
+        setFolderData((prevData) => [...prevData, response.data.item]);
+        setFlatFolderData((prevData) => [...prevData, response.data.item]);
+        setOpen(false); // 모달 닫기
+      } else {
+        console.error('프로젝트 생성 실패: ', response.status);
+      }
+    } catch (error) {
+      console.error('서버 요청 오류: ', error);
     }
     setOpen(false);
   };
