@@ -9,7 +9,6 @@ import Calendar from '../components/mypage/Calendar';
 import StatusEditModal from '../components/mypage/StatusEditModal';
 import BackgroundImgModal from '../components/mypage/BackgroundImgModal';
 import ProfileImgModal from '../components/mypage/ProfileImgModal';
-import { useLocation } from 'react-router-dom';
 import '../css/profile.css';
 
 const MypageContainer = styled.div`
@@ -22,18 +21,12 @@ const Mypage = () => {
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false); // 배경 이미지 모달 상태
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false); // 프로필 이미지 모달 상태
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [status, setStatus] = useState("소개 글을 입력해 주세요.");
     const [activeTab, setActiveTab] = useState('Workstatus');
     const [profileImage, setProfileImage] = useState('/images/dataInk_logo_sqr.png');
     const [backgroundImage, setBackgroundImage] = useState('/images/dataInk_background_default.jpg');
     const [selectedBackgroundFile, setSelectedBackgroundFile] = useState(null);
     const [selectedProfileFile, setSelectedProfileFile] = useState(null); // 프로필 파일 상태
-    
-    
-
-    const location = useLocation();
-
 
     const handleProfileAuthentication = () => {
         setIsProfileAuthenticated(true); // 프로필 탭 인증 성공 시 호출

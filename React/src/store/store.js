@@ -12,9 +12,11 @@ import {
 } from 'redux-persist';
 
 import storageSession from 'redux-persist/es/storage/session';
+import mypageSlice from '../slices/mypageSlice';
 
 const reducers = combineReducers({
-    userSlice
+    userSlice,
+    mypageSlice
 });
 
 const persistConfig = {

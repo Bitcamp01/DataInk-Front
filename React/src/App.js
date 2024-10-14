@@ -16,6 +16,11 @@ import Notice_detail from './pages/Notice_detail';
 import FindAccount from './pages/FindAccount';
 import LabellingDetail from './pages/LabellingDetail';
 import MainGrid from './pages/MainGrid';
+import ProfileInit from './components/mypage/ProfileInit';
+import Profile from './components/mypage/Profile';
+import Workstatus from './components/mypage/Workstatus';
+import Calendar from './components/mypage/Calendar';
+import Alarm from './components/mypage/Alarm';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { Provider } from 'react-redux';
@@ -40,6 +45,11 @@ function App() {
             <Route path="/label/detail" element={<LabellingDetail />} />
             <Route path="/member" element={<MemberManagement />} />
             <Route path="/mypage" element={<Mypage />} />
+            <Route path="/mypage/profileinit" element={<ProfileInit />} />
+            <Route path="/mypage/profile" element={ <Profile />} />
+            <Route path="/mypage/workstatus" element={<Workstatus />} />
+            <Route path="/mypage/calendar" element={<Calendar />} />
+            <Route path="/mypage/alarm" element={<Alarm />} />
             <Route path="/notice" element={<Notice />} />
             <Route path="/review" element={<Review />} />
             <Route path="/notice_write" element={<Notice_write />} />
