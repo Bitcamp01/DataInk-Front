@@ -7,6 +7,7 @@ import  '../css/table-label.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import CommonButton from '../components/CommonButton'
+import ConfirmModal from './labelling/ConfirmModal';
 
 const columns = [
   { field: 'id', headerName: 'No', width: 90, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
@@ -41,15 +42,12 @@ const ButtonContainer = styled.div`
 export default function DataGridDemo() {
   const navigate = useNavigate();
 
-  const [open, setOpen] = React.useState(false);
-  const [selectedRow, setSelectedRow] = React.useState(null);
   const [rowSelectionModel, setRowSelectionModel] = React.useState([]); // 선택된 행을 관리하는 상태
-  
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedRow(null);
-  };
+  const [modalMessage, setModalMessage] = React.useState("선택한 작업을 검수 요청하시겠습니까?");
+  const [isModalOpen, setIsModalOpen] = React.useState(false); // 모달창 열고 닫기 상태
+  const [isConfirmed, setIsConfirmed] = React.useState(false); // 확인 상태 관리
 
+  
   const handleRowClick = (params) => {
     // const { id } = params.row;
     navigate(`/label/detail`);
@@ -75,11 +73,31 @@ export default function DataGridDemo() {
     }
   };
 
-  const handleSubmit = () => {
-    // 선택된 행들의 ID를 검수 요청 처리
-    console.log("선택된 행 ID:", rowSelectionModel);
-    // 여기에 서버로 요청을 보내는 로직을 추가할 수 있습니다.
+  const handleSubmitForReview = () => {
+    if (rowSelectionModel.length === 0) {
+      alert("검수 요청할 작업을 선택하세요.");
+      return;
+    }
+    
+    setIsModalOpen(true); // 모달을 열기
   };
+  
+  const handleConfirm = () => {
+    submitTaskForReview();
+    setModalMessage("검수 요청이 완료되었습니다.");  // 메시지 변경
+    setIsConfirmed(true);  // 예/아니오 버튼을 숨기고 확인 버튼을 표시
+  };
+
+  const resetModalState = () => {
+    setIsModalOpen(false);
+    setIsConfirmed(false);
+    setModalMessage("선택한 작업을 검수 요청하시겠습니까?");
+  };
+  
+  const submitTaskForReview = () => {
+    // 검수 요청을 서버로 전송하는 로직 필요
+  };
+  
 
   return (
     <div style={{ width: '100%' }}>
@@ -153,7 +171,15 @@ export default function DataGridDemo() {
             </Stack>
         </div>
         <ButtonContainer>
-            <CommonButton onClick={handleSubmit}>검수 요청</CommonButton>
+            <CommonButton onClick={handleSubmitForReview}>검수 요청</CommonButton>
+            {isModalOpen && (
+                <ConfirmModal 
+                    message={modalMessage}
+                    isConfirmed={isConfirmed}
+                    onConfirm={handleConfirm}
+                    onClose={resetModalState} // 닫기 로직을 단순화
+                />
+            )}
         </ButtonContainer>
     </div>
 

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // 백엔드에서 유저 정보를 가져오기 위한 axios
+import axios from 'axios';
 import styled from 'styled-components';
-import ProfileInit from '../pages/ProfileInit';
+import ProfileInit from '../components/mypage/ProfileInit';
 import Profile from '../components/mypage/Profile';
 import Workstatus from '../components/mypage/Workstatus';
 import Alarm from '../components/mypage/Alarm';
+import Calendar from '../components/mypage/Calendar';
 import StatusEditModal from '../components/mypage/StatusEditModal';
 import BackgroundImgModal from '../components/mypage/BackgroundImgModal';
-import ProfileImgModal from '../components/mypage/ProfileImgModal'; // 새로 추가된 컴포넌트
+import ProfileImgModal from '../components/mypage/ProfileImgModal';
 import { useLocation } from 'react-router-dom';
 import '../css/profile.css';
 
@@ -17,22 +18,25 @@ const MypageContainer = styled.div`
 
 const Mypage = () => {
     const [user, setUser] = useState({ name: '', role: '' }); // 유저 정보 상태
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isProfileAuthenticated, setIsProfileAuthenticated] = useState(false); // 프로필 탭에 대한 인증 상태 추가
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false); // 배경 이미지 모달 상태
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false); // 프로필 이미지 모달 상태
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [status, setStatus] = useState("소개 글을 입력해 주세요.");
-    const [activeTab, setActiveTab] = useState('Profile');
+    const [activeTab, setActiveTab] = useState('Workstatus');
     const [profileImage, setProfileImage] = useState('/images/dataInk_logo_sqr.png');
     const [backgroundImage, setBackgroundImage] = useState('/images/dataInk_background_default.jpg');
     const [selectedBackgroundFile, setSelectedBackgroundFile] = useState(null);
     const [selectedProfileFile, setSelectedProfileFile] = useState(null); // 프로필 파일 상태
     
+    
 
     const location = useLocation();
 
-    const handleAuthentication = () => {
-        setIsAuthenticated(true);
+
+    const handleProfileAuthentication = () => {
+        setIsProfileAuthenticated(true); // 프로필 탭 인증 성공 시 호출
     };
 
     const handleOpenStatusModal = () => {
@@ -104,8 +108,8 @@ const Mypage = () => {
         setSelectedProfileFile(null);
         setIsProfileModalOpen(false);
     };
+
     useEffect(() => {
-        if (isAuthenticated) { // isAuthenticated가 true일 때만 실행
             const fetchUserInfo = async () => {
                 try {
                     const response = await axios.get('/api/user');
@@ -118,10 +122,8 @@ const Mypage = () => {
                     console.error('Error fetching user info:', error);
                 }
             };
-
             fetchUserInfo();
-        }
-    }, [isAuthenticated]); // isAuthenticated가 변경될 때만 useEffect 실행
+    }, [])
 
     // 배경 이미지 업데이트 (파일 선택되었을 때)
     useEffect(() => {
@@ -139,34 +141,29 @@ const Mypage = () => {
         }
     }, [selectedProfileFile]);
 
-    useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const section = queryParams.get('section');
-        if (section) {
-            setActiveTab(section === 'workstatus' ? 'Workstatus' : 'Profile');
-        }
-    }, [location.search]);
-
-    if (!isAuthenticated) {
-        return <ProfileInit onAuthenticate={handleAuthentication} />;
-    }
-
-
     const renderComponent = () => {
-        if (activeTab === 'Profile') return <Profile />;
+        if (activeTab === 'Profile') {
+            // Profile 탭을 눌렀을 때, 인증이 되어 있지 않으면 ProfileInit 컴포넌트를 먼저 보여줌
+            if (!isProfileAuthenticated) {
+                return <ProfileInit onAuthenticate={handleProfileAuthentication} />;
+            }
+            return <Profile />;
+        }
         if (activeTab === 'Workstatus') return <Workstatus />;
         if (activeTab === 'Alarm') return <Alarm />;
+        if (activeTab === 'Calendar') return <Calendar />;
     };
 
     return (
         <MypageContainer>
             <section className="profile-content">
                 <div className="profile-header" 
-                    style={{ backgroundImage: `url(${backgroundImage})`,
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'center center',
-                            backgroundSize: 'cover'
-                }}
+                    style={{ 
+                        backgroundImage: `url(${backgroundImage})`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center center',
+                        backgroundSize: 'cover'
+                    }}
                 >
                     <button className="edit-header-btn"
                         onClick={handleOpenBackgroundModal} // 배경 수정 모달 열기
@@ -206,21 +203,12 @@ const Mypage = () => {
                                 </button>
                             </p>
                         </div>
-                        <div className="profile-buttons">
-                            <button className="calendar-btn">Calendar</button>
-                        </div>
                     </div>
                 </div>
 
                 <div className="tabs">
                     <button
-                        className={`tab-links ${activeTab === 'Profile' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('Profile')}
-                    >
-                        Profile
-                    </button>
-                    <button
-                        className={`tab-links ${activeTab === 'Workstatus' ? 'active' : ''}`}
+                        className={`tab-links workstatus ${activeTab === 'Workstatus' ? 'active' : ''}`}
                         onClick={() => setActiveTab('Workstatus')}
                     >
                         Work status
@@ -230,6 +218,18 @@ const Mypage = () => {
                         onClick={() => setActiveTab('Alarm')}
                     >
                         Alarm
+                    </button>
+                    <button
+                        className={`tab-links profile ${activeTab === 'Profile' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('Profile')}
+                    >
+                        Profile
+                    </button>
+                    <button
+                        className={`tab-links calendar ${activeTab === 'Calendar' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('Calendar')}
+                    >
+                        Calendar
                     </button>
                 </div>
 

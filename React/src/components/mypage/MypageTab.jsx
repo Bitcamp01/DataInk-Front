@@ -15,6 +15,9 @@ return (
         <button className={`tab-links alarm ${activeTab === 'Alarm' ? 'active' : ''}`} onClick={() => setActiveTab('Alarm')}>
         Alarm
         </button>
+        <button className={`tab-links ${activeTab === 'Calendar' ? 'active' : ''}`} onClick={() => setActiveTab('Calendar')}>
+        Alarm
+        </button>
     </div>
 
     <div>{renderComponent(activeTab)}</div>
