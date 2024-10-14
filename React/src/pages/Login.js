@@ -121,7 +121,7 @@ const Login = () => {
                     {/* 비밀번호 입력 필드 */}
                     <div className="login__input-field">
                         <img
-                            src="../images/login/login-password-input-hide_icon.svg"
+                            src="../images/login/login-password-input_icon.svg"
                             alt="비밀번호 아이콘"
                             className="login__input-icon"
                         />
@@ -145,7 +145,7 @@ const Login = () => {
                                 src={
                                     showPassword
                                         ? "../images/login/login-password-input-hide_icon.svg"
-                                        : "../images/login/login-password-input-show_icon.svg"
+                                        : "../images/login/login-password-input-on_icon.svg"
                                 }
                                 alt={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
                             />
