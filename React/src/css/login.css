@@ -39,9 +39,10 @@
 
 .login__logo-text {
   margin-left: 0.3125rem;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #000000;
+  margin-bottom: 0.5rem;
 }
 
 /* 환영 메시지 */
@@ -65,13 +66,13 @@
 
 /* 소셜 로그인 */
 .login__social-login {
-  background-color: #dde6f4;
+  background-color: #e3e6e9;
   border-radius: 20px;
-  padding: 0.4rem;
+  padding: 0.1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 70%;
+  width: 90%;
   margin-bottom: 1.5rem;
 }
 
@@ -81,8 +82,7 @@
 }
 
 .login__social-icon {
-  width: 1.5625rem;
-  height: 1.5625rem;
+  width: 2.5625rem;
   object-fit: contain;
 }
 
@@ -101,10 +101,9 @@
 }
 
 .login__divider-text {
-  margin: 0 0.625rem;
-  font-size: 0.75rem;
-  font-weight: 100;
-  color: #625959;
+  margin: 0 0.925rem;
+  font-size: 0.9rem;
+  color: #737373;
 }
 
 /* 입력 필드 */
