@@ -35,11 +35,11 @@ const ItemStructure = () => {
 
         }
     }
-    useEffect(() => {
-        if (itemId !== null) {
-            setData(getItem().data.item);
-        }
-    }, [itemId]);
+    // useEffect(() => {
+    //     if (itemId !== null) {
+    //         setData(getItem().data);
+    //     }
+    // }, [itemId]);
     const calculateDepth = (obj, depth = 1) => {
         if (typeof obj === 'object' && obj !== null) {
             return Math.max(...Object.values(obj).map(value => calculateDepth(value, depth + 1)));
@@ -49,6 +49,7 @@ const ItemStructure = () => {
 
 
     const setColspan = () => {
+
         const maxDepth = Math.max(...Object.keys(data).map(key => calculateDepth(data[key], 1)));
         return maxDepth + 1;
     };
@@ -146,6 +147,7 @@ const ItemStructure = () => {
         ));
     };
     const handleSave = async () => {
+        console.log(data)
         try {
 
             if (itemId !== null) {

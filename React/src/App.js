@@ -26,6 +26,7 @@ import { persistStore } from 'redux-persist';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import PrivateRoute from './components/PrivateRoute';
+import ItemStructure from "./components/adminProjectStructure/ItemStructure";
 
 function App() {
   const persiststore = persistStore(store);
@@ -55,6 +56,7 @@ function App() {
             <Route path="/notice_write" element={<Notice_write />} />
             <Route path="/notice_detail" element={<Notice_detail />} />
             <Route path="/main_grid" element={<MainGrid />} />
+            <Route path="/item_structure/:itemId" element={<ItemStructure />} />
           </Route>
 
           {/* Public Routes */}

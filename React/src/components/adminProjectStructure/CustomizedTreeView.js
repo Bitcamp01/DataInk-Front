@@ -10,6 +10,8 @@ import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import { unstable_useTreeItem2 as useTreeItem2 } from '@mui/x-tree-view/useTreeItem2';
+import { jwtDecode } from 'jwt-decode'; // named import로 수정
+
 import {
   TreeItem2Content,
   TreeItem2IconContainer,
@@ -139,14 +141,16 @@ CustomTreeItem.propTypes = {
   onDoubleClick: PropTypes.func.isRequired,
 };
 
-export default function CustomizedTreeView({ folderData, setSelectedFolder, setFolderData, setFlatFolderData, handleTreeViewMouseEnter,getSelectedFolderData }) {
+export default function CustomizedTreeView({ folderData, setSelectedFolder,setSelectedProject,selectedProject, setFolderData, setFlatFolderData, handleTreeViewMouseEnter,getSelectedFolderData }) {
   const [open, setOpen] = React.useState(false);
   const [newProjectName, setNewProjectName] = React.useState('');
   const [newProjectDec, setNewProjectDec] = React.useState('');
   const [newProjectDueDate, setNewProjectDueDate] = React.useState(''); // 마감일자 상태 추가
 
   const handleFolderDoubleClick = (folder) => {
-    getSelectedFolderData(folder.id)
+    if (folder.parentId === null){
+      setSelectedProject(folder.id);
+    }
     setSelectedFolder(folder.id);
   };
 
@@ -160,29 +164,40 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder, setF
 
   const createNewProject = async (e) => {
     e.preventDefault();
-    const newRootFolder = {
-      // id: new Date().getTime().toString(),
-      label: newProjectName,
+    const sendFolder = {
+      projectId:null,
+      userId:null,
+      name: newProjectName,
       description: newProjectDec,
-      isFolder: true,
-      parentId: null,
-      // lastModifiedBy: 'A',
-      // lastModifiedDate: new Date().toISOString(),
-      itemId: null,
-      dueDate: newProjectDueDate, // 마감일자 추가
+      startDate: null, // LocalDateTime과 호환되도록 수정
+      endDate: `${newProjectDueDate}T00:00:00`, // LocalDateTime에 맞게 수정
+      mongoDataId:null,
+      folders:[]
     };
     try {
-      // 백엔드로 데이터 전송
-      const response = await axios.post('/project/create', newRootFolder,{
+      const response = await axios.post('http://localhost:9090/projects/create', sendFolder,{
         headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+          'Content-Type': 'application/json'
         }
       });
-
-      if (response.status === 200) {
-        // 성공적으로 데이터를 생성하면 로컬 상태 업데이트
-        setFolderData((prevData) => [...prevData, response.data.item]);
-        setFlatFolderData((prevData) => [...prevData, response.data.item]);
+      console.log(response);
+      if (response.status === 201) {
+        // 성공적으로 데이터를 생성하면 로컬 상태 업데이트, 이때 프로젝트 정보로 프로젝트 루트 폴더를 하나 생성함
+        const newFolder={
+          id:response.data.projectId,
+          label:response.data.name,
+          children:[],
+          itemId:null,
+          lastModifiedUserId:response.data.userId,
+          lastModifiedDate:response.data.startDate,
+          isFolder:true,
+          parentId:null,
+          finished:false,
+          workStatus:"",
+          projectId:response.data.projectId
+        }
+        setFlatFolderData((prevData) => [...prevData, newFolder]);
         setOpen(false); // 모달 닫기
       } else {
         console.error('프로젝트 생성 실패: ', response.status);

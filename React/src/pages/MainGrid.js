@@ -21,33 +21,40 @@ export function flattenTree(treeData, parentId = null) {
       lastModifiedUserId: item.lastModifiedUserId, // 추가된 필드
       lastModifiedDate: item.lastModifiedDate,
       finished: item.finished, // 추가된 필드
+      workStatus: item.workStatus,
+      projectId:item.projectId,
+      mergeId: `${item.id}_${item.projectId}` // 오직 클라이언트에서만 사용하는 id,백 단으로 절대로 넘어가면 안됨
     });
     if (item.children && item.children.length > 0) {
       flatData = flatData.concat(flattenTree(item.children, item.id));
     }
+
   });
 
   return flatData;
 }
 
-// Flat 데이터를 트리 구조로 변환하는 함수
 export function unflatten(flatData) {
   let tree = [];
   let lookup = {};
 
+  // id와 rootId를 결합하여 고유한 키를 생성
   flatData.forEach(item => {
-    lookup[item.id] = {
+    const key = item.mergeId;
+    lookup[key] = {
       ...item,
       children: []  // 트리 구조로 변환할 때 자식 노드를 위한 배열 추가
     };
   });
 
   flatData.forEach(item => {
+    const key = item.mergeId;
     if (item.parentId === null) {
-      tree.push(lookup[item.id]);
+      tree.push(lookup[key]);
     } else {
-      if (lookup[item.parentId]) {
-        lookup[item.parentId].children.push(lookup[item.id]);
+      const parentKey = `${item.parentId}_${item.projectId}`;
+      if (lookup[parentKey]) {
+        lookup[parentKey].children.push(lookup[key]);
       }
     }
   });
@@ -62,19 +69,22 @@ export default function MainGrid() {
         
   ];
   const [folderData, setFolderData] = React.useState([]); //트리뷰에서 사용할 전체 폴더 구조 데이터
+
+  const [selectedProject, setSelectedProject] = React.useState(null); // 어떤 프로젝트를 선택하는지
   const [selectedFolder, setSelectedFolder] = React.useState(null); // 현재 선택된 폴더, 트리뷰와 데이터 그리드의 선택 된 폴더 동기화에 이용,선택한 폴더,파일의 id를 가지고 있음
+
   const [flatFolderData,setFlatFolderData] = React.useState([]);// folderData를 대신해 전체 구조를 표현하고 관리할 부분
   const [shouldUpdateTree, setShouldUpdateTree] = React.useState(false); // 트리 갱신 필요 여부
   //초기화면 구성시 서버로부터 프로젝트 구조 가져오기, 백엔드 구현시 요청하는 코드로 변경 필요
   const getInitFolderData= async () =>{
     try {
-      const response=await axios.get("http://localhost:9090/project",{
+      const response=await axios.get("http://localhost:9090/projects",{
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
       })
       if (response.status === 200){
-        setFolderData(response.data.items);
+        setFolderData(response.data);
       }
     }
     catch(err){
@@ -105,21 +115,29 @@ export default function MainGrid() {
 
 
 
-  const getSelectedFolderData = async (selectFolder) => {
+  const getSelectedFolderData = async () => {
     try {
-      const response = await axios.get(`http://localhost:9090/project/${selectFolder}`, {
+      const response = await axios.get(`http://localhost:9090/projects`, {
+        params:{
+          selectedFolder: selectedFolder,
+          selectedProject: selectedProject
+        }
+        ,
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
         }
       });
       if (response.status === 200) {
         // 서버로부터 받아온 데이터가 response.data.items라고 가정하고 업데이트합니다.
-        updateFlatFolderData(response.data.items);
+        updateFlatFolderData(response.data);
       }
     } catch (err) {
       console.error("Error fetching selected folder data:", err);
     }
   };
+  React.useEffect(()=>{
+    getSelectedFolderData();
+  },[selectedFolder,selectedProject])
   React.useEffect(()=>{
     getInitFolderData();
   },[])
@@ -131,7 +149,6 @@ export default function MainGrid() {
     setShouldUpdateTree(true);
   },[flatFolderData])
   const handleTreeViewMouseEnter = () => {
-    console.log("asdasd")
     if (shouldUpdateTree) {
       const newTreeData = unflatten(flatFolderData);
       setFolderData(newTreeData);
@@ -143,20 +160,18 @@ export default function MainGrid() {
         <Grid container spacing={2} columns={12} sx={{ flexGrow: 1 }}>
           <Grid size={{ xs: 12, lg: 3 }} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
             <Stack gap={2} direction={{ xs: 'column', sm: 'row', lg: 'column' }}>
-            {/* folderData는 전체 폴더 구조를 출력해야하는 트리뷰 입장에서 필요,setFlattenFolderData는 새로운 프로젝트 추가시 폴더 구조의 변경이 일어나는데 평탄화된
-            폴더구조와 트리구조로 된 폴더 구조를 일치시키기 위해 사용, folderSelect는 선택한 폴더를 알아야 해당 부분의 정보를 datagrid와 공유 가능,
-            setfolderData는 새로운 폴더 추가시 변경되는 폴더 구조 적용을 위해 사용  */}
             <CustomizedTreeView getSelectedFolderData={getSelectedFolderData}
                                 handleTreeViewMouseEnter={handleTreeViewMouseEnter}
                                 folderData={folderData}
                                 setSelectedFolder={setSelectedFolder}
                                 setFolderData={setFolderData}
-                                setFlatFolderData={setFlatFolderData}/>
+                                setFlatFolderData={setFlatFolderData}
+                                setSelectedProject={setSelectedProject}
+                                selectedProject={selectedProject}/>
 
           </Stack>
         </Grid>
           <Grid size={{ md: 12, lg: 9 }} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          {/* 메인 그리드가 초기에 받아와 관리하는 전체 구조, 트리뷰와 데이터 그리드의 동기화에 사용될 선택된 폴더,폴더 , 폴더 데이터 변경에 사용할 set함수  */}
           <CustomizedDataGrid getSelectedFolderData={getSelectedFolderData}
                               folderData={folderData}
                               setFolderData={setFolderData}
@@ -164,7 +179,9 @@ export default function MainGrid() {
                               setSelectedFolder={setSelectedFolder}
                               flatFolderData={flatFolderData}
                               setFlatFolderData={setFlatFolderData}
-                              setShouldUpdateTree={setShouldUpdateTree}/>
+                              setShouldUpdateTree={setShouldUpdateTree}
+                              setSelectedProject={setSelectedProject}
+                              selectedProject={selectedProject}/>
         </Grid>
       </Grid>
     </Box>

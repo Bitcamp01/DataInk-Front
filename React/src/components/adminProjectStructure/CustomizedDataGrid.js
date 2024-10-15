@@ -37,7 +37,7 @@ const columns = [
    }
 ];
 // 메인 컴포넌트
-export default function CustomizedDataGrid({getSelectedFolderData,folderData,selectedFolder = null,setSelectedFolder,flatFolderData,setFlatFolderData,setShouldUpdateTree}) {
+export default function CustomizedDataGrid({getSelectedFolderData,folderData,setSelectedProject,selectedProject,selectedFolder = null,setSelectedFolder,flatFolderData,setFlatFolderData,setShouldUpdateTree}) {
   const apiRef = useGridApiRef();
   // 현재 선택된 폴더의 정보를 가지게 될 상태
   const [rows, setRows] = useState([]);
@@ -292,7 +292,9 @@ const handlePaste = () => {
   const handleRowDoubleClick=(params)=>{
     const row = params.row;
     if (row.isFolder) {
-      getSelectedFolderData(params.id);
+      if (row.parentId === null){
+        setSelectedProject(params.id);
+      }
       setSelectedFolder(params.id);
     } else {
       // 파일인 경우: 사이드 패널에 표시
@@ -371,26 +373,30 @@ const handlePaste = () => {
       if (selectedFolder === null){
         select=0
       }
-      const response=await axios.post("http://localhost:9090/project/create-folder",select,{
+      const response=await axios.post("http://localhost:9090/project/create-folder",
+          {
+            selectedFolder: selectedFolder,
+            selectedProject: selectedProject
+          },{
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
         }
       });
-      if (response.status === 200){
+      if (response.status === 201){
         // rows 상태 업데이트, flatdata가 비동기 업데이트기 때문에 우선 포커스 용으로 row상태 업데이트
-        setRows([...rows, response.data.item]);
-        setFlatFolderData([...flatFolderData,response.data.item]);
+        setRows([...rows, response.data]);
+        setFlatFolderData([...flatFolderData,response.data]);
         // 체크박스 선택 상태 초기화
-        setRowSelectionModel([response.data.item.id]); // 새로 생성한 폴더 선택
+        setRowSelectionModel([response.data.id]); // 새로 생성한 폴더 선택
 
         // 새 폴더 행을 편집 모드로 설정
         setRowModesModel((prevModel) => ({
           ...prevModel,
-          [response.data.item.id]: { mode: GridRowModes.Edit }, // 편집 모드로 전환
+          [response.data.id]: { mode: GridRowModes.Edit }, // 편집 모드로 전환
         }));
 
 
-        apiRef.current.setCellFocus(response.data.item.id, 'label');
+        apiRef.current.setCellFocus(response.data.id, 'label');
       }
     }
     catch(error){
