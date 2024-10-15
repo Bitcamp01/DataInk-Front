@@ -183,7 +183,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
       });
       console.log(response);
       if (response.status === 201) {
-        // 성공적으로 데이터를 생성하면 로컬 상태 업데이트, 이때 프로젝트 정보로 프로젝트 루트 폴더를 하나 생성함
+        // 성공적으로 데이터를 생성하면 로컬 상태 업데이트, 이때 프로젝트 정보로 프로젝트 루트 폴더를 하나 생성함, 이 폴더는 프론트 폴더 구조를 따름
         const newFolder={
           id:response.data.projectId,
           label:response.data.name,
@@ -195,7 +195,8 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
           parentId:null,
           finished:false,
           workStatus:"",
-          projectId:response.data.projectId
+          projectId:response.data.projectId,
+          mergeId:`${response.data.projectId}_${response.data.projectId}`
         }
         setFlatFolderData((prevData) => [...prevData, newFolder]);
         setOpen(false); // 모달 닫기

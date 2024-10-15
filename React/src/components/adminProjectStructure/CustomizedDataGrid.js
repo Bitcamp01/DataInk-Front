@@ -55,29 +55,29 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
 
  
   // flatFolderData를 Map 형태로 관리하여 탐색 성능 향상
-  const [flatFolderMap, setFlatFolderMap] = useState(new Map(flatFolderData.map(item => [item.id, item])));
+  const [flatFolderMap, setFlatFolderMap] = useState(new Map(flatFolderData.map(item => [item.mergeId, item])));
 
   //데이터 그리드 영역 업데이트 부분
   useEffect(()=>{
-    setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder));
-  },[selectedFolder,flatFolderMap])
+    setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder && item.projectId === selectedProject));
+  },[selectedFolder,selectedProject,flatFolderMap])
 
   // flatFolderData가 변경될 때 Map으로 업데이트
   useEffect(() => {
-    setFlatFolderMap(new Map(flatFolderData.map(item => [item.id, item])));
+    setFlatFolderMap(new Map(flatFolderData.map(item => [item.mergeId, item])));
     setShouldUpdateTree(true);
   }, [flatFolderData]);
   ///////////////////////////////////////////////////////////////////////////////////
   const [conversionList, setConversionList] = useState([]); // 변환 목록
   const [isConversionModalOpen, setIsConversionModalOpen] = useState(false);
   const handleAddToConversion = () => {
-    const selectedItems = rowSelectionModel.map((id) =>
-      flatFolderData.find((item) => item.id === id)
-    );
-  
+    // 불필요한 find를 사용하지 않고 바로 rowSelectionModel을 이용할 수 있음, id는 mergeId를 사용하게 됨
+    const selectedItems = rowSelectionModel.map((id) => flatFolderMap.get(id));
+
+
     // 변환 목록에 이미 존재하는 항목은 추가하지 않음
     const newItems = selectedItems.filter(
-      (item) => !conversionList.some((existingItem) => existingItem.id === item.id)
+      (item) => !conversionList.some((existingItem) => existingItem.mergeId === item.mergeId)
     );
   
     if (newItems.length > 0) {
@@ -96,7 +96,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
     setIsConversionModalOpen(false);
   };
   const handleRemoveFromConversionList = (itemId) => {
-    setConversionList((prevList) => prevList.filter((item) => item.id !== itemId));
+    setConversionList((prevList) => prevList.filter((item) => item.mergeId !== itemId));
   };
   ///////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////
@@ -292,16 +292,20 @@ const handlePaste = () => {
   const handleRowDoubleClick=(params)=>{
     const row = params.row;
     if (row.isFolder) {
-      if (row.parentId === null){
-        setSelectedProject(params.id);
-      }
-      setSelectedFolder(params.id);
+      setSelectedProject(row.projectId);
+      setSelectedFolder(row.id);
     } else {
       // 파일인 경우: 사이드 패널에 표시
 
     }
   }
-  
+  //////
+  //////////////////////////////////////////////////////
+  //////
+  //////
+  //////
+  //////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////
   const [rowModesModel, setRowModesModel] = React.useState({});
 
   const handleRowEditStop = (params, event) => {
@@ -509,7 +513,7 @@ const handlePaste = () => {
             checkboxSelection
             disableDoubleClickEdit={true}
             rows={rows}
-            getRowId={(row) => row.id}
+            getRowId={(row) => row.mergeId}
             columns={columns}
             editMode='row'
             onCellDoubleClick={(params, event) => {

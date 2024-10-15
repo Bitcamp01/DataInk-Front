@@ -23,7 +23,8 @@ export function flattenTree(treeData, parentId = null) {
       finished: item.finished, // 추가된 필드
       workStatus: item.workStatus,
       projectId:item.projectId,
-      mergeId: `${item.id}_${item.projectId}` // 오직 클라이언트에서만 사용하는 id,백 단으로 절대로 넘어가면 안됨
+      mergeId: `${item.id}_${item.projectId}` // 오직 클라이언트에서만 사용하는 id,백 단으로 절대로 넘어가면 안됨, 프론트 단에서 데이터 구분은 mergeId로 이루어지게 함
+      //따라서 모든 데이터는 flatData로만 변경이 이루어져야 함
     });
     if (item.children && item.children.length > 0) {
       flatData = flatData.concat(flattenTree(item.children, item.id));
@@ -135,13 +136,14 @@ export default function MainGrid() {
       console.error("Error fetching selected folder data:", err);
     }
   };
+  //초기화//////////////////////
   React.useEffect(()=>{
     getSelectedFolderData();
   },[selectedFolder,selectedProject])
   React.useEffect(()=>{
     getInitFolderData();
   },[])
-
+  //초기화//////////////////////
   React.useEffect(()=>{
     setFlatFolderData(flattenTree(initialFolderData))
   },[])
