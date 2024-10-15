@@ -339,7 +339,7 @@ const handlePaste = () => {
         // flatFolderData 상태 업데이트
         setFlatFolderData((prevFlatData) =>
             prevFlatData.map((item) =>
-                item.id === updatedRow.id ? { ...item, ...updatedDataFromBackend } : item
+                item.id === updatedRow.id ? { ...item, ...response.data.item } : item
             )
         );
 
