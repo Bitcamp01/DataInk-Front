@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -27,7 +26,7 @@ const CalendarToolbar = styled.div`
         padding: 8px 12px !important;
         margin: 0 5px !important;
         font-size: 14px !important;
-        cursor: pointer;
+        cursor: pointer;y
         transition: background-color 0.3s ease !important;
     }
 

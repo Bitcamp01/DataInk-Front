@@ -1,27 +1,31 @@
-// src/components/Join.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux'; // 추가
+import { telCheck } from '../apis/userApis'; // 추가
 import '../css/join.css';
 
 const Join = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch(); // 추가
 
     // 상태 관리
-    const [username, setUsername] = useState('');
-    const [name, setname] = useState('');
-    const [email, setEmail] = useState('');
-    const [birthdate, setBirthdate] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [carrier, setCarrier] = useState('');
-    const [phone, setPhone] = useState('');
+    const [user_id, setUserId] = useState(''); // 아이디
+    const [name, setname] = useState(''); // 실명
+    const [email, setEmail] = useState(''); // 이메일
+    const [birth, setBirthdate] = useState(''); // 생년월일
+    const [password, setPassword] = useState(''); // 비밀번호
+    const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인
+    const [carrier, setCarrier] = useState(''); // 통신사
+    const [tel, setTel] = useState(''); // 전화번호
+    const [authen, setAuthen] = useState('ROLE_USER'); // 회원 권한
 
     // 유효성 검사 상태
-    const [usernameValid, setUsernameValid] = useState({
+    const [userIdValid, setUserIdValid] = useState({
         lettersAndNumbersOnly: false,
         minLength: false,
         hasNumber: false,
+        isAvailable: null, // 아이디 중복 체크 결과
     });
 
     const [nameValid, setnameValid] = useState({
@@ -44,6 +48,10 @@ const Join = () => {
         matches: false,
     });
 
+    const [authenValid, setAuthenValid] = useState({
+        selected: false,
+    });
+
     // 포커스 상태 관리
     const [focusedField, setFocusedField] = useState('');
 
@@ -51,11 +59,25 @@ const Join = () => {
     const [message, setMessage] = useState('');
 
     // 유효성 검사 함수
-    const validateUsername = (value) => {
+    const validateUserId = async (value) => {
         const lettersAndNumbersOnly = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/.test(value);
         const minLength = value.length >= 6;
         const hasNumber = /\d/.test(value);
-        setUsernameValid({ lettersAndNumbersOnly, minLength, hasNumber });
+
+        if (lettersAndNumbersOnly && minLength && hasNumber) {
+            // 아이디 중복 체크 API 호출
+            try {
+                const response = await dispatch(telCheck(tel)).unwrap();
+                // 주의: 이 부분은 전화번호 중복 체크 로직과 혼동되지 않도록 수정 필요
+            } catch (error) {
+                setUserIdValid((prev) => ({
+                    ...prev,
+                    isAvailable: false,
+                }));
+            }
+        } else {
+            setUserIdValid({ lettersAndNumbersOnly, minLength, hasNumber, isAvailable: null });
+        }
     };
 
     const validatename = (value) => { 
@@ -82,10 +104,15 @@ const Join = () => {
         setConfirmPasswordValid({ matches });
     };
 
+    const validateAuthen = (value) => {
+        const selected = value !== '';
+        setAuthenValid({ selected });
+    };
+
     // useEffect를 사용하여 실시간으로 유효성 검사
     useEffect(() => {
-        validateUsername(username);
-    }, [username]);
+        validateUserId(user_id);
+    }, [user_id]);
 
     useEffect(() => {
         validatename(name);
@@ -100,26 +127,60 @@ const Join = () => {
         validateConfirmPassword(confirmPassword);
     }, [password, confirmPassword]);
 
+    useEffect(() => {
+        validateAuthen(authen);
+    }, [authen]);
+
+    // 전화번호 중복 체크 useEffect
+    useEffect(() => {
+        const checkTel = async () => {
+            if (tel) {
+                try {
+                    const response = await dispatch(telCheck(tel)).unwrap();
+                    if (response.telCheckMsg === 'invalid tel') {
+                        setUserIdValid((prev) => ({
+                            ...prev,
+                            isAvailable: false,
+                        }));
+                    } else {
+                        setUserIdValid((prev) => ({
+                            ...prev,
+                            isAvailable: true,
+                        }));
+                    }
+                } catch (error) {
+                    console.error('전화번호 중복 확인 에러:', error);
+                    setMessage('전화번호 중복 확인 중 오류가 발생했습니다.');
+                }
+            }
+        };
+
+        checkTel();
+    }, [tel, dispatch]);
+
     // 필드 유효성 검사
-    const isUsernameValid = Object.values(usernameValid).every(Boolean);
+    const isUserIdValid = Object.values(userIdValid).every(Boolean);
     const isnameValid = Object.values(nameValid).every(Boolean);
     const isEmailValidField = Object.values(emailValid).every(Boolean);
     const isPasswordValidField = Object.values(passwordValid).every(Boolean);
     const isConfirmPasswordValidField = Object.values(confirmPasswordValid).every(Boolean);
     const isCarrierValid = carrier !== '';
-    const isPhoneValid = /^\d{11}$/.test(phone);
-    const isBirthdateValid = birthdate !== "";
+    const isTelValid = /^\d{11}$/.test(tel);
+    const isBirthdateValid = birth !== "";
+    const isAuthenValidField = Object.values(authenValid).every(Boolean);
 
     // 전체 폼 유효성 검사
     const isFormValid =
-        isUsernameValid &&
+        isUserIdValid &&
         isnameValid &&
         isEmailValidField &&
         isPasswordValidField &&
         isConfirmPasswordValidField &&
         isCarrierValid &&
-        isPhoneValid &&
-        isBirthdateValid;
+        isTelValid &&
+        isBirthdateValid &&
+        isAuthenValidField &&
+        userIdValid.isAvailable !== false; // 전화번호가 사용 가능해야 함
 
     // 폼 제출 핸들러
     const handleSubmit = async (e) => {
@@ -128,17 +189,19 @@ const Join = () => {
             try {
                 // 요청 페이로드 준비
                 const payload = {
-                    id: username,
+                    id: user_id,
                     name: name,
                     email: email,
-                    birthdate: birthdate,
+                    birth: birth,
                     password: password,
                     carrier: carrier,
-                    phone: phone,
+                    tel: tel,
+                    authen: authen,
+                    dep: ""
                 };
 
                 // 백엔드 API 엔드포인트에 POST 요청
-                const response = await axios.post('/users/join', payload);
+                const response = await axios.post('http://localhost:9090/users/join', payload);
 
                 if (response.status === 201) {
                     setMessage('회원가입이 완료되었습니다!');
@@ -193,25 +256,26 @@ const Join = () => {
                 {/* 회원가입 폼 */}
                 <form className="join__form" onSubmit={handleSubmit}>
                     {/* 아이디 필드 */}
-                    <div className={`join__form-group ${focusedField === 'username' ? 'active' : ''}`}>
-                        <label htmlFor="username">
+                    <div className={`join__form-group ${focusedField === 'user_id' ? 'active' : ''}`}>
+                        <label htmlFor="user_id">
                             <span className="join__required">*</span>아이디
                         </label>
                         <div className="join__input-wrapper">
                             <input
                                 type="text"
-                                id="username"
-                                name="username"
+                                id="user_id"
+                                name="user_id"
                                 placeholder="아이디를 입력하세요"
                                 aria-label="아이디 입력"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                onFocus={() => setFocusedField('username')}
+                                autoComplete="off"
+                                value={user_id}
+                                onChange={(e) => setUserId(e.target.value)}
+                                onFocus={() => setFocusedField('user_id')}
                                 onBlur={() => setFocusedField('')}
-                                className={isUsernameValid ? 'valid' : ''}
+                                className={isUserIdValid ? 'valid' : ''}
                                 required
                             />
-                            {isUsernameValid && (
+                            {isUserIdValid && (
                                 <img
                                     src="../images/join/join-check_icon.svg"
                                     alt="체크 아이콘"
@@ -222,21 +286,24 @@ const Join = () => {
                     </div>
 
                     {/* 부가 설명 메시지 - 아이디 */}
-                    <div className={`join__validation-messages ${focusedField === 'username' && !isUsernameValid ? 'visible' : ''}`}>
-                        <p className={usernameValid.lettersAndNumbersOnly ? 'valid' : 'invalid'}>
+                    <div className={`join__validation-messages ${focusedField === 'user_id' && (!isUserIdValid || userIdValid.isAvailable === false) ? 'visible' : ''}`}>
+                        <p className={userIdValid.lettersAndNumbersOnly ? 'valid' : 'invalid'}>
                             영문자와 숫자의 조합만 사용 가능합니다.
                         </p>
-                        <p className={usernameValid.minLength ? 'valid' : 'invalid'}>
+                        <p className={userIdValid.minLength ? 'valid' : 'invalid'}>
                             6글자 이상이어야 합니다.
                         </p>
-                        <p className={usernameValid.hasNumber ? 'valid' : 'invalid'}>
+                        <p className={userIdValid.hasNumber ? 'valid' : 'invalid'}>
                             숫자를 하나 이상 조합해주세요.
                         </p>
+                        {userIdValid.isAvailable === false && (
+                            <p style={{ color: 'red', fontWeight: 'bold' }}>이미 사용 중인 아이디입니다.</p>
+                        )}
                     </div>
 
                     {/* 실명 필드 */}
                     <div className={`join__form-group ${focusedField === 'name' ? 'active' : ''}`}>
-                        <label htmlFor="ame">
+                        <label htmlFor="name">
                             <span className="join__required">*</span>이름
                         </label>
                         <div className="join__input-wrapper">
@@ -310,19 +377,19 @@ const Join = () => {
                     </div>
 
                     {/* 생년월일 필드 */}
-                    <div className={`join__form-group ${focusedField === 'birthdate' ? 'active' : ''}`}>
-                        <label htmlFor="birthdate">
+                    <div className={`join__form-group ${focusedField === 'birth' ? 'active' : ''}`}>
+                        <label htmlFor="birth">
                             <span className="join__required">*</span>생년월일
                         </label>
                         <div className="join__input-wrapper join__date-input">
                             <input
                                 type="date"
-                                id="birthdate"
-                                name="birthdate"
+                                id="birth"
+                                name="birth"
                                 aria-label="생년월일 입력"
-                                value={birthdate}
+                                value={birth}
                                 onChange={(e) => setBirthdate(e.target.value)}
-                                onFocus={() => setFocusedField('birthdate')}
+                                onFocus={() => setFocusedField('birth')}
                                 onBlur={() => setFocusedField('')}
                                 className={isBirthdateValid ? 'valid' : ''}
                                 required
@@ -338,7 +405,7 @@ const Join = () => {
                     </div>
 
                     {/* 부가 설명 메시지 - 생년월일 */}
-                    <div className={`join__validation-messages ${focusedField === 'birthdate' && !isBirthdateValid ? 'visible' : ''}`}>
+                    <div className={`join__validation-messages ${focusedField === 'birth' && !isBirthdateValid ? 'visible' : ''}`}>
                         <p className={isBirthdateValid ? 'valid' : 'invalid'}>
                             생년월일을 선택해주세요.
                         </p>
@@ -356,6 +423,7 @@ const Join = () => {
                                 name="password"
                                 placeholder="비밀번호를 입력하세요"
                                 aria-label="비밀번호 입력"
+                                autoComplete="new-password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 onFocus={() => setFocusedField('password')}
@@ -468,25 +536,25 @@ const Join = () => {
                     </div>
 
                     {/* 전화번호 필드 */}
-                    <div className={`join__form-group ${focusedField === 'phone' ? 'active' : ''}`}>
-                        <label htmlFor="phone">
+                    <div className={`join__form-group ${focusedField === 'tel' ? 'active' : ''}`}>
+                        <label htmlFor="tel">
                             <span className="join__required">*</span>전화번호
                         </label>
                         <div className="join__input-wrapper">
                             <input
                                 type="tel"
-                                id="phone"
-                                name="phone"
+                                id="tel"
+                                name="tel"
                                 placeholder="전화번호를 입력하세요"
                                 aria-label="전화번호 입력"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                onFocus={() => setFocusedField('phone')}
+                                value={tel}
+                                onChange={(e) => setTel(e.target.value)}
+                                onFocus={() => setFocusedField('tel')}
                                 onBlur={() => setFocusedField('')}
-                                className={isPhoneValid ? 'valid' : ''}
+                                className={isTelValid ? 'valid' : ''}
                                 required
                             />
-                            {isPhoneValid && (
+                            {isTelValid && (
                                 <img
                                     src="../images/join/join-check_icon.svg"
                                     alt="체크 아이콘"
@@ -497,9 +565,50 @@ const Join = () => {
                     </div>
 
                     {/* 부가 설명 메시지 - 전화번호 */}
-                    <div className={`join__validation-messages ${focusedField === 'phone' && !isPhoneValid ? 'visible' : ''}`}>
-                        <p className={isPhoneValid ? 'valid' : 'invalid'}>
+                    <div className={`join__validation-messages ${focusedField === 'tel' && !isTelValid ? 'visible' : ''}`}>
+                        <p className={isTelValid ? 'valid' : 'invalid'}>
                             올바른 양식으로 입력해주세요 (총 11자 짜리 숫자).
+                        </p>
+                        {userIdValid.isAvailable === false && (
+                            <p style={{ color: 'red', fontWeight: 'bold' }}>이미 사용 중인 전화번호입니다.</p>
+                        )}
+                    </div>
+
+                    {/* 회원 권한 선택 */}
+                    <div className={`join__form-group ${focusedField === 'authen' ? 'active' : ''}`}>
+                        <label htmlFor="authen">
+                            <span className="join__required">*</span>회원 상태
+                        </label>
+                        <div className="join__input-wrapper">
+                            <select
+                                id="authen"
+                                name="authen"
+                                aria-label="회원 상태 선택"
+                                value={authen}
+                                onChange={(e) => setAuthen(e.target.value)}
+                                onFocus={() => setFocusedField('authen')}
+                                onBlur={() => setFocusedField('')}
+                                className={isAuthenValidField ? 'valid' : ''}
+                                required
+                            >
+                                <option value="">회원 상태를 선택해주세요</option>
+                                <option value="ROLE_ADMIN">관리자</option>
+                                <option value="ROLE_USER">라벨러</option>
+                            </select>
+                            {isAuthenValidField && (
+                                <img
+                                    src="../images/join/join-check_icon.svg"
+                                    alt="체크 아이콘"
+                                    className="join__input-icon visible"
+                                />
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 부가 설명 메시지 - 회원 상태 */}
+                    <div className={`join__validation-messages ${focusedField === 'authen' && !isAuthenValidField ? 'visible' : ''}`}>
+                        <p className={authenValid.selected ? 'valid' : 'invalid'}>
+                            회원 상태를 선택해주세요.
                         </p>
                     </div>
 
@@ -516,7 +625,6 @@ const Join = () => {
             </div>
         </div>
     );
-
 };
 
 export default Join;
