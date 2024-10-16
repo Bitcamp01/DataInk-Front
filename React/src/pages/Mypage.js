@@ -10,27 +10,83 @@ import StatusEditModal from '../components/mypage/StatusEditModal';
 import BackgroundImgModal from '../components/mypage/BackgroundImgModal';
 import ProfileImgModal from '../components/mypage/ProfileImgModal';
 import '../css/profile.css';
+import { useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { passwordChk } from '../apis/mypageApis';
+import { resetProfileAuth } from '../slices/mypageSlice';
 
 const MypageContainer = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
 `;
 
 const Mypage = () => {
-    const [user, setUser] = useState({ name: '', role: '' }); // 유저 정보 상태
-    const [isProfileAuthenticated, setIsProfileAuthenticated] = useState(false); // 프로필 탭에 대한 인증 상태 추가
+    const dispatch = useDispatch();
+    const { isProfileAuthenticated } = useSelector(state => state.mypageSlice);
+    const { name = '', id = '', email = '', tel = '', birth = '', authen = '' } = useSelector(state => state.userSlice);
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
-    const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false); // 배경 이미지 모달 상태
-    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false); // 프로필 이미지 모달 상태
+    const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [status, setStatus] = useState("소개 글을 입력해 주세요.");
     const [activeTab, setActiveTab] = useState('Workstatus');
     const [profileImage, setProfileImage] = useState('/images/dataInk_logo_sqr.png');
     const [backgroundImage, setBackgroundImage] = useState('/images/dataInk_background_default.jpg');
     const [selectedBackgroundFile, setSelectedBackgroundFile] = useState(null);
-    const [selectedProfileFile, setSelectedProfileFile] = useState(null); // 프로필 파일 상태
+    const [selectedProfileFile, setSelectedProfileFile] = useState(null);
+    
 
-    const handleProfileAuthentication = () => {
-        setIsProfileAuthenticated(true); // 프로필 탭 인증 성공 시 호출
+    const location = useLocation();
+
+    const handleProfileAuthentication = async (password) => {
+        await dispatch(passwordChk(password));
     };
+
+    useEffect(() => {
+        // Query parameters를 사용하여 activeTab 설정
+        const queryParams = new URLSearchParams(location.search);
+        const section = queryParams.get('section');
+
+        if (section && ['Alarm', 'Profile', 'Calendar'].includes(section)) {
+            setActiveTab(section);
+        }
+    }, [location.search]);
+
+    useEffect(() => {
+        // Reset profile authentication every time Profile tab is clicked
+        if (activeTab === 'Profile') {
+            dispatch(resetProfileAuth());
+        }
+    }, [activeTab]);
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await axios.get('/api/user');
+                const userData = response.data.user;
+                setStatus(userData?.status || "소개 글을 입력해 주세요.");
+                setProfileImage(userData?.profileImage || '/images/dataInk_logo_sqr.png');
+                setBackgroundImage(userData?.backgroundImage || '/images/dataInk_background_default.jpg');
+            } catch (error) {
+                console.error('Error fetching user info:', error);
+            }
+        };
+        fetchUserInfo();
+    }, []);
+
+    useEffect(() => {
+        // 배경 이미지 업데이트 (파일 선택되었을 때)
+        if (selectedBackgroundFile) {
+            const imageUrl = URL.createObjectURL(selectedBackgroundFile);
+            setBackgroundImage(imageUrl);
+        }
+    }, [selectedBackgroundFile]);
+
+    useEffect(() => {
+        // 프로필 이미지 업데이트 (파일 선택되었을 때)
+        if (selectedProfileFile) {
+            const imageUrl = URL.createObjectURL(selectedProfileFile);
+            setProfileImage(imageUrl);
+        }
+    }, [selectedProfileFile]);
 
     const handleOpenStatusModal = () => {
         setStatusModalOpen(true);
@@ -52,17 +108,14 @@ const Mypage = () => {
         }
     };
 
-    // 배경 수정 모달 열기
     const handleOpenBackgroundModal = () => {
         setIsBackgroundModalOpen(true);
     };
 
-    // 배경 수정 모달 닫기
     const handleCloseBackgroundModal = () => {
         setIsBackgroundModalOpen(false);
     };
 
-    // 배경 이미지 저장
     const handleSaveBackground = (file) => {
         if (file) {
             setSelectedBackgroundFile(file);
@@ -70,24 +123,20 @@ const Mypage = () => {
         setIsBackgroundModalOpen(false);
     };
 
-    // 기본 이미지로 설정
     const handleSetDefaultBackground = () => {
         setBackgroundImage('/images/dataInk_background_default.jpg');
         setSelectedBackgroundFile(null);
         setIsBackgroundModalOpen(false);
     };
 
-    // 프로필 수정 모달 열기
     const handleOpenProfileModal = () => {
         setIsProfileModalOpen(true);
     };
 
-    // 프로필 수정 모달 닫기
     const handleCloseProfileModal = () => {
         setIsProfileModalOpen(false);
     };
 
-    // 프로필 이미지 저장
     const handleSaveProfile = (file) => {
         if (file) {
             setSelectedProfileFile(file);
@@ -95,52 +144,18 @@ const Mypage = () => {
         setIsProfileModalOpen(false);
     };
 
-    // 기본 이미지로 설정
     const handleSetDefaultProfile = () => {
         setProfileImage('/images/dataInk_logo_sqr.png');
         setSelectedProfileFile(null);
         setIsProfileModalOpen(false);
     };
 
-    useEffect(() => {
-            const fetchUserInfo = async () => {
-                try {
-                    const response = await axios.get('/api/user');
-                    const userData = response.data.user;
-                    setUser({
-                        name: userData.name,
-                        role: userData.role,
-                    });
-                } catch (error) {
-                    console.error('Error fetching user info:', error);
-                }
-            };
-            fetchUserInfo();
-    }, [])
-
-    // 배경 이미지 업데이트 (파일 선택되었을 때)
-    useEffect(() => {
-        if (selectedBackgroundFile) {
-            const imageUrl = URL.createObjectURL(selectedBackgroundFile);
-            setBackgroundImage(imageUrl);
-        }
-    }, [selectedBackgroundFile]);
-
-    // 프로필 이미지 업데이트 (파일 선택되었을 때)
-    useEffect(() => {
-        if (selectedProfileFile) {
-            const imageUrl = URL.createObjectURL(selectedProfileFile);
-            setProfileImage(imageUrl);
-        }
-    }, [selectedProfileFile]);
-
     const renderComponent = () => {
         if (activeTab === 'Profile') {
-            // Profile 탭을 눌렀을 때, 인증이 되어 있지 않으면 ProfileInit 컴포넌트를 먼저 보여줌
             if (!isProfileAuthenticated) {
-                return <ProfileInit onAuthenticate={handleProfileAuthentication} />;
+                return <ProfileInit onAuthenticate={(password) => { handleProfileAuthentication(password); }} />;
             }
-            return <Profile />;
+            return <Profile userDetails={{ name, id, email, tel, birth }} />;
         }
         if (activeTab === 'Workstatus') return <Workstatus />;
         if (activeTab === 'Alarm') return <Alarm />;
@@ -159,7 +174,7 @@ const Mypage = () => {
                     }}
                 >
                     <button className="edit-header-btn"
-                        onClick={handleOpenBackgroundModal} // 배경 수정 모달 열기
+                        onClick={handleOpenBackgroundModal}
                     >
                         배경 수정
                     </button>
@@ -176,7 +191,7 @@ const Mypage = () => {
                             className="profile-info__editicon" 
                             src="/icons/profile_image.svg"
                             alt="Edit Profile Icon" 
-                            onClick={handleOpenProfileModal} // 프로필 수정 모달 열기
+                            onClick={handleOpenProfileModal}
                         />
                         <input 
                             type="file" 
@@ -187,8 +202,8 @@ const Mypage = () => {
                         />
 
                         <div className="profile-info__intro">
-                            <h2 className="profile-info__intro profile-info__intro--name">{user.name}Soyeon Jung</h2>
-                            <p className="profile-info__intro profile-info__intro--role">{user.role}Labeler</p>
+                            <h2 className="profile-info__intro profile-info__intro--name">{name}</h2>
+                            <p className="profile-info__intro profile-info__intro--role">{authen}</p>
                             <p className="profile-info__intro profile-info__intro--status">
                                 {status}
                                 <button className="edit-status-btn" onClick={handleOpenStatusModal}>
@@ -214,7 +229,10 @@ const Mypage = () => {
                     </button>
                     <button
                         className={`tab-links profile ${activeTab === 'Profile' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('Profile')}
+                        onClick={() => {
+                            setActiveTab('Profile');
+                            dispatch(resetProfileAuth());
+                        }}
                     >
                         Profile
                     </button>
@@ -239,8 +257,8 @@ const Mypage = () => {
 
             <BackgroundImgModal 
                 isOpen={isBackgroundModalOpen} 
-                currentImage={backgroundImage} // 현재 배경 이미지
-                defaultImage="/images/dataInk_background_default.jpg" // 기본 이미지
+                currentImage={backgroundImage}
+                defaultImage="/images/dataInk_background_default.jpg"
                 onClose={handleCloseBackgroundModal} 
                 onSave={handleSaveBackground} 
                 onSetDefault={handleSetDefaultBackground} 
@@ -256,7 +274,6 @@ const Mypage = () => {
             />
         </MypageContainer>
     );
-
 };
 
 export default Mypage;

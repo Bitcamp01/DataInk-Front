@@ -49,7 +49,7 @@ function Header({ title }) {
         if (option === 'mypage') {
             navigate('/mypage'); // 마이페이지로 이동
         } else if (option === 'mytasks') {
-            navigate('/mypage?section=workstatus'); // 내 작업으로 이동 (쿼리 파라미터로 구분)
+            navigate('/mypage?section=Calendar'); // 내 작업으로 이동 (쿼리 파라미터로 구분)
         }
     };
 
@@ -105,7 +105,7 @@ function Header({ title }) {
                             <div className="profile-dropdown__header">프로필 옵션</div>
                             <div className="profile-dropdown__content">
                                 <div onClick={() => handleProfileSelect('mypage')} className="profile-dropdown__item">마이페이지</div>
-                                <div onClick={() => handleProfileSelect('mytasks')} className="profile-dropdown__item">내 작업</div>
+                                <div onClick={() => handleProfileSelect('mytasks')} className="profile-dropdown__item">내 일정</div>
                             </div>
                         </div>
                     )}

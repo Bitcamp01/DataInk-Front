@@ -53,26 +53,26 @@ export const passwordChk = createAsyncThunk(
         try {
             const response = await axios.post(
                 'http://localhost:9090/mypage/password-check',
-                { password }, // 비밀번호를 요청 본문에 포함
+                { password },
                 {
                     headers: {
                         Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                     },
                     validateStatus: function (status) {
-                        // 상태 코드가 401이라도 오류로 처리하지 않음
                         return status >= 200 && status < 300 || status === 401;
                     },
                 }
             );
 
-            // 비밀번호가 올바르지 않은 경우 응답 처리
             if (response.status === 401) {
                 return thunkApi.rejectWithValue({
                     message: 'Incorrect password',
                     status: 401,
                 });
             }
-            return response.data;
+
+            // 사용자 정보 반환
+            return response.data.user;
         } catch (e) {
             return thunkApi.rejectWithValue(e);
         }
