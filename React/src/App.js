@@ -45,11 +45,11 @@ function App() {
             <Route path="/label/detail" element={<LabellingDetail />} />
             <Route path="/member" element={<MemberManagement />} />
             <Route path="/mypage" element={<Mypage />} />
-            <Route path="/mypage/profileinit" element={<ProfileInit />} />
-            <Route path="/mypage/profile" element={ <Profile />} />
-            <Route path="/mypage/workstatus" element={<Workstatus />} />
-            <Route path="/mypage/calendar" element={<Calendar />} />
-            <Route path="/mypage/alarm" element={<Alarm />} />
+            {/* <Route path="/profileinit" element={<ProfileInit />} />
+            <Route path="/profile" element={ <Profile />} />
+            <Route path="/workstatus" element={<Workstatus />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/alarm" element={<Alarm />} /> */}
             <Route path="/notice" element={<Notice />} />
             <Route path="/review" element={<Review />} />
             <Route path="/notice_write" element={<Notice_write />} />

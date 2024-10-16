@@ -1,4 +1,3 @@
-// src/slices/userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 import { join, login, logout, telCheck } from '../apis/userApis'; // telCheck import
 
@@ -7,7 +6,12 @@ const userSlice = createSlice({
     initialState: {
         isLogin: false,
         userId: 0,
+        name: '',
         id: '',
+        email: '',
+        tel: '',
+        birth: '',
+        authen: '',
         telCheckMsg: '',
     },
     reducers: {},
@@ -17,7 +21,11 @@ const userSlice = createSlice({
             .addCase(join.fulfilled, (state, action) => {
                 alert(`${action.payload.id}님 DataInk 가입을 축하드립니다.`);
                 window.location.href = '/login';
-                return state;
+                return {
+                    ...state,
+                    ...action.payload,
+                    isLogin: true,
+                };
             })
             .addCase(join.rejected, (state, action) => {
                 alert('에러가 발생했습니다.');
@@ -29,9 +37,8 @@ const userSlice = createSlice({
                 sessionStorage.setItem('ACCESS_TOKEN', action.payload.token);
                 return {
                     ...state,
+                    ...action.payload,
                     isLogin: true,
-                    userId: action.payload.userId,
-                    id: action.payload.id,
                 };
             })
             .addCase(login.rejected, (state, action) => {
@@ -52,7 +59,12 @@ const userSlice = createSlice({
                     ...state,
                     isLogin: false,
                     userId: 0,
-                    id: '',    
+                    name: '',
+                    id: '',
+                    email: '',
+                    tel: '',
+                    authen: '',
+                    birth: '',
                 };
             })
             .addCase(logout.rejected, (state, action) => {

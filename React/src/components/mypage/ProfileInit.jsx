@@ -29,7 +29,7 @@ const ProfileInit = () => {
         const resultAction = await dispatch(passwordChk(password));
         if (passwordChk.fulfilled.match(resultAction)) {
             // 비밀번호 확인 성공 시 profile 페이지로 이동
-            navigate('/mypage/profile');
+            navigate('/mypage?section=Profile');
         } else {
             // 실패한 경우 오류 메시지 설정
             setErrorMessage('비밀번호가 잘못되었습니다. 다시 시도해주세요.');
