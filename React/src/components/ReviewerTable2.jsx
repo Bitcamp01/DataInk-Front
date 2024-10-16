@@ -182,14 +182,12 @@ export default ReviewerTable2;
 // import React, { useEffect, useState } from 'react';
 // import { DataGridPro } from '@mui/x-data-grid-pro';
 
-// // **실제 API 호출 함수**
 // const fetchData = async () => {
-//   // **실제 API URL로 교체해야 함**
-//   const response = await fetch('https://your-api-endpoint.com/data'); 
+//   const response = await fetch('https://your-api-endpoint.com/data');
 //   if (!response.ok) {
-//     throw new Error('네트워크 응답이 실패했습니다.'); // **오류 처리 추가**
+//     throw new Error('네트워크 응답이 실패했습니다.');
 //   }
-//   return await response.json(); // **JSON 형태로 데이터 반환**
+//   return await response.json();
 // };
 
 // const ReviewerTable2 = () => {
@@ -198,23 +196,28 @@ export default ReviewerTable2;
 //   useEffect(() => {
 //     const loadData = async () => {
 //       try {
-//         const data = await fetchData(); // **fetchData 호출**
+//         const data = await fetchData();
 
-//         // rows 객체를 배열로 변환하여 DataGridPro에 전달
+//         // hierarchy 필드를 배열 형태로 변환
 //         const transformedData = Object.entries(data)
-//           .map(([id, row]) => ({
-//             id: Number(id),
-//             content: row.content, // jobTitle 대신 content 사용
-//             hierarchy: row.hierarchy,
-//             hierarchy2: row.hierarchy2,
-//             hierarchy3: row.hierarchy3,
-//             checked: row.checked || false, // checked 필드를 추가하고 기본값 false 설정
-//           }))
-//           .filter(row => row.content !== '');  // content가 빈 문자열이 아닌 것만 필터링
+//           .map(([id, row]) => {
+//             const hierarchyArray = [];
+//             Object.keys(row).forEach(key => {
+//               if (key.startsWith('hierarchy')) {
+//                 hierarchyArray.push(row[key]);
+//               }
+//             });
+//             return {
+//               id: Number(id),
+//               content: row.content,
+//               hierarchyArray,
+//               checked: row.checked || false,
+//             };
+//           })
+//           .filter(row => row.content !== '');
 
 //         setRowsArray(transformedData);
 //       } catch (error) {
-//         // **오류 발생 시 콘솔에 오류 출력**
 //         console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
 //       }
 //     };
@@ -223,45 +226,40 @@ export default ReviewerTable2;
 //   }, []);
 
 //   const columns = [
-//     { 
-//       field: 'content', 
-//       headerName: '내용', 
-//       width: 300,  // 열 너비 조정
+//     {
+//       field: 'content',
+//       headerName: '내용',
+//       width: 300,
 //       renderCell: (params) => (
-//         <div style={{ 
-//           whiteSpace: 'normal',  // 줄 바꿈 가능
-//           wordWrap: 'break-word', // 긴 단어도 줄 바꿈
-//           display: 'flex',  // 플렉스박스를 사용하여 정렬
-//           flexDirection: 'column', 
+//         <div style={{
+//           whiteSpace: 'normal',
+//           wordWrap: 'break-word',
+//           display: 'flex',
+//           flexDirection: 'column',
 //           alignItems: 'flex-start'
 //         }}>
-//           <div style={{ color: 'black' }}>{params.value}</div> {/* 검정 텍스트 */}
+//           <div style={{ color: 'black' }}>{params.value}</div>
 //           <div style={{
-//             padding: '5px', // 패딩 추가
-//             borderRadius: '4px', // 모서리 둥글게
-//             marginTop: '5px', // 위쪽 여백 추가
+//             padding: '5px',
+//             borderRadius: '4px',
+//             marginTop: '5px',
 //           }}>
-//             {params.row.hierarchy} 
-//             {params.row.hierarchy2 ? ` > ${params.row.hierarchy2}` : ''} 
-//             {params.row.hierarchy3 ? ` > ${params.row.hierarchy3}` : ''} {/* hierarchy 요소를 표시 */}
+//             {params.row.hierarchyArray.join(' > ')} {/* hierarchyArray를 사용하여 표시 */}
 //           </div>
 //         </div>
-//       ), 
+//       ),
 //     },
-//     { 
-//       field: 'checked', 
-//       headerName: '선택', 
+//     {
+//       field: 'checked',
+//       headerName: '선택',
 //       width: 100,
-//       type: 'boolean', 
-//       editable: true, 
+//       type: 'boolean',
+//       editable: true,
 //     },
 //   ];
 
 //   const getTreeDataPath = (row) => {
-//     const path = [row.hierarchy];
-//     if (row.hierarchy2) path.push(row.hierarchy2);
-//     if (row.hierarchy3) path.push(row.hierarchy3);
-//     return path;
+//     return row.hierarchyArray.filter(Boolean); // 빈 값이 아닌 것만 사용
 //   };
 
 //   return (
@@ -269,10 +267,10 @@ export default ReviewerTable2;
 //       <div style={{ height: 400, width: '100%' }}>
 //         <DataGridPro
 //           treeData
-//           rows={rowsArray}  // 배열로 변환된 데이터 사용
+//           rows={rowsArray}
 //           columns={columns}
 //           getTreeDataPath={getTreeDataPath}
-//           checkboxSelection // 체크박스 활성화
+//           checkboxSelection
 //         />
 //       </div>
 //     </div>
@@ -280,4 +278,5 @@ export default ReviewerTable2;
 // };
 
 // export default ReviewerTable2;
+
 
