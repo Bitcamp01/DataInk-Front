@@ -5,13 +5,19 @@ const mypageSlice = createSlice({
     name: 'mypage',
     initialState: {
         profileImg: "",
-        backgroundImg: ""
+        backgroundImg: "",
+        isProfileAuthenticated: false,
+        userDetails: null
     },
-    reducers: {},
+    reducers: {
+        resetProfileAuth: (state) => {
+            state.isProfileAuthenticated = false;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(passwordChk.fulfilled, (state, action) => {
-            window.location.href = '/mypage';
-            return state;
+            state.isProfileAuthenticated = true;
+            state.userDetails = action.payload; // 서버에서 가져온 사용자 정보를 저장
         });
         builder.addCase(passwordChk.rejected, (state, action) => {
             if (action.payload.status === 401) {
@@ -19,9 +25,10 @@ const mypageSlice = createSlice({
             } else {
                 alert('확인 중 에러가 발생했습니다.');
             }
-            return state;
         });
     }
 });
+
+export const { resetProfileAuth } = mypageSlice.actions;
 
 export default mypageSlice.reducer;
