@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useDispatch } from 'react-redux'; // 추가
-import { telCheck } from '../apis/userApis'; // 추가
+import { useDispatch } from 'react-redux';
+import { idCheck, telCheck } from '../apis/userApis'; // 전화번호 중복 체크 API
 import '../css/join.css';
 
 const Join = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // 추가
+    const dispatch = useDispatch();
 
     // 상태 관리
     const [user_id, setUserId] = useState(''); // 아이디
@@ -18,7 +18,7 @@ const Join = () => {
     const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인
     const [carrier, setCarrier] = useState(''); // 통신사
     const [tel, setTel] = useState(''); // 전화번호
-    const [authen, setAuthen] = useState('ROLE_USER'); // 회원 권한
+    const [authen, setAuthen] = useState(''); // 회원 권한
 
     // 유효성 검사 상태
     const [userIdValid, setUserIdValid] = useState({
@@ -52,35 +52,42 @@ const Join = () => {
         selected: false,
     });
 
+    const [telValid, setTelValid] = useState({
+        isNumeric: false,
+        isElevenDigits: false,
+        isAvailable: null, // 전화번호 중복 체크 결과
+    });
+
     // 포커스 상태 관리
     const [focusedField, setFocusedField] = useState('');
 
     // 메시지 상태
     const [message, setMessage] = useState('');
 
-    // 유효성 검사 함수
     const validateUserId = async (value) => {
         const lettersAndNumbersOnly = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/.test(value);
         const minLength = value.length >= 6;
         const hasNumber = /\d/.test(value);
-
+    
         if (lettersAndNumbersOnly && minLength && hasNumber) {
             // 아이디 중복 체크 API 호출
             try {
-                const response = await dispatch(telCheck(tel)).unwrap();
-                // 주의: 이 부분은 전화번호 중복 체크 로직과 혼동되지 않도록 수정 필요
+                const response = await dispatch(idCheck(value)).unwrap();
+                if (response.idCheckMsg === 'valid id') {
+                    setUserIdValid({ lettersAndNumbersOnly, minLength, hasNumber, isAvailable: true });
+                } else {
+                    setUserIdValid({ lettersAndNumbersOnly, minLength, hasNumber, isAvailable: false });
+                }
             } catch (error) {
-                setUserIdValid((prev) => ({
-                    ...prev,
-                    isAvailable: false,
-                }));
+                console.error('아이디 중복 확인 에러:', error);
+                setUserIdValid({ lettersAndNumbersOnly, minLength, hasNumber, isAvailable: false });
             }
         } else {
             setUserIdValid({ lettersAndNumbersOnly, minLength, hasNumber, isAvailable: null });
         }
     };
 
-    const validatename = (value) => { 
+    const validatename = (value) => {
         const notEmpty = value.trim() !== '';
         const isValidFormat = /^[가-힣\s]+$/.test(value);
         setnameValid({ notEmpty, isValidFormat });
@@ -109,6 +116,29 @@ const Join = () => {
         setAuthenValid({ selected });
     };
 
+    const validateTel = async (value) => {
+        const isNumeric = /^\d+$/.test(value);
+        const isElevenDigits = value.length === 11;
+    
+        if (isNumeric && isElevenDigits) {
+            // 전화번호 중복 체크 API 호출
+            try {
+                const response = await telCheck(value);
+                if (response.item && response.item.telCheckMsg === 'valid tel') {
+                    setTelValid({ isNumeric, isElevenDigits, isAvailable: true });
+                } else {
+                    setTelValid({ isNumeric, isElevenDigits, isAvailable: false });
+                }
+            } catch (error) {
+                console.error('전화번호 중복 확인 에러:', error);
+                setMessage('전화번호 중복 확인 중 오류가 발생했습니다.');
+                setTelValid({ isNumeric, isElevenDigits, isAvailable: false });
+            }
+        } else {
+            setTelValid({ isNumeric, isElevenDigits, isAvailable: null });
+        }
+    };
+
     // useEffect를 사용하여 실시간으로 유효성 검사
     useEffect(() => {
         validateUserId(user_id);
@@ -131,56 +161,34 @@ const Join = () => {
         validateAuthen(authen);
     }, [authen]);
 
-    // 전화번호 중복 체크 useEffect
     useEffect(() => {
-        const checkTel = async () => {
-            if (tel) {
-                try {
-                    const response = await dispatch(telCheck(tel)).unwrap();
-                    if (response.telCheckMsg === 'invalid tel') {
-                        setUserIdValid((prev) => ({
-                            ...prev,
-                            isAvailable: false,
-                        }));
-                    } else {
-                        setUserIdValid((prev) => ({
-                            ...prev,
-                            isAvailable: true,
-                        }));
-                    }
-                } catch (error) {
-                    console.error('전화번호 중복 확인 에러:', error);
-                    setMessage('전화번호 중복 확인 중 오류가 발생했습니다.');
-                }
-            }
-        };
-
-        checkTel();
-    }, [tel, dispatch]);
+        validateTel(tel);
+    }, [tel]);
 
     // 필드 유효성 검사
-    const isUserIdValid = Object.values(userIdValid).every(Boolean);
-    const isnameValid = Object.values(nameValid).every(Boolean);
+    const isUserIdValidField = Object.values(userIdValid).every(Boolean);
+    const isnameValidField = Object.values(nameValid).every(Boolean);
     const isEmailValidField = Object.values(emailValid).every(Boolean);
     const isPasswordValidField = Object.values(passwordValid).every(Boolean);
     const isConfirmPasswordValidField = Object.values(confirmPasswordValid).every(Boolean);
     const isCarrierValid = carrier !== '';
-    const isTelValid = /^\d{11}$/.test(tel);
+    const isTelValidField = Object.values(telValid).every(Boolean);
     const isBirthdateValid = birth !== "";
     const isAuthenValidField = Object.values(authenValid).every(Boolean);
 
     // 전체 폼 유효성 검사
     const isFormValid =
-        isUserIdValid &&
-        isnameValid &&
+        isUserIdValidField &&
+        isnameValidField &&
         isEmailValidField &&
         isPasswordValidField &&
         isConfirmPasswordValidField &&
         isCarrierValid &&
-        isTelValid &&
+        isTelValidField &&
         isBirthdateValid &&
         isAuthenValidField &&
-        userIdValid.isAvailable !== false; // 전화번호가 사용 가능해야 함
+        userIdValid.isAvailable !== false &&
+        telValid.isAvailable !== false;
 
     // 폼 제출 핸들러
     const handleSubmit = async (e) => {
@@ -203,7 +211,7 @@ const Join = () => {
                 // 백엔드 API 엔드포인트에 POST 요청
                 const response = await axios.post('http://localhost:9090/users/join', payload);
 
-                if (response.status === 201) {
+                if (response.status === 201 || response.status === 200) {
                     setMessage('회원가입이 완료되었습니다!');
                     // 로그인 페이지로 리디렉션
                     setTimeout(() => {
@@ -272,10 +280,10 @@ const Join = () => {
                                 onChange={(e) => setUserId(e.target.value)}
                                 onFocus={() => setFocusedField('user_id')}
                                 onBlur={() => setFocusedField('')}
-                                className={isUserIdValid ? 'valid' : ''}
+                                className={isUserIdValidField ? 'valid' : ''}
                                 required
                             />
-                            {isUserIdValid && (
+                            {isUserIdValidField && (
                                 <img
                                     src="../images/join/join-check_icon.svg"
                                     alt="체크 아이콘"
@@ -286,7 +294,7 @@ const Join = () => {
                     </div>
 
                     {/* 부가 설명 메시지 - 아이디 */}
-                    <div className={`join__validation-messages ${focusedField === 'user_id' && (!isUserIdValid || userIdValid.isAvailable === false) ? 'visible' : ''}`}>
+                    <div className={`join__validation-messages ${focusedField === 'user_id' && (!isUserIdValidField || userIdValid.isAvailable === false) ? 'visible' : ''}`}>
                         <p className={userIdValid.lettersAndNumbersOnly ? 'valid' : 'invalid'}>
                             영문자와 숫자의 조합만 사용 가능합니다.
                         </p>
@@ -317,10 +325,10 @@ const Join = () => {
                                 onChange={(e) => setname(e.target.value)}
                                 onFocus={() => setFocusedField('name')}
                                 onBlur={() => setFocusedField('')}
-                                className={isnameValid ? 'valid' : ''}
+                                className={isnameValidField ? 'valid' : ''}
                                 required
                             />
-                            {isnameValid && (
+                            {isnameValidField && (
                                 <img
                                     src="../images/join/join-check_icon.svg"
                                     alt="체크 아이콘"
@@ -331,7 +339,7 @@ const Join = () => {
                     </div>
 
                     {/* 부가 설명 메시지 - 실명 */}
-                    <div className={`join__validation-messages ${focusedField === 'name' && !isnameValid ? 'visible' : ''}`}>
+                    <div className={`join__validation-messages ${focusedField === 'name' && !isnameValidField ? 'visible' : ''}`}>
                         <p className={nameValid.notEmpty ? 'valid' : 'invalid'}>
                             성함을 입력해주세요.
                         </p>
@@ -531,7 +539,7 @@ const Join = () => {
                     {/* 부가 설명 메시지 - 통신사 */}
                     <div className={`join__validation-messages ${focusedField === 'carrier' && !isCarrierValid ? 'visible' : ''}`}>
                         <p className={isCarrierValid ? 'valid' : 'invalid'}>
-                            통신사를 클릭해주세요.
+                            통신사를 선택해주세요.
                         </p>
                     </div>
 
@@ -551,10 +559,10 @@ const Join = () => {
                                 onChange={(e) => setTel(e.target.value)}
                                 onFocus={() => setFocusedField('tel')}
                                 onBlur={() => setFocusedField('')}
-                                className={isTelValid ? 'valid' : ''}
+                                className={isTelValidField ? 'valid' : ''}
                                 required
                             />
-                            {isTelValid && (
+                            {isTelValidField && (
                                 <img
                                     src="../images/join/join-check_icon.svg"
                                     alt="체크 아이콘"
@@ -565,11 +573,14 @@ const Join = () => {
                     </div>
 
                     {/* 부가 설명 메시지 - 전화번호 */}
-                    <div className={`join__validation-messages ${focusedField === 'tel' && !isTelValid ? 'visible' : ''}`}>
-                        <p className={isTelValid ? 'valid' : 'invalid'}>
-                            올바른 양식으로 입력해주세요 (총 11자 짜리 숫자).
+                    <div className={`join__validation-messages ${focusedField === 'tel' && (!isTelValidField || telValid.isAvailable === false) ? 'visible' : ''}`}>
+                        <p className={telValid.isNumeric ? 'valid' : 'invalid'}>
+                            숫자만 입력해주세요.
                         </p>
-                        {userIdValid.isAvailable === false && (
+                        <p className={telValid.isElevenDigits ? 'valid' : 'invalid'}>
+                            11자리의 전화번호를 입력해주세요.
+                        </p>
+                        {telValid.isAvailable === false && (
                             <p style={{ color: 'red', fontWeight: 'bold' }}>이미 사용 중인 전화번호입니다.</p>
                         )}
                     </div>
@@ -577,13 +588,13 @@ const Join = () => {
                     {/* 회원 권한 선택 */}
                     <div className={`join__form-group ${focusedField === 'authen' ? 'active' : ''}`}>
                         <label htmlFor="authen">
-                            <span className="join__required">*</span>회원 상태
+                            <span className="join__required">*</span>회원 권한
                         </label>
                         <div className="join__input-wrapper">
                             <select
                                 id="authen"
                                 name="authen"
-                                aria-label="회원 상태 선택"
+                                aria-label="회원 권한 선택"
                                 value={authen}
                                 onChange={(e) => setAuthen(e.target.value)}
                                 onFocus={() => setFocusedField('authen')}
@@ -591,7 +602,7 @@ const Join = () => {
                                 className={isAuthenValidField ? 'valid' : ''}
                                 required
                             >
-                                <option value="">회원 상태를 선택해주세요</option>
+                                <option value="">회원 권한을 선택해주세요</option>
                                 <option value="ROLE_ADMIN">관리자</option>
                                 <option value="ROLE_USER">라벨러</option>
                             </select>
@@ -605,10 +616,10 @@ const Join = () => {
                         </div>
                     </div>
 
-                    {/* 부가 설명 메시지 - 회원 상태 */}
+                    {/* 부가 설명 메시지 - 회원 권한 */}
                     <div className={`join__validation-messages ${focusedField === 'authen' && !isAuthenValidField ? 'visible' : ''}`}>
                         <p className={authenValid.selected ? 'valid' : 'invalid'}>
-                            회원 상태를 선택해주세요.
+                            회원 권한을 선택해주세요.
                         </p>
                     </div>
 
