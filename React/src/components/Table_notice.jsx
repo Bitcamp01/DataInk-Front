@@ -1,7 +1,13 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, useGridSelector } from '@mui/x-data-grid';
 import  '../css/table.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { getNotice } from '../apis/noticeApis';
+import { useEffect } from 'react';
+
+
 
 
 const columns = [
@@ -12,32 +18,45 @@ const columns = [
   { field: 'regdate', headerName: '작성일', flex: 150 / 1100 },  
 ];
 
-const rows = [
-  { id: 1, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 2, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 3, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 4, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 5, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 6, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 7, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 8, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 9, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-  { id: 10, title: '[프로젝트000]라벨링 작성 시 유의할 점을 꼭 확인해주세요.', writer: '김시표', department: 'AI Clova' , regdate: '2024-03-15'},
-];
-  
-export default function Table_Notice() {
+
+const Table_notice = () => {
+  const notice = useSelector(state => state.noticeSlice.notice);
+  const searchCondition = useSelector(state => state.noticeSlice.searchCondition);
+  const searchKeyword = useSelector(state=> state.noticeSlice.searchKeyword);
+  const page = useSelector(state => state.noticeSlice.page);
+
+  const navi = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getNotice({
+      searchCondition: 'all',
+      searchKeyword: '',
+      page: 0
+    }));
+  },[]);
+
+  const changePage = React.useCallback((e, v) => {
+    dispatch(getNotice({
+      searchCondition,
+      searchKeyword,
+      page:parseInt(v) -1
+    }));
+  },[searchCondition, searchKeyword]);
+
+    
   return (
     <div style={{ width: '70%' }}>
     <Box sx={{ width: '100%',  
       minWidth:'1135px', 
       marginBottom: '39px', 
       boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)',
-      borderRadius: '10px', // 테두리 둥글게 설정
+      borderRadius: '10px', 
       
       }}>
 
       <DataGrid
-        rows={rows}
+        rows={notice}
         columns={columns}
         rowHeight={40} 
         headerHeight={50}
@@ -79,3 +98,4 @@ export default function Table_Notice() {
     );
 }
 
+export default Table_notice;
