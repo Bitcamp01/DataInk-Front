@@ -43,10 +43,22 @@ export const logout = createAsyncThunk(
 );
 
 export const telCheck = createAsyncThunk(
-    'users/telCheck',
+    'users/tel-Check',
     async (tel, thunkApi) => {
         try {
             const response = await axios.post('http://localhost:9090/users/tel-check', { tel });
+            return response.data.item;
+        } catch (e) {
+            return thunkApi.rejectWithValue(e);
+        }
+    }
+);
+
+export const idCheck = createAsyncThunk(
+    'users/id-check',
+    async (id, thunkApi) => {
+        try {
+            const response = await axios.post('http://localhost:9090/users/id-check', { id });
             return response.data.item;
         } catch (e) {
             return thunkApi.rejectWithValue(e);
