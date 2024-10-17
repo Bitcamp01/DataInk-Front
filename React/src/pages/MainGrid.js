@@ -23,8 +23,6 @@ export function flattenTree(treeData, parentId = null) {
       finished: item.finished, // 추가된 필드
       workStatus: item.workStatus,
       projectId:item.projectId,
-      mergeId: `${item.id}_${item.projectId}` // 오직 클라이언트에서만 사용하는 id,백 단으로 절대로 넘어가면 안됨, 프론트 단에서 데이터 구분은 mergeId로 이루어지게 함
-      //따라서 모든 데이터는 flatData로만 변경이 이루어져야 함
     });
     if (item.children && item.children.length > 0) {
       flatData = flatData.concat(flattenTree(item.children, item.id));
@@ -41,7 +39,7 @@ export function unflatten(flatData) {
 
   // id와 rootId를 결합하여 고유한 키를 생성
   flatData.forEach(item => {
-    const key = item.mergeId;
+    const key = `${item.id}_${item.projectId}`
     lookup[key] = {
       ...item,
       children: []  // 트리 구조로 변환할 때 자식 노드를 위한 배열 추가
@@ -49,7 +47,7 @@ export function unflatten(flatData) {
   });
 
   flatData.forEach(item => {
-    const key = item.mergeId;
+    const key =  `${item.id}_${item.projectId}`
     if (item.parentId === null) {
       tree.push(lookup[key]);
     } else {

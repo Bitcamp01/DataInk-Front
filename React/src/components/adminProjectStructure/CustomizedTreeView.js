@@ -148,9 +148,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
   const [newProjectDueDate, setNewProjectDueDate] = React.useState(''); // 마감일자 상태 추가
 
   const handleFolderDoubleClick = (folder) => {
-    if (folder.parentId === null){
-      setSelectedProject(folder.id);
-    }
+    setSelectedProject(folder.projectId);
     setSelectedFolder(folder.id);
   };
 
@@ -195,8 +193,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
           parentId:null,
           finished:false,
           workStatus:"",
-          projectId:response.data.projectId,
-          mergeId:`${response.data.projectId}_${response.data.projectId}`
+          projectId:response.data.projectId
         }
         setFlatFolderData((prevData) => [...prevData, newFolder]);
         setOpen(false); // 모달 닫기

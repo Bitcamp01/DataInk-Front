@@ -55,7 +55,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
 
  
   // flatFolderData를 Map 형태로 관리하여 탐색 성능 향상
-  const [flatFolderMap, setFlatFolderMap] = useState(new Map(flatFolderData.map(item => [item.mergeId, item])));
+  const [flatFolderMap, setFlatFolderMap] = useState(new Map(flatFolderData.map(item => [`${item.id}_${item.projectId}`, item])));
 
   //데이터 그리드 영역 업데이트 부분
   useEffect(()=>{
@@ -64,7 +64,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
 
   // flatFolderData가 변경될 때 Map으로 업데이트
   useEffect(() => {
-    setFlatFolderMap(new Map(flatFolderData.map(item => [item.mergeId, item])));
+    setFlatFolderMap(new Map(flatFolderData.map(item => [item.id, item])));
     setShouldUpdateTree(true);
   }, [flatFolderData]);
   ///////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
 
     // 변환 목록에 이미 존재하는 항목은 추가하지 않음
     const newItems = selectedItems.filter(
-      (item) => !conversionList.some((existingItem) => existingItem.mergeId === item.mergeId)
+      (item) => !conversionList.some((existingItem) => existingItem.id === item.id && existingItem.projectId === item.projectId)
     );
   
     if (newItems.length > 0) {
@@ -95,8 +95,8 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   const handleCloseConversionModal = () => {
     setIsConversionModalOpen(false);
   };
-  const handleRemoveFromConversionList = (itemId) => {
-    setConversionList((prevList) => prevList.filter((item) => item.mergeId !== itemId));
+  const handleRemoveFromConversionList = (itemId,itemProjectId) => {
+    setConversionList((prevList) => prevList.filter((item) => item.id !== itemId && item.projectId === itemProjectId));
   };
   ///////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////
@@ -513,7 +513,7 @@ const handlePaste = () => {
             checkboxSelection
             disableDoubleClickEdit={true}
             rows={rows}
-            getRowId={(row) => row.mergeId}
+            getRowId={(row) => row.id}
             columns={columns}
             editMode='row'
             onCellDoubleClick={(params, event) => {
@@ -572,7 +572,7 @@ const handlePaste = () => {
               {conversionList.map((item) => (
                 <ListItem key={item.id}>
                   <ListItemText primary={item.label} />
-                  <IconButton onClick={() => handleRemoveFromConversionList(item.id)}>
+                  <IconButton onClick={() => handleRemoveFromConversionList(item.id,item.projectId)}>
                     <RemoveCircleOutlineIcon />
                   </IconButton>
                 </ListItem>
