@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/profile.css';
-import PasswordChangeModal from './PasswordChangeModal'; // 모달 컴포넌트 임포트
+import PasswordChangeModal from './PasswordChangeModal';
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
+    // Redux에서 사용자 데이터 가져오기
+    const { name, id, email, tel, birth} = useSelector(state => state.userSlice);
+
     // 비밀번호 변경 모달 열림/닫힘 상태 관리
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     
@@ -90,7 +94,8 @@ const Profile = () => {
                         type="text" 
                         id="name" 
                         name="name" 
-                        placeholder="이름" 
+                        placeholder="이름"
+                        value={name}
                         readOnly 
                     />
                 </div>
@@ -101,6 +106,7 @@ const Profile = () => {
                         id="username" 
                         name="username" 
                         placeholder="아이디"
+                        value={id}
                         readOnly 
                     />
                 </div>
@@ -110,7 +116,7 @@ const Profile = () => {
                         type="text" 
                         id="nickname" 
                         name="nickname" 
-                        placeholder="닉네임 입력" 
+                        placeholder="닉네임 입력"
                     />
                 </div>
                 <div className="profile-form__group">
@@ -120,31 +126,33 @@ const Profile = () => {
                         id="email" 
                         name="email" 
                         placeholder="이메일 주소를 입력해주세요" 
+                        value={email}
                     />
                 </div>
                 <div className="profile-form__group">
                     <label htmlFor="phone-carrier">*휴대폰 인증</label>
-                    <select 
+                    {/* <select 
                         id="phone-carrier" 
                         name="carrier"
                     >
                         <option value="KT">KT</option>
                         <option value="SKT">SKT</option>
                         <option value="LGU+">LGU+</option>
-                    </select>
+                    </select> */}
                     <div className="profile-form__input-container">
                         <input 
                             type="text" 
                             id="phone" 
                             name="phone" 
                             placeholder="-없이 숫자만 입력" 
+                            value={tel}
                         />
-                        <button 
+                        {/* <button 
                             type="button" 
                             className="profile-form__button"
                         >
                             인증번호 요청
-                        </button>
+                        </button> */}
                     </div>
                 </div>
                 <div className="profile-form__group">
@@ -154,6 +162,7 @@ const Profile = () => {
                         id="birthdate" 
                         name="birthdate" 
                         placeholder="생년월일"
+                        value={birth}
                         readOnly 
                     />
                 </div>

@@ -1,3 +1,4 @@
+// src/apis/userApis.js
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -34,6 +35,18 @@ export const logout = createAsyncThunk(
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
             });
+            return response.data.item;
+        } catch (e) {
+            return thunkApi.rejectWithValue(e);
+        }
+    }
+);
+
+export const telCheck = createAsyncThunk(
+    'users/telCheck',
+    async (tel, thunkApi) => {
+        try {
+            const response = await axios.post('http://localhost:9090/users/tel-check', { tel });
             return response.data.item;
         } catch (e) {
             return thunkApi.rejectWithValue(e);

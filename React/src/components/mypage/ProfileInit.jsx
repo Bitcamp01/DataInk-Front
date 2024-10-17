@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import '../../css/profileInit.css';
-import { useSelector } from 'react-redux';
-// import axios from 'axios';
-
+import { useDispatch  } from 'react-redux';
+import { passwordChk } from '../../apis/mypageApis';
+import { useNavigate } from 'react-router-dom'; // navigate 사용
 
 const BackgroundContainer = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
@@ -15,53 +14,27 @@ const BackgroundContainer = styled.div`
     align-items: center;
 `;
 
-const ProfileInit = ({onAuthenticate}) => {
-    const navigate = useNavigate();
+const ProfileInit = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate(); // navigate 함수 추가
     const [password, setPassword] = useState(''); // 비밀번호 상태 추가
     const [errorMessage, setErrorMessage] = useState(''); // 오류 메시지 상태 추가
-
-    // const isLogin = useSelector(state => state.user.isLogin);
-
-    // useEffect(() => {
-        
-    //     if(!isLogin) {
-    //         navigate('/login');
-    //     }
-    // }, []);
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value); // 입력된 비밀번호 상태 업데이트
     };
 
-    // const handlePasswordSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     // 비밀번호 검증 로직
-    //     try {
-    //         const response = await axios.post('http:주소값넣어줘야함', {
-    //             password
-    //         });
-
-    //         // 검증 성공 시
-    //         if (response.data.isValid) {
-    //             onAuthenticate(); // 인증 상태 변경
-    //             navigate('/mypage'); // 인증이 완료되면 Mypage로 이동
-    //         } else {
-    //             setErrorMessage('비밀번호가 틀렸습니다. 다시 시도해 주세요.');
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //         setErrorMessage('오류가 발생했습니다. 다시 시도해 주세요.');
-    //     }
-    // };
-
-    ////////////////// 임시로 바로 인증 통과 및 페이지 이동//////////////////////////
-    const handlePasswordSubmit = (e) => {
+    const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        onAuthenticate();
-        navigate('/mypage');
+        const resultAction = await dispatch(passwordChk(password));
+        if (passwordChk.fulfilled.match(resultAction)) {
+            // 비밀번호 확인 성공 시 profile 페이지로 이동
+            navigate('/mypage?section=Profile');
+        } else {
+            // 실패한 경우 오류 메시지 설정
+            setErrorMessage('비밀번호가 잘못되었습니다. 다시 시도해주세요.');
+        }
     };
-
 
     return (
         <BackgroundContainer>
@@ -94,7 +67,7 @@ const ProfileInit = ({onAuthenticate}) => {
                 </div>
             </div>
         </BackgroundContainer>
-    )
-}
+    );
+};
 
-export default ProfileInit
+export default ProfileInit;

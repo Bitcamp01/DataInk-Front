@@ -4,7 +4,7 @@ import axios from "axios";
 
 // 프로필 이미지 업로드 Thunk
 export const uploadProfileImage = createAsyncThunk(
-    'profile/uploadProfileImage',
+    'mypage/uploadProfileImage',
     async (file, thunkApi) => {
         const formData = new FormData();
         formData.append('profileImage', file);
@@ -26,7 +26,7 @@ export const uploadProfileImage = createAsyncThunk(
 
 // 배경 이미지 업로드 Thunk
 export const uploadBackgroundImage = createAsyncThunk(
-    'profile/uploadBackgroundImage',
+    'mypage/uploadBackgroundImage',
     async (file, thunkApi) => {
         const formData = new FormData();
         formData.append('backgroundImage', file);
@@ -42,6 +42,39 @@ export const uploadBackgroundImage = createAsyncThunk(
         } catch (error) {
             // 에러 발생 시 rejectWithValue로 에러 메시지 반환
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
+        }
+    }
+);
+
+// 패스워드 체크 Thunk
+export const passwordChk = createAsyncThunk(
+    'mypage/passwordChk',
+    async (password, thunkApi) => {
+        try {
+            const response = await axios.post(
+                'http://localhost:9090/mypage/password-check',
+                { password },
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+                    },
+                    validateStatus: function (status) {
+                        return status >= 200 && status < 300 || status === 401;
+                    },
+                }
+            );
+
+            if (response.status === 401) {
+                return thunkApi.rejectWithValue({
+                    message: 'Incorrect password',
+                    status: 401,
+                });
+            }
+
+            // 사용자 정보 반환
+            return response.data.user;
+        } catch (e) {
+            return thunkApi.rejectWithValue(e);
         }
     }
 );

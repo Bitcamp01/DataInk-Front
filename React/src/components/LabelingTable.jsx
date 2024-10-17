@@ -3,67 +3,65 @@
 // import '../css/reviewer.css';
 
 // const LabelingTable = () => {
-//   // 상태 변수 설정
-//   const [rowsData, setRowsData] = useState([]); // 테이블에 표시할 행 데이터 상태
-//   const [hoveredRow, setHoveredRow] = useState(null); // 마우스를 올린 행의 ID
-//   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 }); // 툴팁의 위치
-//   const [editRowsModel, setEditRowsModel] = useState({}); // 테이블의 편집 모델 상태
+//   const [rowsData, setRowsData] = useState([]);
+//   const [hoveredRow, setHoveredRow] = useState(null);
+//   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+//   const [editRowsModel, setEditRowsModel] = useState({});
 
-//   // 데이터를 비동기적으로 가져오는 함수
 //   const fetchData = async () => {
 //     try {
-//       const response = await fetch('https://example.com/api/rows'); // API에서 데이터를 가져옴 (URL을 실제 엔드포인트로 변경)
-//       const data = await response.json(); // JSON 형식으로 응답을 파싱
-//       const formattedData = Object.entries(data).map(([id, row]) => ({
-//         id: Number(id), // id를 숫자로 변환
-//         content: row.content, // content 필드
-//         hierarchy: row.hierarchy, // hierarchy 필드
-//         hierarchy2: row.hierarchy2, // hierarchy2 필드 (존재하는 경우)
-//         hierarchy3: row.hierarchy3, // hierarchy3 필드 (존재하는 경우)
-//         checked: row.checked, // checked 상태
-//       }));
-//       setRowsData(formattedData); // 가져온 데이터를 상태에 저장
+//       const response = await fetch('https://example.com/api/rows');
+//       const data = await response.json();
+//       const formattedData = Object.entries(data).map(([id, row]) => {
+//         // hierarchy 관련 필드를 배열로 수집
+//         const hierarchyArray = [];
+//         Object.keys(row).forEach(key => {
+//           if (key.startsWith('hierarchy')) {
+//             hierarchyArray.push(row[key]);
+//           }
+//         });
+//         return {
+//           id: Number(id),
+//           content: row.content,
+//           hierarchyArray, // 수집한 hierarchy 배열
+//           checked: row.checked,
+//         };
+//       });
+//       setRowsData(formattedData);
 //     } catch (error) {
-//       console.error('데이터를 가져오는 데 실패했습니다:', error); // 에러가 발생하면 콘솔에 출력
+//       console.error('데이터를 가져오는 데 실패했습니다:', error);
 //     }
 //   };
 
-//   // 컴포넌트가 마운트될 때 데이터를 가져오기 위한 useEffect
 //   useEffect(() => {
-//     fetchData(); // fetchData 함수를 호출하여 데이터를 가져옴
-//   }, []); // 빈 배열을 사용하여 컴포넌트가 처음 렌더링될 때만 실행
+//     fetchData();
+//   }, []);
 
-//   // 마우스가 특정 셀 위에 있을 때 툴팁을 표시하기 위한 함수
 //   const handleMouseEnter = (event, rowId) => {
-//     setHoveredRow(rowId); // 마우스가 올라간 행의 ID를 상태로 설정
-//     setTooltipPos({ x: event.clientX, y: event.clientY }); // 마우스 위치에 맞춰 툴팁 위치를 설정
+//     setHoveredRow(rowId);
+//     setTooltipPos({ x: event.clientX, y: event.clientY });
 //   };
 
-//   // 마우스가 셀을 벗어났을 때 툴팁을 숨기는 함수
 //   const handleMouseLeave = () => {
-//     setHoveredRow(null); // 툴팁을 표시할 행이 없도록 설정
+//     setHoveredRow(null);
 //   };
 
-//   // 테이블의 편집 모델 변경 시 호출되는 함수
 //   const handleEditRowsModelChange = (model) => {
-//     setEditRowsModel(model); // 변경된 편집 모델을 상태로 설정
+//     setEditRowsModel(model);
 //   };
 
-//   // 행이 업데이트될 때 처리하는 함수
 //   const handleProcessRowUpdate = (newRow) => {
-//     // 업데이트된 행 데이터를 기존 데이터에서 찾아 교체
 //     const updatedRows = rowsData.map(row => (row.id === newRow.id ? newRow : row));
-//     setRowsData(updatedRows); // 업데이트된 데이터를 상태로 설정
-//     return newRow; // 새로 업데이트된 행을 반환
+//     setRowsData(updatedRows);
+//     return newRow;
 //   };
 
-//   // 테이블의 열 정의
 //   const columns = [
 //     { 
 //       field: 'content', 
 //       headerName: '내용', 
 //       width: 300,
-//       editable: true,  // 셀 편집 활성화
+//       editable: true,
 //       renderCell: (params) => (
 //         <div 
 //           style={{ 
@@ -74,14 +72,12 @@
 //             alignItems: 'flex-start', 
 //             position: 'relative'
 //           }}
-//           onMouseEnter={(event) => handleMouseEnter(event, params.id)} // 마우스를 셀에 올렸을 때 호출
-//           onMouseLeave={handleMouseLeave} // 마우스를 셀에서 벗어났을 때 호출
+//           onMouseEnter={(event) => handleMouseEnter(event, params.id)}
+//           onMouseLeave={handleMouseLeave}
 //         >
-//           <div style={{ color: 'black' }}>{params.value}</div> {/* content 값 출력 */}
+//           <div style={{ color: 'black' }}>{params.value}</div>
 //           <div style={{ padding: '5px', borderRadius: '4px', marginTop: '5px' }}>
-//             {params.row.hierarchy} {/* hierarchy 값 출력 */}
-//             {params.row.hierarchy2 ? ` > ${params.row.hierarchy2}` : ''} {/* hierarchy2 값이 있을 경우 출력 */}
-//             {params.row.hierarchy3 ? ` > ${params.row.hierarchy3}` : ''} {/* hierarchy3 값이 있을 경우 출력 */}
+//             {params.row.hierarchyArray.join(' > ')} {/* hierarchyArray를 사용하여 계층 구조 표시 */}
 //           </div>
 //         </div>
 //       ),
@@ -94,7 +90,7 @@
 //         <input 
 //           type="checkbox" 
 //           checked={params.value} 
-//           readOnly // 체크박스를 읽기 전용으로 설정
+//           readOnly
 //         />
 //       ),
 //     },
@@ -104,14 +100,14 @@
 //     <div className="label-table-container">
 //       <div style={{ height: '100%', width: '100%' }}>
 //         <DataGridPro
-//           treeData // 트리 데이터 형식 사용
-//           rows={rowsData} // 행 데이터
-//           columns={columns} // 열 정의
-//           getTreeDataPath={(row) => [row.hierarchy, row.hierarchy2, row.hierarchy3].filter(Boolean)} // 트리 경로 설정
-//           defaultGroupingExpansionDepth={-1} // 기본 그룹 확장 깊이 (-1은 모든 그룹을 확장)
-//           editRowsModel={editRowsModel} // 편집 모델 설정
-//           onEditRowsModelChange={handleEditRowsModelChange} // 편집 모델 변경 시 처리
-//           processRowUpdate={handleProcessRowUpdate} // 행 업데이트 처리
+//           treeData
+//           rows={rowsData}
+//           columns={columns}
+//           getTreeDataPath={(row) => row.hierarchyArray.filter(Boolean)} // 빈 값 제외
+//           defaultGroupingExpansionDepth={-1}
+//           editRowsModel={editRowsModel}
+//           onEditRowsModelChange={handleEditRowsModelChange}
+//           processRowUpdate={handleProcessRowUpdate}
 //         />
 //       </div>
 
@@ -128,7 +124,7 @@
 //             zIndex: 1000 
 //           }}
 //         >
-//           <p>설명창 자리입니다</p> {/* 툴팁 내용 */}
+//           <p>설명창 자리입니다</p>
 //         </div>
 //       )}
 //     </div>
@@ -136,6 +132,7 @@
 // };
 
 // export default LabelingTable;
+
 
 
 import React, { useState } from 'react';
