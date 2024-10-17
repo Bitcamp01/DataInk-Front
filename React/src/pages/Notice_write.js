@@ -1,12 +1,53 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import '../css/memberManagement.css';
-import { Box, Typography, Button, TextField, IconButton, Avatar, Paper } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Box, Typography, Button, TextField, IconButton, Avatar, Paper, List, ListItem, ListItemText, ListItemIcon  } from '@mui/material';
+import axios from 'axios';
+import InputFileUpload from '../components/InputFileUpload';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import ImageIcon from '@mui/icons-material/Image';
+
 
 const Notice_write = () => {
+  //제목과 내용을 상태로 관리 
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [files, setFiles] = useState([]);
+
+  //파일업로드 핸들러
+  const handleFileChange =(selectedFiles) =>{
+    setFiles(selectedFiles);
+  };
+
+  
+
+
+  //등록 버튼 클릭 시 POST 요청을 보내는 함수 
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('title',title);
+    formData.append('content',content);
+
+      //파일이 여러개인 경우, FormData에 각 파일 추가 
+      Array.from(files).forEach(file => {
+        formData.append('uploadFiles', file);
+      });
+      
+      try{ 
+        const response = await axios.post('http://localhost:3000/notice', formData, {
+          headers: {
+            'Content-Type' : 'multipart/form-data'
+          }
+        });
+
+        console.log("게시글이 등록되었습니다.", response.data);
+        setTitle('');
+        setContent('');
+        setFiles([]);//파일 상태 초기화
+      } catch(error){
+        console.error("게시글 등록 중 오류 발생:", error);
+      }
+    };
+    
   return (
     <>
     {/* 콘텐츠 영역 */}
@@ -91,13 +132,39 @@ const Notice_write = () => {
                 }}
               />
             </Box>
-          </Box>
-        </Paper>
+             {/* 파일 업로드 컴포넌트 */}
+             <InputFileUpload onFileChange={handleFileChange} 
+           />
+
+
+              {/* 파일 미리보기 */}
+              <List sx={{ mt: 2 }}>
+                {Array.from(files).map((file, index) => (
+                  <ListItem key={index}>
+                    <ListItemIcon>
+                      {file.type.startsWith('image/') ? (
+                        <ImageIcon />
+                      ) : (
+                        <InsertDriveFileIcon />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={file.name}
+                      secondary={file.size > 1024 ? `${(file.size / 1024).toFixed(1)} KB` : `${file.size} B`}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </Paper>
+
+      
 
         {/* 등록 버튼 */}
         <Box display="flex" justifyContent="flex-end" mt={2} maxWidth="110%" width="103%">
           <Button 
             variant="contained"
+            onClick={handleSubmit}
             sx={{ 
               fontSize:'15px',
               width:'150px',
@@ -117,8 +184,7 @@ const Notice_write = () => {
       </Box>
     </section>
   </>
-);
-};
+)};
 
 export default Notice_write;
 
