@@ -71,7 +71,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   const [conversionList, setConversionList] = useState([]); // 변환 목록
   const [isConversionModalOpen, setIsConversionModalOpen] = useState(false);
   const handleAddToConversion = () => {
-    // 불필요한 find를 사용하지 않고 바로 rowSelectionModel을 이용할 수 있음, id는 mergeId를 사용하게 됨
+    // 불필요한 find를 사용하지 않고 바로 rowSelectionModel을 이용할 수 있음,
     const selectedItems = rowSelectionModel.map((id) => flatFolderMap.get(id));
 
 
@@ -513,7 +513,7 @@ const handlePaste = () => {
             checkboxSelection
             disableDoubleClickEdit={true}
             rows={rows}
-            getRowId={(row) => row.id}
+            getRowId={(row) => `${row.id}_${row.projectId}`}
             columns={columns}
             editMode='row'
             onCellDoubleClick={(params, event) => {

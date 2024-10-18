@@ -11,6 +11,7 @@ import axios from "axios";
 // 트리 데이터를 Flat 데이터로 변환하는 함수
 export function flattenTree(treeData, parentId = null) {
   let flatData = [];
+  //실제로 백엔드에서 이런 식으로 넘어오지는 않음. 때문에 어떻게 해서든 이런 데이터 형식을 가지게 끔 변형해야 함
   treeData.forEach((item) => {
     flatData.push({
       id: item.id,
