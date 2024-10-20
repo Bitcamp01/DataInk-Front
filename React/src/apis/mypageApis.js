@@ -39,9 +39,9 @@ export const updateMypageInfo = createAsyncThunk(
     'mypage/updateMypageInfo',
     async (userInfo, thunkApi) => {
         try {
-            const response = await axios.post(
+            const response = await axios.put(
                 'http://localhost:9090/mypage/update-profile',
-                {userInfo},
+                userInfo,
                 {
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,

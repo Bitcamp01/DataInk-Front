@@ -8,7 +8,7 @@ const Profile = () => {
     const dispatch = useDispatch();
 
     // Redux에서 사용자 데이터 가져오기
-    const { name, id, email, tel, birth} = useSelector(state => state.userSlice);
+    const { name, id, email, tel, birth } = useSelector(state => state.userSlice);
 
     // 비밀번호 변경 모달 열림/닫힘 상태 관리
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -18,7 +18,7 @@ const Profile = () => {
     const [dep, setDep] = useState('');
     const [postcode, setPostcode] = useState('');
     const [address, setAddress] = useState('');
-    const [addr, setAddr] = useState('');
+    const [detailAddress, setDetailAddress] = useState('');
     const [extraAddress, setExtraAddress] = useState('');
 
 
@@ -78,7 +78,7 @@ const Profile = () => {
                     setPostcode(data.zonecode);
                     setAddress(addr);
                     setExtraAddress(extraAddr);
-                    setAddr(''); // 상세 주소는 비워둔다.
+                    setDetailAddress(''); // 상세 주소는 비워둔다.
                 }
             }).open();
         } else {
@@ -91,12 +91,11 @@ const Profile = () => {
         e.preventDefault();
         
         try {
+            const fullAddress = `${postcode} ${address} ${detailAddress} ${extraAddress}`;
             await dispatch(updateMypageInfo({
                 nickname,
-                postcode,
-                address,
-                addr,
-                extraAddress
+                dep,
+                addr: fullAddress
             })).unwrap();
             alert('회원 정보가 성공적으로 수정되었습니다.');
         } catch (error) {
@@ -142,7 +141,7 @@ const Profile = () => {
                         id="nickname" 
                         name="nickname" 
                         placeholder="닉네임 입력해주세요"
-                        value={nickname}
+                        value={nickname}s
                         onChange={(e) => setNickname(e.target.value)}
                     />
                 </div>
@@ -223,8 +222,8 @@ const Profile = () => {
                             type="text" 
                             name="detailed-address" 
                             placeholder="상세 주소" 
-                            value={addr}
-                            onChange={(e) => setAddr(e.target.value)} 
+                            value={detailAddress}
+                            onChange={(e) => setDetailAddress(e.target.value)} 
                         />
                         <input 
                             type="text" 
