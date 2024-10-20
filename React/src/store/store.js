@@ -18,7 +18,7 @@ import storageSession from 'redux-persist/es/storage/session';
 const reducers = combineReducers({
     userSlice,
     noticeSlice,
-    labelTableSlices,
+    labelTableSlice,
 });
 
 const persistConfig = {
