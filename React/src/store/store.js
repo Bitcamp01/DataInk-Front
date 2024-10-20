@@ -1,7 +1,7 @@
 import {configureStore, combineReducers} from '@reduxjs/toolkit';
 import userSlice from '../slices/userSlice';
 import noticeSlice from '../slices/noticeSlice';
-import mypageSlice from '../slices/mypageSlice';
+import labelTableSlice from '../slices/labelTableSlice';
 
 import {
     persistReducer,
@@ -18,7 +18,7 @@ import storageSession from 'redux-persist/es/storage/session';
 const reducers = combineReducers({
     userSlice,
     noticeSlice,
-    mypageSlice,
+    labelTableSlices,
 });
 
 const persistConfig = {
