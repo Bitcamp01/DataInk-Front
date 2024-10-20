@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/profile.css';
 import PasswordChangeModal from './PasswordChangeModal';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateMypageInfo } from '../../apis/mypageApis';
 
 const Profile = () => {
+    const dispatch = useDispatch();
+
     // Redux에서 사용자 데이터 가져오기
-    const { name, id, email, tel, birth} = useSelector(state => state.userSlice);
+    const { name, id, email, tel, birth } = useSelector(state => state.userSlice);
 
     // 비밀번호 변경 모달 열림/닫힘 상태 관리
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     
     // 주소 관련 상태 관리
+    const [nickname, setNickname] = useState('');
+    const [dep, setDep] = useState('');
     const [postcode, setPostcode] = useState('');
     const [address, setAddress] = useState('');
     const [detailAddress, setDetailAddress] = useState('');
     const [extraAddress, setExtraAddress] = useState('');
+
 
     // Daum 우편번호 API 스크립트 로드
     useEffect(() => {
@@ -80,6 +86,24 @@ const Profile = () => {
         }
     };
 
+    // 사용자 정보 업데이트 함수
+    const handleSaveProfile = async (e) => {
+        e.preventDefault();
+        
+        try {
+            const fullAddress = `${postcode} ${address} ${detailAddress} ${extraAddress}`;
+            await dispatch(updateMypageInfo({
+                nickname,
+                dep,
+                addr: fullAddress
+            })).unwrap();
+            alert('회원 정보가 성공적으로 수정되었습니다.');
+        } catch (error) {
+            console.error('프로필 업데이트 중 오류 발생:', error);
+            alert('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');
+        }
+    };
+
     return (
         <div id="Profile" className="tab-content">
             <div className="profile-header-title">
@@ -111,12 +135,25 @@ const Profile = () => {
                     />
                 </div>
                 <div className="profile-form__group">
-                    <label htmlFor="nickname">*닉네임</label>
+                    <label htmlFor="nickname">닉네임</label>
                     <input 
                         type="text" 
                         id="nickname" 
                         name="nickname" 
-                        placeholder="닉네임 입력"
+                        placeholder="닉네임 입력해주세요"
+                        value={nickname}s
+                        onChange={(e) => setNickname(e.target.value)}
+                    />
+                </div>
+                <div className="profile-form__group">
+                    <label htmlFor="dep">부서</label>
+                    <input 
+                        type="text" 
+                        id="department" 
+                        name="department" 
+                        placeholder="부서 입력해주세요"
+                        value={dep}
+                        onChange={(e) => setDep(e.target.value)}
                     />
                 </div>
                 <div className="profile-form__group">
@@ -130,15 +167,7 @@ const Profile = () => {
                     />
                 </div>
                 <div className="profile-form__group">
-                    <label htmlFor="phone-carrier">*휴대폰 인증</label>
-                    {/* <select 
-                        id="phone-carrier" 
-                        name="carrier"
-                    >
-                        <option value="KT">KT</option>
-                        <option value="SKT">SKT</option>
-                        <option value="LGU+">LGU+</option>
-                    </select> */}
+                    <label htmlFor="phone-carrier">*휴대폰 번호</label>
                     <div className="profile-form__input-container">
                         <input 
                             type="text" 
@@ -147,12 +176,6 @@ const Profile = () => {
                             placeholder="-없이 숫자만 입력" 
                             value={tel}
                         />
-                        {/* <button 
-                            type="button" 
-                            className="profile-form__button"
-                        >
-                            인증번호 요청
-                        </button> */}
                     </div>
                 </div>
                 <div className="profile-form__group">
@@ -221,6 +244,7 @@ const Profile = () => {
                     </button>
                     <button 
                         className="button profile-password__submit"
+                        onClick={handleSaveProfile}
                     >
                         저장
                     </button>

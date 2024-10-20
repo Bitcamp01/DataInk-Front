@@ -60,7 +60,7 @@ const Mypage = () => {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('/api/user');
+                const response = await axios.get('http://localhost:9090/mypage');
                 const userData = response.data.user;
                 setStatus(userData?.status || "소개 글을 입력해 주세요.");
                 setProfileImage(userData?.profileImage || '/images/dataInk_logo_sqr.png');
