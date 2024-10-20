@@ -1,7 +1,7 @@
 import {configureStore, combineReducers} from '@reduxjs/toolkit';
 import userSlice from '../slices/userSlice';
 import noticeSlice from '../slices/noticeSlice';
-import mypageSlice from '../slices/mypageSlice'
+import mypageSlice from '../slices/mypageSlice';
 
 import {
     persistReducer,
