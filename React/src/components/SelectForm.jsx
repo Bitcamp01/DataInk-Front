@@ -47,9 +47,30 @@ const SelectForm = () => {
     };
 
     const handleRejectClick = () => {
-        const userConfirmed = window.confirm('반려시키시겠습니까?'); // 반려 확인 메시지
+        const userConfirmed = window.confirm('반려시키시겠습니까?');
         if (userConfirmed) {
-            navigate('/label/work');
+            fetch('/labeltask/reject', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taskId: '12345', // 작업의 taskId (예시)
+                    rejectionReason: getFinalSubmission(), // 선택된 이유와 textarea 내용을 결합한 최종 반려 사유
+                }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('반려가 완료되었습니다.');
+                    navigate('/label/work'); // 반려 성공 시 페이지 이동, 후에 병주형이 리스트에 id 붙여서 경로 만들어주면 props 받아서 이동하는거 만들자
+                } else {
+                    alert('반려에 실패했습니다.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('서버 오류가 발생했습니다.');
+            });
         } else {
             navigate('/review');
         }
