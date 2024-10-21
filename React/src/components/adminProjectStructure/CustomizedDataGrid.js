@@ -60,12 +60,13 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   //데이터 그리드 영역 업데이트 부분
   useEffect(()=>{
     console.log("update")
+    console.log(flatFolderData)
     setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder && item.projectId === selectedProject));
   },[selectedFolder,selectedProject,flatFolderMap])
 
   // flatFolderData가 변경될 때 Map으로 업데이트
   useEffect(() => {
-    setFlatFolderMap(new Map(flatFolderData.map(item => [item.id, item])));
+    setFlatFolderMap(new Map(flatFolderData.map(item => [`${item.id}_${item.projectId}`, item])));
   }, [flatFolderData]);
   ///////////////////////////////////////////////////////////////////////////////////
   const [conversionList, setConversionList] = useState([]); // 변환 목록
@@ -319,10 +320,11 @@ const handleCopy = () => {
   const processRowUpdate = async(newRow) => {
     console.log("processRowUpdate")
     try {
-      const response = await axios.post(`http://localhost:9090/projects/modify`, {
+      console.log("newRow",newRow)
+      const response = await axios.post(`http://localhost:9090/projects/rename`, {
         label: newRow.label,
-        id: newRow.id,
-        projectId:newRow.projectId
+        selectedFolder: newRow.id,
+        selectedProject:newRow.projectId
       }, {
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
@@ -368,10 +370,6 @@ const handleCopy = () => {
     //edit모드가 풀릴때 다시 요청 보내는 방식
     //const response ~~~
     try {
-      let select=selectedFolder;
-      if (selectedFolder === null){
-        select=0
-      }
       const response=await axios.post("http://localhost:9090/projects/createfolder",
           {
             selectedFolder: selectedFolder,

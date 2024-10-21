@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import CustomizedTreeView from '../components/adminProjectStructure/CustomizedTreeView';
 import CustomizedDataGrid from '../components/adminProjectStructure/CustomizedDataGrid';
 import axios from "axios";
+import { wait } from '@testing-library/user-event/dist/utils';
 
 
 
@@ -50,16 +51,15 @@ export default function MainGrid() {
     let tree = [];
     let lookup = {};
 
-    // id와 rootId를 결합하여 고유한 키를 생성
     flatData.forEach(item => {
-      // console.log(item)
+   
       const key = `${item.id}_${item.projectId}`
       lookup[key] = {
         ...item,
-        children: []  // 트리 구조로 변환할 때 자식 노드를 위한 배열 추가
+        children: [] 
       };
     });
-    // console.log(lookup);
+
     flatData.forEach(item => {
       const key =  `${item.id}_${item.projectId}`
       if (item.parentId === null) {
@@ -71,8 +71,7 @@ export default function MainGrid() {
         }
       }
     });
-    // console.log(lookup);
-    // console.log(tree)
+  
     return tree;
   }
   //초기화면 구성시 서버로부터 프로젝트 구조 가져오기, 백엔드 구현시 요청하는 코드로 변경 필요
@@ -110,32 +109,47 @@ export default function MainGrid() {
     }
   }
   const updateFlatFolderData = (newData) => {
+ 
     if (!Array.isArray(newData)) {
       console.error("newData is not an array", newData);
-      return; // 혹은 배열이 아닐 경우 적절한 처리를 수행합니다.
+      return; // 배열이 아닐 경우 적절한 처리를 수행합니다.
     }
+  
     setFlatFolderData((prevFlatData) => {
-      // id와 projectId를 결합하여 고유한 키 생성
-      const lookup = new Map(prevFlatData.map(item => [`${item.id}_${item.projectId}`, item]));
-
-      // 기존 데이터와 새로운 데이터 병합
+      const updatedFlatData = prevFlatData.map((item) => {
+        // 새로운 데이터에서 id가 일치하는 항목 찾기
+        const newItem = newData.find((newItem) => newItem.id === item.id);
+  
+        // 새로운 데이터가 있는 경우에만 업데이트, 그렇지 않으면 기존 데이터 유지
+        if (newItem) {
+          return {
+            ...item, // 기존 데이터를 유지
+            label: newItem.label, // 덮어쓸 필드
+            isFolder: newItem.isFolder,
+            itemId: newItem.itemId,
+            lastModifiedUserId: newItem.lastModifiedUserId,
+            lastModifiedDate: newItem.lastModifiedDate,
+            finished: newItem.finished,
+            workStatus: newItem.workStatus,
+            // parentId와 projectId는 기존 값을 유지
+          };
+        }
+        return item; // 새로운 데이터가 없으면 기존 데이터 그대로 유지
+      });
+  
+      // 기존 데이터에 없는 새 항목을 추가
       newData.forEach((newItem) => {
-        const key = `${newItem.id}_${newItem.projectId}`;
-        if (lookup.has(key)) {
-          lookup.set(key, { ...lookup.get(key), ...newItem });
-        } else {
-          lookup.set(key, newItem);
+        if (!prevFlatData.some((item) => item.id === newItem.id)) {
+          updatedFlatData.push(newItem); // 새 항목 추가
         }
       });
-
-      // 새로 받아온 데이터에는 없고 기존 데이터에는 있는 항목들을 제거
-      const updatedFlatData = Array.from(lookup.values()).filter(item =>
-          newData.some(newItem => newItem.id === item.id && newItem.projectId === item.projectId)
-      );
-
-      return updatedFlatData;
+  
+      return updatedFlatData; // 배열 형태로 반환
     });
+  
   };
+  
+  
 
 
 
@@ -155,7 +169,7 @@ export default function MainGrid() {
       if (response.status === 200) {
 
         // 서버로부터 받아온 데이터가 response.data.items라고 가정하고 업데이트합니다.
-        updateFlatFolderData(flattenTree(response.data));
+        updateFlatFolderData(flattenTree(response.data,null,selectedProject));
       }
     } catch (err) {
       console.error("Error fetching selected folder data:", err);
@@ -173,7 +187,6 @@ export default function MainGrid() {
     setFlatFolderData(flattenTree(originalFolderData))
   },[originalFolderData])
   React.useEffect(()=>{
-    console.log(flatFolderData)
     const newTreeData = unflatten(flatFolderData);
     setFolderData(newTreeData);
   },[flatFolderData])
