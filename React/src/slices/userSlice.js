@@ -13,6 +13,9 @@ const userSlice = createSlice({
         birth: '',
         authen: '',
         telCheckMsg: '',
+        addr: '',
+        dep: '',
+        nickname:'',
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -65,6 +68,9 @@ const userSlice = createSlice({
                     tel: '',
                     authen: '',
                     birth: '',
+                    addr: '',
+                    dep: '',
+                    nickname:'',
                 };
             })
             .addCase(logout.rejected, (state, action) => {
