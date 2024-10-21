@@ -13,20 +13,21 @@ import { useEffect } from 'react';
 const columns = [
   { field: 'id', headerName: 'No', flex: 90 / 1100, cellClassName: 'first-column', headerClassName: 'header-text'  }, 
   { field: 'title', headerName: '제목', flex: 580 / 1100 },  
-  { field: 'writer', headerName: '작성자', flex: 140 / 1100 }, 
+  { field: 'writer', headerName: '작성자', flex: 120 / 1100 }, 
   { field: 'department', headerName: '소속(부서)', flex: 140 / 1100 },  
-  { field: 'regdate', headerName: '작성일', flex: 150 / 1100 },  
+  { field: 'regdate', headerName: '작성일', flex: 200 / 1100 },  
 ];
 
 
 const Table_notice = () => {
-  const notice = useSelector(state => state.noticeSlice.notice);
+  const notice = useSelector(state => state.noticeSlice.notice) || [];
   const searchCondition = useSelector(state => state.noticeSlice.searchCondition);
   const searchKeyword = useSelector(state=> state.noticeSlice.searchKeyword);
   const page = useSelector(state => state.noticeSlice.page);
 
   const navi = useNavigate();
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     dispatch(getNotice({
@@ -38,9 +39,9 @@ const Table_notice = () => {
 
   const changePage = React.useCallback((e, v) => {
     dispatch(getNotice({
-      searchCondition,
-      searchKeyword,
-      page:parseInt(v) -1
+      searchCondition: 'all',
+      searchKeyword: '',
+      page: parseInt(v) - 1
     }));
   },[searchCondition, searchKeyword]);
 
@@ -56,7 +57,13 @@ const Table_notice = () => {
       }}>
 
       <DataGrid
-        rows={notice}
+         rows={(notice.content ?? []).map((item, index) => ({
+              id: item.noticeId,
+              title: item.title,
+              writer: item.name,
+              department: item.department || '부서 정보 없음',
+              regdate: item.created
+            }))}
         columns={columns}
         rowHeight={40} 
         headerHeight={50}

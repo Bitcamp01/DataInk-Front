@@ -77,7 +77,15 @@ export default function Table_projectList() {
        borderRadius: '10px'}}>
 
       <DataGrid
-        rows={rows}
+        // rows={(memberListAll?.content ?? []).map((item, index) => ({
+        //   id: item.prId,                  
+        //   name: item.name,       
+        //   department: item.department || '부서 정보 없음', 
+        //   email: item.email,  
+        //   tel: item.tel, 
+        //   role:item.role, 
+        //   regdate: item.created               
+        // }))} 
         columns={columns} 
         rowHeight={40} 
         headerHeight={50}

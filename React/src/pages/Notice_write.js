@@ -33,7 +33,7 @@ const Notice_write = () => {
       });
       
       try{ 
-        const response = await axios.post('http://localhost:3000/notice', formData, {
+        const response = await axios.post('http://localhost:9090/notice', formData, {
           headers: {
             'Content-Type' : 'multipart/form-data'
           }

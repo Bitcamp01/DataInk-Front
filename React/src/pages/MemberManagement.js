@@ -1,21 +1,41 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
+import axios from 'axios';
 import '../css/memberManagement.css';
 import FixedSizeGrid from '../components/Table_memberListAll'; 
 import Table_projectList from '../components/Table_projectList';
 import Modal_addMember from '../components/Modal_addMember';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { getMember } from '../apis/memberManagementApis';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTabData } from '../slices/memberSlice';
 
 const MemberManagement = () => {
-  const [activeTab, setActiveTab] = useState('member');
+  const [activeTab, setActiveTab] = useState('users');
   const [open, setOpen] = useState(false); // 모달 상태 관리
   const [email, setEmail] = useState('');  // 이메일 입력 상태
+  const [page, setPage] = useState(1); // 페이지 상태
+  
+  const dispatch = useDispatch();
+
+  // Redux 상태를 가져오기
+  const {  data = [], totalPages, loading, error } = useSelector((state) => state.memberManagement || {});
+
+
+  // 탭 전환 시 데이터를 가져오기 위해 useEffect 사용
+  useEffect(() => {
+    dispatch(fetchTabData({ tab:activeTab, page}));
+  }, [activeTab, page, dispatch]); // activeTab이나 page가 변경될 때마다 호출
+
+
+  // 페이지 변경 핸들러
+  const handlePageChange = (event, value) => {
+      setPage(value);
+  };
 
   // 탭 변경 함수
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
+    setPage(1); // 탭이 변경될 때 페이지를 초기화
   };
 
   // 모달 열기
@@ -34,10 +54,10 @@ const MemberManagement = () => {
         {/* 콘텐츠 영역 */}
         <section className="member-list">
             <div className="member-list__title">
-              {activeTab === 'member'?'전체 멤버 리스트' :'프로젝트 별 멤버 관리'}
+              {activeTab === 'users'?'전체 멤버 리스트' :'프로젝트 별 멤버 관리'}
             </div>
             <div className="member-list__discription">
-              {activeTab === 'member'? (
+              {activeTab === 'users'? (
                 <> 가입한 멤버들의 리스트를 확인하고<br />
                 멤버추가 버튼을 이용하여 새로운 멤버를 등록할 수 있습니다
                 </>
@@ -53,21 +73,21 @@ const MemberManagement = () => {
             <div className="tab-section__tabs">
               {/* 멤버 리스트 탭 */}
               <button
-                className={`tab-section__tab ${activeTab === 'member' ? 'tab-section__tab--active' : ''}`}
-                onClick={() => handleTabClick('member')}>
+                className={`tab-section__tab ${activeTab === 'users' ? 'tab-section__tab--active' : ''}`}
+                onClick={() => handleTabClick('users')}>
                 멤버 리스트
               </button>
              
               {/* 프로젝트 관리 탭 */}
               <button
-                className={`tab-section__tab ${activeTab === 'project' ? 'tab-section__tab--active' : ''}`}
-                onClick={() => handleTabClick('project')}>
+                className={`tab-section__tab ${activeTab === 'projects' ? 'tab-section__tab--active' : ''}`}
+                onClick={() => handleTabClick('projects')}>
                 프로젝트 관리
               </button>
             
               </div>
-              {/* 멤버 추가 버튼: activeTab이 'member'일 때만 보이게 */}
-              {activeTab === 'member' && (
+              {/* 멤버 추가 버튼: activeTab이 'users'일 때만 보이게 */}
+              {activeTab === 'users' && (
                     <Button
                       variant="contained" 
                       onClick={handleClickOpen}
@@ -92,31 +112,11 @@ const MemberManagement = () => {
 
             {/* 테이블 영역 */}
             <div className='table-container'>
-            {activeTab === 'member' ?  <FixedSizeGrid /> : <Table_projectList/>}
+            {activeTab === 'users' ?  <FixedSizeGrid data={data || []} /> :
+            <Table_projectList data={data || []} />}
             </div>
 
-            {/* 페이지네이션 */}
-            <div className="pagination-container custom-pagination">
-                <Stack spacing={2} sx={{ marginBottom: '80px',  }}>
-                    <Pagination count={10}  sx={{
-                      '& .MuiPaginationItem-root': {
-                        color: '#7c97fe !important', // 기본 페이지 버튼의 색상
-                      },
-                      '& .Mui-selected': {
-                        backgroundColor: '#7c97fe', // 선택된 페이지 속성
-                        color: '#ffffff', 
-                      },
-                      '& .MuiPaginationItem-root:not(.Mui-selected)': {
-                        color: '#3e3e3e', // 선택되지 않은 페이지 텍스트 색상 설정 
-                      },
-                      '& .MuiPaginationItem-ellipsis': {
-                        color: '#3e3e3e', // 페이지 사이의 점 색상
-                      },
-                    
-                    }} />
-                </Stack>
-            </div>
-
+            
 
           {/* 멤버 추가 모달창 */}
           <Modal_addMember open={open} handleClose={handleClose} email={email} setEmail={setEmail} />
