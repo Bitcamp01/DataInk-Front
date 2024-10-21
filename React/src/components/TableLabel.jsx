@@ -8,6 +8,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import CommonButton from '../components/CommonButton'
 import ConfirmModal from './labelling/ConfirmModal';
+import { useSelector } from 'react-redux';
 
 const columns = [
   { field: 'id', headerName: 'No', width: 90, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
@@ -19,18 +20,18 @@ const columns = [
   { field: 'deadline', headerName: '마감일', width: 250 },
 ];
 
-const rows = [
-  { id: 1, category1: '텍스트', category2: 'OCR', category3: '영수증', workname: '영수증 인식 작업', workstatus: '진행중', deadline: '2024-03-15' },
-  { id: 2, category1: '이미지', category2: '객체 탐지', category3: '교통표지판', workname: '교통표지판 인식 작업', workstatus: '진행중', deadline: '2024-03-20' },
-  { id: 3, category1: '음성', category2: '음성 변환', category3: '인터뷰', workname: '인터뷰 음성 라벨링 작업', workstatus: '진행중', deadline: '2024-03-25' },
-  { id: 4, category1: '텍스트', category2: '번역', category3: '기술문서', workname: '기술문서 번역 라벨링', workstatus: '진행중', deadline: '2024-03-30' },
-  { id: 5, category1: '이미지', category2: '분류', category3: '상품 이미지', workname: '상품 이미지 분류 작업', workstatus: '반려됨', deadline: '2024-04-01' },
-  { id: 6, category1: '음성', category2: '음성 인식', category3: '콜센터 대화', workname: '콜센터 대화 음성 인식', workstatus: '반려됨', deadline: '2024-04-05' },
-  { id: 7, category1: '텍스트', category2: '기술문서', category3: '리뷰', workname: '리뷰 분석 라벨링', workstatus: '반려됨', deadline: '2024-04-10' },
-  { id: 8, category1: '이미지', category2: '객체 탐지', category3: '교통표지판', workname: '추가 교통표지판 라벨링', workstatus: '반려됨', deadline: '2024-04-15' },
-  { id: 9, category1: '텍스트', category2: '감정 분석', category3: 'SNS 데이터', workname: 'SNS 데이터 감정 분석', workstatus: '반려됨', deadline: '2024-04-20' },
-  { id: 10, category1: '음성', category2: '대화 분석', category3: '뉴스 인터뷰', workname: '뉴스 인터뷰 대화 분석', workstatus: '반려됨', deadline: '2024-04-25' },
-];
+// const rows = [
+//   { id: 1, category1: '텍스트', category2: 'OCR', category3: '영수증', workname: '영수증 인식 작업', workstatus: '진행중', deadline: '2024-03-15' },
+//   { id: 2, category1: '이미지', category2: '객체 탐지', category3: '교통표지판', workname: '교통표지판 인식 작업', workstatus: '진행중', deadline: '2024-03-20' },
+//   { id: 3, category1: '음성', category2: '음성 변환', category3: '인터뷰', workname: '인터뷰 음성 라벨링 작업', workstatus: '진행중', deadline: '2024-03-25' },
+//   { id: 4, category1: '텍스트', category2: '번역', category3: '기술문서', workname: '기술문서 번역 라벨링', workstatus: '진행중', deadline: '2024-03-30' },
+//   { id: 5, category1: '이미지', category2: '분류', category3: '상품 이미지', workname: '상품 이미지 분류 작업', workstatus: '반려됨', deadline: '2024-04-01' },
+//   { id: 6, category1: '음성', category2: '음성 인식', category3: '콜센터 대화', workname: '콜센터 대화 음성 인식', workstatus: '반려됨', deadline: '2024-04-05' },
+//   { id: 7, category1: '텍스트', category2: '기술문서', category3: '리뷰', workname: '리뷰 분석 라벨링', workstatus: '반려됨', deadline: '2024-04-10' },
+//   { id: 8, category1: '이미지', category2: '객체 탐지', category3: '교통표지판', workname: '추가 교통표지판 라벨링', workstatus: '반려됨', deadline: '2024-04-15' },
+//   { id: 9, category1: '텍스트', category2: '감정 분석', category3: 'SNS 데이터', workname: 'SNS 데이터 감정 분석', workstatus: '반려됨', deadline: '2024-04-20' },
+//   { id: 10, category1: '음성', category2: '대화 분석', category3: '뉴스 인터뷰', workname: '뉴스 인터뷰 대화 분석', workstatus: '반려됨', deadline: '2024-04-25' },
+// ];
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -47,6 +48,7 @@ export default function DataGridDemo() {
   const [isModalOpen, setIsModalOpen] = React.useState(false); // 모달창 열고 닫기 상태
   const [isConfirmed, setIsConfirmed] = React.useState(false); // 확인 상태 관리
 
+  const tableData = useSelector((state) => state.labelTableSlice.tableData);
   
   const handleRowClick = (params) => {
     // const { id } = params.row;
@@ -111,7 +113,7 @@ export default function DataGridDemo() {
       }}>
 
       <DataGrid
-        rows={rows}
+        rows={tableData}
         columns={columns}
         rowHeight={40} 
         headerHeight={50}
