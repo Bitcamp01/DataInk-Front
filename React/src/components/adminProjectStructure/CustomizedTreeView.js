@@ -10,7 +10,7 @@ import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import { unstable_useTreeItem2 as useTreeItem2 } from '@mui/x-tree-view/useTreeItem2';
-import { jwtDecode } from 'jwt-decode'; // named import로 수정
+
 
 import {
   TreeItem2Content,
@@ -141,12 +141,31 @@ CustomTreeItem.propTypes = {
   onDoubleClick: PropTypes.func.isRequired,
 };
 
-export default function CustomizedTreeView({ folderData, setSelectedFolder,setSelectedProject,selectedProject, setFolderData, setFlatFolderData, handleTreeViewMouseEnter,getSelectedFolderData }) {
+export default function CustomizedTreeView({ folderData, setSelectedFolder,setSelectedProject,selectedProject, setFolderData, setFlatFolderData,getSelectedFolderData }) {
   const [open, setOpen] = React.useState(false);
   const [newProjectName, setNewProjectName] = React.useState('');
   const [newProjectDec, setNewProjectDec] = React.useState('');
   const [newProjectDueDate, setNewProjectDueDate] = React.useState(''); // 마감일자 상태 추가
 
+  const getFolderData= async (folderId,projectId)=>{
+    try {
+      const response=await axios.get("http://localhost:9090/projects/folder", {
+        params:{
+          selectedFolder:folderId,
+          selectedProject:projectId
+        },
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+        }
+      });
+      if (response.status === 200) {
+
+      }
+    }
+    catch (e){
+
+    }
+  }
   const handleFolderDoubleClick = (folder) => {
     setSelectedProject(folder.projectId);
     setSelectedFolder(folder.id);
@@ -222,7 +241,6 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
           </Box>
 
           <RichTreeView
-              onMouseEnter={handleTreeViewMouseEnter}
               items={folderData}
               aria-label="pages"
               multiSelect

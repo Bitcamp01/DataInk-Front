@@ -39,7 +39,7 @@ export default function ItemSettingsModal({ open, onClose, onSave, items, select
     setSelectedItem(item.id); // 선택된 항목의 ID만 저장
   };
   const createNewItem = () =>{
-    navi("/item_structure")
+    navi("/item_structure/0")
   }
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">

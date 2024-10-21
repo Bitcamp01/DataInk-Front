@@ -3,13 +3,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const ItemStructure = () => {
     const { itemId } = useParams();
     const [data, setData] = useState({});
     const [rowCnt,setRowCnt] = useState(0);
     const [itemName, setItemName] = useState('');
+    const navi=useNavigate();
     const changeTextFiled = (e, path) => {
         const newValue = e.target.value;
         const pathArray = path.split('.');
@@ -35,11 +36,11 @@ const ItemStructure = () => {
 
         }
     }
-    // useEffect(() => {
-    //     if (itemId !== null) {
-    //         setData(getItem().data);
-    //     }
-    // }, [itemId]);
+    useEffect(() => {
+        if (itemId !== 0) {
+            setData(getItem().data);
+        }
+    }, [itemId]);
     const calculateDepth = (obj, depth = 1) => {
         if (typeof obj === 'object' && obj !== null) {
             return Math.max(...Object.values(obj).map(value => calculateDepth(value, depth + 1)));
@@ -147,16 +148,13 @@ const ItemStructure = () => {
         ));
     };
     const handleSave = async () => {
-        console.log(data)
         try {
-
-            if (itemId !== null) {
+            if (itemId !== 0) {
                 const payload = {
                     itemId: itemId,
                     itemName: itemName,
                     data: data,
                 };
-                // 기존 아이템 업데이트 로직 (서버로 PUT 요청 등)
                 console.log('아이템 업데이트:', itemId);
                 const response = await axios.post("http://localhost:9090/item/update",payload,{
                     headers : { 'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`}
@@ -172,7 +170,9 @@ const ItemStructure = () => {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                     }
                 })
-
+                if (response.status === 201){
+                    navi("/main_grid")
+                }
             }
         } catch (error) {
             console.error('Error saving data:', error);
