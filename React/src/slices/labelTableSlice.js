@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchFolders, fetchTasksByFolderId, fetchProjectEndDate } from "../apis/labelTableApis";
+import { fetchFolders, fetchTasksByFolderId, fetchProjectEndDate, submitForReview } from "../apis/labelTableApis";
 
 // 폴더 상태 관리 slice 생성
 const labelTableSlice = createSlice({
@@ -35,6 +35,13 @@ const labelTableSlice = createSlice({
         })
         .addCase(fetchProjectEndDate.fulfilled, (state, action) => {
           state.endDate = action.payload; // 프로젝트 마감일 설정
+        })
+        // 검수 요청 상태 처리
+        .addCase(submitForReview.fulfilled, (state, action) => {
+          return state;
+        })
+        .addCase(submitForReview.rejected, (state, action) => {
+          return state;
         });
     },
 });
