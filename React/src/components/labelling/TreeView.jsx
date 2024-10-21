@@ -81,7 +81,8 @@ const handleFolderClick = async (folderId, parentLabels = []) => {
 
     // 파일(Task) 데이터를 대분류, 중분류, 소분류에 맞춰 매핑
     const folderFiles = tasks.map((task, index) => ({
-      id: index + 1,  // 인덱스를 1부터 시작하도록 설정
+     id: index + 1,  // 인덱스를 1부터 시작하도록 설정 (테이블 표시용)
+      taskId: task.id,  // 실제 Task ID 저장 (검수 요청 시 사용)
       workname: task.taskName,
       category1: updatedParentLabels[0] || '',  // 대분류
       category2: updatedParentLabels[1] || '',  // 중분류

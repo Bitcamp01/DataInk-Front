@@ -51,4 +51,22 @@ export const fetchProjectEndDate = createAsyncThunk(
     }
   }
 );
+
+// 비동기 작업 정의 (검수 요청 - 상태 업데이트)
+export const submitForReview = createAsyncThunk(
+  'labelTable/submitForReview',
+  async (taskIds, { rejectWithValue }) => {
+    try {
+      // taskIds를 보내서 상태를 업데이트하는 API 호출
+      const response = await axios.put(`http://localhost:9090/mongo/tasks/update-submit`, taskIds, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+                },
+            });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
   
