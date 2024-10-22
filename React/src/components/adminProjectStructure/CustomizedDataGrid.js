@@ -365,10 +365,6 @@ const handleCopy = () => {
   };
 
   const handleCreateNewFolder = async ()=>{
-    // 새 폴더 만들기는 두번의 요청으로 이루어지게 함
-    // 단순히 get요청으로 현재 폴더 위치에 default폴더를 생성
-    //edit모드가 풀릴때 다시 요청 보내는 방식
-    //const response ~~~
     try {
       const response=await axios.post("http://localhost:9090/projects/createfolder",
           {
@@ -379,37 +375,31 @@ const handleCopy = () => {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
         }
       });
-      if (response.status === 201){
+      console.log("create folder",response)
+      if (response.status === 200){
         // rows 상태 업데이트, flatdata가 비동기 업데이트기 때문에 우선 포커스 용으로 row상태 업데이트
         setRows([...rows, response.data]);
         setFlatFolderData([...flatFolderData,response.data]);
         // 체크박스 선택 상태 초기화
         setRowSelectionModel([response.data.id]); // 새로 생성한 폴더 선택
-
+        console.log("aaaaaaaaaaaaaaaaaa")
         // 새 폴더 행을 편집 모드로 설정
-        setRowModesModel((prevModel) => ({
-          ...prevModel,
-          [response.data.id]: { mode: GridRowModes.Edit }, // 편집 모드로 전환
-        }));
-
-
-        apiRef.current.setCellFocus(response.data.id, 'label');
+        // setRowModesModel((prevModel) => ({
+        //   ...prevModel,
+        //   [response.data.id]: { mode: GridRowModes.Edit }, // 편집 모드로 전환
+        // }));
+        // console.log("bbbbbbbbbbbbbbb")
+        // apiRef.current.setCellFocus(response.data.id, 'label');
+        // console.log("ccccccccccccccccccc")
       }
     }
     catch(error){
 
     }
-    // const newFolder = {
-    //   id: String(new Date().getTime()), // 사용할 아이디를 백단에서 받아옴, 지금은 임시 값
-    //   label: 'New Folder', // 기본 폴더 이름
-    //   isFolder: true,
-    //   parentId:selectedFolder
-    // };
-
-
     // 컨텍스트 메뉴 닫기
     handleClose();
   }
+
   const handleDelete = async (e) => {
     if (rowSelectionModel.length > 0) {
       try {
