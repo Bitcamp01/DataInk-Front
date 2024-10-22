@@ -59,9 +59,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
 
   //데이터 그리드 영역 업데이트 부분
   useEffect(()=>{
-    console.log("update")
-    console.log(flatFolderData)
-    setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder && item.projectId === selectedProject));
+    setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder));
   },[selectedFolder,selectedProject,flatFolderMap])
 
   // flatFolderData가 변경될 때 Map으로 업데이트
@@ -180,24 +178,34 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
 };
   
 // 파일 선택시 호출되는 핸들러
-const handleFileUpload = (event) => {
-  //백엔드에 axios요청
+const handleFileUpload = async (event) => {
   const selectedFiles = Array.from(event.target.files); // 선택된 파일 배열로 변환
-  //파일 정보를 백엔드로 부터 받아옴
-  const newFiles = selectedFiles.map((file) => ({
-    id: String(new Date().getTime()) + file.name, // 고유한 ID 생성
-    label: file.name,
-    isFolder: false,
-    children: [],
-    parentId:selectedFolder,
-    lastModifiedUserId:"A",
-    lastModifiedDate: new Date().toISOString()
-  }));
+
+  const formData = new FormData();
+
+  selectedFiles.forEach((file) => {
+    formData.append("files", file); // "files"는 백엔드에서 받을 필드 이름
+  });
+  try {
+    const response= await axios.post('http://localhost:9090/project/uploadfile', selectedFiles,{
+      params: {
+        selectedFolder: selectedFolder,
+        selectedProject: selectedProject,
+      },
+      headers :{
+        'Content-Type' : 'multipart/form-data',
+        'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+      }
+    });
+  }
+  catch (e){
+
+  }
 
   // 체크박스 선택 상태 초기화 (첫 번째 파일 선택)
   setRowSelectionModel([]);
   //파일 추가
-  setFlatFolderData((prevFlatData) => [...prevFlatData, ...newFiles]);
+  setFlatFolderData((prevFlatData) => [...prevFlatData]);
   // 컨텍스트 메뉴 닫기
   handleClose();
 };
@@ -364,44 +372,61 @@ const handleCopy = () => {
     setRowModesModel(newRowModesModel);
   };
 
-  const handleCreateNewFolder = async ()=>{
+  useEffect(() => {
+    // rows가 업데이트되고, rowSelectionModel이 올바르게 설정된 경우에만 실행
+    if (rows.length > 0 && rowSelectionModel.length > 0) {
+      const selectedId = rowSelectionModel[0];
+
+      // 편집 모드 설정
+      setRowModesModel((prevModel) => ({
+        ...prevModel,
+        [selectedId]: { mode: GridRowModes.Edit },
+      }));
+
+      // 포커스 설정
+      apiRef.current.setCellFocus(selectedId, 'label');
+    }
+  }, [rows, rowSelectionModel]);
+
+  const handleCreateNewFolder = async () => {
     try {
-      const response=await axios.post("http://localhost:9090/projects/createfolder",
+      const response = await axios.post(
+          "http://localhost:9090/projects/createfolder",
           {
             selectedFolder: selectedFolder,
-            selectedProject: selectedProject
-          },{
-        headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`, // 토큰 필요 시 추가
-        }
-      });
-      console.log("create folder",response)
-      if (response.status === 200){
-        // rows 상태 업데이트, flatdata가 비동기 업데이트기 때문에 우선 포커스 용으로 row상태 업데이트
-        setRows([...rows, response.data]);
-        setFlatFolderData([...flatFolderData,response.data]);
-        // 체크박스 선택 상태 초기화
-        setRowSelectionModel([response.data.id]); // 새로 생성한 폴더 선택
-        console.log("aaaaaaaaaaaaaaaaaa")
-        // 새 폴더 행을 편집 모드로 설정
-        // setRowModesModel((prevModel) => ({
-        //   ...prevModel,
-        //   [response.data.id]: { mode: GridRowModes.Edit }, // 편집 모드로 전환
-        // }));
-        // console.log("bbbbbbbbbbbbbbb")
-        // apiRef.current.setCellFocus(response.data.id, 'label');
-        // console.log("ccccccccccccccccccc")
-      }
-    }
-    catch(error){
+            selectedProject: selectedProject,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+            }
+          }
+      );
 
+      if (response.status === 200) {
+        const newFolder = response.data;
+
+        // 상태 업데이트
+        setRows((prevRows) => [...prevRows, newFolder]);
+        setFlatFolderData((prevFlatData) => [...prevFlatData, newFolder]);
+
+        // 새로 생성한 폴더 선택
+        setRowSelectionModel([newFolder.id]);
+      }
+    } catch (error) {
+      console.error("Error creating folder:", error);
     }
+
     // 컨텍스트 메뉴 닫기
     handleClose();
-  }
+  };
+
 
   const handleDelete = async (e) => {
+    console.log(rowSelectionModel)
     if (rowSelectionModel.length > 0) {
+      const selectedFolderId = selectedFolder === null ? 0 : selectedFolder
+      const selectedProjectId = selectedProject === null ? 0 : selectedProject
       try {
         const response = await axios.post('http://localhost:9090/projects/delete', {
           ids: rowSelectionModel, // 선택된 폴더의 ID들을 data로 넘김
@@ -413,8 +438,8 @@ const handleCopy = () => {
 
         if (response.status === 200) {
           // 성공적으로 삭제된 경우, 클라이언트에도 반영
-          const selectedIds = rowSelectionModel;
-
+          const selectedIds = rowSelectionModel.map((item) => item.split("_")[0]);
+          console.log(selectedIds)
           // flatFolderData 상태에서 선택된 항목들을 제거
           setFlatFolderData(prevFlatData =>
               prevFlatData.filter(item => !selectedIds.includes(item.id))
@@ -456,7 +481,7 @@ const handleCopy = () => {
       <GridToolbarContainer>
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
-        <Button variant="contained" component="label" sx={{ m: 1 }}>
+        <Button variant="contained" component="label" disabled={selectedFolder === null} sx={{ m: 1 }}>
           파일 업로드
           <input type="file" hidden multiple accept=".pdf" onChange={handleFileUpload} />
         </Button>
