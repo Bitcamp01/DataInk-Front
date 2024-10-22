@@ -10,15 +10,18 @@ import CommonButton from '../components/CommonButton';
 import ConfirmModal from './labelling/ConfirmModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitForReview } from '../apis/labelTableApis';
+import { clearTableData } from '../slices/labelTableSlice';
+import NoRows from './labelling/NoRows';
 
 const columns = [
-  { field: 'id', headerName: 'No', width: 90, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
+  { field: 'id', headerName: 'Task ID'},
+  { field: 'no', headerName: 'No', width: 90, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
   { field: 'category1', headerName: '대분류', width: 150 },
   { field: 'category2', headerName: '중분류', width: 150 },
   { field: 'category3', headerName: '소분류', width: 150 },
   { field: 'workname', headerName: '작업명', width: 300 },
   { field: 'workstatus', headerName: '작업상태', width: 170 },
-  { field: 'deadline', headerName: '마감일', width: 250 }
+  { field: 'deadline', headerName: '마감일', width: 250 },
 ];
 
 const ButtonContainer = styled.div`
@@ -39,45 +42,39 @@ export default function DataGridDemo() {
 
   const tableData = useSelector((state) => state.labelTableSlice.tableData);
 
+  React.useEffect(() => {
+    // 첫 렌더링 시 테이블 데이터 초기화
+    dispatch(clearTableData());
+  }, [dispatch]);
+
   const handleRowClick = (params) => {
-    const { taskId } = params.row;
-    navigate(`/label/detail/${taskId}`);
+    const { id } = params.row;  // taskId 대신 id 사용
+    navigate(`/label/detail`);
+    // navigate(`/label/detail/${id}`); // taskId 같이 보내기 가능, 근데 전역 state로 하는 게 낫지 않나?
   };
 
   const handleCellClick = (params, event) => {
-    if (params.field === 'id') {
+    if (params.field === 'no') {
       event.stopPropagation();
-
-      const taskId = params.row.taskId;
-      console.log('선택한 task:', taskId);
-
+  
       const isSelected = rowSelectionModel.includes(params.id);
       let newSelectionModel = [];
-      let newTaskSelectionModel = [];
-
+  
       if (isSelected) {
         newSelectionModel = rowSelectionModel.filter((id) => id !== params.id);
-        newTaskSelectionModel = selectedTaskIds.filter((id) => id !== taskId);
       } else {
         newSelectionModel = [...rowSelectionModel, params.id];
-        newTaskSelectionModel = [...selectedTaskIds, taskId];
       }
-
-      setRowSelectionModel(newSelectionModel); // 체크박스 상태 업데이트
-      setSelectedTaskIds(newTaskSelectionModel); // taskId 상태 업데이트
+  
+      setRowSelectionModel(newSelectionModel);  // 체크박스 상태 업데이트
+      setSelectedTaskIds(newSelectionModel);  // taskId 상태도 id로 업데이트
     }
   };
 
   const handleSelectionChange = (newSelectionModel) => {
-    setRowSelectionModel(newSelectionModel);
-
-    const selectedIds = newSelectionModel.map((id) => {
-      const selectedRow = tableData.find((row) => row.id === id);
-      return selectedRow ? selectedRow.taskId : null;
-    }).filter(Boolean);
-
-    setSelectedTaskIds(selectedIds);
-    console.log('선택한 taskIds:', selectedIds);
+    setRowSelectionModel(newSelectionModel);  // 선택한 id 바로 저장
+    setSelectedTaskIds(newSelectionModel);  // 바로 taskIds로 사용 가능
+    console.log('선택한 ids:', newSelectionModel);
   };
 
   const handleSubmitForReview = () => {
@@ -121,6 +118,7 @@ export default function DataGridDemo() {
           width: '100%',
           maxWidth: '100%',
           minWidth: '1135px',
+          height: '80%',
           marginBottom: '39px',
           boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)',
           borderRadius: '10px'
@@ -129,6 +127,9 @@ export default function DataGridDemo() {
         <DataGrid
           rows={tableData}
           columns={columns}
+          columnVisibilityModel={{
+            id: false,  // taskId 컬럼 숨기기
+          }}
           rowHeight={40}
           headerHeight={50}
           checkboxSelection
@@ -136,6 +137,9 @@ export default function DataGridDemo() {
           onRowSelectionModelChange={handleSelectionChange}
           onRowClick={handleRowClick}
           onCellClick={handleCellClick}
+          slots={{
+            noRowsOverlay: NoRows,
+          }}
           sx={{
             background: 'white',
             fontFamily: 'Pretendard, Noto-sans KR',
@@ -166,7 +170,6 @@ export default function DataGridDemo() {
               outline: 'none'
             }
           }}
-          autoHeight
           disableRowSelectionOnClick
           hideFooter
         />
