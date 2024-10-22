@@ -2,6 +2,7 @@ import {configureStore, combineReducers} from '@reduxjs/toolkit';
 import userSlice from '../slices/userSlice';
 import noticeSlice from '../slices/noticeSlice';
 import memberSlice from '../slices/memberSlice';
+import labelTableSlice from '../slices/labelTableSlice';
 import mypageSlice from '../slices/mypageSlice';
 
 import {
@@ -20,6 +21,7 @@ const reducers = combineReducers({
     userSlice,
     noticeSlice,
     memberSlice,
+    labelTableSlice,
     mypageSlice
 });
 
