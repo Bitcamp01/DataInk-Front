@@ -5,9 +5,19 @@ import axios from 'axios';
 import InputFileUpload from '../components/InputFileUpload';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ImageIcon from '@mui/icons-material/Image';
-
+import { useSelector } from 'react-redux';
+import '../slices/userSlice';
 
 const Notice_write = () => {
+
+  
+  // Redux에서 로그인한 사용자 정보 가져오기, 기본값으로 빈 객체 제공
+  const user = useSelector((state) => state.users || {});
+  const { name: userName, accessToken } = user;  // 'name'을 'userName'으로 변경
+
+  
+
+
   //제목과 내용을 상태로 관리 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -31,11 +41,14 @@ const Notice_write = () => {
       Array.from(files).forEach(file => {
         formData.append('uploadFiles', file);
       });
+
+
       
       try{ 
         const response = await axios.post('http://localhost:9090/notice', formData, {
           headers: {
-            'Content-Type' : 'multipart/form-data'
+            'Content-Type' : 'multipart/form-data',
+            'Authorization': `Bearer ${accessToken}`,
           }
         });
 
@@ -95,10 +108,9 @@ const Notice_write = () => {
             <Box display="flex" justifyContent="space-between" alignItems="flex-start">
               <Box display="flex" alignItems="center">
                 {/* 작성자 아바타 */}
-                <Avatar alt="작성자" src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
+                <Avatar alt={userName} src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
                 <Box>
-                  <Typography variant="body1" fontFamily="Pretendard">정소연</Typography>
-                  <Typography variant="body2" fontFamily="Pretendard" color="textSecondary" sx={{ mb: 3 }}>2024.09.19 14:25</Typography>
+                <Typography variant="body1" fontFamily="Pretendard">{userName}</Typography> 
                 </Box>
               </Box>
             </Box>

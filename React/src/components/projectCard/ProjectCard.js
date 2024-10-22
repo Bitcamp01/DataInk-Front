@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
 import '../../css/project-card.css';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setProjectId } from '../../slices/labelTableSlice';
 
-const ProjectCard = ({ projects }) => {
+const ProjectCard = ({projects}) => {
 
-    const navigate = useNavigate(); // navigate 함수 정의 (병주)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    // 북마크 상태 관리, 기본은 false, 즉 비활성화된 상태
-    const [isBookmarked, setIsBookmarked] = useState(false);
+  // 북마크 상태 관리, 기본은 false, 즉 비활성화된 상태
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
-    // 북마크 클릭 핸들러
-    const handleBookmarkClick = () => {
-        // 클릭하면 상태를 반대로 변화시킴
-        setIsBookmarked(!isBookmarked);
-    }
+  // 북마크 클릭 핸들러
+  const handleBookmarkClick = () => {
+    setIsBookmarked(!isBookmarked);
+  }
 
-    // 카드 클릭 핸들러 (병주)
-    const handleCardClick = (projectId) => {
-      navigate(`/label/work`); // 프로젝트 ID 생기면 아래처럼 경로로 전달, 지금은 없어서 받기만 하고 전달 x (병주)
-      // navigate(`/label/work/${projectId}`);
-    }
+  // 카드 클릭 핸들러
+  const handleCardClick = (projectId) => {
+    dispatch(setProjectId(projectId)); // projectId를 전역 상태로 저장
+    navigate(`/label/work`);
+  }
 
   return (
     <div>
@@ -61,7 +63,6 @@ const ProjectCard = ({ projects }) => {
             <div className="labeler">
               <span className="labeler-text">멤버</span>
               <div className="labeler-profile">
-                {/* 멤버 이미지들 */}
                 {project.members
                   .filter(member => member.class === 'labeler')
                   .map((member, idx) => (

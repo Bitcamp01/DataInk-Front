@@ -13,6 +13,9 @@ const userSlice = createSlice({
         birth: '',
         authen: '',
         telCheckMsg: '',
+        addr: '',
+        dep: '',
+        nickname:'',
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -38,6 +41,7 @@ const userSlice = createSlice({
                 return {
                     ...state,
                     ...action.payload,
+                    accessToken: action.payload.token, // 토큰을 Redux 상태에 저장
                     isLogin: true,
                 };
             })
@@ -65,6 +69,9 @@ const userSlice = createSlice({
                     tel: '',
                     authen: '',
                     birth: '',
+                    addr: '',
+                    dep: '',
+                    nickname:'',
                 };
             })
             .addCase(logout.rejected, (state, action) => {
@@ -78,7 +85,12 @@ const userSlice = createSlice({
             .addCase(telCheck.rejected, (state, action) => {
                 state.telCheckMsg = 'error';
             });
+            
+            
     }
 });
+
+
+
 
 export default userSlice.reducer;

@@ -5,10 +5,21 @@ import { DataGrid } from '@mui/x-data-grid';
 import Pagination from '@mui/material/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getMember } from '../apis/memberManagementApis';
+import { fetchTabData, getMember } from '../apis/memberManagementApis';
 import Stack from '@mui/material/Stack';
 import '../css/table.css';
 import '../css/memberManagement.css';
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2); // 월을 2자리로 맞춤
+  const day = ('0' + date.getDate()).slice(-2); // 일을 2자리로 맞춤
+  const hours = ('0' + date.getHours()).slice(-2); // 시를 2자리로 맞춤
+  const minutes = ('0' + date.getMinutes()).slice(-2); // 분을 2자리로 맞춤
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}`; // 원하는 형식으로 반환
+};
 
 const columns = [
   { field: 'id', headerName: 'No', flex: 60 / 1100 ,cellClassName: 'first-column', headerClassName: 'header-text'  },  
@@ -23,22 +34,17 @@ const columns = [
 
 
 const Table_memberListAll = () => {
-  const memberListAll= useSelector(state => state.memberSlice.member);
+  const memberListAll= useSelector(state => state.memberSlice.usersData);
   const page = useSelector(state => state.memberSlice.page);
-  const totalPageCount = memberListAll?.totalPages ?? 1; // totalPages가 undefined인 경우 기본값 1
+  const totalPageCount = useSelector(state => state.memberSlice.totalPages);
   
 
   const navi = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getMember({
-      page: 0
-    }));
-  },[]);
-
   const changePage = React.useCallback((e, v) => {
-    dispatch(getMember({
+    dispatch(fetchTabData({
+      tab: 'users',
       page:parseInt(v) -1
     }));
   },[dispatch]);
@@ -56,14 +62,14 @@ const Table_memberListAll = () => {
       }}>
 
       <DataGrid
-         rows={(memberListAll?.content ?? []).map((item, index) => ({
-          id: item.noticeId,                  
+         rows={(memberListAll ?? []).map((item, index) => ({
+          id: item.userId,                  
           name: item.name,       
-          department: item.department || '부서 정보 없음', 
+          department: item.userDetailDto?.dep || '부서 정보 없음', // userDetailDto가 존재하지 않으면 '부서 정보 없음'
           email: item.email,  
           tel: item.tel, 
-          role:item.role, 
-          regdate: item.created               
+          role: item.authen, 
+          regdate: formatDate(item.regdate)      
         }))} 
         columns={columns}
         pageSize={10}    

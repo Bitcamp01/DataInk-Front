@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'; 
-import axios from 'axios';
 import '../css/memberManagement.css';
 import FixedSizeGrid from '../components/Table_memberListAll'; 
 import Table_projectList from '../components/Table_projectList';
 import Modal_addMember from '../components/Modal_addMember';
 import Button from '@mui/material/Button';
-import { getMember } from '../apis/memberManagementApis';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTabData } from '../slices/memberSlice';
+import { fetchTabData } from '../apis/memberManagementApis';
 
 const MemberManagement = () => {
   const [activeTab, setActiveTab] = useState('users');
@@ -17,8 +15,8 @@ const MemberManagement = () => {
   
   const dispatch = useDispatch();
 
-  // Redux 상태를 가져오기
-  const {  data = [], totalPages, loading, error } = useSelector((state) => state.memberManagement || {});
+  // // Redux 상태를 가져오기
+  // const {  data = [], totalPages, loading, error } = useSelector((state) => state.memberManagement || {});
 
 
   // 탭 전환 시 데이터를 가져오기 위해 useEffect 사용
@@ -34,6 +32,7 @@ const MemberManagement = () => {
 
   // 탭 변경 함수
   const handleTabClick = (tabName) => {
+    console.log("Tab 변경됨, tabName:", tabName); // 로그 추가
     setActiveTab(tabName);
     setPage(1); // 탭이 변경될 때 페이지를 초기화
   };
@@ -112,8 +111,8 @@ const MemberManagement = () => {
 
             {/* 테이블 영역 */}
             <div className='table-container'>
-            {activeTab === 'users' ?  <FixedSizeGrid data={data || []} /> :
-            <Table_projectList data={data || []} />}
+            {activeTab === 'users' ?  <FixedSizeGrid  /> :
+            <Table_projectList />}
             </div>
 
             

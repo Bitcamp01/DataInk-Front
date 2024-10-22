@@ -1,26 +1,23 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
-export const getMember = createAsyncThunk(
-    
-    'memberManagement/getMember',
-    async (searchObj, thunkApi) => {
-      try{
-        const response = await axios.get('http://localhost:9090/member', { 
-          headers:{
-            Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
-           
-          },
-          params: {
-            page: searchObj.page,
-            size:15,
+  // createAsyncThunk를 사용하여 API 호출 정의
+export const fetchTabData = createAsyncThunk(
+  'memberManagement/fetchTabData',
+  async ({ tab, page }, thunkApi) => {
+    try {
+      const response = await axios.get(`http://localhost:9090/member`, {
+        params: {
+          tab,
+          page: page - 1,
+        },
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
-        });
-  
-        return response.data;
-      } catch(e) {
-        return thunkApi.rejectWithValue(e);
-      }
+      });
+      return { tab, data: response.data };
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response.data);
     }
-  );
+  }
+);
