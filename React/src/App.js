@@ -53,7 +53,7 @@ function App() {
             <Route path="/notice" element={<Notice />} />
             <Route path="/review" element={<Review />} />
             <Route path="/notice_write" element={<Notice_write />} />
-            <Route path="/notice_detail" element={<Notice_detail />} />
+            <Route path="/notice/:id" element={<Notice_detail />} />
             <Route path="/main_grid" element={<MainGrid />} />
           </Route>
 

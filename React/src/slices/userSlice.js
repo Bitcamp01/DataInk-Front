@@ -41,6 +41,7 @@ const userSlice = createSlice({
                 return {
                     ...state,
                     ...action.payload,
+                    accessToken: action.payload.token, // 토큰을 Redux 상태에 저장
                     isLogin: true,
                 };
             })
@@ -84,7 +85,12 @@ const userSlice = createSlice({
             .addCase(telCheck.rejected, (state, action) => {
                 state.telCheckMsg = 'error';
             });
+            
+            
     }
 });
+
+
+
 
 export default userSlice.reducer;

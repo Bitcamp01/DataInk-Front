@@ -12,7 +12,9 @@ import CloseIcon from '@mui/icons-material/Close';
 
 
 const Modal_addMember = ({ open, handleClose, email, setEmail }) => {
+
   const [isDisabled, setIsDisabled] = useState(false); // 초기값을 false로 설정
+
   return (
     <>
       {/* 멤버 추가 모달창 */}
