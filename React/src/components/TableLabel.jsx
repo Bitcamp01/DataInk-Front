@@ -49,7 +49,8 @@ export default function DataGridDemo() {
 
   const handleRowClick = (params) => {
     const { id } = params.row;  // taskId 대신 id 사용
-    navigate(`/label/detail/${id}`);
+    navigate(`/label/detail`);
+    // navigate(`/label/detail/${id}`); // taskId 같이 보내기 가능, 근데 전역 state로 하는 게 낫지 않나?
   };
 
   const handleCellClick = (params, event) => {
@@ -117,7 +118,7 @@ export default function DataGridDemo() {
           width: '100%',
           maxWidth: '100%',
           minWidth: '1135px',
-          minHeight: '50vh',
+          height: '80%',
           marginBottom: '39px',
           boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)',
           borderRadius: '10px'
@@ -169,7 +170,6 @@ export default function DataGridDemo() {
               outline: 'none'
             }
           }}
-          autoHeight
           disableRowSelectionOnClick
           hideFooter
         />
