@@ -1,11 +1,3 @@
-/* 공통 스타일: 특정 컨테이너 안에서만 적용되도록 수정 */
-
-/* 글꼴 */
-* {
-    font-family: 'Pretendard', 'NotoSansKR', sans-serif;
-    color: #3E3E3E;
-    -ms-overflow-style: none;
-}
 
 .nh4 {
     font-size: 1rem; /* 폰트 크기 조정 */
@@ -139,8 +131,8 @@
 }
 
 .review-submit-container {
-    display: flex;
-    justify-content: right; /* 버튼들을 가운데 정렬 */
+    display: flex; /* Flexbox 사용 */
+    justify-content: space-between; /* 양쪽 끝으로 정렬 */
     gap: 4rem; /* 버튼들 사이에 2rem 간격 추가 */
     margin-top: 10px;
     width: 100%; /* form-container와 동일한 폭 */
@@ -149,7 +141,6 @@
 
 .review-submit-container button {
     padding: 8px 16px;
-    background-color: #007bff;
     border: none;
     color: #fff;
     cursor: pointer;
@@ -170,7 +161,7 @@
 }
 
 .review-submit-container button.apply-button {
-    background-color: #7C97FE;
+    background-color: #5272e4;
     color: #ffffff;
 }
 
@@ -251,6 +242,16 @@
     margin-top: 2rem; /* 상단에 여백 추가 */
 }
 
+.select-button {
+    background-color: #f0f0f0;
+    width: 50%;
+    border: #c1c1c1 1px solid;
+    margin-top: 0.3rem;
+    font-size: xx-small;
+    padding: 0.2rem;
+    border-radius: 3px;
+}
+
 .approve-button {
     background-color: #7C97FE;
     color: white;
@@ -259,6 +260,25 @@
     border-radius: 5px;
     width: 100%; /* 버튼 폭을 review-submit-container 폭에 맞춤 */
     max-width: 10rem; /* 버튼의 최대 너비 설정 */
+}
+.next-button {
+    background-color: #7C97FE;
+    color: white;
+    padding: 10rem;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 10rem;
+}
+
+.prev-button {
+    background-color: #7C97FE;
+    color: white;
+    padding: 10rem;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 10rem;
 }
 
 .modal-labelingname{
@@ -269,20 +289,27 @@
 /* review 테이블 */
 
 .review-table-container {
-    flex-grow: 1; /* 테이블이 공간을 차지하게 함 */
-    max-height: 40rem; /* 필요에 따라 최대 높이 설정 (예시로 30rem) */
+    flex-grow: 1;
+    max-height: 50rem; /* 최대 높이 설정 */
     overflow-y: scroll; /* 세로 스크롤 가능하게 */
     overflow-x: scroll; /* 수평 스크롤 추가 */
-    max-width: 100%; /* 컨테이너의 최대 너비 설정 */
+    border: #c1c1c1 1px solid;
+}
+
+.label-table-container {
+    flex-grow: 1;
+    max-height: 45rem; /* 최대 높이 설정 */
+    overflow-y: scroll; /* 세로 스크롤 가능하게 */
+    overflow-x: scroll; /* 수평 스크롤 추가 */
     border: #c1c1c1 1px solid;
 }
 
 .review-table {
-    width: auto; /* 자동 너비 설정 */
-    min-width: 100%; /* 테이블이 컨테이너를 넘을 때 스크롤 가능하게 함 */
-    border-collapse: collapse; /* 테이블 경계 접기 */
-    background-color: #f1f6f9; /* 배경색 설정 */
-    table-layout: auto; /* 자동 레이아웃 설정 */
+    width: auto; /* 테이블의 너비 자동 조정 */
+    min-width: 100%; /* 테이블이 컨테이너 너비를 넘으면 스크롤 가능하게 */
+    border-collapse: collapse;
+    background-color: #f1f6f9;
+    table-layout: auto; /* 테이블 셀의 너비 고정 */
 }
 
 
@@ -293,6 +320,7 @@
     text-align: center; /* 텍스트 왼쪽 정렬 */
     word-break: break-word; /* 단어가 길면 자동으로 줄 바꿈 */
     white-space: normal; /* 텍스트가 셀 안에서 자동으로 줄 바꿈 되도록 설정 */
+    min-width: 7rem;
 }
 
 .review-table-header {
@@ -314,4 +342,12 @@
 }
 
 
-
+/* labelingtable input 창 */
+.input-field {
+    border: none; /* 기본 테두리 제거 */
+    outline: none; /* 포커스 시 생기는 아웃라인 제거 */
+    padding: 5px; /* 패딩 추가 (선택사항) */
+    width: 100%; /* 입력창 너비를 셀에 맞춤 (선택사항) */
+    box-shadow: none; /* 그림자 제거 (선택사항) */
+    /* 필요한 추가 스타일을 여기에 지정할 수 있습니다. */
+}

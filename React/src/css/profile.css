@@ -1,10 +1,3 @@
-/* 공통 스타일 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 /* 상단 프로필 배경 및 정보 */
 .profile-header {
     position: relative;
@@ -51,7 +44,7 @@ h3 {
     background-color: #e6e6e6;
     color: #96A2CF;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     padding: 5px 10px;
     z-index: 10;
@@ -132,25 +125,6 @@ h3 {
     padding-left: 150;
 }
 
-.calendar-btn {
-    width: 180px;
-    height: 40px;
-    padding: 10px 20px;
-    border: 1px solid #7785BE;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    margin: 5px;
-    background-color: white;
-    color: #7785BE;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.calendar-btn:hover {
-    background-color: #7785BE;
-    color: white;
-}
-
 /* 탭 스타일 */
 .tabs {
     justify-content: center;
@@ -173,27 +147,40 @@ h3 {
     margin: 0 -5px;
     color: #666;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 .tab-links:hover {
     background-color: #e6f2ff;
-    color: #3498DB;
+    color: #535db1;
 }
 
-.tab-links.active {
+/* z-index 수정 부분 */
+.tab-links.workstatus {
+    z-index: 4; /* workstatus가 가장 위 */
+}
+
+.tab-links.alarm {
+    z-index: 3; /* alarm이 두 번째 */
+}
+
+.tab-links.profile {
+    z-index: 2; /* profile이 세 번째 */
+}
+
+.tab-links.calendar {
+    z-index: 1; /* calendar가 마지막 */
+}
+
+/* 각 탭 활성화 시 z-index를 올려줌 */
+.tab-links.alarm.active,
+.tab-links.workstatus.active,
+.tab-links.profile.active,
+.tab-links.calendar.active {
     z-index: 5;
     color: #5d66a4;
     font-weight: bold;
     background-color: white;
-}
-
-.tab-links.alarm {
-    z-index: 0;
-}
-
-.tab-links.alarm.active {
-    z-index: 5;
 }
 
 /* 탭 콘텐츠 스타일 */
@@ -255,11 +242,6 @@ h3 {
     margin-right: 10px;
 }
 
-.profile-form__input-container input {
-    margin-left: 165px;
-    width: 387px;
-}
-
 .profile-form__group-address {
     padding: 9px;
     font-size: 14px;
@@ -270,11 +252,11 @@ h3 {
 }
 
 .profile-form__button {
-    padding: 12px 13px;
+    padding: 10px 10px;
     background-color: #7785BE;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
@@ -291,20 +273,21 @@ h3 {
 }
 
 .profile-form__button:hover {
-    background-color: #2980B9;
+    background-color: #535db1;
 }
 
 /* 공통 버튼 스타일 */
 .button {
-    padding: 10px;
+    height: 40px;
+    padding: 10px 10px;
     background-color: #7785BE;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     transition: background-color 0.3s ease;
-    margin-top: 10px;
+    margin-top: 20px;
     display: inline-block;
 }
 
@@ -314,11 +297,11 @@ h3 {
 
 /* 마우스 오버 시 색상 변경 */
 .button:hover {
-    background-color: #2980B9;
+    background-color: #535db1;
 }
 
 .profile-form__submit {
-    margin-left: 470px;
+    margin-left: 430px;
     margin-right: 10px;
 }
 
@@ -326,145 +309,32 @@ h3 {
     margin-left: 10px;
 }
 
-/* 유효한 입력 */
-.password-modal__current.valid, .password-modal__new.valid, .password-modal__confirm.valid {
-    border: 2px solid green;
-}
-
-/* 유효하지 않은 입력 */
-.password-modal__current.invalid, .password-modal__new.invalid, .password-modal__confirm.invalid {
-    border: 2px solid red;
-}
-
-/* 비밀번호 변경 모달 오버레이 */
-.password-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+/* 두 개의 인풋 필드를 가로로 정렬 */
+.postcode-container {
+    width: 512px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+    gap: 29px; /* 두 인풋 사이의 간격 설정 */
 }
 
-/* 비밀번호 변경 모달 내용 */
-.password-modal {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 400px;
-    width: 100%;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    z-index: 1001;
+/* 우편 번호 입력 필드 크기 조절 */
+.postcode-number {
+    width: 65% !important; /* !important로 우선순위 높임 */
+    padding: 10px !important;
+    font-size: 14px !important;
 }
 
-.password-modal input {
-    width: 350px;
-    height: 20px;
-    padding: 10px;
-    margin-top: 10px;
-    font-size: medium;
-}
-
-/* 비밀번호 변경 모달 버튼 컨테이너 */
-.password-modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.password-modal-buttons button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.password-modal-buttons button:first-child {
+/* 우편번호 찾기 버튼 크기 조절 */
+.postcode-search {
+    padding: 10px 10px;
+    width: 25% !important; /* !important로 우선순위 높임 */
+    padding: 10px !important;
+    font-size: 14px !important;
     background-color: #7785BE;
-    color: white;
-}
-
-.password-modal-buttons button:last-child {
-    background-color: #e6e6e6;
-    color: #333;
-}
-
-/* 모달 배경 */
-.status_modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-/* 모달 컨텐츠 스타일 */
-.status_modal--content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-    max-width: 400px;
-    width: 100%;
-}
-
-.status_modal--content h2 {
-    margin-bottom: 15px;
-}
-
-.status_modal--content input {
-    width: 350px;
-    height: 30px;
-    padding: 10px;
-    font-size: medium;
-    border: 1px solid;
     border-radius: 4px;
-}
-
-/* 모달 버튼 컨테이너 */
-.status-modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-/* 모달 버튼 스타일 */
-.status-modal-buttons button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-/* 기본 버튼 색상 */
-.status-modal-buttons button:first-child {
-    background-color: #7785BE;
     color: white;
+    cursor: pointer;
 }
 
-/* 취소 버튼 색상 */
-.status-modal-buttons button:last-child {
-    background-color: #e6e6e6;
-    color: #333;
-}
-
-/* 호버 시 색상 변경 */
-.status-modal-buttons button:first-child:hover {
-    background-color: #2980B9;
-}
-
-.status-modal-buttons button:last-child:hover {
-    background-color: #ccc;
+.postcode-search:hover {
+    background-color: #535db1;
 }

@@ -1,45 +1,95 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import WorkItem from './WorkItem';
-import { useTodoState } from './TodoContext';
+import axios from 'axios';
+import moment from 'moment';
 
 const WorkInListBlock = styled.div`
   padding-left: 20px;
   padding-bottom: 20px;
   flex: 1;
-  overflow-y: auto; // 스크롤이 생기도록 설정
+  overflow-y: auto;
 
-    &::-webkit-scrollbar {
-        width: 10px;
-    }
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
 
-    &::-webkit-scrollbar-thumb {
-        background: #E7E7E7;
-        border-radius: 10px;
-    }
+  &::-webkit-scrollbar-thumb {
+    background: #E7E7E7;
+    border-radius: 10px;
+  }
 
-    &::-webkit-scrollbar-track {
-        background: white;
-    }
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
 `;
 
-function WorkInList() {
-  const todos = useTodoState();
+const WorkInList = () => {
+  const [workItems, setWorkItems] = useState([]);
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [error, setError] = useState(null); // 에러 상태 추가
+
+  useEffect(() => {
+    const fetchWorkItems = async () => {
+      const token = sessionStorage.getItem('ACCESS_TOKEN'); // localStorage에서 토큰 가져오기
+      // console.log(token);
+      try {
+        const response = await axios.get('http://localhost:9090/api/work-items', {
+          headers: {
+            Authorization: `Bearer ${token}`, // JWT 토큰 추가
+          },
+        });
+        const items = response.data;
+
+        const sortedItems = items.map(item => {
+
+          const endDate = moment(item.endDate);
+          const today = moment().startOf('day');
+          const diffDays = endDate.diff(today, 'days');
+
+          return { 
+            id: item.userId,  // userId를 id로 사용
+            name: item.name,     // 프로젝트 이름
+            endDate: item.endDate, // 종료일
+            diffDays // 남은 날짜를 항목에 추가
+          };
+        })
+        .filter(item => item.diffDays >= 0) // 오늘 이후나 오늘이 마감일인 항목만 필터링
+        .sort((a, b) => a.diffDays - b.diffDays); // 남은 날짜 기준으로 오름차순 정렬
+
+        setWorkItems(sortedItems);
+      } catch (error) {
+        console.error('Error fetching work items: ', error);
+        setError('Work items could not be fetched.'); // 에러 메시지 설정
+        if (error.response) {
+          console.log('Error response data:', error.response.data);
+          console.log('Error status:', error.response.status);
+        } else {
+          console.log('Error message:', error.message);
+        }
+      } finally {
+        setLoading(false); // 데이터 로딩 완료
+      }
+    };
+
+    fetchWorkItems();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // 로딩 중일 때 메시지 표시
+  }
+
+  if (error) {
+    return <div>{error}</div>; // 에러 발생 시 메시지 표시
+  }
 
   return (
-    <>
-      <WorkInListBlock>
-        <WorkItem text="프로젝트1"/>
-        <WorkItem text="프로젝트2"/>
-        <WorkItem text="프로젝트3"/>
-        <WorkItem text="프로젝트4"/>
-        <WorkItem text="프로젝트5"/>
-        <WorkItem text="프로젝트6"/>
-
-      </WorkInListBlock>
-    </>
+    <WorkInListBlock>
+      {workItems.map(item => (
+        <WorkItem key={item.id} text={item.name} deadline={item.endDate} />
+      ))}
+    </WorkInListBlock>
   );
-}
+};
 
 export default WorkInList;
-

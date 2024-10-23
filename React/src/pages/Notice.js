@@ -34,7 +34,7 @@ const Notice = () => {
 
         
           {/* 멤버 추가 버튼: activeTab이 'member'일 때만 보이게 */}   
-          <div class="write-btn-container"  >
+          <div className="write-btn-container"  >
             <button 
             className="member-list__write-btn" 
             style={{ float: 'right' }}

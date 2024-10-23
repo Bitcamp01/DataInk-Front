@@ -12,7 +12,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';  
 import CloseIcon from '@mui/icons-material/Close'; 
+import { useSelector } from 'react-redux';
 import '../css/scrollbar.css';
+import { useDispatch } from 'react-redux';  
+import { telCheck } from '../apis/userApis';
+
 
 const columns = [
   { field: 'id', headerName: '이름', width: 120, resizable: false  },
@@ -20,46 +24,38 @@ const columns = [
   { field: 'role', headerName: '역할', width: 150},
 ];
 
-const allMembersRows = [
-  { id: '김병주',  department: 'Ncloud', role: '관리자' },
-  { id: '최수민',  department: 'AI Clova', role: '검수자' },
-  { id: '서재환',  department: 'AI Clova', role: '라벨러' },
-  { id: '오유빈',  department: 'AI Clova', role: '라벨러' },
-  { id: '김시표',  department: 'AI Clova', role: '라벨러' },
-  { id: '마태림',  department: 'AI Clova', role: '라벨러' },
-  { id: '김화영',  department: 'AI Clova', role: '라벨러' },
-  { id: '마태림',  department: 'AI Clova', role: '라벨러' },
-  { id: '김화영',  department: 'AI Clova', role: '라벨러' },
-  { id: '마태림',  department: 'AI Clova', role: '라벨러' },
-  { id: '김화영',  department: 'AI Clova', role: '라벨러' },
-  { id: '마태림',  department: 'AI Clova', role: '라벨러' },
-  { id: '김화영',  department: 'AI Clova', role: '라벨러' },
-  { id: '마태림',  department: 'AI Clova', role: '라벨러' },
-  { id: '김화영',  department: 'AI Clova', role: '라벨러' },
-  { id: '마태림',  department: 'AI Clova', role: '라벨러' },
-  { id: '김화영',  department: 'AI Clova', role: '라벨러' },
-
-];
 
 export default function Table_projectList_Modal({ open, onClose, selectedRow , handleClose}) {
+  const dispatch = useDispatch();
+    
+  // userSlice의 데이터를 가져옵니다
+  const usersData = useSelector(state => state.users); // userSlice에서 users 데이터를 가져옴
+  
   const [selectedAllMembers, setSelectedAllMembers] = React.useState([]);
   const [projectMembers, setProjectMembers] = React.useState([]);
 
-  //'전체 멤버'에서 선택된 멤버를 '프로젝트 참여 멤버'로 추가
+  // telCheck API 호출하여 관련 로직 처리
+  React.useEffect(() => {
+    if (open) {
+      dispatch(telCheck()); // telCheck API 호출 예시
+    }
+  }, [dispatch, open]);
+
+  // '전체 멤버'에서 선택된 멤버를 '프로젝트 참여 멤버'로 추가
   const handleAddMembers = () => {
-    const newMembers = allMembersRows.filter((row) =>
-      selectedAllMembers.includes(row.id) 
+    const newMembers = usersData.filter((member) =>
+      selectedAllMembers.includes(member.id)
     );
 
     const filteredNewMembers = newMembers.filter(
       (newMember) => !projectMembers.some((projectMember) => projectMember.id === newMember.id)
     );
 
-    setProjectMembers((prev) => [...prev, ...newMembers]);
+    setProjectMembers((prev) => [...prev, ...filteredNewMembers]);
     setSelectedAllMembers([]);
   };
 
-  //'프로젝트 참여 멤버'에서 선택된 멤버 제거
+  // '프로젝트 참여 멤버'에서 선택된 멤버 제거
   const handleRemoveMembers = () => {
     const remainingMembers = projectMembers.filter(
       (member) => !selectedAllMembers.includes(member.id)
@@ -67,7 +63,6 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     setProjectMembers(remainingMembers);
     setSelectedAllMembers([]);
   };
-
 
   return (
 
@@ -115,7 +110,11 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 
                       
               <DataGrid
-                rows={allMembersRows}
+                 rows={(usersData ?? []).map((item, index) => ({
+                  name: item.name,       
+                  department: item.userDetailDto?.dep || '부서 정보 없음', // userDetailDto가 존재하지 않으면 '부서 정보 없음'
+                  role: item.authen,  
+                }))} 
                 columns={columns}
                 checkboxSelection
                 sx={{

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, TextField, Select, MenuItem, InputLabel, FormControl, Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -8,33 +8,25 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import dayjs from 'dayjs';
 import '../../css/workstatus.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProjects } from '../../apis/mypageApis';
 
 const columns = [
-    { field: 'id', headerName: 'No', width: 100, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
-    { field: 'projectName', headerName: '프로젝트명', width: 300 },
-    { field: 'taskName', headerName: '작업명', width: 250 },
-    { field: 'remainingTasks', headerName: '잔여작업', width: 110 },
-    { field: 'myTasks', headerName: '내 작업수', width: 110 },
-    { field: 'inspectionWaiting', headerName: '검수대기', width: 110 },
-    { field: 'rejected', headerName: '반려', width: 110 },
-    { field: 'inspectionDone', headerName: '검수완료', width: 110 },
-    { field: 'deadline', headerName: '기한일', width: 180 },
-];
-
-const rows = [
-        { id: 1, projectName: '설정 가능한 모듈형 공구', taskName: 'natus 작업', remainingTasks: '63', myTasks: '25', inspectionWaiting: '20', rejected: '003', inspectionDone: '011', deadline: '2024-07-21 22:47' },
-        { id: 2, projectName: '객체 기반의 안정적 유연성', taskName: 'quae 작업', remainingTasks: '121', myTasks: '48', inspectionWaiting: '39', rejected: '005', inspectionDone: '009', deadline: '2024-07-10 17:11' },
-        { id: 3, projectName: '출판된 지역적 융합', taskName: 'quos 작업', remainingTasks: '145', myTasks: '143', inspectionWaiting: '32', rejected: '017', inspectionDone: '026', deadline: '2024-01-02 13:41' },
-        { id: 4, projectName: '특별한 객체 지향적 도전', taskName: 'totam 작업', remainingTasks: '165', myTasks: '54', inspectionWaiting: '25', rejected: '002', inspectionDone: '030', deadline: '2024-05-01 09:44' },
-        { id: 5, projectName: '완벽히 설정된 실시간 인트라넷', taskName: 'libero 작업', remainingTasks: '170', myTasks: '123', inspectionWaiting: '43', rejected: '020', inspectionDone: '008', deadline: '2024-05-05 06:14' },
-        { id: 6, projectName: '적응된 고도 기반 인트라넷', taskName: 'repellendus 작업', remainingTasks: '88', myTasks: '141', inspectionWaiting: '41', rejected: '005', inspectionDone: '009', deadline: '2024-09-03 07:27' },
-        { id: 7, projectName: '더 작아진 멀티미디어 컨셉', taskName: 'autem 작업', remainingTasks: '125', myTasks: '87', inspectionWaiting: '38', rejected: '017', inspectionDone: '017', deadline: '2024-08-11 15:34' },
-        { id: 8, projectName: '안정적인 다이나믹 알고리즘', taskName: 'magnam 작업', remainingTasks: '154', myTasks: '49', inspectionWaiting: '9', rejected: '007', inspectionDone: '015', deadline: '2024-04-11 13:42' },
-        { id: 9, projectName: '자가 이용 가능한 분리형 인코딩', taskName: 'laboriosam 작업', remainingTasks: '140', myTasks: '123', inspectionWaiting: '16', rejected: '015', inspectionDone: '010', deadline: '2024-04-29 18:42' },
-        { id: 10, projectName: '크로스 그룹 6세대 솔루션', taskName: 'exercitationem 작업', remainingTasks: '160', myTasks: '52', inspectionWaiting: '28', rejected: '010', inspectionDone: '027', deadline: '2024-01-18 20:09' }
+    { field: 'projectId', headerName: 'No', width: 100, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
+    { field: 'name', headerName: '프로젝트명', width: 300 },
+    { field: 'description', headerName: '작업명', width: 250 },
+    // { field: 'remainingTasks', headerName: '잔여작업', width: 110 }, // ProjectDto에 해당 필드가 없음
+    // { field: 'myTasks', headerName: '내 작업수', width: 110 }, // ProjectDto에 해당 필드가 없음
+    // { field: 'inspectionWaiting', headerName: '검수대기', width: 110 }, // ProjectDto에 해당 필드가 없음
+    // { field: 'rejected', headerName: '반려', width: 110 }, // ProjectDto에 해당 필드가 없음
+    // { field: 'inspectionDone', headerName: '검수완료', width: 110 }, // ProjectDto에 해당 필드가 없음
+    { field: 'endDate', headerName: '기한일', width: 180 },
 ];
 
 const Workstatus = () => {
+    const dispatch = useDispatch();
+    const projects = useSelector((state) => state.mypageSlice.projects) || [];
+    const loading = useSelector((state) => state.mypageSlice.loading);
     const [category, setCategory] = useState('');
     const [period, setPeriod] = useState('');
     const [startDate, setStartDate] = useState(dayjs().subtract(1, 'day'));
@@ -74,6 +66,11 @@ const Workstatus = () => {
         },
         width: '140px',
     };
+
+    useEffect(() => {
+        // 프로젝트 데이터를 가져오는 Thunk 호출
+        dispatch(getAllProjects());
+    }, [dispatch]);
 
     return (
         <div id="WorkStatus" className="tab-content">
@@ -235,7 +232,7 @@ const Workstatus = () => {
             {/* 데이터 그리드 섹션 */}
             <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)' }}>
                 <DataGrid
-                    rows={rows}
+                    rows={projects}
                     columns={columns}
                     rowHeight={40}
                     headerHeight={50}
@@ -245,8 +242,11 @@ const Workstatus = () => {
                         cell: 'custom-cell',
                         columnHeader: 'custom-header',
                     }}
+                    loading={loading}
                 />
+                {loading && <div>로딩 중입니다...</div>}
             </Box>
+
 
             {/* 페이지네이션 섹션 */}
             <div className="workstatus-pagination-container">
