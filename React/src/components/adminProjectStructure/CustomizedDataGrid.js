@@ -57,6 +57,8 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   // flatFolderData를 Map 형태로 관리하여 탐색 성능 향상
   const [flatFolderMap, setFlatFolderMap] = useState(new Map(flatFolderData.map(item => [`${item.id}_${item.projectId}`, item])));
 
+
+  
   //데이터 그리드 영역 업데이트 부분
   useEffect(()=>{
     setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder));
@@ -70,11 +72,8 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   const [conversionList, setConversionList] = useState([]); // 변환 목록
   const [isConversionModalOpen, setIsConversionModalOpen] = useState(false);
   const handleAddToConversion = () => {
-    // 불필요한 find를 사용하지 않고 바로 rowSelectionModel을 이용할 수 있음,
-    const selectedItems = rowSelectionModel.map((id) => flatFolderMap.get(`${id}_${selectedProject}`));
+    const selectedItems = rowSelectionModel.map(item=>item);
 
-
-    // 변환 목록에 이미 존재하는 항목은 추가하지 않음
     const newItems = selectedItems.filter(
       (item) => !conversionList.some((existingItem) => existingItem.id === item.id && existingItem.projectId === item.projectId)
     );
@@ -94,8 +93,8 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   const handleCloseConversionModal = () => {
     setIsConversionModalOpen(false);
   };
-  const handleRemoveFromConversionList = (itemId,itemProjectId) => {
-    setConversionList((prevList) => prevList.filter((item) => item.id !== itemId && item.projectId === itemProjectId));
+  const handleRemoveFromConversionList = (id) => {
+    setConversionList((prevList) => prevList.filter((item) => item !== id ));
   };
   ///////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////
@@ -372,21 +371,21 @@ const handleCopy = () => {
     setRowModesModel(newRowModesModel);
   };
 
-  useEffect(() => {
-    // rows가 업데이트되고, rowSelectionModel이 올바르게 설정된 경우에만 실행
-    if (rows.length > 0 && rowSelectionModel.length > 0) {
-      const selectedId = rowSelectionModel[0];
+  // useEffect(() => {
+  //   // rows가 업데이트되고, rowSelectionModel이 올바르게 설정된 경우에만 실행
+  //   if (rows.length > 0 && rowSelectionModel.length > 0) {
+  //     const selectedId = rowSelectionModel[0];
 
-      // 편집 모드 설정
-      setRowModesModel((prevModel) => ({
-        ...prevModel,
-        [selectedId]: { mode: GridRowModes.Edit },
-      }));
+  //     // 편집 모드 설정
+  //     setRowModesModel((prevModel) => ({
+  //       ...prevModel,
+  //       [selectedId]: { mode: GridRowModes.Edit },
+  //     }));
 
-      // 포커스 설정
-      apiRef.current.setCellFocus(selectedId, 'label');
-    }
-  }, [rows, rowSelectionModel]);
+  //     // 포커스 설정
+  //     apiRef.current.setCellFocus(selectedId, 'label');
+  //   }
+  // }, [rows, rowSelectionModel]);
 
   const handleCreateNewFolder = async () => {
     try {
@@ -425,8 +424,6 @@ const handleCopy = () => {
   const handleDelete = async (e) => {
     console.log(rowSelectionModel)
     if (rowSelectionModel.length > 0) {
-      const selectedFolderId = selectedFolder === null ? 0 : selectedFolder
-      const selectedProjectId = selectedProject === null ? 0 : selectedProject
       try {
         const response = await axios.post('http://localhost:9090/projects/delete', {
           ids: rowSelectionModel, // 선택된 폴더의 ID들을 data로 넘김
@@ -576,15 +573,15 @@ const handleCopy = () => {
           <InfiniteScroll
             dataLength={conversionList.length}
             next={() => {}}
-            hasMore={false} // 무한 스크롤이 필요 없는 경우 false로 설정
+            hasMore={false} 
             height={400}
             loader={<CircularProgress />}
           >
             <List>
               {conversionList.map((item) => (
-                <ListItem key={item.id}>
-                  <ListItemText primary={item.label} />
-                  <IconButton onClick={() => handleRemoveFromConversionList(item.id,item.projectId)}>
+                <ListItem key={item}>
+                  <ListItemText primary={flatFolderMap.get(item).label} />
+                  <IconButton onClick={() => handleRemoveFromConversionList(item)}>
                     <RemoveCircleOutlineIcon />
                   </IconButton>
                 </ListItem>
@@ -594,9 +591,12 @@ const handleCopy = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseConversionModal}>닫기</Button>
-          <Button variant="contained" onClick={() => {
+          <Button variant="contained" onClick={ async () => {
             // 변환 작업을 서버에 요청하는 로직 추가
             console.log('서버로 변환 요청:', conversionList);
+            const response = await axios.post("http://localhost:9090/projects/conversion",conversionList,{
+              'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+            })
             handleCloseConversionModal();
           }}>
             변환 시작

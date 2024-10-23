@@ -24,6 +24,7 @@ const ItemStructure = () => {
         }
     };
     const getItem= async ()=>{
+        console.log("get item")
         try {
             const response=await axios.get(`http://localhost:9090/item/${itemId}`,{
                 headers: {
@@ -37,7 +38,11 @@ const ItemStructure = () => {
         }
     }
     useEffect(() => {
-        if (itemId !== 0) {
+        console.log(itemId)
+        if (itemId == 0) {
+            console.log("0 is")
+        }
+        else{
             setData(getItem().data);
         }
     }, [itemId]);
@@ -149,7 +154,23 @@ const ItemStructure = () => {
     };
     const handleSave = async () => {
         try {
-            if (itemId !== 0) {
+            console.log(data)
+            if (itemId == 0) {
+                const payload = {
+                    itemName: itemName,
+                    data: data,
+                };
+                console.log('새로운 아이템 생성:', itemId);
+                const response = await axios.post("http://localhost:9090/projects/itemcreate",payload,{
+                    headers: {
+                        'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+                    }
+                })
+                if (response.status === 200){
+                    navi("/main_grid")
+                }
+                
+            } else {
                 const payload = {
                     itemId: itemId,
                     itemName: itemName,
@@ -159,18 +180,7 @@ const ItemStructure = () => {
                 const response = await axios.post("http://localhost:9090/item/update",payload,{
                     headers : { 'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`}
                 })
-            } else {
-                const payload = {
-                    itemName: itemName,
-                    data: data,
-                };
-                console.log('새로운 아이템 생성:', itemId);
-                const response = await axios.post("http://localhost:9090/item/create",payload,{
-                    headers: {
-                        'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
-                    }
-                })
-                if (response.status === 201){
+                if (response.status === 200){
                     navi("/main_grid")
                 }
             }

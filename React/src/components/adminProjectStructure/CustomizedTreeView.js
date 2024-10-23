@@ -236,7 +236,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
 
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button variant="contained" sx={{ ml: 'auto' }} onClick={()=>navi("/item_structure")}>
+            <Button variant="contained" sx={{ ml: 'auto' }} onClick={()=>navi("/item_structure/0")}>
               새 항목 만들기
             </Button>
           </Box>
