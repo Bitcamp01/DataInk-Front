@@ -6,7 +6,7 @@ export const fetchTabData = createAsyncThunk(
   'memberManagement/fetchTabData',
   async ({ tab, page }, thunkApi) => {
     try {
-      const response = await axios.get(`https://dataink.site/member`, {
+      const response = await axios.get(`https://dataink-back.store/member`, {
         params: {
           tab,
           page: page - 1,

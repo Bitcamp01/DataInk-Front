@@ -149,7 +149,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
 
   const getFolderData= async (folderId,projectId)=>{
     try {
-      const response=await axios.get("https://dataink.site/projects/folder", {
+      const response=await axios.get("https://dataink-back.store/projects/folder", {
         params:{
           selectedFolder:folderId,
           selectedProject:projectId
@@ -193,7 +193,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
       folders:[]
     };
     try {
-      const response = await axios.post('https://dataink.site/projects/create', sendFolder,{
+      const response = await axios.post('https://dataink-back.store/projects/create', sendFolder,{
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
           'Content-Type': 'application/json'

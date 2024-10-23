@@ -9,7 +9,7 @@ const RenderProfileCard = () => {
     const fetchedProfile = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       try {
-        const response = await axios.get('https://dataink.site/api/profile', {
+        const response = await axios.get('https://dataink-back.store/api/profile', {
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -37,7 +37,7 @@ const RenderProfileCard = () => {
     const fetchedNotice = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       try {
-        const response = await axios.get('https://dataink.site/api/notices', {
+        const response = await axios.get('https://dataink-back.store/api/notices', {
           headers: {
             Authorization: `Bearer ${token}`
           },

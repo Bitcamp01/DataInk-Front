@@ -45,7 +45,7 @@ const Notice_write = () => {
 
       
       try{ 
-        const response = await axios.post('https://dataink.site/notice', formData, {
+        const response = await axios.post('https://dataink-back.store/notice', formData, {
           headers: {
             'Content-Type' : 'multipart/form-data',
             'Authorization': `Bearer ${accessToken}`,

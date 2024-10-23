@@ -7,7 +7,7 @@ export const passwordChk = createAsyncThunk(
     async (password, thunkApi) => {
         try {
             const response = await axios.post(
-                'https://dataink.site/mypage/password-check',
+                'https://dataink-back.store/mypage/password-check',
                 { password },
                 {
                     headers: {
@@ -40,7 +40,7 @@ export const updateMypageInfo = createAsyncThunk(
     async (userInfo, thunkApi) => {
         try {
             const response = await axios.put(
-                'https://dataink.site/mypage/update-profile',
+                'https://dataink-back.store/mypage/update-profile',
                 userInfo,
                 {
                     headers: {
@@ -61,7 +61,7 @@ export const getAllProjects = createAsyncThunk(
     'mypage/getAllProjects',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get('https://dataink.site/projects/all', {
+            const response = await axios.get('https://dataink-back.store/projects/all', {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -78,7 +78,7 @@ export const fetchMypageInfo = createAsyncThunk(
     'mypage/fetchMypageInfo',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get('https://dataink.site/mypage', {
+            const response = await axios.get('https://dataink-back.store/mypage', {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 }
@@ -96,7 +96,7 @@ export const deleteProfileImage = createAsyncThunk(
     'mypage/deleteProfileImage',
     async (_, thunkApi) => {
         try {
-            const response = await axios.delete('https://dataink.site/mypage/profile-image', {
+            const response = await axios.delete('https://dataink-back.store/mypage/profile-image', {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
@@ -114,7 +114,7 @@ export const deleteBackgroundImage = createAsyncThunk(
     'mypage/deleteBackgroundImage',
     async (_, thunkApi) => {
         try {
-            const response = await axios.delete('https://dataink.site/mypage/background-image', {
+            const response = await axios.delete('https://dataink-back.store/mypage/background-image', {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
