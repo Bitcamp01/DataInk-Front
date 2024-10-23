@@ -7,7 +7,7 @@ const Options = () => (
       <label htmlFor="remember" className="remember-text">아이디를 기억하겠습니다.</label>
     </div>
     <div className="find-links">
-      <a href="http://localhost:3000/findaccount" className="find-link">아이디비밀번호 찾기</a>
+      <Link to="/findaccount" className="find-link">아이디비밀번호 찾기</Link>
     </div>
   </div>
 );
