@@ -9,7 +9,7 @@ const RenderProfileCard = () => {
     const fetchedProfile = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       try {
-        const response = await axios.get('http://localhost:9090/api/profile', {
+        const response = await axios.get('http://223.130.134.24:9090/api/profile', {
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -37,7 +37,7 @@ const RenderProfileCard = () => {
     const fetchedNotice = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       try {
-        const response = await axios.get('http://localhost:9090/api/notices', {
+        const response = await axios.get('http://223.130.134.24:9090/api/notices', {
           headers: {
             Authorization: `Bearer ${token}`
           },

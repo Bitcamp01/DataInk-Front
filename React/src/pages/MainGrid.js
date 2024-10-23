@@ -77,7 +77,7 @@ export default function MainGrid() {
   //초기화면 구성시 서버로부터 프로젝트 구조 가져오기, 백엔드 구현시 요청하는 코드로 변경 필요
   const getInitFolderData= async () =>{
     try {
-      const response=await axios.get("http://localhost:9090/projects/all",{
+      const response=await axios.get("http://223.130.134.24:9090/projects/all",{
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
@@ -156,7 +156,7 @@ export default function MainGrid() {
 
   const getSelectedFolderData = async () => {
     try {
-      const response = await axios.get(`http://localhost:9090/projects/folder`, {
+      const response = await axios.get(`http://223.130.134.24:9090/projects/folder`, {
         params:{
           selectedFolder: selectedFolder,
           selectedProject: selectedProject

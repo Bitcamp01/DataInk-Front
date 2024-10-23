@@ -26,7 +26,7 @@ const ItemStructure = () => {
     const getItem= async ()=>{
         console.log("get item")
         try {
-            const response=await axios.get(`http://localhost:9090/item/${itemId}`,{
+            const response=await axios.get(`http://223.130.134.24:9090/item/${itemId}`,{
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
@@ -161,7 +161,7 @@ const ItemStructure = () => {
                     data: data,
                 };
                 console.log('새로운 아이템 생성:', itemId);
-                const response = await axios.post("http://localhost:9090/projects/itemcreate",payload,{
+                const response = await axios.post("http://223.130.134.24:9090/projects/itemcreate",payload,{
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                     }
@@ -177,7 +177,7 @@ const ItemStructure = () => {
                     data: data,
                 };
                 console.log('아이템 업데이트:', itemId);
-                const response = await axios.post("http://localhost:9090/item/update",payload,{
+                const response = await axios.post("http://223.130.134.24:9090/item/update",payload,{
                     headers : { 'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`}
                 })
                 if (response.status === 200){

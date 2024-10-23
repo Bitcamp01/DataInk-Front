@@ -20,7 +20,7 @@ const OwnCalendar = () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       console.log(token);
       try {
-        const response = await axios.get('http://localhost:9090/api/project-end-dates', {
+        const response = await axios.get('http://223.130.134.24:9090/api/project-end-dates', {
           headers: {
             Authorization: `Bearer ${token}`
           },

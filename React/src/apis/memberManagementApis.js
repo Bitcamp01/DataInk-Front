@@ -6,7 +6,7 @@ export const fetchTabData = createAsyncThunk(
   'memberManagement/fetchTabData',
   async ({ tab, page }, thunkApi) => {
     try {
-      const response = await axios.get(`http://localhost:9090/member`, {
+      const response = await axios.get(`http://223.130.134.24:9090/member`, {
         params: {
           tab,
           page: page - 1,
