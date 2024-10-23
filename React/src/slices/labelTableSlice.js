@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchFolders, fetchTasksByFolderId, fetchProjectEndDate } from "../apis/labelTableApis";
+import { fetchFolders, fetchTasksByFolderId, fetchProjectEndDate, submitForReview } from "../apis/labelTableApis";
 
 // 폴더 상태 관리 slice 생성
 const labelTableSlice = createSlice({
@@ -21,9 +21,13 @@ const labelTableSlice = createSlice({
       setTableData: (state, action) => {
         state.tableData = action.payload; // 파일 목록 데이터를 테이블에 설정
       },
+      // 테이블 데이터를 초기화하는 액션
+      clearTableData(state) {
+        state.tableData = [];  // 빈 배열로 초기화
+      },
       setEndDate: (state, action) => {
         state.endDate = action.payload; // 프로젝트 마감일 설정
-      }
+      },
     },
     extraReducers: (builder) => {
       builder
@@ -35,10 +39,17 @@ const labelTableSlice = createSlice({
         })
         .addCase(fetchProjectEndDate.fulfilled, (state, action) => {
           state.endDate = action.payload; // 프로젝트 마감일 설정
+        })
+        // 검수 요청 상태 처리
+        .addCase(submitForReview.fulfilled, (state, action) => {
+          return state;
+        })
+        .addCase(submitForReview.rejected, (state, action) => {
+          return state;
         });
     },
 });
 
-export const { setProjectId, setSelectedFolderId, setTableData, setEndDate } = labelTableSlice.actions;
+export const { setProjectId, setSelectedFolderId, setTableData, clearTableData, setEndDate } = labelTableSlice.actions;
 
 export default labelTableSlice.reducer;

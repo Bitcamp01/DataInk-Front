@@ -63,12 +63,15 @@ const findFolderById = (folders, folderId, parentLabels = []) => {
 const handleFolderClick = async (folderId, parentLabels = []) => {
   const { folder, parentLabels: updatedParentLabels } = findFolderById(folders, folderId, parentLabels);
 
-  console.log("Selected folder:", folder);
-  console.log("Selected Parentfolder:", updatedParentLabels); // 부모 계층 출력
-
   if (!folder || !folder.id) {
     console.error("Folder or Folder ID is undefined:", folder);
     return; // 폴더나 폴더 ID가 없으면 함수 종료
+  }
+
+  // children 중 하나라도 folder 속성이 true이면 함수 종료 (즉, 하위 폴더가 있을 경우 처리하지 않음)
+  const hasSubFolder = folder.children && folder.children.some(child => child.folder === true);
+  if (hasSubFolder) {
+    return; // 하위 폴더가 있는 경우 함수 종료
   }
 
   try {
@@ -80,15 +83,38 @@ const handleFolderClick = async (folderId, parentLabels = []) => {
     const projectEndDate = projectEndDateAction.payload;
 
     // 파일(Task) 데이터를 대분류, 중분류, 소분류에 맞춰 매핑
-    const folderFiles = tasks.map((task, index) => ({
-      id: index + 1,  // 인덱스를 1부터 시작하도록 설정
-      workname: task.taskName,
-      category1: updatedParentLabels[0] || '',  // 대분류
-      category2: updatedParentLabels[1] || '',  // 중분류
-      category3: updatedParentLabels[2] || '',  // 소분류
-      workstatus: task.status,  // 작업 상태
-      deadline: projectEndDate || '마감일 없음',  // 프로젝트 마감일
-    }));
+    const folderFiles = tasks.map((task, index) => {
+      // updatedParentLabels의 길이에 따른 카테고리 설정
+      let category1 = '';
+      let category2 = '';
+      let category3 = '';
+    
+      if (updatedParentLabels.length === 0) {
+        category1 = folder.label;  // updatedParentLabels가 비어 있으면 folder.label을 category1에 설정
+      } else if (updatedParentLabels.length === 1) {
+        category1 = updatedParentLabels[0];  // updatedParentLabels[0]이 대분류
+        category2 = folder.label;  // category2에 folder.label
+      } else if (updatedParentLabels.length === 2) {
+        category1 = updatedParentLabels[0];  // updatedParentLabels[0]이 대분류
+        category2 = updatedParentLabels[1];  // updatedParentLabels[1]이 중분류
+        category3 = folder.label;  // category3에 folder.label
+      } else {
+        category1 = updatedParentLabels[0];  // updatedParentLabels[0]이 대분류
+        category2 = updatedParentLabels[1];  // updatedParentLabels[1]이 중분류
+        category3 = updatedParentLabels[2];  // updatedParentLabels[2]이 소분류
+      }
+
+      return {
+        id: task.id,  // 실제 Task ID 저장 (검수 요청 시 사용)
+        no: index + 1,  // 인덱스를 1부터 시작하도록 설정 (테이블 표시용)
+        workname: task.taskName,
+        category1,  // 대분류
+        category2,  // 중분류
+        category3,  // 소분류
+        workstatus: task.status,  // 작업 상태
+        deadline: projectEndDate || '마감일 없음',  // 프로젝트 마감일
+      };
+    });
 
     // 테이블 데이터를 전역 상태로 저장
     dispatch(setTableData(folderFiles));
@@ -124,8 +150,10 @@ const handleFolderClick = async (folderId, parentLabels = []) => {
           </div>
           <RichTreeView 
             items={transformedItems}
-            onItemClick={(event, node) => handleFolderClick(node)} // 폴더 클릭 시 핸들러 실행
-          />
+            onItemClick={(event, node) => {
+              handleFolderClick(node);} // 폴더 클릭 시 핸들러 실행
+            }
+              />
         </>
       )}
 
