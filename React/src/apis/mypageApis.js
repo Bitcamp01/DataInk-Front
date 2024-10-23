@@ -7,7 +7,7 @@ export const passwordChk = createAsyncThunk(
     async (password, thunkApi) => {
         try {
             const response = await axios.post(
-                'http://223.130.134.24:9090/mypage/password-check',
+                'https://223.130.134.24:9090/mypage/password-check',
                 { password },
                 {
                     headers: {
@@ -40,7 +40,7 @@ export const updateMypageInfo = createAsyncThunk(
     async (userInfo, thunkApi) => {
         try {
             const response = await axios.put(
-                'http://223.130.134.24:9090/mypage/update-profile',
+                'https://223.130.134.24:9090/mypage/update-profile',
                 userInfo,
                 {
                     headers: {
@@ -61,7 +61,7 @@ export const getAllProjects = createAsyncThunk(
     'mypage/getAllProjects',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get('http://223.130.134.24:9090/projects/all', {
+            const response = await axios.get('https://223.130.134.24:9090/projects/all', {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -78,7 +78,7 @@ export const fetchMypageInfo = createAsyncThunk(
     'mypage/fetchMypageInfo',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get('http://223.130.134.24:9090/mypage', {
+            const response = await axios.get('https://223.130.134.24:9090/mypage', {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 }
@@ -96,7 +96,7 @@ export const deleteProfileImage = createAsyncThunk(
     'mypage/deleteProfileImage',
     async (_, thunkApi) => {
         try {
-            const response = await axios.delete('http://223.130.134.24:9090/mypage/profile-image', {
+            const response = await axios.delete('https://223.130.134.24:9090/mypage/profile-image', {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
@@ -114,7 +114,7 @@ export const deleteBackgroundImage = createAsyncThunk(
     'mypage/deleteBackgroundImage',
     async (_, thunkApi) => {
         try {
-            const response = await axios.delete('http://223.130.134.24:9090/mypage/background-image', {
+            const response = await axios.delete('https://223.130.134.24:9090/mypage/background-image', {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
