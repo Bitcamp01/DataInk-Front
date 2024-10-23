@@ -183,7 +183,7 @@ import React, { useEffect, useState } from 'react';
 import { DataGridPro } from '@mui/x-data-grid-pro';
 
 const fetchData = async () => {
-  const response = await fetch('https://223.130.134.24/labeltask/data');
+  const response = await fetch('https://dataink.site/labeltask/data');
   if (!response.ok) {
     throw new Error('네트워크 응답이 실패했습니다.');
   }

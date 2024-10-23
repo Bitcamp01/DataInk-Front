@@ -95,7 +95,7 @@ const ReviewModal = ({ isOpen, onClose, taskId }) => {
     const handleApplyClick = async () => {
         try {
             // 승인 API 호출
-            const response = await axios.patch('https://223.130.134.24/labeltask/approve', {
+            const response = await axios.patch('https://dataink.site/labeltask/approve', {
                 taskId: taskId, // 필요한 데이터
                 comment: feedback // textarea의 내용
             });

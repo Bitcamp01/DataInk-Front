@@ -20,7 +20,7 @@ const OwnCalendar = () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       console.log(token);
       try {
-        const response = await axios.get('https://223.130.134.24/api/project-end-dates', {
+        const response = await axios.get('https://dataink.site/api/project-end-dates', {
           headers: {
             Authorization: `Bearer ${token}`
           },
