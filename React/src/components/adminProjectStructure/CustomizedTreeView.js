@@ -149,7 +149,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
 
   const getFolderData= async (folderId,projectId)=>{
     try {
-      const response=await axios.get("https://223.130.134.24:9090/projects/folder", {
+      const response=await axios.get("https://223.130.134.24/projects/folder", {
         params:{
           selectedFolder:folderId,
           selectedProject:projectId
@@ -193,7 +193,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
       folders:[]
     };
     try {
-      const response = await axios.post('https://223.130.134.24:9090/projects/create', sendFolder,{
+      const response = await axios.post('https://223.130.134.24/projects/create', sendFolder,{
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
           'Content-Type': 'application/json'

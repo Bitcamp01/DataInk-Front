@@ -34,7 +34,7 @@ const WorkInList = () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN'); // localStorage에서 토큰 가져오기
       // console.log(token);
       try {
-        const response = await axios.get('https://223.130.134.24:9090/api/work-items', {
+        const response = await axios.get('https://223.130.134.24/api/work-items', {
           headers: {
             Authorization: `Bearer ${token}`, // JWT 토큰 추가
           },

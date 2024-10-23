@@ -5,7 +5,7 @@ export const post = createAsyncThunk(
     'notice/post',
     async (formData, thunkApi) => {
       try{
-        const response = await axios.post('https://223.130.134.24:9090/notice', formData,{
+        const response = await axios.post('https://223.130.134.24/notice', formData,{
           headers:{
             Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
             "Content-Type" : "multipart/form-data"
@@ -24,7 +24,7 @@ export const getNotice = createAsyncThunk(
     'notice/getNotice',
     async(searchObj, thunkApi) => {
         try {
-            const response = await axios.get('https://223.130.134.24:9090/notice',  {
+            const response = await axios.get('https://223.130.134.24/notice',  {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 },

@@ -6,7 +6,7 @@ export const fetchFolders = createAsyncThunk(
     'labelTable/fetchFolders',
     async (projectId, thunkApi) => {
       try {
-        const response = await axios.get(`https://223.130.134.24:9090/projects/${projectId}/folders`, {
+        const response = await axios.get(`https://223.130.134.24/projects/${projectId}/folders`, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
           }
@@ -23,7 +23,7 @@ export const fetchTasksByFolderId = createAsyncThunk(
   'labelTable/fetchTasksByFolderId',
   async (folderId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`https://223.130.134.24:9090/mongo/tasks/folder/${folderId}`, {
+      const response = await axios.get(`https://223.130.134.24/mongo/tasks/folder/${folderId}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
@@ -40,7 +40,7 @@ export const fetchProjectEndDate = createAsyncThunk(
   'labelTable/fetchProjectEndDate',
   async (projectId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`https://223.130.134.24:9090/projects/enddate/${projectId}`, {
+      const response = await axios.get(`https://223.130.134.24/projects/enddate/${projectId}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
@@ -58,7 +58,7 @@ export const submitForReview = createAsyncThunk(
   async (taskIds, { rejectWithValue }) => {
     try {
       // taskIds를 보내서 상태를 업데이트하는 API 호출
-      const response = await axios.put(`https://223.130.134.24:9090/mongo/tasks/update-submit`, taskIds, {
+      const response = await axios.put(`https://223.130.134.24/mongo/tasks/update-submit`, taskIds, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
