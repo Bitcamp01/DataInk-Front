@@ -1,45 +1,43 @@
-
-.header-container {
+.chart__header-container {
     display: flex;
     align-items: center; /* 수직 정렬 */
-    margin-bottom: 20px;
     padding: 20px;
+    margin-bottom: 20px;
 }
 
-.title {
+.chart__title {
     color: #2F2F2F;
     font-weight: bold;
     font-size: 1.3rem;
     margin-top: 5px;
-    width: 140px;
+    width: 180px;
 }
 
-.controls {
+.chart__controls {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-left: 140px;
+    margin-left: 100px;
 }
 
 @media (max-width: 1530px) {
-    .controls {
+    .chart__controls {
         margin-left: 30%;
     }
 }
 
 @media (max-width: 1400px) {
-    .controls {
+    .chart__controls {
         margin-left: 30%;
     }
 }
 
-
-.dropdown-wrapper {
+.chart__dropdown-wrapper {
     display: inline-block;
     position: relative; /* 드롭다운의 부모 컨테이너를 기준으로 드롭다운 메뉴가 위치 */
 }
 
-.dropdown-button {
+.chart__dropdown-button {
     background-color: white;
     border: 1px solid #BCBCBC;
     padding: 6px 12px;
@@ -54,7 +52,7 @@
     text-align: center;
 }
 
-.dropdown-arrow {
+.chart__dropdown-arrow {
     display: inline-block;
     margin-left: 8px;
     width: 0;
@@ -64,7 +62,7 @@
     border-top: 5px solid #7C97FE;
 }
 
-.dropdown-menu {
+.chart__dropdown-menu {
     position: absolute;
     top: 100%; /* 드롭다운 버튼 바로 아래에 배치 */
     left: 0;
@@ -77,7 +75,7 @@
     z-index: 1;
 }
 
-.dropdown-item {
+.chart__dropdown-item {
     padding: 8px 12px;
     cursor: pointer;
     font-size: 12px;
@@ -87,21 +85,20 @@
     text-align: center;
 }
 
-.dropdown-item.selected {
+.chart__dropdown-item--selected {
     color: #007BFF;
 }
 
-.refresh-button {
+.chart__refresh-button {
     background-color: white;
     color: #717171;
     border: 1px solid #BCBCBC;
-    padding: 7px 10px;
+    padding: 5.5px 10px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 12px;
 }
 
-
-.refresh-button:hover {
+.chart__refresh-button:hover {
     background-color: #F5F5F5;
 }

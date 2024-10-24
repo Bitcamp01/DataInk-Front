@@ -2,26 +2,24 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Pretendard', 'NotoSansKR', sans-serif
 }
 
-.profileContaniner {
+.bm-profileContainer {
     width: 100%;
     height: 100%;
 }
 
-.username {
+.bm-username {
     color: #7C97FE;
     font-weight: normal;
+    margin: 10px;
+    border-bottom: 1px solid #D0D0D0;
+    padding-bottom: 10px;
+    font-size: 1.4rem;
 }
 
-.Announcement-detail {
-    color: #929292;
-    font-weight: normal;
-    font-size: 0.8rem;
-    margin-left: 50%;
-}
-
-.profileCard {
+.bm-profileCard {
     width: 235px;
     height: 421px;
     background: white;
@@ -29,45 +27,46 @@
     border: 1px solid #C4C4C4;
 }
 
-.profile {
+.bm-profile {
     text-align: center;
 }
 
-.profile img {
+.bm-profile img {
     width: 130px;
     height: 130px;
 }
 
-.profile h4 {
+.bm-prodile-title {
+    display: inline-block;
     color: #7C97FE;
     font-weight: normal;
     margin-top: 20px;
-    margin-bottom: 20px;
-}
-.profile h2 {
-    margin: 10px;
-    border-bottom: 1px solid #D0D0D0;
-    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 
-.roleInfo {
+
+.bm-roleInfo {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.Affiliation {
-    padding-right: 30px;
+.bm-affiliation {
+    padding-right: 20px;
     border-right: 1px dotted #D0D0D0;
     margin-right: 15px;
     text-align: center;
+    font-size: 1rem;
+    margin-left: 10px;
 }
 
-.role {
+.bm-role {
     text-align: center;
+    font-size: 1rem;
+    margin-right: 10px;
 }
 
-.Announcement {
+.bm-announcement {
     border: 1px dotted #DBDBDB;
     background: #F6F8FF;
     width: 220px;
@@ -77,23 +76,41 @@
     margin-top: 20px;
 }
 
-.detail-info {
+.bm-announcementDetail {
+    color: #929292;
+    font-weight: normal;
+    font-size: 0.7rem;
+    margin-right: 5px;
+}
+
+.bm-announcement-title {
+    margin-top: 5px;
+    margin-left: 8px;
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #2F2F2F;
+}
+
+.bm-detailInfo {
     display: inline-flex;
     width: 210px;
 }
 
-.detail-info img {
+.bm-detailInfo img {
     width: 9.82px;
     height: 14.59px;
     vertical-align: middle;
     margin-right: 10px;
 }
 
-.detail-info span {
+.bm-detailInfo span {
     white-space: nowrap;
 }
 
-.detail-info a {
+.bm-detailInfo a {
     text-decoration: none;
     white-space: nowrap;
     overflow: hidden;
@@ -102,26 +119,13 @@
     text-overflow: ellipsis;
 }
 
-#Announcement-detail {
-    margin-top: 5px;
-    margin-left: 100px;
-    text-decoration: none;
-}
-
-.Announcement h5 {
-    margin-top: 5px;
-    margin-left: 8px;
-    margin-bottom: 2px;
-}
-
-.detail-info {
+.bm-detailInfo {
     align-items: center;
     margin-left: 5px;
     margin-bottom: 5px;
-    margin-top: 2%;
 }
 
-.detail-info span {
+.bm-detailInfo span {
     margin: 0;
     font-size: 0.8rem;
 }
