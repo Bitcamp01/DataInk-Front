@@ -1,8 +1,8 @@
+// src/components/Join.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { idCheck, telCheck } from '../apis/userApis'; // 전화번호 중복 체크 API
+import { idCheck, telCheck, join } from '../apis/userApis'; // join 액션 추가
 import '../css/join.css';
 
 const Join = () => {
@@ -64,16 +64,17 @@ const Join = () => {
     // 메시지 상태
     const [message, setMessage] = useState('');
 
+    // 아이디 유효성 검사 및 중복 체크
     const validateUserId = async (value) => {
         const lettersAndNumbersOnly = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/.test(value);
         const minLength = value.length >= 6;
         const hasNumber = /\d/.test(value);
-    
+
         if (lettersAndNumbersOnly && minLength && hasNumber) {
             // 아이디 중복 체크 API 호출
             try {
                 const response = await dispatch(idCheck(value)).unwrap();
-                if (response.idCheckMsg === 'valid id') {
+                if (response.usernameCheckMsg === 'available username') { // 백엔드 메시지에 맞춰 수정
                     setUserIdValid({ lettersAndNumbersOnly, minLength, hasNumber, isAvailable: true });
                 } else {
                     setUserIdValid({ lettersAndNumbersOnly, minLength, hasNumber, isAvailable: false });
@@ -87,17 +88,20 @@ const Join = () => {
         }
     };
 
-    const validatename = (value) => {
+    // 이름 유효성 검사
+    const validateName = (value) => {
         const notEmpty = value.trim() !== '';
         const isValidFormat = /^[가-힣\s]+$/.test(value);
         setnameValid({ notEmpty, isValidFormat });
     };
 
+    // 이메일 유효성 검사
     const validateEmail = (value) => {
         const format = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
         setEmailValid({ format });
     };
 
+    // 비밀번호 유효성 검사
     const validatePassword = (value) => {
         const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
         const hasUppercase = /[A-Z]/.test(value);
@@ -106,25 +110,28 @@ const Join = () => {
         setPasswordValid({ hasSpecialChar, hasUppercase, hasLowercase, hasNumber });
     };
 
+    // 비밀번호 확인 유효성 검사
     const validateConfirmPassword = (value) => {
         const matches = value === password && value !== '';
         setConfirmPasswordValid({ matches });
     };
 
+    // 회원 권한 유효성 검사
     const validateAuthen = (value) => {
         const selected = value !== '';
         setAuthenValid({ selected });
     };
 
+    // 전화번호 유효성 검사 및 중복 체크
     const validateTel = async (value) => {
         const isNumeric = /^\d+$/.test(value);
         const isElevenDigits = value.length === 11;
-    
+
         if (isNumeric && isElevenDigits) {
             // 전화번호 중복 체크 API 호출
             try {
-                const response = await telCheck(value);
-                if (response.item && response.item.telCheckMsg === 'valid tel') {
+                const response = await dispatch(telCheck(value)).unwrap(); // dispatch 추가
+                if (response.telCheckMsg === 'available tel') { // 백엔드 메시지에 맞춰 수정
                     setTelValid({ isNumeric, isElevenDigits, isAvailable: true });
                 } else {
                     setTelValid({ isNumeric, isElevenDigits, isAvailable: false });
@@ -145,7 +152,7 @@ const Join = () => {
     }, [user_id]);
 
     useEffect(() => {
-        validatename(name);
+        validateName(name);
     }, [name]);
 
     useEffect(() => {
@@ -166,13 +173,13 @@ const Join = () => {
     }, [tel]);
 
     // 필드 유효성 검사
-    const isUserIdValidField = Object.values(userIdValid).every(Boolean);
+    const isUserIdValidField = Object.values(userIdValid).every((value, index) => index < 3 ? value : value === true);
     const isnameValidField = Object.values(nameValid).every(Boolean);
     const isEmailValidField = Object.values(emailValid).every(Boolean);
     const isPasswordValidField = Object.values(passwordValid).every(Boolean);
     const isConfirmPasswordValidField = Object.values(confirmPasswordValid).every(Boolean);
     const isCarrierValid = carrier !== '';
-    const isTelValidField = Object.values(telValid).every(Boolean);
+    const isTelValidField = Object.values(telValid).every((value, index) => index < 2 ? value : value === true);
     const isBirthdateValid = birth !== "";
     const isAuthenValidField = Object.values(authenValid).every(Boolean);
 
@@ -208,8 +215,8 @@ const Join = () => {
                     dep: ""
                 };
 
-                // 백엔드 API 엔드포인트에 POST 요청
-                const response = await axios.post('http://localhost:9090/users/join', payload);
+                // 백엔드 API 엔드포인트에 POST 요청 (Redux 액션 사용)
+                const response = await dispatch(join(payload)).unwrap();
 
                 if (response.status === 201 || response.status === 200) {
                     setMessage('회원가입이 완료되었습니다!');
@@ -294,7 +301,7 @@ const Join = () => {
                     </div>
 
                     {/* 부가 설명 메시지 - 아이디 */}
-                    <div className={`join__validation-messages ${focusedField === 'user_id' && (!isUserIdValidField || userIdValid.isAvailable === false) ? 'visible' : ''}`}>
+                    <div className={`join__validation-messages ${focusedField === 'user_id' && (userIdValid.isAvailable === false || !isUserIdValidField) ? 'visible' : ''}`}>
                         <p className={userIdValid.lettersAndNumbersOnly ? 'valid' : 'invalid'}>
                             영문자와 숫자의 조합만 사용 가능합니다.
                         </p>
@@ -573,7 +580,7 @@ const Join = () => {
                     </div>
 
                     {/* 부가 설명 메시지 - 전화번호 */}
-                    <div className={`join__validation-messages ${focusedField === 'tel' && (!isTelValidField || telValid.isAvailable === false) ? 'visible' : ''}`}>
+                    <div className={`join__validation-messages ${focusedField === 'tel' && (telValid.isAvailable === false || !isTelValidField) ? 'visible' : ''}`}>
                         <p className={telValid.isNumeric ? 'valid' : 'invalid'}>
                             숫자만 입력해주세요.
                         </p>

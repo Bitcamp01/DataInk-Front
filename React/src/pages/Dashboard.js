@@ -25,7 +25,7 @@ const Dashboard = () => {
   return (
     <section className='content'>
       <div className='overView'>
-        <h2 id='overView-text'>Overview</h2>
+        <span id='overView-text'>Overview</span>
         <div className='total'>
           <RenderProfileCard />
           <div className='work'>
@@ -40,9 +40,9 @@ const Dashboard = () => {
         </div>
 
         <div className='project'>
-          <h2 className='project-header'>
+          <span className='project-header'>
             참여 중인 프로젝트 <span className='project-count'>10</span><span>건</span>
-          </h2>
+          </span>
           <div id='card-container'>
             <RendarProjectCard />
           </div>

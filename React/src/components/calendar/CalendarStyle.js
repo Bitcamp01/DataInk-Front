@@ -184,12 +184,13 @@ export const StyledDate = styled.div`
 
 /* 출석한 날짜에 점 표시 스타일 */
 export const StyledDot = styled.div`
-  background-color: #FF4949;
   border-radius: 50%;
   width: 0.3rem;
   height: 0.3rem;
   position: absolute;
-  top: 70%; /* 이 값을 조정하여 날짜 바로 아래에 위치시킵니다 */
+  top: 70%;
   left: 50%;
   transform: translateX(-50%); /* 수평 중앙 정렬 유지 */
+  z-index: 1;
 `;
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyledCalendarWrapper,
   StyledCalendar,
@@ -6,12 +6,46 @@ import {
   StyledDot,
 } from "./CalendarStyle";
 import moment from 'moment';
+import axios from 'axios';
 
 const OwnCalendar = () => {
   const today = new Date();
   const [date, setDate] = useState(today);
   const [activeStartDate, setActiveStartDate] = useState(new Date());
-  const attendDay = ["2024-09-06", "2024-09-17"]; // 출석한 날짜 예시
+  const [projectEndDay, setProjectEndDay] = useState([]);
+
+  useEffect(() => {
+    // 백엔드 API 요청
+    const fetchEndDates = async () => {
+      const token = sessionStorage.getItem('ACCESS_TOKEN');
+      // console.log(token);
+      try {
+        const response = await axios.get('http://localhost:9090/api/project-end-dates', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        const items = response.data;
+        const projectEnd = items.map(item => ({
+          id: item.userId,
+          endDate: moment(item.endDate).format("YYYY-MM-DD"),  // 여기서 endDate를 포맷
+          projectName: item.projectName
+        }));
+
+        setProjectEndDay(projectEnd);
+      } catch (error) {
+        console.error('Error fetching end dates: ', error);
+        if (error.response) {
+          console.log('Error response data:', error.response.data);
+          console.log('Error status:', error.response.status);
+        } else {
+          console.log('Error message:', error.message);
+        }
+      }
+    };
+  
+    fetchEndDates();
+  }, []);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
@@ -43,11 +77,21 @@ const OwnCalendar = () => {
         }
         tileContent={({ date, view }) => {
           let html = [];
-          if (view === "month") { // view가 'month'일 때
-            // 해당 날짜가 출석한 날짜인지 확인
-            if (attendDay.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
-              html.push(<StyledDot key={moment(date).format("YYYY-MM-DD")} />);
-              console.log(moment(date).format("YYYY-MM-DD"));
+          if (view === "month") {
+            const formattedDate = moment(date).format("YYYY-MM-DD");
+            const foundEndDate = projectEndDay.find((x) => x.endDate === formattedDate); // endDate로 비교
+            
+            if (foundEndDate) {
+              // 날짜 비교
+              const endDate = moment(foundEndDate.endDate);  // endDate에 접근
+              const diffDays = endDate.diff(moment(), 'days');
+
+              // 남은 날짜에 따라 색상 결정
+              const dotColor = diffDays <= 5 ? '#FF4949' : '#7C97FE';
+              
+              html.push(
+                <StyledDot key={formattedDate} style={{ backgroundColor: dotColor }} />
+              );
             }
           }
           return <>{html}</>;

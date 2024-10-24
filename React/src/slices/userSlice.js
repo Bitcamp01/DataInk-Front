@@ -96,7 +96,12 @@ const userSlice = createSlice({
                 console.error('Rejected action:', action);
                 alert(action.payload || '비밀번호 변경 중 에러가 발생했습니다.');
             });
+            
+            
     }
 });
+
+
+
 
 export default userSlice.reducer;

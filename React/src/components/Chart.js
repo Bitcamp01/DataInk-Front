@@ -97,25 +97,25 @@ export default function App() {
 
     return (
         <div>
-            <div className="header-container">
-                <h3 className="title">완료된 작업현황</h3>
-                <div className="controls">
-                    <div className="refresh-button-wrapper">
-                        <button onClick={refreshChart} className="refresh-button">
+            <div className="chart__header-container">
+                <h3 className="chart__title">완료된 작업현황</h3>
+                <div className="chart__controls">
+                    <div className="chart__refresh-button-wrapper">
+                        <button onClick={refreshChart} className="chart__refresh-button">
                             <img src='/icons/Refresh_icon.svg' alt="refresh" />
                         </button>
                     </div>
-                    <div className="dropdown-wrapper">
-                        <button onClick={toggleDropdown} className="dropdown-button">
+                    <div className="chart__dropdown-wrapper">
+                        <button onClick={toggleDropdown} className="chart__dropdown-button">
                             {selectedView}
-                            <span className="dropdown-arrow"></span>
+                            <span className="chart__dropdown-arrow"></span>
                         </button>
                         {isDropdownOpen && (
-                            <ul className="dropdown-menu">
+                            <ul className="chart__dropdown-menu">
                                 {['월별', '년도별', '일자별'].map((view, index) => (
                                     <li
                                         key={index}
-                                        className={`dropdown-item ${view === selectedView ? 'selected' : ''}`}
+                                        className={`chart__dropdown-item ${view === selectedView ? 'chart__dropdown-item--selected' : ''}`}
                                         onClick={() => handleSelectView(view)}
                                     >
                                         {view}

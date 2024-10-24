@@ -1,12 +1,32 @@
-import React from 'react';
-import '../css/memberManagement.css';
-import { Box, Typography, Button, TextField, IconButton, Avatar, Paper } from '@mui/material';
+import React, { useEffect, useState } from 'react'; // useEffect, useState와 함께 React import
+import { Box, Typography, Button, TextField, Avatar, Paper } from '@mui/material';
+import { useParams } from 'react-router-dom'; // useParams로 URL 파라미터 가져오기
+import { useSelector } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
+
+
+
 const Notice_detail = () => {
+  const { id } = useParams(); // URL에서 공지사항 ID 추출
+  const [notice, setNotice] = useState(null);
+  const noticeList = useSelector(state => state.noticeSlice.notice); // 공지사항 리스트 가져오기
+
+
+  useEffect(() => {
+    // 공지사항 리스트에서 ID에 해당하는 데이터 찾기
+    const selectedNotice = noticeList.content.find(item => item.noticeId === parseInt(id));
+    setNotice(selectedNotice);
+  }, [id, noticeList]);
+
+  if (!notice) {
+    return null; // 빈 화면 처리
+  }
+
+
   return (
   <>
     {/* 콘텐츠 영역 */}
@@ -26,7 +46,7 @@ const Notice_detail = () => {
           <Box display="flex" flexDirection="column">
 
               {/* 제목 */}
-           <Typography variant="h6" fontFamily="Pretendard" sx={{ mb: 3, height:'50px', borderBottom: 'solid 1.5px #eaeaea', }}>분류 작업시 주의사항</Typography>
+           <Typography variant="h6" fontFamily="Pretendard" sx={{ mb: 3, height:'50px', borderBottom: 'solid 1.5px #eaeaea', }}>{notice.title}</Typography>
 
             {/* 작성자 정보와 수정 / 삭제 버튼 */}
               <Box display="flex" justifyContent="space-between" alignItems="flex-start">
@@ -35,8 +55,8 @@ const Notice_detail = () => {
                   {/* 작성자 아바타 */}
                   <Avatar alt="작성자" src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2 , mb:3}} />
                   <Box>
-                    <Typography variant="body1" fontFamily="Pretendard">정소연</Typography>
-                    <Typography variant="body2"  fontFamily="Pretendard" color="textSecondary" sx={{ mb: 3}}>2024.09.19 14:25</Typography>
+                    <Typography variant="body1" fontFamily="Pretendard">{notice.name}</Typography>
+                    <Typography variant="body2"  fontFamily="Pretendard" color="textSecondary" sx={{ mb: 3}}>{new Date(notice.created).toLocaleString()}</Typography>
                   </Box>
                 </Box>
 
@@ -52,8 +72,7 @@ const Notice_detail = () => {
           {/* 공지 내용 */}
           <Box sx={{ minHeight: '300px' }}>
             <Typography variant="body1" fontFamily="Pretendard" sx={{color:"#3e3e3e"}}>
-              데이터 분류 작업시 순위를 두고 작업에 임해주시기 바랍니다.
-              자세한 사항은 추후 공지 예정입니다.
+            {notice.content} 
             </Typography>
           </Box>
 

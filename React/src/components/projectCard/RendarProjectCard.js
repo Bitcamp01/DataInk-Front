@@ -4,7 +4,6 @@ import ProjectCard from './ProjectCard';
 const RendarProjectCard = () => {
   const projects = [
     {
-      id: 26,
       name: '프로젝트 이름',
       deadline: 2,
       description: '프로젝트 설명입니다.프로젝트 설명입니다.프로젝트 설명입니다.프로젝트 설명입니다.프로젝트 설명입니다.',
@@ -22,7 +21,6 @@ const RendarProjectCard = () => {
 
   const projects1 = [
     {
-      id: 28,
       name: '프로젝트 이름',
       deadline: 23,
       description: '프로젝트 설명입니다.프로젝트 설명입니다.프로젝트 설명입니다.프로젝트 설명입니다.프로젝트 설명입니다.',

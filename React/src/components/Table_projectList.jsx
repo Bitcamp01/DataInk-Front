@@ -12,6 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Table_projectList_modal from './Table_projectList_modal';
+import { useSelector } from 'react-redux';
 
 
 const rows = [
@@ -30,6 +31,11 @@ const rows = [
 export default function Table_projectList() {
   const [open, setOpen] = React.useState(false);
   const [selectedRow, setSelectedRow] = React.useState(null);
+
+  
+  const projectListAll= useSelector(state => state.memberSlice.projectsData);
+  // 콘솔에 데이터를 출력하여 확인
+console.log("Current projectListAll data:", projectListAll);
 
   const handleEditClick = (id) => {
     const row = rows.find((row)=> row.id === id);
@@ -77,7 +83,13 @@ export default function Table_projectList() {
        borderRadius: '10px'}}>
 
       <DataGrid
-        rows={rows}
+        rows={(projectListAll ?? []).map((item, index) => ({
+          id: item.projectId,
+          project_name: item.name,       
+          description: item.description || '설명 없음', 
+          regdate: item.startDate,  
+          member: item.userId,         
+        }))} 
         columns={columns} 
         rowHeight={40} 
         headerHeight={50}
