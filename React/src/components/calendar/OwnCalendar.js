@@ -18,7 +18,7 @@ const OwnCalendar = () => {
     // 백엔드 API 요청
     const fetchEndDates = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
-      console.log(token);
+      // console.log(token);
       try {
         const response = await axios.get('http://localhost:9090/api/project-end-dates', {
           headers: {
