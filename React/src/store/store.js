@@ -5,6 +5,8 @@ import noticeSlice from '../slices/noticeSlice';
 import memberSlice from '../slices/memberSlice';
 import labelTableSlice from '../slices/labelTableSlice';
 import mypageSlice from '../slices/mypageSlice';
+import calendarSlice from '../slices/calendarSlice';
+import eventSlice from '../slices/eventSlice';
 import categorySlice from '../slices/categorySlice';
 import memberModalSlice from '../slices/memberModalSlice';
 
@@ -26,6 +28,8 @@ const reducers = combineReducers({
     memberSlice,
     labelTableSlice,
     mypageSlice,
+    calendarSlice,
+    eventSlice
     categorySlice,
     memberModalSlice,
 });
