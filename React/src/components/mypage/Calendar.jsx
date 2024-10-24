@@ -204,7 +204,8 @@ const ColorCircle = styled.span`
 const Calendar = () => {
     const dispatch = useDispatch();
     const { calendars, status: calendarStatus, error: calendarError } = useSelector((state) => state.calendar);
-    const { events, status: eventStatus, error: eventError } = useSelector((state) => state.event);
+    // const { events, status: eventStatus, error: eventError } = useSelector((state) => state.event);
+    const [events, setEvents] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);  // 선택한 날짜 상태
     const [selectedEvent, setSelectedEvent] = useState(null);// 선택한 이벤트
     const [selectedEvents, setSelectedEvents] = useState([]);  // 선택한 날짜의 이벤트 위에꺼랑 다른거임
