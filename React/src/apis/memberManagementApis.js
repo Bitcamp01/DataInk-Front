@@ -21,3 +21,24 @@ export const fetchTabData = createAsyncThunk(
     }
   }
 );
+
+export const fetchModalData = createAsyncThunk(
+  'modalManagement/fetchModalData',
+  async ({ page, size = 10 }, thunkApi) =>{
+    try{
+      const response = await axios.get(`http://localhost:9090/member/modal`,{
+        params:{
+          page: page,
+          size: size,
+        },
+        headers: {
+          Authorization : `Bearer ${sessionStorage.getItem(`ACCESS_TOKEN`)}`
+        }
+      });
+
+      return  response.data.pageItems;
+    }catch(error){
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);

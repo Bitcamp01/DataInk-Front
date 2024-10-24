@@ -41,7 +41,6 @@ const userSlice = createSlice({
                 return {
                     ...state,
                     ...action.payload,
-                    accessToken: action.payload.token, // 토큰을 Redux 상태에 저장
                     isLogin: true,
                 };
             })

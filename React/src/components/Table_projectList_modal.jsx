@@ -1,22 +1,16 @@
-import * as React from 'react';
+import React, { useState, useEffect, useRef } from 'react'; 
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
 import { DataGrid } from '@mui/x-data-grid';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { useDispatch, useSelector } from 'react-redux';
+import DialogActions from '@mui/material/DialogActions'; 
+import DialogContent from '@mui/material/DialogContent'; 
+import Grid from '@mui/material/Grid'; 
+import Button from '@mui/material/Button'; 
 import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';  
-import CloseIcon from '@mui/icons-material/Close'; 
-import { useSelector } from 'react-redux';
-import '../css/scrollbar.css';
-import { useDispatch } from 'react-redux';  
-import { telCheck } from '../apis/userApis';
-
+import { fetchModalData } from '../apis/memberManagementApis';
 
 const columns = [
   { field: 'id', headerName: '이름', width: 120, resizable: false  },
@@ -27,42 +21,109 @@ const columns = [
 
 export default function Table_projectList_Modal({ open, onClose, selectedRow , handleClose}) {
   const dispatch = useDispatch();
-    
-  // userSlice의 데이터를 가져옵니다
-  const usersData = useSelector(state => state.users); // userSlice에서 users 데이터를 가져옴
+
+  // 상태 정의 (useState)
+  const [selectedAllMembers, setSelectedAllMembers] = useState([]); // 선택된 모든 멤버
+  const [projectMembers, setProjectMembers] = useState([]); // 프로젝트에 참여한 멤버
+  const [usersData, setUsersData] = useState([]);
+  const modalData = useSelector((state) => state.memberModalSlice.modalDatas); // Redux 상태 가져오기
+  const [page, setPage] = useState(0); // 페이지 추적
   
-  const [selectedAllMembers, setSelectedAllMembers] = React.useState([]);
-  const [projectMembers, setProjectMembers] = React.useState([]);
+  
+  // 각 DataGrid의 스크롤 컨테이너 참조
+  const containerRef1 = useRef(null);
+  const containerRef2 = useRef(null);
 
-  // telCheck API 호출하여 관련 로직 처리
-  React.useEffect(() => {
+  // 모달이 열릴 때 초기 데이터 불러오기
+  useEffect(() => {
     if (open) {
-      dispatch(telCheck()); // telCheck API 호출 예시
+      setPage(0);  // 페이지 초기화
+      dispatch(fetchModalData(0));  // 첫 페이지 데이터 불러오기
     }
-  }, [dispatch, open]);
+  }, [open]);
 
-  // '전체 멤버'에서 선택된 멤버를 '프로젝트 참여 멤버'로 추가
-  const handleAddMembers = () => {
-    const newMembers = usersData.filter((member) =>
-      selectedAllMembers.includes(member.id)
-    );
+  // Redux의 modalData가 변경될 때마다 usersData 업데이트
+  useEffect(() => {
+    console.log('Updated modalData:', modalData);
+    setUsersData(modalData);
+  }, [modalData]);
 
-    const filteredNewMembers = newMembers.filter(
-      (newMember) => !projectMembers.some((projectMember) => projectMember.id === newMember.id)
-    );
+  // 첫 번째 DataGrid의 스크롤 이벤트 처리
+  const handleScroll1 = () => {
+    if (!containerRef1.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef1.current;
 
-    setProjectMembers((prev) => [...prev, ...filteredNewMembers]);
-    setSelectedAllMembers([]);
+    if (scrollHeight - scrollTop <= clientHeight + 50 ) { // 끝에서 30px 남았을 때
+      setPage((prevPage) => prevPage + 1);
+    }
   };
 
-  // '프로젝트 참여 멤버'에서 선택된 멤버 제거
-  const handleRemoveMembers = () => {
+  // 두 번째 DataGrid의 스크롤 이벤트 처리
+  const handleScroll2 = () => {
+    if (!containerRef2.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef2.current;
+
+    if (scrollHeight - scrollTop <= clientHeight + 30) { // 끝에서 30px 남았을 때
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  // 페이지가 변경될 때마다 데이터 추가 불러오기
+  useEffect(() => {
+    if (open && page > 0) {
+      dispatch(fetchModalData({ page })); // 페이지 증가 시 데이터 요청
+    }
+  }, [page, open, dispatch]);
+
+  // 첫 번째 DataGrid의 스크롤 이벤트 연결 및 해제
+  useEffect(() => {
+    if (open && containerRef1.current) {
+      const container = containerRef1.current;
+      container.addEventListener('scroll', handleScroll1);
+
+      return () => {
+        container.removeEventListener('scroll', handleScroll1);
+      };
+    }
+  }, [open]);
+
+  // 두 번째 DataGrid의 스크롤 이벤트 연결 및 해제
+  useEffect(() => {
+    if (open && containerRef2.current) {
+      const container = containerRef2.current;
+      container.addEventListener('scroll', handleScroll2);
+
+      return () => {
+        container.removeEventListener('scroll', handleScroll2);
+      };
+    }
+  }, [open]);
+
+
+  //선택된 멤버를 프로젝트 참여 멤버로 추가 
+  const handleAddMembers = () => {
+    const newMembers = usersData.filter((member) => 
+    selectedAllMembers.includes(member.id));
+
+
+    const filteredNewMembers = newMembers.filter(
+      (newMember) => !projectMembers.some((projectMember) => projectMember.id ===newMember.id)
+    );
+
+    setProjectMembers((prev) => [...prev,...filteredNewMembers]);//중복되지 않은 멤버들만 추가 
+    setSelectedAllMembers([]); //선택초기화 
+
+  };
+
+  //선택된 멤버를 프로젝트에서 제거 
+  const handleRemoveMembers = () =>{
     const remainingMembers = projectMembers.filter(
       (member) => !selectedAllMembers.includes(member.id)
     );
     setProjectMembers(remainingMembers);
     setSelectedAllMembers([]);
   };
+
 
   return (
 
@@ -96,9 +157,10 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
               <p style={{ marginBottom: '30px', marginTop: '15px', display: 'block', color:'#3e3e3e' }}>
                 프로젝트에 참여시킬 멤버를 선택 후, 화살표 아이콘을 눌러 해당 프로젝트에 참여해주세요.</p>
               <Box
+                ref={containerRef1}
                 sx={{
                   height: '540px',
-                  overflow: 'hidden',  
+                  overflow: 'auto',  
                   border: 'transparent', 
                   minWidth: '200px',
                   width: '100%', 
@@ -106,15 +168,17 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                   overflowY: 'auto', 
         
                 }}
+                onScroll={handleScroll1} // 스크롤 이벤트 핸들러 등록
               >        
                 
                       
               <DataGrid
-                 rows={(usersData ?? []).map((item, index) => ({
-                  name: item.name,       
-                  department: item.userDetailDto?.dep || '부서 정보 없음', // userDetailDto가 존재하지 않으면 '부서 정보 없음'
-                  role: item.authen,  
-                }))} 
+                rows={(usersData).map((item) => ({
+                  id: item.id,
+                  name: item.name,
+                  department: item.userDetailDto.dep || '부서 정보 없음',
+                  role: item.authen,
+                }))}
                 columns={columns}
                 checkboxSelection
                 sx={{
@@ -202,6 +266,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 프로젝트에서 제외할 멤버를 선택 후, 화살표 아이콘을 눌러 해당 프로젝트에서 제외해주세요.</p>
                 <Box 
                 className="custom-scrollbar"
+                ref={containerRef2}
                 sx={{
                   height: '540px',
                   overflow: 'hidden',  
@@ -229,10 +294,16 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                   },
                   
                 }}
+                onScroll={handleScroll2} // 스크롤 이벤트 핸들러 등록
               >    
        
               <DataGrid
-                rows={projectMembers}
+                rows={projectMembers.map((item) => ({
+                  id: item.id,
+                  name: item.name,
+                  department: item.userDetailDto.dep || '부서 정보 없음',
+                  role: item.authen,
+                }))}
                 columns={columns}
                 checkboxSelection
                 pageSize={5}
