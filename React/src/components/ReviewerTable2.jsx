@@ -183,7 +183,10 @@ import React, { useEffect, useState } from 'react';
 import { DataGridPro } from '@mui/x-data-grid-pro';
 
 const fetchData = async () => {
-  const response = await fetch('https://dataink-back.store/labeltask/data');
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+  const response = await fetch(`${API_BASE_URL}/labeltask/data`);
   if (!response.ok) {
     throw new Error('네트워크 응답이 실패했습니다.');
   }

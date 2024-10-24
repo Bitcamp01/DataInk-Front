@@ -5,6 +5,9 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import {useNavigate, useParams} from "react-router-dom";
 
+// 환경 변수에서 API URL 가져오기
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const ItemStructure = () => {
     const { itemId } = useParams();
     const [data, setData] = useState({});
@@ -26,7 +29,7 @@ const ItemStructure = () => {
     const getItem= async ()=>{
         console.log("get item")
         try {
-            const response=await axios.get(`https://dataink-back.store/item/${itemId}`,{
+            const response=await axios.get(`${API_BASE_URL}/item/${itemId}`,{
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
@@ -161,7 +164,7 @@ const ItemStructure = () => {
                     data: data,
                 };
                 console.log('새로운 아이템 생성:', itemId);
-                const response = await axios.post("https://dataink-back.store/projects/itemcreate",payload,{
+                const response = await axios.post(`${API_BASE_URL}/projects/itemcreate`,payload,{
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                     }
@@ -177,7 +180,7 @@ const ItemStructure = () => {
                     data: data,
                 };
                 console.log('아이템 업데이트:', itemId);
-                const response = await axios.post("https://dataink-back.store/item/update",payload,{
+                const response = await axios.post(`${API_BASE_URL}/item/update`,payload,{
                     headers : { 'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`}
                 })
                 if (response.status === 200){

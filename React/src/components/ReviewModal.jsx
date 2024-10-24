@@ -87,6 +87,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // axios 임포트
 
 const ReviewModal = ({ isOpen, onClose, taskId }) => {
+    // 환경 변수에서 API URL 가져오기
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
     const navigate = useNavigate();
     const [feedback, setFeedback] = useState('');
 
@@ -95,7 +98,7 @@ const ReviewModal = ({ isOpen, onClose, taskId }) => {
     const handleApplyClick = async () => {
         try {
             // 승인 API 호출
-            const response = await axios.patch('https://dataink-back.store/labeltask/approve', {
+            const response = await axios.patch(`${API_BASE_URL}/labeltask/approve`, {
                 taskId: taskId, // 필요한 데이터
                 comment: feedback // textarea의 내용
             });

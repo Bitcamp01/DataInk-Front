@@ -8,11 +8,9 @@ import CustomizedDataGrid from '../components/adminProjectStructure/CustomizedDa
 import axios from "axios";
 import { wait } from '@testing-library/user-event/dist/utils';
 
-
-
-
-
 export default function MainGrid() {
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const [originalFolderData, setOriginalFolderData] = React.useState([]);//실제 백엔드에서 받는 데이터
   const [folderData, setFolderData] = React.useState([]); //트리뷰에서 사용할 전체 폴더 구조 데이터
@@ -77,7 +75,7 @@ export default function MainGrid() {
   //초기화면 구성시 서버로부터 프로젝트 구조 가져오기, 백엔드 구현시 요청하는 코드로 변경 필요
   const getInitFolderData= async () =>{
     try {
-      const response=await axios.get("https://dataink-back.store/projects/all",{
+      const response=await axios.get(`${API_BASE_URL}/projects/all`,{
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
@@ -156,7 +154,7 @@ export default function MainGrid() {
 
   const getSelectedFolderData = async () => {
     try {
-      const response = await axios.get(`https://dataink-back.store/projects/folder`, {
+      const response = await axios.get(`${API_BASE_URL}/projects/folder`, {
         params:{
           selectedFolder: selectedFolder,
           selectedProject: selectedProject

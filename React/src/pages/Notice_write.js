@@ -10,6 +10,9 @@ import '../slices/userSlice';
 
 const Notice_write = () => {
 
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   
   // Redux에서 로그인한 사용자 정보 가져오기, 기본값으로 빈 객체 제공
   const user = useSelector((state) => state.users || {});
@@ -45,7 +48,7 @@ const Notice_write = () => {
 
       
       try{ 
-        const response = await axios.post('https://dataink-back.store/notice', formData, {
+        const response = await axios.post(`${API_BASE_URL}/notice`, formData, {
           headers: {
             'Content-Type' : 'multipart/form-data',
             'Authorization': `Bearer ${accessToken}`,

@@ -25,6 +25,9 @@ const WorkInListBlock = styled.div`
 `;
 
 const WorkInList = () => {
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const [workItems, setWorkItems] = useState([]);
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(null); // 에러 상태 추가
@@ -34,7 +37,7 @@ const WorkInList = () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN'); // localStorage에서 토큰 가져오기
       // console.log(token);
       try {
-        const response = await axios.get('https://dataink-back.store/api/work-items', {
+        const response = await axios.get(`${API_BASE_URL}/api/work-items`, {
           headers: {
             Authorization: `Bearer ${token}`, // JWT 토큰 추가
           },

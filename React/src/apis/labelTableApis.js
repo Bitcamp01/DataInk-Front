@@ -1,12 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// 환경 변수에서 API URL 가져오기
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 // 비동기 Thunk 함수로 폴더 데이터를 가져옴
 export const fetchFolders = createAsyncThunk(
     'labelTable/fetchFolders',
     async (projectId, thunkApi) => {
       try {
-        const response = await axios.get(`https://dataink-back.store/projects/${projectId}/folders`, {
+        const response = await axios.get(`${API_BASE_URL}/projects/${projectId}/folders`, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
           }
@@ -23,7 +26,7 @@ export const fetchTasksByFolderId = createAsyncThunk(
   'labelTable/fetchTasksByFolderId',
   async (folderId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`https://dataink-back.store/mongo/tasks/folder/${folderId}`, {
+      const response = await axios.get(`${API_BASE_URL}/mongo/tasks/folder/${folderId}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
@@ -40,7 +43,7 @@ export const fetchProjectEndDate = createAsyncThunk(
   'labelTable/fetchProjectEndDate',
   async (projectId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`https://dataink-back.store/projects/enddate/${projectId}`, {
+      const response = await axios.get(`${API_BASE_URL}/projects/enddate/${projectId}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
@@ -58,7 +61,7 @@ export const submitForReview = createAsyncThunk(
   async (taskIds, { rejectWithValue }) => {
     try {
       // taskIds를 보내서 상태를 업데이트하는 API 호출
-      const response = await axios.put(`https://dataink-back.store/mongo/tasks/update-submit`, taskIds, {
+      const response = await axios.put(`${API_BASE_URL}/mongo/tasks/update-submit`, taskIds, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },

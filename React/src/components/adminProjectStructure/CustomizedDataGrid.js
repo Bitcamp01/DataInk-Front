@@ -26,6 +26,9 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'; /
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from "axios"; // InfiniteScroll 컴포넌트 import
 
+// 환경 변수에서 API URL 가져오기
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 // columns 정의, 추후 날짜,용량 등의 정보를 추가할 예정
 const columns = [
   { field: 'label', headerName: 'label', flex: 1.5, minWidth: 200, editable:true,
@@ -108,7 +111,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
     try {
 
       // 서버에서 최신 아이템 데이터를 가져오는 비동기 요청
-      const response = await axios.get('https://dataink-back.store/item'); // 예시: 실제 API 엔드포인트 사용
+      const response = await axios.get(`${API_BASE_URL}/item`); // 예시: 실제 API 엔드포인트 사용
       if (!response.ok) {
         throw new Error('Failed to fetch items');
       }
@@ -186,7 +189,7 @@ const handleFileUpload = async (event) => {
     formData.append("files", file); // "files"는 백엔드에서 받을 필드 이름
   });
   try {
-    const response= await axios.post('https://dataink-back.store/project/uploadfile', selectedFiles,{
+    const response= await axios.post(`${API_BASE_URL}/project/uploadfile`, selectedFiles,{
       params: {
         selectedFolder: selectedFolder,
         selectedProject: selectedProject,
@@ -328,7 +331,7 @@ const handleCopy = () => {
     console.log("processRowUpdate")
     try {
       console.log("newRow",newRow)
-      const response = await axios.post(`https://dataink-back.store/projects/rename`, {
+      const response = await axios.post(`${API_BASE_URL}/projects/rename`, {
         label: newRow.label,
         selectedFolder: newRow.id,
         selectedProject:newRow.projectId
@@ -390,7 +393,7 @@ const handleCopy = () => {
   const handleCreateNewFolder = async () => {
     try {
       const response = await axios.post(
-          "https://dataink-back.store/projects/createfolder",
+          `${API_BASE_URL}/projects/createfolder`,
           {
             selectedFolder: selectedFolder,
             selectedProject: selectedProject,
@@ -425,7 +428,7 @@ const handleCopy = () => {
     console.log(rowSelectionModel)
     if (rowSelectionModel.length > 0) {
       try {
-        const response = await axios.post('https://dataink-back.store/projects/delete', {
+        const response = await axios.post(`${API_BASE_URL}/projects/delete`, {
           ids: rowSelectionModel, // 선택된 폴더의 ID들을 data로 넘김
         }, {
           headers: {
@@ -594,7 +597,7 @@ const handleCopy = () => {
           <Button variant="contained" onClick={ async () => {
             // 변환 작업을 서버에 요청하는 로직 추가
             console.log('서버로 변환 요청:', conversionList);
-            const response = await axios.post("https://dataink-back.store/projects/conversion",conversionList,{
+            const response = await axios.post(`${API_BASE_URL}/projects/conversion`,conversionList,{
               'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
             })
             handleCloseConversionModal();
