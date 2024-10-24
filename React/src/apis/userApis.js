@@ -65,3 +65,10 @@ export const idCheck = createAsyncThunk(
         }
     }
 );
+
+
+
+// export const fetchAllUsers = async () => {
+//     const response = await axios.get('http://localhost:9090/member');
+//     return response.data;
+// };

@@ -8,7 +8,7 @@ html {
     font-size: 16px;
 }
 
-.card {
+.project-card {
     background: white;
     width: 404px;
     height: 255px;
@@ -18,36 +18,39 @@ html {
     border: 1px solid white;
     margin-right: 30px;
     margin-bottom: 35px;
-    cursor: pointer; /* 카드 클릭이벤트 추가해서, 커서도 위에 가면 모양 바뀌게 추가했습니다! (병주) */
+    cursor: pointer;
 }
 
-.card:hover {
+.project-card:hover {
     border: 1px solid #2E7AF2;
 }
 
-.projectCard-header {
+.project-card__header {
     display: flex;
     margin-bottom: 3%;
     padding-top: 5%;
     padding-left: 5%;
 }
 
-.bookmark {
+.project-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.project-card__bookmark {
     background: none;
     border: none;
     margin-left: 35%;
     cursor: pointer;
 }
 
-
-.explanation {
+.project-card__explanation {
     display: flex;
     color: #797979;
     font-weight: 500;
-    margin-bottom: 6%;
 }
 
-.projectDetails {
+.project-card__details {
     padding-left: 5%;
     padding-right: 5%;
     height: 45%;
@@ -56,17 +59,17 @@ html {
     justify-content: space-between;
 }
 
-.project-percent {
+.project-card__percent {
     color: #2E7AF2;
     margin-left: 1.8%;
 }
 
-.progress-container {
+.project-card__progress-container {
     position: relative;
     margin-bottom: 30px;
 }
 
-.progress {
+.project-card__progress {
     display: block;
     position: absolute;
     height: 10px;
@@ -76,7 +79,7 @@ html {
     z-index: 2;
 }
 
-.progress-background {
+.project-card__progress-background {
     position: absolute;
     display: block;
     height: 10px;
@@ -86,7 +89,7 @@ html {
     z-index: 1;
 }
 
-.deadline {
+.project-card__deadline {
     width: 64px;
     height: 26px;
     background: #FD5B5B;
@@ -100,19 +103,19 @@ html {
     margin-top: 2px;
 }
 
-.members img{
+.project-card__members img{
     border: 2px solid #2E7AF2;
     border-radius: 50%;
     margin-top: 5px;
 }
 
-.members {
+.project-card__members {
     display: flex;
     padding-left: 20px;
     padding-right: 20px;
 }
 
-.manager {
+.project-card__manager {
     display: flex;
     font-size: 13px;
     text-align: center;
@@ -123,7 +126,7 @@ html {
     padding-right: 10px;
 }
 
-.reviewer {
+.project-card__reviewer {
     display: flex;
     font-size: 13px;
     text-align: center;
@@ -135,7 +138,7 @@ html {
     padding-right: 10px;
 }
 
-.labeler {
+.project-card__labeler {
     position: relative;
     align-items: center;
     font-size: 13px;
@@ -143,11 +146,11 @@ html {
     margin-left: 10px;
 }
 
-.labeler img:first-child {
+.project-card__labeler img:first-child {
     display: inline;
     margin-left: 0;
 }
 
-.labeler img {
+.project-card__labeler img {
     margin-left: -20px;
 }
