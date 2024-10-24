@@ -21,7 +21,6 @@ const Remove = styled.div`
 const TodoItemBlock = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding-top: 12px;
 
   &:hover {
@@ -68,9 +67,11 @@ function TodoItem({ id, done, text }) {
   const onToggle = () => dispatch({ type: 'TOGGLE', id });
 
   const onRemove = async () => {
+    const token = sessionStorage.getItem('ACCESS_TOKEN');
     try {
-      const token = sessionStorage.getItem('ACCESS_TOKEN');
-      await axios.delete(`http://localhost:9090/api/todo/${id}`, {
+      
+      // todoId 경로 변수에 `id` 삽입
+      await axios.delete(`http://localhost:9090/TodoList/todoDelete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

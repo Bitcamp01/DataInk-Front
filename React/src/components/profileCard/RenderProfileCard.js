@@ -21,7 +21,7 @@ const RenderProfileCard = () => {
           dep: response.data.dep,
           profileImg: response.data.profileImg
         };
-        console.log(profile);
+        // console.log(profile);
         setProfile(profile);
       } catch (error) {
         console.error("프로필 정보를 가져오는데 실패했습니다: ", error);

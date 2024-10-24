@@ -1,7 +1,5 @@
 import axios from 'axios';
-import moment from 'moment';
-import React, { useReducer, createContext, useContext, useRef, useState, useEffect } from 'react';
-
+import React, { useReducer, createContext, useContext, useRef, useEffect } from 'react';
 
 const initialTodos = [];
 
@@ -45,8 +43,12 @@ export function TodoProvider({ children }) {
           done: item.done,
           createDate: item.create,
         }));
+
+        console.log(todos);
+
         dispatch({
-          type: 'SET_TODOS', todos
+          type: 'SET_TODOS',
+          todos: todos 
         });
       } catch (error) {
         console.error('TodoList를 불러오는 중 에러가 발생했습니다: ', error);
