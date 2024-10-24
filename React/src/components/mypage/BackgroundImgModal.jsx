@@ -64,6 +64,14 @@ const BackgroundImgModal = ({ isOpen, currentImage, defaultImage, onClose, onSav
     const [isDefaultImage, setIsDefaultImage] = useState(false); // 기본 이미지 여부 상태
     const [fileName, setFileName] = useState("선택된 파일 없음"); // 파일 이름
 
+    // 기본 이미지로 설정
+    const handleSetDefault = () => {
+        setSelectedFile(null); // 선택된 파일 초기화
+        setPreviewUrl(defaultImage); // 기본 이미지로 미리보기 설정
+        setIsDefaultImage(true); // 기본 이미지 상태로 설정
+        setFileName("기본 이미지로 설정됨"); // 파일 이름을 "기본 이미지로 설정됨"으로 표시
+    };
+
     // 파일이 변경되었을 때 미리보기 이미지 업데이트
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -76,16 +84,8 @@ const BackgroundImgModal = ({ isOpen, currentImage, defaultImage, onClose, onSav
         }
     };
 
-    // 기본 이미지로 설정
-    const handleSetDefault = () => {
-        setSelectedFile(null); // 선택된 파일 초기화
-        setPreviewUrl(defaultImage); // 기본 이미지로 미리보기 설정
-        setIsDefaultImage(true); // 기본 이미지 상태로 설정
-        setFileName("기본 이미지로 설정됨"); // 파일 이름을 "기본 이미지로 설정됨"으로 표시
-    };
-
     // 수정 버튼 클릭 시
-    const handleSave = () => {
+    const handleSaveBackground = () => {
         if (isDefaultImage) {
             onSetDefault(); // 기본 이미지로 설정
         } else if (selectedFile) {
@@ -129,7 +129,7 @@ const BackgroundImgModal = ({ isOpen, currentImage, defaultImage, onClose, onSav
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <ModalButton onClick={handleSetDefault}>기본이미지로 설정</ModalButton>
                     <ModalButton onClick={onClose}>취소</ModalButton>
-                    <ModalButton onClick={handleSave} disabled={!isDefaultImage && !selectedFile}>수정하기</ModalButton>
+                    <ModalButton onClick={handleSaveBackground} disabled={!isDefaultImage && !selectedFile}>수정하기</ModalButton>
                 </div>
             </ModalContent>
         </ModalOverlay>

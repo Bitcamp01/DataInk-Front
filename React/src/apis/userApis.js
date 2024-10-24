@@ -65,3 +65,30 @@ export const idCheck = createAsyncThunk(
         }
     }
 );
+
+export const changePassword = createAsyncThunk(
+    'users/changePassword ',
+    async ({ currentPassword, newPassword, userId }, thunkApi) => {
+        try {
+            console.log(userId);
+            const response = await axios.post(
+                `http://localhost:9090/users/${userId}/change-password`,
+                { currentPassword, newPassword },
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+                    },
+                }
+            );
+            console.log('Response:', response);
+            if (response.status === 200) {
+                return response.data;
+            }
+
+        } catch (error) {
+            console.error('Error in changePassword Thunk:', error);
+            return thunkApi.rejectWithValue(
+                error.response?.data?.statusMessage || '비밀번호 변경 중 오류가 발생했습니다.');
+        }
+    }
+);

@@ -3,6 +3,8 @@ import userSlice from '../slices/userSlice';
 import noticeSlice from '../slices/noticeSlice';
 import labelTableSlice from '../slices/labelTableSlice';
 import mypageSlice from '../slices/mypageSlice';
+import calendarSlice from '../slices/calendarSlice';
+import eventSlice from '../slices/eventSlice';
 
 import {
     persistReducer,
@@ -20,7 +22,10 @@ const reducers = combineReducers({
     userSlice,
     noticeSlice,
     labelTableSlice,
-    mypageSlice
+    mypageSlice,
+    calendarSlice,
+    eventSlice
+
 });
 
 const persistConfig = {
