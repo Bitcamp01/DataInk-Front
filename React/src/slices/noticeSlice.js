@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getNotice, post } from "../apis/noticeApis";
+import { useNavigate } from "react-router-dom";
 
 const noticeSlice = createSlice({
     name: 'notice',
