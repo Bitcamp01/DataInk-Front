@@ -4,6 +4,7 @@ import noticeSlice from '../slices/noticeSlice';
 import memberSlice from '../slices/memberSlice';
 import labelTableSlice from '../slices/labelTableSlice';
 import mypageSlice from '../slices/mypageSlice';
+import categorySlice from '../slices/categorySlice';
 
 import {
     persistReducer,
@@ -22,7 +23,8 @@ const reducers = combineReducers({
     noticeSlice,
     memberSlice,
     labelTableSlice,
-    mypageSlice
+    mypageSlice,
+    categorySlice,
 });
 
 const persistConfig = {
