@@ -26,6 +26,9 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'; /
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from "axios"; // InfiniteScroll 컴포넌트 import
 
+// 환경 변수에서 API URL 가져오기
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 // columns 정의, 추후 날짜,용량 등의 정보를 추가할 예정
 const columns = [
   { field: 'label', headerName: 'label', flex: 1.5, minWidth: 200, editable:true,
@@ -110,7 +113,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
     try {
 
       // 서버에서 최신 아이템 데이터를 가져오는 비동기 요청
-      const response = await axios.get('http://localhost:9090/projects/items',{
+      const response = await axios.get(`${API_BASE_URL}/projects/items`,{
         headers :{
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
@@ -138,7 +141,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
     try{
       console.log("itemId",selectedItemId)
       console.log("선택 폴더",rowSelectionModel)
-      const response=await axios.post("http://localhost:9090/projects/item_select",{
+      const response=await axios.post(`${API_BASE_URL}/projects/item_select`,{
         selectedItemId : selectedItemId,
         selectedFolder : rowSelectionModel
       },
@@ -211,7 +214,7 @@ const handleFileUpload = async (event) => {
   formData.append("selectedFolder", selectedFolder);
   formData.append("selectedProject", selectedProject);
   try {
-    const response= await axios.post('http://localhost:9090/projects/upload', formData,{
+    const response= await axios.post(`${API_BASE_URL}/projects/upload`, formData,{
       headers :{
         'Content-Type' : 'multipart/form-data',
         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
@@ -268,7 +271,7 @@ const handleCopy = () => {
 
   const handlePaste = async () => {
     if (cutRows.length > 0) {
-      const response = await axios.post ("http://localhost:9090/projects/cut_paste",cutRows,{
+      const response = await axios.post (`${API_BASE_URL}/projects/cut_paste`,cutRows,{
         params:{
           selectedFolder:selectedFolder,
           selectedProject:selectedProject
@@ -282,7 +285,7 @@ const handleCopy = () => {
       setCutRows([]); // 잘라내기 상태 초기화
       handleClose(); // 메뉴 닫기
     } else if (copyRows.length > 0) {
-      const response = await axios.post ("http://localhost:9090/projects/copy_paste",copyRows,{
+      const response = await axios.post (`${API_BASE_URL}/projects/copy_paste`,copyRows,{
         params:{
           selectedFolder:selectedFolder,
           selectedProject:selectedProject
@@ -344,7 +347,7 @@ const handleCopy = () => {
   };
   const processRowUpdate = async(newRow) => {
     try {
-      const response = await axios.post(`http://localhost:9090/projects/rename`, {
+      const response = await axios.post(`${API_BASE_URL}/projects/rename`, {
         label: newRow.label,
         selectedFolder: newRow.id,
         selectedProject:newRow.projectId
@@ -399,7 +402,7 @@ const handleCopy = () => {
   const handleCreateNewFolder = async () => {
     try {
       const response = await axios.post(
-          "http://localhost:9090/projects/createfolder",
+          `${API_BASE_URL}/projects/createfolder`,
           {
             selectedFolder: selectedFolder,
             selectedProject: selectedProject,
@@ -438,7 +441,7 @@ const handleCopy = () => {
     console.log(rowSelectionModel)
     if (rowSelectionModel.length > 0) {
       try {
-        const response = await axios.post('http://localhost:9090/projects/delete', {
+        const response = await axios.post(`${API_BASE_URL}/projects/delete`, {
           ids: rowSelectionModel, // 선택된 폴더의 ID들을 data로 넘김
         }, {
           headers: {
@@ -620,7 +623,7 @@ const handleCopy = () => {
             console.log('서버로 변환 요청:', conversionList);
 
             try {
-                const response = await axios.post("http://localhost:9090/projects/conversion", conversionList, {
+                const response = await axios.post(`${API_BASE_URL}/projects/conversion`, conversionList, {
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                     }
@@ -629,7 +632,6 @@ const handleCopy = () => {
             } catch (error) {
                 console.error('Error during conversion:', error);
             }
-
             handleCloseConversionModal();
             }}>
             변환 시작

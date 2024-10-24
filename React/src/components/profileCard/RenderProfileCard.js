@@ -3,13 +3,16 @@ import ProfileCard from './ProfileCard';
 import axios from 'axios';
 
 const RenderProfileCard = () => {
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     const fetchedProfile = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       try {
-        const response = await axios.get('http://localhost:9090/profile/profiles', {
+        const response = await axios.get(`${API_BASE_URL}/profile/profiles`, {
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -37,7 +40,7 @@ const RenderProfileCard = () => {
     const fetchedNotice = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       try {
-        const response = await axios.get('http://localhost:9090/profile/notices', {
+        const response = await axios.get(`${API_BASE_URL}/profile/notices`, {
           headers: {
             Authorization: `Bearer ${token}`
           },

@@ -19,6 +19,9 @@ const MypageContainer = styled.div`
 `;
 
 const Mypage = () => {
+    // 환경 변수에서 API URL 가져오기
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    
     const dispatch = useDispatch();
     const { status, profileImage, backgroundImage, isProfileAuthenticated } = useSelector((state) => state.mypageSlice);
     const { name, id, email, tel, birth, authen} = useSelector(state => state.userSlice);

@@ -5,6 +5,9 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 
+// 환경 변수에서 API URL 가져오기
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const ItemStructure = () => {
     const { itemId } = useParams();
     const [data, setData] = useState([]);
@@ -15,7 +18,7 @@ const ItemStructure = () => {
     // 서버에서 데이터 가져오기
     const getItem = async () => {
         try {
-            const response = await axios.get(`http://localhost:9090/projects/item_structure/${itemId}`, {
+            const response = await axios.get(`${API_BASE_URL}/projects/item_structure/${itemId}`, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
@@ -179,7 +182,7 @@ const ItemStructure = () => {
                     data: arrayToObject(data),
                 };
                 console.log('새로운 아이템 생성:', itemId);
-                const response = await axios.post("http://localhost:9090/projects/itemcreate",payload,{
+                const response = await axios.post(`${API_BASE_URL}/projects/itemcreate`,payload,{
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
@@ -197,7 +200,7 @@ const ItemStructure = () => {
                     data: arrayToObject(data),
                 };
                 console.log('아이템 업데이트:', JSON.stringify(data));
-                const response = await axios.post("http://localhost:9090/projects/itemupdate",payload,{
+                const response = await axios.post(`${API_BASE_URL}/projects/itemupdate`,payload,{
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`

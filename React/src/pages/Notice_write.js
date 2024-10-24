@@ -11,6 +11,9 @@ import { useNavigate } from 'react-router-dom';
 
 const Notice_write = () => {
 
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   
   // Redux에서 로그인한 사용자 정보 가져오기, 기본값으로 빈 객체 제공
   const user = useSelector((state) => state.userSlice || {});

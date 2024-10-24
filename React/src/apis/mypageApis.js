@@ -1,13 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// 환경 변수에서 API URL 가져오기
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 // 캘린더 추가 Thunk
 export const addCalendar = createAsyncThunk(
     'calendar/addCalendar',
     async ({ calendarName, color }, thunkApi) => {
         try {
             const newCalendar = { calendarName, color };
-            const response = await axios.post('http://localhost:9090/calendars', newCalendar, {
+            const response = await axios.post(`${API_BASE_URL}/calendars`, newCalendar, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -25,7 +28,7 @@ export const updateCalendar = createAsyncThunk(
     async ({ id, calendarName, color }, thunkApi) => {
         try {
             const updatedCalendar = { calendarName, color };
-            const response = await axios.put(`http://localhost:9090/calendars/${id}`, updatedCalendar, {
+            const response = await axios.put(`${API_BASE_URL}/calendars/${id}`, updatedCalendar, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -42,7 +45,13 @@ export const deleteCalendar = createAsyncThunk(
     'calendar/deleteCalendar',
     async (id, thunkApi) => {
         try {
-            const response = await axios.delete(`http://localhost:9090/calendars/${id}`, {
+            const response = await axios.delete(`http://
+            
+            
+            
+            
+            
+            /calendars/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -67,7 +76,7 @@ export const addEvent = createAsyncThunk(
             adjustedEndDate.setDate(adjustedEndDate.getDate());
 
             const newEvent = { calendarId, title, startDate, endDate: adjustedEndDate.toISOString().split("T")[0], memo };
-            const response = await axios.post('http://localhost:9090/events', newEvent, {
+            const response = await axios.post(`${API_BASE_URL}/events`, newEvent, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -94,7 +103,7 @@ export const updateEvent = createAsyncThunk(
             adjustedEndDate.setDate(adjustedEndDate.getDate());
 
             const updatedEvent = { title, startDate, endDate: adjustedEndDate.toISOString().split("T")[0], memo };
-            const response = await axios.put(`http://localhost:9090/events/${id}`, updatedEvent, {
+            const response = await axios.put(`${API_BASE_URL}/events/${id}`, updatedEvent, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                     'Content-Type': 'application/json',
@@ -112,7 +121,7 @@ export const deleteEvent = createAsyncThunk(
     'event/deleteEvent',
     async (id, thunkApi) => {
         try {
-            const response = await axios.delete(`http://localhost:9090/events/${id}`, {
+            const response = await axios.delete(`${API_BASE_URL}/events/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -129,7 +138,7 @@ export const fetchCalendars = createAsyncThunk(
     'calendar/fetchCalendars',
     async (thunkApi) => {
         try {
-            const response = await axios.get('http://localhost:9090/calendars', {
+            const response = await axios.get(`${API_BASE_URL}/calendars`, {
             headers: {
                 'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
             },
@@ -147,7 +156,7 @@ export const fetchEvents = createAsyncThunk(
     'event/fetchEvents',
     async (thunkApi) => {
         try {
-            const response = await axios.get('http://localhost:9090/events', {
+            const response = await axios.get(`${API_BASE_URL}/events`, {
             headers: {
                 'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
             },
@@ -164,7 +173,7 @@ export const passwordChk = createAsyncThunk(
     async (password, thunkApi) => {
         try {
             const response = await axios.post(
-                'http://localhost:9090/mypage/password-check',
+                `${API_BASE_URL}/mypage/password-check`,
                 { password },
                 {
                     headers: {
@@ -196,7 +205,7 @@ export const fetchMypageInfo = createAsyncThunk(
     'mypage/fetchMypageInfo',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get('http://localhost:9090/mypage', {
+            const response = await axios.get(`${API_BASE_URL}/mypage`, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 }
@@ -213,7 +222,7 @@ export const updateMypageInfo = createAsyncThunk(
     'mypage/updateMypageInfo',
     async (userInfo, thunkApi) => {
         try {
-            const response = await axios.put('http://localhost:9090/mypage/update-profile',
+            const response = await axios.put(`${API_BASE_URL}/mypage/update-profile`,
                 userInfo,
                 {
                     headers: {
@@ -234,7 +243,7 @@ export const getAllProjects = createAsyncThunk(
     'mypage/getAllProjects',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get('http://localhost:9090/projects/all', {
+            const response = await axios.get(`${API_BASE_URL}/projects/all`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -256,7 +265,7 @@ export const uploadProfileImage = createAsyncThunk(
             formData.append('file', file);
 
             const response = await axios.post(
-                'http://localhost:9090/mypage/upload-profile-image',
+                `${API_BASE_URL}/mypage/upload-profile-image`,
                 formData,
                 {
                     headers: {
@@ -282,7 +291,7 @@ export const updateProfileImage = createAsyncThunk(
             formData.append('file', file);
 
             const response = await axios.put(
-                'http://localhost:9090/mypage/update-profile-image',
+                `${API_BASE_URL}/mypage/update-profile-image`,
                 formData,
                 {
                     headers: {
@@ -305,7 +314,7 @@ export const deleteProfileImage = createAsyncThunk(
     async (_, thunkApi) => {
         try {
             const response = await axios.delete(
-                'http://localhost:9090/mypage/delete-profile-image',
+                `${API_BASE_URL}/mypage/delete-profile-image`,
                 {
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
@@ -329,7 +338,7 @@ export const uploadBackgroundImage = createAsyncThunk(
             formData.append('file', file);
 
             const response = await axios.post(
-                'http://localhost:9090/mypage/upload-background-image',
+                `${API_BASE_URL}/mypage/upload-background-image`,
                 formData,
                 {
                     headers: {
@@ -355,7 +364,7 @@ export const updateBackgroundImage = createAsyncThunk(
             formData.append('file', file);
 
             const response = await axios.put(
-                'http://localhost:9090/mypage/update-background-image',
+                `${API_BASE_URL}/mypage/update-background-image`,
                 formData,
                 {
                     headers: {
@@ -378,7 +387,7 @@ export const deleteBackgroundImage = createAsyncThunk(
     async (_, thunkApi) => {
         try {
             const response = await axios.delete(
-                'http://localhost:9090/mypage/delete-background-image',
+                `${API_BASE_URL}/mypage/delete-background-image`,
                 {
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
