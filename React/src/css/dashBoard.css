@@ -12,6 +12,9 @@
 #overView-text {
     margin-left: 20px;
     margin-bottom: 20px;
+    font-size: 1.7rem;
+    font-weight: 500;
+    display: inline-block;
 }
 
 .content {
@@ -44,7 +47,7 @@
 
 .total {
     width: 100vw;
-    height: 471px;
+    height: 425px;
     margin-left: 20px;
     display: flex;
     gap: 40px;
@@ -67,11 +70,12 @@
     margin-left: 20px;
 }
 
-.projectCard-header {
+.project-header {
     display: flex;
     margin-bottom: 20px;
-    padding-top: 18px;
-    padding-left: 20px;
+    padding-top: 10px;
+    font-size: 1.7rem;
+    font-weight: 500;
 }
 
 #card-container {
