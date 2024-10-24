@@ -36,7 +36,14 @@ export default function ItemSettingsModal({ open, onClose, onSave, items, select
 
   // 항목 선택 핸들러
   const handleSelectItem = (item) => {
-    setSelectedItem(item.id); // 선택된 항목의 ID만 저장
+    console.log(item)
+    if(selectedItem === item.id){
+      setSelectedItem();
+    }
+    else{
+      setSelectedItem(item.id);
+    }
+     // 선택된 항목의 ID만 저장
   };
   const createNewItem = () =>{
     navi("/item_structure/0")
@@ -59,9 +66,9 @@ export default function ItemSettingsModal({ open, onClose, onSave, items, select
                 key={item.id}
                 button
                 onClick={() => handleSelectItem(item)}
-                selected={item.selected}
+                selected={selectedItem==item.id}
               >
-                <ListItemText primary={item.label} />
+                <ListItemText primary={item.fieldName} />
                 {item.id === selectedItem && (
                   <ListItemIcon>
                     <CheckCircleIcon color="primary" />
