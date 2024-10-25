@@ -71,11 +71,11 @@ function TodoItem({ id, done, text }) {
     try {
       
       // todoId 경로 변수에 `id` 삽입
-      await axios.delete(`http://localhost:9090/TodoList/todoDelete/${id}`, {
+      await axios.delete(`http://localhost:9090/TodoList/todoDelete`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      dispatch({ type: 'REMOVE', id });
+      dispatch({ type: 'REMOVE' });
     } catch (error) {
       console.error('Todo를 삭제하는 중 에러가 발생했습니다:', error);
     }
