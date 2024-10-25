@@ -26,6 +26,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'; /
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from "axios"; // InfiniteScroll 컴포넌트 import
 import { update } from '@react-spring/web';
+import PdfModal from './PdfModal';
 
 // 환경 변수에서 API URL 가져오기
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -338,7 +339,35 @@ const handleCopy = () => {
       handleClose(); // 메뉴 닫기
     }
   };
+  ////////////////////////////////////////////////////////////////////////////////////
+  const [isModalOpen, setIsModalOpen] = useState(false);
+    const [pdfUrl, setPdfUrl] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
+    const handleOpenModal = async (label) => {
+        setIsModalOpen(true);
+        setIsLoading(true);
+        try {
+            const response = await axios.get(`http://localhost:9090/projects/pdf/${label}`, {
+                headers: {
+                    'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+                }
+            });
+            console.log("url",response.data)
+            setPdfUrl(response.data); // 서버에서 가져온 PDF URL 설정
+        } catch (error) {
+            console.error("Error fetching PDF URL:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setPdfUrl(null); // 모달을 닫을 때 URL을 초기화
+    };
+
+  ////////////////////////////////////////////////////////////////////////////////////
 
 
   const handleRowDoubleClick=(params)=>{
@@ -347,17 +376,10 @@ const handleCopy = () => {
       setSelectedProject(row.projectId);
       setSelectedFolder(row.id);
     } else {
-      // 파일인 경우: 사이드 패널에 표시
-
+      handleOpenModal(row.label);
     }
   }
-  //////
-  //////////////////////////////////////////////////////
-  //////
-  //////
-  //////
-  //////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////
+
   const [rowModesModel, setRowModesModel] = React.useState({});
 
   const handleRowEditStop = (params, event) => {
@@ -633,6 +655,7 @@ const handleCopy = () => {
           />
         </Box>
       </Box>
+      <PdfModal open={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
       <Dialog open={isConversionModalOpen} onClose={handleCloseConversionModal} fullWidth maxWidth="sm">
         <DialogTitle>변환 목록</DialogTitle>
         <DialogContent>
