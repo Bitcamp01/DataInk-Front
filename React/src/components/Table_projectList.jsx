@@ -1,4 +1,4 @@
-import * as React from 'react';
+// import * as React from 'react';
 import Box from '@mui/material/Box';
 import  '../css/table.css';
 import Pagination from '@mui/material/Pagination';
@@ -12,7 +12,20 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Table_projectList_modal from './Table_projectList_modal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { fetchTabData } from '../apis/memberManagementApis';
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2); // 월을 2자리로 맞춤
+  const day = ('0' + date.getDate()).slice(-2); // 일을 2자리로 맞춤
+  const hours = ('0' + date.getHours()).slice(-2); // 시를 2자리로 맞춤
+  const minutes = ('0' + date.getMinutes()).slice(-2); // 분을 2자리로 맞춤
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}`; // 원하는 형식으로 반환
+};
 
 
 const rows = [
@@ -31,11 +44,23 @@ const rows = [
 export default function Table_projectList() {
   const [open, setOpen] = React.useState(false);
   const [selectedRow, setSelectedRow] = React.useState(null);
-
-  
+  const page = useSelector(state => state.memberSlice.page); // 현재 페이지
+  const totalPageCount = useSelector(state => state.memberSlice.totalPages); // 총 페이지 수
   const projectListAll= useSelector(state => state.memberSlice.projectsData);
   // 콘솔에 데이터를 출력하여 확인
 console.log("Current projectListAll data:", projectListAll);
+
+const dispatch = useDispatch();
+
+
+const changePage = useCallback((e, v) => {
+  const newPage = parseInt(v) ; // 페이지 번호를 0 기반으로 변경
+  dispatch(fetchTabData({
+    tab: 'projects',
+    page: newPage // 0 기반 페이지 전송
+  }));
+}, [dispatch]);
+
 
   const handleEditClick = (id) => {
     const row = rows.find((row)=> row.id === id);
@@ -52,8 +77,8 @@ console.log("Current projectListAll data:", projectListAll);
     { field: 'id', headerName: 'No', flex: 60 / 1160 , cellClassName: 'first-column', headerClassName: 'header-text' }, 
   { field: 'project_name', headerName: '프로젝트 이름', flex: 200 / 1160 },  
   { field: 'description', headerName: '프로젝트 설명', flex: 400 / 1160 }, 
-  { field: 'regdate', headerName: '프로젝트 생성일', flex: 150 / 1160 },  
-  { field: 'member', headerName: '프로젝트 참여자', flex: 350 / 1160 },  
+  { field: 'regdate', headerName: '프로젝트 생성일', flex: 170 / 1160 },  
+  { field: 'member', headerName: '프로젝트 참여자', flex: 330 / 1160 },  
 
     {
       field: 'actions',
@@ -87,7 +112,7 @@ console.log("Current projectListAll data:", projectListAll);
           id: item.projectId,
           project_name: item.name,       
           description: item.description || '설명 없음', 
-          regdate: item.startDate,  
+          regdate: formatDate(item.startDate),  
           member: item.userId,         
         }))} 
         columns={columns} 
@@ -124,6 +149,37 @@ console.log("Current projectListAll data:", projectListAll);
           }}
       />
     </Box>
+
+    {/* 페이지네이션 */}
+    <div className="pagination-container custom-pagination" style={{ marginTop: '20px',  width: '100%'  }}>
+        <Stack spacing={2} sx={{ marginBottom: '80px' }}>
+          <Pagination 
+            count={totalPageCount} 
+            page={page} 
+            onChange={changePage} 
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: '20px 0',
+              '& .MuiPaginationItem-root': {
+                color: '#7c97fe !important', // 기본 페이지 버튼의 색상
+              },
+              '& .Mui-selected': {
+                backgroundColor: '#7c97fe', // 선택된 페이지 색상
+                color: '#ffffff', 
+              },
+              '& .MuiPaginationItem-root:not(.Mui-selected)': {
+                color: '#3e3e3e', // 선택되지 않은 페이지 텍스트 색상 설정 
+              },
+              '& .MuiPaginationItem-ellipsis': {
+                color: '#3e3e3e', // 페이지 사이의 점 색상
+              },
+            }}
+          />
+        </Stack>
+      </div>
+
 
 
       {/* 프로젝트 편집 모달창 */}
