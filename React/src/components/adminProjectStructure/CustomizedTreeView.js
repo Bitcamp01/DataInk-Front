@@ -26,6 +26,9 @@ import { Button } from '@mui/material';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
+// 환경 변수에서 API URL 가져오기
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 function DotIcon({ color }) {
   return (
       <Box sx={{ marginRight: 1, display: 'flex', alignItems: 'center' }}>
@@ -149,7 +152,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
 
   const getFolderData= async (folderId,projectId)=>{
     try {
-      const response=await axios.get("http://localhost:9090/projects/folder", {
+      const response=await axios.get(`${API_BASE_URL}/projects/folder`, {
         params:{
           selectedFolder:folderId,
           selectedProject:projectId
@@ -193,7 +196,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
       folders:[]
     };
     try {
-      const response = await axios.post('http://localhost:9090/projects/create', sendFolder,{
+      const response = await axios.post(`${API_BASE_URL}/projects/create`, sendFolder,{
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
           'Content-Type': 'application/json'
@@ -275,7 +278,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
                   variant="outlined"
               />
               <TextField
-                  autoFocus
+                
                   margin="dense"
                   label="프로젝트 설명"
                   multiline

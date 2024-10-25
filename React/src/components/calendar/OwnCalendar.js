@@ -9,6 +9,9 @@ import moment from 'moment';
 import axios from 'axios';
 
 const OwnCalendar = () => {
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const today = new Date();
   const [date, setDate] = useState(today);
   const [activeStartDate, setActiveStartDate] = useState(new Date());
@@ -18,9 +21,9 @@ const OwnCalendar = () => {
     // 백엔드 API 요청
     const fetchEndDates = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
-      console.log(token);
+      // console.log(token);
       try {
-        const response = await axios.get('http://localhost:9090/api/project-end-dates', {
+        const response = await axios.get(`${API_BASE_URL}/api/project-end-dates`, {
           headers: {
             Authorization: `Bearer ${token}`
           },

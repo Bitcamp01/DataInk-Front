@@ -25,6 +25,10 @@ import {
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'; // Remove 아이콘 import
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from "axios"; // InfiniteScroll 컴포넌트 import
+import { update } from '@react-spring/web';
+
+// 환경 변수에서 API URL 가져오기
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // columns 정의, 추후 날짜,용량 등의 정보를 추가할 예정
 const columns = [
@@ -58,7 +62,9 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   const [flatFolderMap, setFlatFolderMap] = useState(new Map(flatFolderData.map(item => [`${item.id}_${item.projectId}`, item])));
 
 
-  
+  useEffect(()=>{
+    console.log(rowSelectionModel)
+  },[rowSelectionModel])
   //데이터 그리드 영역 업데이트 부분
   useEffect(()=>{
     setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder));
@@ -102,18 +108,22 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [items, setItems] = useState([]);
-
+  
   // 항목 설정 모달 열기 (최신 아이템 리스트 로드)
   const handleOpenItemModal = async () => {
     try {
 
       // 서버에서 최신 아이템 데이터를 가져오는 비동기 요청
-      const response = await axios.get('http://localhost:9090/item'); // 예시: 실제 API 엔드포인트 사용
-      if (!response.ok) {
-        throw new Error('Failed to fetch items');
+      const response = await axios.get(`${API_BASE_URL}/projects/items`,{
+        headers :{
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+        }
+      }); // 예시: 실제 API 엔드포인트 사용
+      if (response.status == 200) {
+        console.log(response.data)
+        
       }
-      const itemData = await response.json();
-      setItems(itemData); // 최신 아이템 리스트로 업데이트
+      setItems(response.data); // 최신 아이템 리스트로 업데이트
       setIsItemModalOpen(true); // 모달 열기
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -128,7 +138,23 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   };
 
   // 항목 저장 및 폴더에 적용
-  const handleSaveItem = () => {
+  const handleSaveItem = async () => {
+    try{
+      console.log("itemId",selectedItemId)
+      console.log("선택 폴더",rowSelectionModel)
+      const response=await axios.post(`${API_BASE_URL}/projects/item_select`,{
+        selectedItemId : selectedItemId,
+        selectedFolder : rowSelectionModel
+      },
+      {
+        headers :{
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+        }
+      })
+    }
+    catch(e){
+
+    }
     setFlatFolderData((prevFlatData) =>
       prevFlatData.map((folder) =>
         folder.id === selectedFolder
@@ -175,7 +201,20 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
     setRowSelectionModel([]); // 선택된 행 초기화
     setContextMenu(null); // 컨텍스트 메뉴 닫기
 };
-  
+function convertFileUploadResponseToFileFormat(folderData) {
+  return {
+    id: folderData.id,  // ID 그대로 사용
+    label: folderData.label,  // 파일명 그대로 사용
+    itemId: folderData.itemIds ? folderData.itemIds[0] : null,  // itemIds의 첫 번째 항목 또는 기본값 설정
+    parentId: selectedFolder,  // 현재 선택된 폴더 ID로 설정
+    projectId: selectedProject,  // 현재 선택된 프로젝트 ID로 설정
+    lastModifiedUserId: String(folderData.lastModifiedUserId),  // lastModifiedUserId는 문자열로 변환
+    lastModifiedDate: folderData.lastModifiedDate,  // 마지막 수정 날짜 그대로 사용
+    finished: folderData.finished,  // finished 그대로 사용
+    children: [],  // children은 빈 배열로 초기화
+    isFolder: folderData.isFolder  // 폴더 여부 그대로 사용
+  };
+}
 // 파일 선택시 호출되는 핸들러
 const handleFileUpload = async (event) => {
   const selectedFiles = Array.from(event.target.files); // 선택된 파일 배열로 변환
@@ -185,17 +224,21 @@ const handleFileUpload = async (event) => {
   selectedFiles.forEach((file) => {
     formData.append("files", file); // "files"는 백엔드에서 받을 필드 이름
   });
+  
+  formData.append("selectedFolder", selectedFolder);
+  formData.append("selectedProject", selectedProject);
   try {
-    const response= await axios.post('http://localhost:9090/project/uploadfile', selectedFiles,{
-      params: {
-        selectedFolder: selectedFolder,
-        selectedProject: selectedProject,
-      },
+    const response= await axios.post(`${API_BASE_URL}/projects/upload`, formData,{
       headers :{
         'Content-Type' : 'multipart/form-data',
         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
       }
     });
+    const newFiles = response.data.map((fileData) => 
+      convertFileUploadResponseToFileFormat(fileData)
+    );
+    
+    setFlatFolderData((prevFlatData) => [...prevFlatData, ...newFiles]);
   }
   catch (e){
 
@@ -203,8 +246,7 @@ const handleFileUpload = async (event) => {
 
   // 체크박스 선택 상태 초기화 (첫 번째 파일 선택)
   setRowSelectionModel([]);
-  //파일 추가
-  setFlatFolderData((prevFlatData) => [...prevFlatData]);
+  
   // 컨텍스트 메뉴 닫기
   handleClose();
 };
@@ -221,69 +263,77 @@ const handleRename = () => {
   // 컨텍스트 메뉴 닫기
   handleClose(); 
 };
+//자르기 복사 시도 마다 이전 값 저장하지 않음
 const handleCut = () => {
   if (rowSelectionModel.length > 0) {
-    setCopyRows([])
-    const selectedIds = rowSelectionModel;
-    setCutRows(selectedIds); // 잘라내기 항목 저장
+    setCopyRows([]); // 복사 항목 초기화
+    setCutRows([]);
+    setCutRows(rowSelectionModel)
+
     setRowSelectionModel([]); // 선택 해제
     handleClose(); // 메뉴 닫기
   }
 };
+
 const handleCopy = () => {
   if (rowSelectionModel.length > 0) {
-    setCutRows([])
-    const selectedIds = rowSelectionModel;
-    setCopyRows(selectedIds); // 복사 항목 저장
+    setCopyRows([]);
+    setCutRows([]); // 잘라내기 항목 초기화
+    setCopyRows(rowSelectionModel);
+
+
     setRowSelectionModel([]); // 선택 해제
     handleClose(); // 메뉴 닫기
-    console.log("copy")
-    console.log(copyRows)
   }
 };
-  const handlePaste = () => {
-    const getAllChildren = (parentId) => {
-      let children = [];
-      flatFolderMap.forEach((item) => {
-        if (item.parentId === parentId && item.projectId === selectedProject) {
-          children.push(item);
-          children = children.concat(getAllChildren(item.id));
-        }
-      });
-      return children;
-    };
 
+  const handlePaste = async () => {
     if (cutRows.length > 0) {
-      // cutRows에 있는 항목들과 그 자식들을 현재 선택된 폴더에 붙여넣기
-      const itemsToMove = cutRows.flatMap(id => [flatFolderMap.get(`${id}_${selectedProject}`), ...getAllChildren(id)]);
-      const updatedFlatData = Array.from(flatFolderMap.values()).map((item) => {
-        if (cutRows.includes(item.id)) {
-          return {
-            ...item,
-            parentId: selectedFolder, // 현재 선택된 폴더로 이동
-            lastModifiedDate: new Date().toISOString(),
-          };
+      const response = await axios.post (`${API_BASE_URL}/projects/cut_paste`,cutRows,{
+        params:{
+          selectedFolder:selectedFolder,
+          selectedProject:selectedProject
         }
-        return item;
-      });
+        ,
+        headers :{
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+        }
+      })
 
-      setFlatFolderData(updatedFlatData);
+      if (response.status === 200) {
+        setFlatFolderData((prevFlatData) =>
+          prevFlatData.map((item) => {
+            // 자르기 한 로우의 id가 존재할 경우에만 처리
+            const shouldUpdate = cutRows.some((row) => {
+              if (row) {  // row와 row.id가 정의되어 있는지 확인
+                const cutId = row.split("_")[0];  // 자르기 항목의 ID 부분 추출
+                return item.id == cutId;
+              }
+              return false;
+            });
+            // 해당 item의 parentId를 selectedFolder로 변경
+            return shouldUpdate ? { ...item, parentId: selectedFolder } : item;
+          })
+        );
+      }
       setCutRows([]); // 잘라내기 상태 초기화
       handleClose(); // 메뉴 닫기
     } else if (copyRows.length > 0) {
-      // copyRows에 있는 항목들과 그 자식들을 현재 선택된 폴더에 복사하여 붙여넣기
-      const itemsToCopy = copyRows.flatMap(id => [flatFolderMap.get(`${id}_${selectedProject}`), ...getAllChildren(id)]);
-      const copiedItems = itemsToCopy.map((item) => {
-        return {
-          ...item,
-          id: String(new Date().getTime()) + Math.random(), // 새로운 고유 ID 생성
-          parentId: copyRows.includes(item.id) ? selectedFolder : item.parentId, // 부모 ID 설정
-          label: item.parentId === null ? `${item.label}_copy` : item.label, // 최상위 항목에만 '_copy' 추가
-          lastModifiedDate: new Date().toISOString(),
-        };
-      });
+      const response = await axios.post (`${API_BASE_URL}/projects/copy_paste`,copyRows,{
+        params:{
+          selectedFolder:selectedFolder,
+          selectedProject:selectedProject
+        }
+        ,
+        headers :{
+          'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+        }
+      })
+      if (response.status === 200) {
+        const newCopiedData = response.data.map((item) => convertFileUploadResponseToFileFormat(item));
+      setFlatFolderData((prevFlatData) => [...prevFlatData, ...newCopiedData]);
+      }
 
-      setFlatFolderData((prevFlatData) => [...prevFlatData, ...copiedItems]);
       setCopyRows([]); // 복사 상태 초기화
       handleClose(); // 메뉴 닫기
     }
@@ -323,12 +373,18 @@ const handleCopy = () => {
     }
   };
 
-
+  const updateFolderDataById = (idToUpdate, updatedData) => {
+    setFlatFolderData((prevFlatData) => 
+      prevFlatData.map(item => 
+        item.id == idToUpdate 
+          ? { ...item, ...updatedData } // 특정 id가 일치하면 업데이트된 데이터를 병합
+          : item // 그렇지 않으면 원래 데이터를 그대로 유지
+      )
+    );
+  };
   const processRowUpdate = async(newRow) => {
-    console.log("processRowUpdate")
     try {
-      console.log("newRow",newRow)
-      const response = await axios.post(`http://localhost:9090/projects/rename`, {
+      const response = await axios.post(`${API_BASE_URL}/projects/rename`, {
         label: newRow.label,
         selectedFolder: newRow.id,
         selectedProject:newRow.projectId
@@ -339,27 +395,25 @@ const handleCopy = () => {
       });
   
       if (response.status === 200) {
-        // 백엔드에서 받은 최신 데이터로 로우와 flatFolderData 업데이트
-        const updatedRow = {
-          ...newRow,
-          lastModifiedUserId: response.data.item.lastModifiedUserId,
-          lastModifiedDate: response.data.item.lastModifiedDate,
-        };
-
-        // flatFolderData 상태 업데이트
-        setFlatFolderData((prevFlatData) =>
-            prevFlatData.map((item) =>
-                item.id === updatedRow.id && item.projectId === updatedRow.projectId ? { ...item, ...response.data.item } : item
-            )
-        );
-
-        // 입력 후 벗어나면 view 모드로 변경
         setRowModesModel((prev) => ({
           ...prev,
           [newRow.id]: { mode: GridRowModes.View },
         }));
 
+      
+        updateFolderDataById(response.data.id,{label: response.data.label,lastModifiedUserId: response.data.lastModifiedUserId,
+          lastModifiedDate: response.data.lastModifiedDate})
+
+        const updatedRow = {
+          ...newRow, // 기존 newRow의 값
+          label: response.data.label, // 서버에서 받아온 최신 값으로 업데이트
+          lastModifiedUserId: response.data.lastModifiedUserId,
+          lastModifiedDate: response.data.lastModifiedDate,
+          // 필요에 따라 다른 필드도 추가
+        };
+        // 입력 후 벗어나면 view 모드로 변경
         return updatedRow;
+
       }
     } catch (error) {
       console.error('Error updating row:', error);
@@ -370,27 +424,22 @@ const handleCopy = () => {
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
-
-  // useEffect(() => {
-  //   // rows가 업데이트되고, rowSelectionModel이 올바르게 설정된 경우에만 실행
-  //   if (rows.length > 0 && rowSelectionModel.length > 0) {
-  //     const selectedId = rowSelectionModel[0];
-
-  //     // 편집 모드 설정
-  //     setRowModesModel((prevModel) => ({
-  //       ...prevModel,
-  //       [selectedId]: { mode: GridRowModes.Edit },
-  //     }));
-
-  //     // 포커스 설정
-  //     apiRef.current.setCellFocus(selectedId, 'label');
-  //   }
-  // }, [rows, rowSelectionModel]);
+  const calculateFolderDepth = (folderId, flatFolderData) => {
+    let depth = 0;
+    let folder = flatFolderData.find(item => item.id === folderId);
+    
+    while (folder && folder.parentId) {
+      depth++;
+      folder = flatFolderData.find(item => item.id === folder.parentId);
+    }
+  
+    return depth;
+  };
 
   const handleCreateNewFolder = async () => {
     try {
       const response = await axios.post(
-          "http://localhost:9090/projects/createfolder",
+          `${API_BASE_URL}/projects/createfolder`,
           {
             selectedFolder: selectedFolder,
             selectedProject: selectedProject,
@@ -403,14 +452,18 @@ const handleCopy = () => {
       );
 
       if (response.status === 200) {
-        const newFolder = response.data;
-
-        // 상태 업데이트
-        setRows((prevRows) => [...prevRows, newFolder]);
-        setFlatFolderData((prevFlatData) => [...prevFlatData, newFolder]);
-
-        // 새로 생성한 폴더 선택
-        setRowSelectionModel([newFolder.id]);
+        const saveFolder={
+            id: response.data.id,
+            parentId: selectedFolder,
+            label: "NewFolder",
+            isFolder: true,
+            itemId:[],
+            lastModifiedUserId: response.data.lastModifiedUserId,
+            lastModifiedDate: response.data.lastModifiedDate,
+            finished: false,
+            projectId: selectedProject
+        }
+        setFlatFolderData((prevFlatData) => [...prevFlatData, saveFolder]);
       }
     } catch (error) {
       console.error("Error creating folder:", error);
@@ -425,7 +478,7 @@ const handleCopy = () => {
     console.log(rowSelectionModel)
     if (rowSelectionModel.length > 0) {
       try {
-        const response = await axios.post('http://localhost:9090/projects/delete', {
+        const response = await axios.post(`${API_BASE_URL}/projects/delete`, {
           ids: rowSelectionModel, // 선택된 폴더의 ID들을 data로 넘김
         }, {
           headers: {
@@ -437,10 +490,12 @@ const handleCopy = () => {
           // 성공적으로 삭제된 경우, 클라이언트에도 반영
           const selectedIds = rowSelectionModel.map((item) => item.split("_")[0]);
           console.log(selectedIds)
+          console.log(flatFolderData)
           // flatFolderData 상태에서 선택된 항목들을 제거
           setFlatFolderData(prevFlatData =>
-              prevFlatData.filter(item => !selectedIds.includes(item.id))
+            prevFlatData.filter(item => !selectedIds.includes(String(item.id))) // id를 문자열로 변환
           );
+          
 
           // 삭제 후 선택된 행 초기화
           setRowSelectionModel([]);
@@ -472,20 +527,27 @@ const handleCopy = () => {
   const handleReloading = () =>{
     getInitFolderData();
   }
+
   // 커스텀 툴바 컴포넌트 정의
   const CustomToolbar = () => {
+    const selectedFolderDepth = selectedFolder !== null ? calculateFolderDepth(selectedFolder, flatFolderData) : -1;
     return (
       <GridToolbarContainer>
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
-        <Button variant="contained" component="label" disabled={selectedFolder === null} sx={{ m: 1 }}>
+      <Button
+        variant="contained"
+        component="label"
+        disabled={selectedFolder === null || selectedFolderDepth < 1}  // 깊이 2 이상이면 비활성화
+        sx={{ m: 1 }}
+      >
           파일 업로드
           <input type="file" hidden multiple accept=".pdf" onChange={handleFileUpload} />
         </Button>
         <Button variant="contained" component="label" disabled={selectedFolder === null} sx={{ m: 1 }} onClick={handleCreateNewFolder}>
           새 폴더
         </Button>
-        <Button variant="contained" component="label" sx={{ m: 1 }} onClick={handlePaste} disabled={cutRows < 1 && copyRows < 1}>
+        <Button variant="contained" component="label" sx={{ m: 1 }} onClick={handlePaste} disabled={cutRows < 1 && copyRows < 1 || selectedFolderDepth < 1}>
           붙여넣기
         </Button>
         <Button 
@@ -506,6 +568,7 @@ const handleCopy = () => {
         <Button variant="contained" onClick={handleReloading}>
           다시 로딩
         </Button>
+
       </GridToolbarContainer>
     );
   };
@@ -532,6 +595,9 @@ const handleCopy = () => {
             }}
             onRowSelectionModelChange={(newRowSelectionModel) => {
               setRowSelectionModel(newRowSelectionModel);
+            }}
+            onProcessRowUpdateError={(error) => {
+              console.error("Row update error:", error);
             }}
             rowSelectionModel={rowSelectionModel}
             rowModesModel={rowModesModel}
@@ -591,16 +657,24 @@ const handleCopy = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseConversionModal}>닫기</Button>
-          <Button variant="contained" onClick={ async () => {
+          <Button variant="contained" onClick={async () => {
             // 변환 작업을 서버에 요청하는 로직 추가
             console.log('서버로 변환 요청:', conversionList);
-            const response = await axios.post("http://localhost:9090/projects/conversion",conversionList,{
-              'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
-            })
+
+            try {
+                const response = await axios.post(`${API_BASE_URL}/projects/conversion`, conversionList, {
+                    headers: {
+                        'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+                    }
+                });
+                console.log(response.data); // 서버 응답 처리
+            } catch (error) {
+                console.error('Error during conversion:', error);
+            }
             handleCloseConversionModal();
-          }}>
+            }}>
             변환 시작
-          </Button>
+        </Button>
         </DialogActions>
       </Dialog>
       <ItemSettingsModal
@@ -622,12 +696,17 @@ const handleCopy = () => {
             : undefined
         }
       >
-        {rowSelectionModel.length === 1 && (
+        {rowSelectionModel.length === 1 && flatFolderMap.has(rowSelectionModel[0]) && 
+          flatFolderMap.get(rowSelectionModel[0]).isFolder && (
         <MenuItem onClick={handleRename}>이름 수정</MenuItem>
         )}
-         <MenuItem onClick={handleDelete}>삭제</MenuItem>
+        {selectedFolder !== null && (
         <MenuItem onClick={handleCut}>자르기</MenuItem>
+        )}
+        {selectedFolder !== null && (
         <MenuItem onClick={handleCopy}>복사</MenuItem>
+        )}
+        <MenuItem onClick={handleDelete}>삭제</MenuItem>
         <MenuItem onClick={handleOpenItemModal}>항목 지정</MenuItem>
         <MenuItem onClick={handleAddToConversion}>변환 목록 추가</MenuItem>
       </Menu>

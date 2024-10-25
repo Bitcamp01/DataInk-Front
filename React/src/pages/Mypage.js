@@ -1,93 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import ProfileInit from '../components/mypage/ProfileInit';
 import Profile from '../components/mypage/Profile';
 import Workstatus from '../components/mypage/Workstatus';
 import Alarm from '../components/mypage/Alarm';
-import Calendar from '../components/mypage/Calendar';
+import Calendar from '../components/mypage/Calendar 원본';
 import StatusEditModal from '../components/mypage/StatusEditModal';
 import BackgroundImgModal from '../components/mypage/BackgroundImgModal';
 import ProfileImgModal from '../components/mypage/ProfileImgModal';
 import '../css/profile.css';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { passwordChk } from '../apis/mypageApis';
-import { resetProfileAuth } from '../slices/mypageSlice';
+import { passwordChk, fetchMypageInfo } from '../apis/mypageApis';
+import { resetProfileAuth, setBackgroundImage, setProfileImage, setStatus } from '../slices/mypageSlice';
 
 const MypageContainer = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
 `;
 
 const Mypage = () => {
+    // 환경 변수에서 API URL 가져오기
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    
     const dispatch = useDispatch();
-    const { isProfileAuthenticated } = useSelector(state => state.mypageSlice);
-    const { name = '', id = '', email = '', tel = '', birth = '', authen = '' } = useSelector(state => state.userSlice);
+    const { status, profileImage, backgroundImage, isProfileAuthenticated } = useSelector((state) => state.mypageSlice);
+    const { name, id, email, tel, birth, authen} = useSelector(state => state.userSlice);
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-    const [status, setStatus] = useState("소개 글을 입력해 주세요.");
     const [activeTab, setActiveTab] = useState('Workstatus');
-    const [profileImage, setProfileImage] = useState('/images/dataInk_logo_sqr.png');
-    const [backgroundImage, setBackgroundImage] = useState('/images/dataInk_background_default.jpg');
     const [selectedBackgroundFile, setSelectedBackgroundFile] = useState(null);
     const [selectedProfileFile, setSelectedProfileFile] = useState(null);
     
-
     const location = useLocation();
 
     const handleProfileAuthentication = async (password) => {
         await dispatch(passwordChk(password));
     };
 
-    useEffect(() => {
-        // Query parameters를 사용하여 activeTab 설정
-        const queryParams = new URLSearchParams(location.search);
-        const section = queryParams.get('section');
-
-        if (section && ['Alarm', 'Profile', 'Calendar'].includes(section)) {
-            setActiveTab(section);
-        }
-    }, [location.search]);
-
-    useEffect(() => {
-        // Reset profile authentication every time Profile tab is clicked
-        if (activeTab === 'Profile') {
-            dispatch(resetProfileAuth());
-        }
-    }, [activeTab]);
-
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const response = await axios.get('http://localhost:9090/mypage');
-                const userData = response.data.user;
-                setStatus(userData?.status || "소개 글을 입력해 주세요.");
-                setProfileImage(userData?.profileImage || '/images/dataInk_logo_sqr.png');
-                setBackgroundImage(userData?.backgroundImage || '/images/dataInk_background_default.jpg');
-            } catch (error) {
-                console.error('Error fetching user info:', error);
-            }
-        };
-        fetchUserInfo();
-    }, []);
-
-    useEffect(() => {
-        // 배경 이미지 업데이트 (파일 선택되었을 때)
-        if (selectedBackgroundFile) {
-            const imageUrl = URL.createObjectURL(selectedBackgroundFile);
-            setBackgroundImage(imageUrl);
-        }
-    }, [selectedBackgroundFile]);
-
-    useEffect(() => {
-        // 프로필 이미지 업데이트 (파일 선택되었을 때)
-        if (selectedProfileFile) {
-            const imageUrl = URL.createObjectURL(selectedProfileFile);
-            setProfileImage(imageUrl);
-        }
-    }, [selectedProfileFile]);
-
+    // 모달 열기 & 닫기
     const handleOpenStatusModal = () => {
         setStatusModalOpen(true);
     };
@@ -96,36 +47,11 @@ const Mypage = () => {
         setStatusModalOpen(false);
     };
 
-    const handleSaveStatus = (newStatus) => {
-        setStatus(newStatus);
-    };
-
-    const handleProfileImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setProfileImage(imageUrl);
-        }
-    };
-
     const handleOpenBackgroundModal = () => {
         setIsBackgroundModalOpen(true);
     };
 
     const handleCloseBackgroundModal = () => {
-        setIsBackgroundModalOpen(false);
-    };
-
-    const handleSaveBackground = (file) => {
-        if (file) {
-            setSelectedBackgroundFile(file);
-        }
-        setIsBackgroundModalOpen(false);
-    };
-
-    const handleSetDefaultBackground = () => {
-        setBackgroundImage('/images/dataInk_background_default.jpg');
-        setSelectedBackgroundFile(null);
         setIsBackgroundModalOpen(false);
     };
 
@@ -137,6 +63,64 @@ const Mypage = () => {
         setIsProfileModalOpen(false);
     };
 
+    // userEffect
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const section = queryParams.get('section');
+
+        if (section && ['Alarm', 'Profile', 'Calendar'].includes(section)) {
+            setActiveTab(section);
+        }
+    }, [location.search]);
+
+    useEffect(() => {
+        if (activeTab === 'Profile') {
+            dispatch(resetProfileAuth());
+        }
+    }, [activeTab]);
+
+    useEffect(() => {
+        dispatch(fetchMypageInfo()); // Thunk를 디스패치하여 API 호출
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (selectedBackgroundFile) {
+            const imageUrl = URL.createObjectURL(selectedBackgroundFile);
+            dispatch(setBackgroundImage(imageUrl));
+        }
+    }, [selectedBackgroundFile, dispatch]);
+
+    useEffect(() => {
+        if (selectedProfileFile) {
+            const imageUrl = URL.createObjectURL(selectedProfileFile);
+            dispatch(setProfileImage(imageUrl));
+        }
+    }, [selectedProfileFile, dispatch]);
+
+    const handleSaveStatus = (newStatus) => {
+        dispatch(setStatus(newStatus));
+    };
+
+    const handleProfileImageUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedProfileFile(file);
+        }
+    };
+
+    const handleSaveBackground = (file) => {
+        if (file) {
+            setSelectedBackgroundFile(file);
+        }
+        setIsBackgroundModalOpen(false);
+    };
+
+    const handleSetDefaultBackground = () => {
+        dispatch(setBackgroundImage()); // 인자 없이 호출하여 기본 배경 이미지 사용
+        setSelectedBackgroundFile(null);
+        setIsBackgroundModalOpen(false);
+    };
+
     const handleSaveProfile = (file) => {
         if (file) {
             setSelectedProfileFile(file);
@@ -145,7 +129,7 @@ const Mypage = () => {
     };
 
     const handleSetDefaultProfile = () => {
-        setProfileImage('/images/dataInk_logo_sqr.png');
+        dispatch(setProfileImage()); // 인자 없이 호출하여 기본 프로필 이미지 사용
         setSelectedProfileFile(null);
         setIsProfileModalOpen(false);
     };
@@ -267,7 +251,7 @@ const Mypage = () => {
             <ProfileImgModal 
                 isOpen={isProfileModalOpen}
                 currentImage={profileImage}
-                defaultImage="/images/dataInk_logo_sqr.png"
+                defaultImage="/images/dataInk_profile_default.png"
                 onClose={handleCloseProfileModal}
                 onSave={handleSaveProfile}
                 onSetDefault={handleSetDefaultProfile}

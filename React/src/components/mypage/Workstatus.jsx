@@ -32,11 +32,12 @@ const Workstatus = () => {
     const [startDate, setStartDate] = useState(dayjs().subtract(1, 'day'));
     const [endDate] = useState(dayjs()); // 종료 날짜는 오늘 날짜로 고정
     const [searchKeyword, setSearchKeyword] = useState('');
+    
 
     // 기간 선택 드롭다운 변경 핸들러
     const handlePeriodChange = (event) => {
         const selectedPeriod = event.target.value;
-    setPeriod(selectedPeriod);
+        setPeriod(selectedPeriod);
 
         // 각 기간에 맞는 날짜 설정
         if (selectedPeriod === 'today') {
@@ -70,7 +71,7 @@ const Workstatus = () => {
     useEffect(() => {
         // 프로젝트 데이터를 가져오는 Thunk 호출
         dispatch(getAllProjects());
-    }, [dispatch]);
+    }, [dispatch]);;
 
     return (
         <div id="WorkStatus" className="tab-content">
@@ -243,6 +244,7 @@ const Workstatus = () => {
                         columnHeader: 'custom-header',
                     }}
                     loading={loading}
+                    getRowId={(row) => row.projectId}
                 />
                 {loading && <div>로딩 중입니다...</div>}
             </Box>

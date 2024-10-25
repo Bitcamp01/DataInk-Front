@@ -69,7 +69,7 @@ const Table_notice = () => {
       }}>
 
       <DataGrid
-          rows={notice.content.map((item, index) => ({
+          rows={(notice && notice.content ? notice.content : []).map((item, index) => ({
           id: item.noticeId,
           title: item.title,
           writer: item.name,

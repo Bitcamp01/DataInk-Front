@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import styled from 'styled-components';
 import Modal from 'react-modal';
+import { fetchCalendars, fetchEvents, addCalendar, updateCalendar, deleteCalendar, addEvent, updateEvent, deleteEvent } from '../../apis/mypageApis';
+import CalendarAddModal from './CalendarAddModal';
+import CalendarEditModal from './CalendarEditModal';
+import EventAddModal from './EventAddModal';
+import EventEditModal from './EventEditModal';
 import 'react-datepicker/dist/react-datepicker.css';
+import calendarSlice from '../../slices/calendarSlice';
+import eventSlice from '../../slices/eventSlice';
+Modal.setAppElement('#root'); // 'root'는 App이 렌더링되는 최상위 DOM 엘리먼트의 ID입니다.
 
 const CalendarBackground = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
@@ -26,7 +35,7 @@ const CalendarToolbar = styled.div`
         padding: 8px 12px !important;
         margin: 0 5px !important;
         font-size: 14px !important;
-        cursor: pointer;y
+        cursor: pointer;
         transition: background-color 0.3s ease !important;
     }
 
@@ -49,7 +58,7 @@ const CalendarToolbar = styled.div`
         min-height: 40rem !important; /* 최소 높이 설정 */
     }
 `;
-
+// 캘린더 컨테이너
 const CalendarContainer = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
     display: flex; /* 사이드바와 메인 캘린더를 나란히 배치 */
@@ -61,27 +70,30 @@ const CalendarContainer = styled.div`
     min-height: 40rem; /* 최소 높이 설정 */
 `;
 
+// 이벤트 스타일 (컨테이너안에들어가는)
 const StyledEvent = styled.div`
     background-color: ${props => props.color};
-    color: ${props => (props.color === '#FFFFB3' ? 'black' : 'white')}; /* 노란색(#FFFFB3)이면 글씨는 검정색, 아니면 흰색 */
-    border-radius: 6px;
+    color: ${props => (props.color === '#FFFFB3' ? 'black' : 'white')};
     text-align: center;
     margin: 2px 0;
     font-size: 0.9em; // 글자 크기도 함께 줄이기 (원래 크기의 70%)
     height: 70%; // 높이를 70%로 축소
 `;
 
+// 전체 캘린더 스타일
 const StyledFullCalendar = styled(FullCalendar)`
     height: 100%; 
     min-height: 40rem;
 `;
 
+// 캘린더 사이드바
 const SidebarContainer = styled.div`
     display: flex;
     justify-content: space-between; /* 왼쪽과 오른쪽 사이드바를 캘린더 양쪽에 배치 */
     width: 100%;
 `;
 
+// 메인 캘린더
 const MainCalendar = styled.div`
     flex: 1;
     min-height: 40rem; /* 메인 캘린더도 같은 최소 높이로 설정 */
@@ -107,6 +119,7 @@ const RightSidebar = styled.div`
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
+// 캘린더 해더
 const DateHeader = styled.h3`
     margin: 0;
     padding-bottom: 10px;
@@ -114,24 +127,28 @@ const DateHeader = styled.h3`
     color: #333;
 `;
 
+// 오른쪽 사이드바에 스케출 표출시
 const ScheduleItem = styled.div`
     margin-top: 10px;
     font-size: 14px;
     color: #333;
 `;
 
+// 구분선
 const Divider = styled.hr`
     border: none;
     border-top: 1px dotted #ccc; /* 점선 스타일 */
     margin: 10px 0; /* 위아래 간격 추가 */
 `;
 
+// 캘린더 리스트 (왼쪽 사이드바)
 const CalendarList = styled.ul`
     list-style-type: none;
     padding: 0;
     margin: 0;
 `;
 
+// 캘린더 하나하나 (수정버튼도있음) (왼쪽 사이드바)
 const CalendarItem = styled.li`
     padding: 10px;
     border-bottom: 1px solid #ddd;
@@ -143,20 +160,22 @@ const CalendarItem = styled.li`
     }
 `;
 
+// 수정 버튼 - 누를때 모달나옴
 const EditButton = styled.button`
     background-color: #7785BE;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    padding: 5px 10px;
-    font-size: 12px;
+    padding: 4px 8px;
+    font-size: 10px;
     display: none;
     &:hover {
         background-color: #535db1;
     }
 `;
 
+// 이벤트 추가 버튼 (왼쪽사이드바) - 누를때 모달나옴
 const EventButton = styled.button`
     background-color: #7785BE;
     color: white;
@@ -171,113 +190,6 @@ const EventButton = styled.button`
         background-color: #535db1;
     }
 `;
-const ModalTitle = styled.h2`
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-`;
-
-const eventModalStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        padding: '30px',
-        width: '420px', // 이벤트 추가 모달의 너비 설정
-        height: '550px', // 이벤트 추가 모달의 높이 설정
-        borderRadius: '10px',
-        border: 'none',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-        backgroundColor: '#ffffff',
-    },
-    overlay: {
-        zIndex: 1000,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-};
-
-const calendarModalStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        padding: '30px',
-        width: '500px',
-        height:'340px',
-        borderRadius: '10px',
-        border: 'none',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-        backgroundColor: '#ffffff',
-    },
-    overlay: {
-        zIndex: 1000,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-};
-
-const ButtonContainer = styled.div`
-    display: flex;
-    margin-top: 40px;
-    justify-content: flex-end;
-`;
-
-const ButtonContainer2 = styled.div`
-    display: flex;
-    justify-content: flex-end;
-`;
-
-const ModalButton = styled.button`
-    background-color: #7785BE;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    padding: 10px 20px;
-    font-size: 14px;
-    margin: 10px;
-    transition: background-color 0.3s ease;
-    width: 100px;
-    &:hover {
-        background-color: #535db1;
-    }
-`;
-
-const InputField = styled.input`
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    margin-top: 10px;
-    font-size: 14px;
-`;
-
-const SelectField = styled.select`
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-top: 10px;
-    margin-bottom: 15px;
-    font-size: 14px;
-`;
-
-const TextArea = styled.textarea`
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    font-size: 14px;
-    height: 100px;
-`;
 
 const ColorCircle = styled.span`
     display: inline-block;
@@ -287,187 +199,18 @@ const ColorCircle = styled.span`
     background-color: ${props => props.color};
     margin-right: 10px;
 `;
-
-// 색상 버튼 스타일 정의
-const ColorButton = styled.button`
-    background-color: ${props => props.color};
-    border: ${props => (props.isHovered ? '2px solid lightgrey' : props.selected ? '2px solid #666' : 'none')}; 
-    border-radius: 50%; /* 동그라미 모양 */
-    width: 30px;
-    height: 30px;
-    margin: 5px 5px;
-    cursor: pointer;
-`;
-
-const CustomButton = styled.button`
-    background-color: ${props => props.color};
-    border: ${props => props.isHovered ? '2px solid lightgray' : props.selected ? '2px solid #666' : '1px solid #777'};
-    color: black; /* 텍스트 색상 */
-    border-radius: 4px; /* 네모난 모양 */
-    padding: 7px 14px;
-    cursor: pointer;
-    margin-left: 10px;
-`;
-
-const InputFieldContainer = styled.div`
-    display: flex;
-    justify-content: center; /* 수평 중앙 정렬 */
-`;
-
-// 사용자 정의 색상 팔레트 스타일
-const UserColorContainer = styled.div`
-    display: flex;
-    margin-top: 10px; /* 간격 추가 */
-    flex-wrap: wrap; /* 줄 바꿈 가능 */
-    justify-content: center;
-`;
-
-const ColorInputContainer = styled.div`
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    justify-content: center;
-`;
-
-// 팔레트의 위치를 고정하기 위해 스타일 추가
-const PaletteContainer = styled.div`
-    position: absolute;
-    width: 300px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: -56px;
-    margin-right: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    z-index: 1000; /* 다른 요소 위에 나타나도록 */
-`;
-
-const DateContainer = styled.div`
-    display: flex;
-    justify-content: space-between;  /* 두 입력 필드를 좌우로 배치 */
-    gap: 20px;  /* 두 입력 필드 사이의 간격 조절 */
-    margin-bottom: 10px;  /* 아래 요소들과의 간격 */
-`;
-
-const DateLabel = styled.label`
-    flex: 1;  /* 입력 필드들이 동일한 너비를 갖도록 설정 */
-    display: flex;
-    flex-direction: column;
-`;
-
-// 색상 선택기 컴포넌트
-const ColorPicker = ({ color, setColor, customColor, setCustomColor }) => {
-    const [showPalette, setShowPalette] = useState(false);
-    const [hoveredColor, setHoveredColor] = useState(''); // 호버된 색상 추적
-
-    // 팔레트에서 색상 선택을 확정하는 함수
-    const paletteConfirm = () => {
-        setCustomColor(color); // 선택한 색상으로 사용자화 색상 설정
-        setShowPalette(false); // 팔레트 닫기
-    };
-
-    // 팔레트에서 색상 선택을 취소하는 함수
-    const paletteCancel = () => {
-        setCustomColor('');
-        setShowPalette(false); // 변경 없이 팔레트 닫기
-    };
-
-    const togglePalette = () => {
-        setShowPalette(!showPalette);
-    };
-
-    return (
-        <ColorInputContainer>
-            <label style={{ marginRight: '10px' }}> 색상: </label>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                {colorOptions.map(option => (
-                    <ColorButton
-                        key={option.value}
-                        color={option.value}
-                        selected={color === option.value} // 선택된 색상일 때 테두리 검은색
-                        isHovered={hoveredColor === option.value} // 호버된 색상일 때 테두리 회색
-                        onClick={() => setColor(option.value)} // 색상 선택 시 상태 업데이트
-                        onMouseEnter={() => setHoveredColor(option.value)} // 마우스 호버 시작
-                        onMouseLeave={() => setHoveredColor('')} // 마우스 호버 끝
-                    />
-                ))}
-                {/* 사용자화 버튼 */}
-                <CustomButton
-                    color={customColor || 'transparent'} // 선택한 색상이 없으면 투명
-                    selected={color === customColor && customColor !== ''} // 사용자화 색상이 선택된 경우에만 테두리 검정
-                    isHovered={hoveredColor === 'custom'} // 사용자화 버튼에 호버 효과 추가
-                    onMouseEnter={() => setHoveredColor('custom')} // 사용자화 버튼에 마우스 호버 시작
-                    onMouseLeave={() => setHoveredColor('')} // 사용자화 버튼에 마우스 호버 끝
-                    onClick={togglePalette}
-                >
-                    사용자화
-                </CustomButton>
-            </div>
-            {showPalette && (
-                <PaletteContainer>
-                    <InputFieldContainer>
-                    <input
-                        type="color"
-                        value={color}
-                        onChange={(e) => setColor(e.target.value)}
-                        style={{ marginBottom: '10px', border: 'none', width: '315px', height: '40px' }} // 색상 선택기 스타일
-                    />
-                    </InputFieldContainer>
-                    {/* 추가 색상 버튼 */}
-                    <UserColorContainer>
-                        <ColorButton color="#FF0000" onClick={() => setColor('#FF0000')} />
-                        <ColorButton color="#FF5733" onClick={() => setColor('#FF5733')} />
-                        <ColorButton color="#FFA500" onClick={() => setColor('#FFA500')} />
-                        <ColorButton color="#FFB833" onClick={() => setColor('#FFB833')} />
-                        <ColorButton color="#FFD133" onClick={() => setColor('#FFD133')} />
-                        <ColorButton color="#FFFF00" onClick={() => setColor('#FFFF00')} />
-                        <ColorButton color="#FFE4B5" onClick={() => setColor('#FFE4B5')} />
-                        <ColorButton color="#F0E68C" onClick={() => setColor('#F0E68C')} />
-                        <ColorButton color="#D4FF33" onClick={() => setColor('#D4FF33')} />
-                        <ColorButton color="#ADFF2F" onClick={() => setColor('#ADFF2F')} />
-                        <ColorButton color="#73FF33" onClick={() => setColor('#73FF33')} />
-                        <ColorButton color="#33FF57" onClick={() => setColor('#33FF57')} />
-                        <ColorButton color="#33FF9D" onClick={() => setColor('#33FF9D')} />
-                        <ColorButton color="#008000" onClick={() => setColor('#008000')} />
-                        <ColorButton color="#00CED1" onClick={() => setColor('#00CED1')} />
-                        <ColorButton color="#33D7FF" onClick={() => setColor('#33D7FF')} />
-                        <ColorButton color="#3373FF" onClick={() => setColor('#3373FF')} />
-                        <ColorButton color="#0000FF" onClick={() => setColor('#0000FF')} />
-                        <ColorButton color="#7D33FF" onClick={() => setColor('#7D33FF')} />
-                        <ColorButton color="#FFC0CB" onClick={() => setColor('#FFC0CB')} />
-                        <ColorButton color="#FFD1DC" onClick={() => setColor('#FFD1DC')} />
-                        <ColorButton color="#FFCCCB" onClick={() => setColor('#FFCCCB')} />
-                        <ColorButton color="#FF33E6" onClick={() => setColor('#FF33E6')} />
-                        <ColorButton color="#800080" onClick={() => setColor('#800080')} />
-                    </UserColorContainer>
-                    <UserColorContainer>
-                        <ModalButton onClick={paletteConfirm}>확인</ModalButton> {/* 확인 버튼 */}
-                        <ModalButton onClick={paletteCancel}>취소</ModalButton> {/* 취소 버튼 */}
-                    </UserColorContainer>
-                </PaletteContainer>
-            )}
-        </ColorInputContainer>
-    );
-};
-
-const colorOptions = [
-    { name: "빨간색", value: "#FFB3B3" },
-    { name: "주황색", value: "#FFD9B3" },
-    { name: "노란색", value: "#FFFFB3" },
-    { name: "초록색", value: "#B3FFB3" },
-    { name: "파란색", value: "#B3D9FF" },
-    { name: "보라색", value: "#D9B3FF" },
-];
+//---------위로 스타일드 컴포넌트--------------------------------------------------------------------------------------------------------------------------------
 
 const Calendar = () => {
+    const dispatch = useDispatch();
+    const { calendars, status: calendarStatus, error: calendarError } = useSelector((state) => state.calendar);
+    // const { events, status: eventStatus, error: eventError } = useSelector((state) => state.event);
     const [events, setEvents] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);  // 선택한 날짜 상태
     const [selectedEvent, setSelectedEvent] = useState(null);// 선택한 이벤트
     const [selectedEvents, setSelectedEvents] = useState([]);  // 선택한 날짜의 이벤트 위에꺼랑 다른거임
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [addEventModalIsOpen, setAddEventModalIsOpen] = useState(false);
+    const [editEventModalIsOpen, setEditEventModalIsOpen] = useState(false); 
     const [addCalendarModalIsOpen, setAddCalendarModalIsOpen] = useState(false);
     const [editCalendarModalIsOpen, setEditCalendarModalIsOpen] = useState(false); // 캘린더 수정 모달 상태
     const [title, setTitle] = useState('');
@@ -480,21 +223,7 @@ const Calendar = () => {
     const [selectedCalendar, setSelectedCalendar] = useState(null); // 수정할 캘린더 정보 저장
     const [isModified, setIsModified] = useState(false);
     const [customColor, setCustomColor] = useState('');
-    
-    // 캘린더 수정 모달 열기
-    const openEditCalendarModal = (calendar) => {
-        setSelectedCalendar(calendar);
-        setCalendarName(calendar.name);
-        setColor(calendar.color);
-        setCustomColor(calendar.customColor || calendar.color); // customColor 초기화
-        setEditCalendarModalIsOpen(true);
-    };
 
-    // 캘린더 수정 모달 닫기
-    const closeEditCalendarModal = () => {
-        setEditCalendarModalIsOpen(false);
-        resetForm();
-    };
 //---------------------------------------------------------------------------------------------------------------------------------------------
 // 지금이게 드래그하면 그날짜대로 설정해서 만드는건데 하나만클릭했을떄도 모달뜨는 오류나서 얼림
     const handleSelect = (selectionInfo) => {
@@ -559,49 +288,6 @@ const Calendar = () => {
             color: '#FF6666'
         }));
     };
-    
-    const applyHolidays = () => {
-        const holidayEvents = getHolidayEvents();
-        setEvents(prevEvents => [...prevEvents, ...holidayEvents]);  // 공휴일 이벤트 추가
-    };
-    
-    useEffect(() => {
-        applyHolidays();  // 공휴일 이벤트 적용
-    }, []);
-
-    const handleUpdateCalendar = () => {
-        const updatedCalendars = calendarOptions.map((calendar) =>
-            calendar.name === selectedCalendar.name
-                ? { ...calendar, name: calendarName, color }
-                : calendar
-        );
-        setCalendarOptions(updatedCalendars);
-    
-        // 이벤트 색상 업데이트
-        const updatedEvents = events.map(event =>
-            event.calendarName === selectedCalendar.name
-                ? { ...event, color }  // 수정된 색상으로 업데이트
-                : event
-        );
-        setEvents(updatedEvents);  // 이벤트 상태 업데이트
-    
-        closeEditCalendarModal();
-    };
-
-    // 모달 열릴 때마다 상태 초기화
-    useEffect(() => {
-        if (modalIsOpen && selectedEvent) {
-            const adjustedEndDate = new Date(selectedEvent.end);
-            adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
-
-            setTitle(selectedEvent.title);
-            setCalendarName(selectedEvent.calendarName);
-            setStartDate(selectedEvent.start);
-            setEndDate(adjustedEndDate.toISOString().split("T")[0]); // 종료 날짜
-            setMemo(selectedEvent.memo || '');
-            setColor(selectedEvent.color || '');
-        }
-    }, [modalIsOpen, selectedEvent]);
 
     // 상태 변경 감지 및 수정 가능 여부 확인
     useEffect(() => {
@@ -616,55 +302,25 @@ const Calendar = () => {
         }
     }, [title, calendarName, startDate, endDate, memo, selectedEvent]);
 
-    // 기본 캘린더 확인 및 생성 로직 추가
-    // useEffect(() => {
-    //     const fetchCalendars = async () => {
-    //         try {
-    //             const response = await axios.get("/src/components/mypage/Calendar", {
-    //                 headers: {
-    //                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}` // 세션에서 토큰을 가져와서 전송
-    //                 }
-    //             });
-
-    //             if (response.data.length === 0) {
-    //                 // 기본 캘린더가 없으면 생성
-    //                 await axios.post("/src/components/mypage/Calendar", {
-    //                     name: "기본 캘린더",
-    //                     color: "#7785BE" // 기본 캘린더 색상
-    //                 });
-
-    //                 // 새로 추가된 캘린더 데이터를 다시 가져와서 상태 업데이트
-    //                 const newResponse = await axios.get("/src/components/mypage/Calendar");
-    //                 setCalendarOptions(newResponse.data);
-    //             } else {
-    //                 setCalendarOptions(response.data);
-    //             }
-    //         } catch (error) {
-    //             console.error("캘린더 로드 에러:", error);
-    //         }
-    //     };
-
-    //     fetchCalendars();
-    // }, []); // 컴포넌트 마운트 시 실행
-
-    const openModal = () => {
-        setModalIsOpen(true);
+    // 일정 모달 열기
+    const openAddEventModal = () => {
+        setAddEventModalIsOpen(true);
     };
 
-    const closeModal = () => {
-        setModalIsOpen(false);
+    const openEditEventModal = () => {
+        setEditEventModalIsOpen(true);
+    };
+
+    // 일정 모달 닫기
+    const closeAddEventModal = () => {
+        setAddEventModalIsOpen(false);
         resetForm(); // 모달 닫을 때 상태 초기화
     };
 
-    const resetForm = () => {
-        setTitle('');
-        setCalendarName('');
-        setStartDate('');
-        setEndDate('');
-        setMemo('');
-        setColor('');
-        setSelectedEvent(null);
-        setIsModified(false);
+    // 일정 모달 닫기
+    const closeEditEventModal = () => {
+        setEditEventModalIsOpen(false);
+        resetForm(); // 모달 닫을 때 상태 초기화
     };
 
     const openAddCalendarModal = () => {
@@ -679,156 +335,152 @@ const Calendar = () => {
         setCalendarName('');
     };
 
-    // 이벤트 삭제 처리
-    const handleDeleteEvent = () => {
-        if (selectedEvent && !selectedEvent.isHoliday) { // 공휴일 삭제 방지
-            setEvents(events.filter(event => event.id !== selectedEvent.id));
-            closeModal();
-        } else {
-            alert('공휴일은 삭제할 수 없습니다.');
-        }
+    // 캘린더 수정 모달 열기
+    const openEditCalendarModal = (calendar) => {
+        console.log("Selected calendar for editing:", calendar); // 추가된 로그
+        setSelectedCalendar(calendar);
+        setCalendarName(calendar.calendarName);
+        setColor(calendar.color);
+        setCustomColor(calendar.customColor || calendar.color); // customColor 초기화
+        setEditCalendarModalIsOpen(true);
     };
 
-    const handleAddCalendar = () => {
-        if (calendarName && color) {
-            const newCalendar = { name: calendarName, color };
-            setCalendarOptions([...calendarOptions, newCalendar]);
-            closeAddCalendarModal();
-        } else {
-            alert('캘린더 이름과 색상을 입력해야 합니다.');
-        }
+    // 캘린더 수정 모달 닫기
+    const closeEditCalendarModal = () => {
+        console.log('취소 버튼 클릭됨');
+        setEditCalendarModalIsOpen(false);
+        setSelectedCalendar(null);  // 선택된 캘린더 초기화
+        resetForm();
     };
 
-    const handleAddEvent = () => {
-        if (title && calendarName && startDate && endDate) {
-            if (new Date(startDate) > new Date(endDate)) {
-                alert('종료일은 시작일보다 늦어야 합니다.');
-                return;
-            }
-
-            // 종료 날짜에 1일을 더해줘서 이벤트가 지정한 마지막 날짜까지 포함되도록 함
-            const adjustedEndDate = new Date(endDate);
-            adjustedEndDate.setDate(adjustedEndDate.getDate() + 1);
-
-            const selectedCalendar = calendarOptions.find(option => option.name === calendarName);
-            const eventColor = selectedCalendar ? selectedCalendar.color : '';
-
-            const newEvent = {
-                id: String(events.length + 1),
-                title,
-                calendarName,
-                start: startDate,
-                end: adjustedEndDate.toISOString().split("T")[0], // 종료 날짜에 하루를 더한 값 사용
-                memo,
-                color: eventColor,
-                allDay: true,
-            };
-            setEvents([...events, newEvent]);
-            closeModal();
-        } else {
-            alert('제목, 캘린더 이름, 시작 날짜 및 종료 날짜를 모두 입력해야 합니다.');
-        }
+    const resetForm = () => {
+        setTitle('');
+        setCalendarName('');
+        setStartDate('');
+        setEndDate('');
+        setMemo('');
+        setColor('');
+        setSelectedEvent(null);
+        setIsModified(false);
     };
 
-    // 이벤트 수정 시 처리
-    const handleUpdateEvent = () => {
-        if (selectedEvent) {
-            if (title && startDate && endDate) {
-                if (new Date(startDate) > new Date(endDate)) {
-                    alert('종료일은 시작일보다 늦어야 합니다.');
-                    return;
+    // 모달 열릴 때마다 상태 초기화
+    useEffect(() => {
+        if (addEventModalIsOpen && selectedEvent) {
+            const adjustedEndDate = new Date(selectedEvent.end);
+            adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
+
+            setTitle(selectedEvent.title);
+            setCalendarName(selectedEvent.calendarName); // 캘린더 이름 설정
+            setStartDate(new Date(selectedEvent.start).toISOString().split("T")[0]); // 시작 날짜 설정
+            setEndDate(new Date(selectedEvent.end).toISOString().split("T")[0]); // 종료 날짜 설정
+            setMemo(selectedEvent.memo || '');
+            setColor(selectedEvent.color || '');
+        }
+    }, [addEventModalIsOpen, selectedEvent]);
+
+    useEffect(() => {
+        const loadCalendars = async () => {
+            try {
+                const calendarsData = await fetchCalendars();
+                if (Array.isArray(calendarsData)) {
+                setCalendarOptions(calendarsData);
+                } else {
+                console.error("캘린더 데이터 형식이 올바르지 않습니다.", calendarsData);
+                setCalendarOptions([]);
                 }
-
-                // 종료 날짜에 1일을 더해주는 로직 유지 (FullCalendar에서 종료일이 exclusive이기 때문)
-                const adjustedEndDate = new Date(endDate);
-                adjustedEndDate.setDate(adjustedEndDate.getDate() + 1); // 종료일 수정
-
-                // 캘린더 이름에 맞는 색상을 찾음
-                const selectedCalendar = calendarOptions.find(option => option.name === calendarName);
-                const eventColor = selectedCalendar ? selectedCalendar.color : selectedEvent.color;
-
-                // 수정된 이벤트 객체 생성
-                const updatedEvent = {
-                    id: selectedEvent.id,
-                    title,
-                    calendarName,  // 선택된 캘린더로 업데이트
-                    start: startDate,
-                    end: adjustedEndDate.toISOString().split("T")[0], // 수정된 종료일 반영
-                    memo,
-                    color: eventColor, // 새로 선택된 캘린더의 색상으로 업데이트
-                    allDay: true,
-                };
-
-                // 기존 이벤트 리스트에서 수정된 이벤트 반영
-                setEvents(events.map(event => (event.id === selectedEvent.id ? updatedEvent : event)));
-                closeModal();
-            } else {
-                alert('제목, 캘린더 이름, 시작 날짜 및 종료 날짜를 모두 입력해야 합니다.');
+            } catch (error) {
+                console.error("캘린더 로드 에러:", error);
+                setCalendarOptions([]);
             }
-        }
-    };
+        };
+        loadCalendars();
+    }, []);
 
+
+    // 이벤트 정보 조회 및 공휴일 적용
+    useEffect(() => {
+        const loadEvents = async () => {
+            try {
+                const eventsData = await fetchEvents(); // API 함수 호출
+    
+                // 각 이벤트의 calendarId와 매칭하여 calendarName 설정
+                const formattedEvents = eventsData.map(event => {
+                    const matchedCalendar = calendarOptions.find(option => option.id === event.calendarId);
+                    
+                    // 시작 및 종료 날짜가 유효한지 확인
+                    const startDate = new Date(event.startDate);
+                    const endDate = new Date(event.endDate);
+                    
+                    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                        console.error('유효하지 않은 날짜 형식입니다:', event.startDate, event.endDate);
+                        return null; // 유효하지 않은 이벤트는 제외
+                    }
+    
+                    return {
+                        id: event.id.toString(),  // ID를 문자열로 변환
+                        title: event.title,
+                        calendarName: matchedCalendar ? matchedCalendar.calendarName : '', // 매칭된 캘린더 이름 사용
+                        start: startDate,
+                        end: endDate,
+                        color: event.color,
+                        allDay: event.allDay ? true : false,  // allDay 필드가 있으면 적용
+                    };
+                }).filter(event => event !== null); // 유효하지 않은 이벤트는 필터링
+    
+                const holidayEvents = getHolidayEvents(); // 공휴일 이벤트 가져오기
+    
+                // 기존 이벤트와 공휴일 데이터를 합쳐서 상태에 저장
+                setEvents([...formattedEvents, ...holidayEvents]);
+            } catch (error) {
+                console.error("이벤트 로드 에러:", error);
+            }
+        };
+    
+        loadEvents();
+    }, [calendarOptions]);
+    
     const handleEventClick = (info) => {
-        const eventId = info.event.id; // 클릭한 이벤트의 ID
-        const event = events.find(event => event.id === eventId); // 해당 ID로 이벤트 찾기
+        const eventId = info.event.id;
+        const event = events.find(event => event.id === eventId);
+        console.log("클릭한 이벤트 ID:", eventId);
+        console.log("이벤트 리스트에서 찾은 이벤트:", event);
     
         if (event) {
             if (event.isHoliday) {
-                alert('공휴일은 클릭할 수 없습니다.'); // 공휴일 클릭 시 알림
+                alert('공휴일은 클릭할 수 없습니다.');
             } else {
-                // 이벤트가 존재할 경우에만 처리
+                console.log("선택된 이벤트:", event);
                 setSelectedEvent(event);
                 setTitle(event.title);
-                setCalendarName(event.calendarName);
     
+                const selectedCalendar = calendarOptions.find(option => option.id === event.calendarId || option.calendarName === event.calendarName);
+                setCalendarName(selectedCalendar ? selectedCalendar.calendarName : '');
+    
+                // 날짜를 "yyyy-MM-dd" 형식으로 변환하여 설정
+                const startDate = new Date(event.start).toISOString().split("T")[0];
+                const endDate = new Date(event.end).toISOString().split("T")[0];
+    
+                // 종료일은 exclusive이므로 하루를 빼서 설정
                 const adjustedEndDate = new Date(event.end);
                 adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
-    
-                setStartDate(event.start);
                 setEndDate(adjustedEndDate.toISOString().split("T")[0]);
+    
+                setStartDate(startDate);
                 setMemo(event.memo || '');
                 setColor(event.color || '');
                 setIsModified(false);
-                openModal();
+                openAddEventModal();
             }
         } else {
-            console.error('이벤트를 찾을 수 없습니다:', eventId); // 이벤트를 찾을 수 없는 경우 오류 메시지 출력
+            console.error('이벤트를 찾을 수 없습니다:', eventId);
         }
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-
-        if (name === "title") {
-            setTitle(value);
-        } else if (name === "calendarName") {
-            setCalendarName(value);
-        } else if (name === "startDate") {
-            setStartDate(value);
-            // 시작 날짜를 선택하면 종료 날짜를 자동으로 시작 날짜와 동일하게 설정
-            if (!endDate || new Date(endDate) < new Date(value)) {
-                setEndDate(value); // 종료 날짜가 없거나, 시작 날짜보다 이전인 경우 업데이트
-            }
-        } else if (name === "endDate") {
-            setEndDate(value);
-        } else if (name === "memo") {
-            setMemo(value);
-        }
-
-        const hasChanges =
-            title !== (selectedEvent ? selectedEvent.title : '') ||
-            calendarName !== (selectedEvent ? selectedEvent.calendarName : '') ||
-            startDate !== (selectedEvent ? selectedEvent.start : '') ||
-            endDate !== (selectedEvent ? selectedEvent.end : '') ||
-            memo !== (selectedEvent ? selectedEvent.memo : '');
-
-        setIsModified(hasChanges);
     };
 
     const handleEventDrop = (info) => {
         const eventId = info.event.id;
         const event = events.find(event => event.id === eventId);
-
+    
         console.log('드롭된 이벤트:', event); // 디버깅용
     
         // 공휴일인 경우 드롭을 취소합니다.
@@ -837,27 +489,25 @@ const Calendar = () => {
             info.revert(); // 드롭을 취소
             return;
         }
-
+    
         const eventIndex = events.findIndex(event => event.id === eventId);
     
         if (eventIndex !== -1) {
             const updatedEvents = [...events];
     
-            // 시작 날짜 업데이트 (날짜만 추출하고, 불필요한 하이픈 제거)
-            const startDate = new Date(info.event.start).toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            }).replace(/\./g, '-').replace(/\s/g, '').replace(/-$/, ''); // 불필요한 하이픈 제거
+            // 시작 날짜 업데이트
+            const startDate = new Date(info.event.start).toISOString().split('T')[0];
     
-            // 종료 날짜 처리 (종료 날짜가 있으면 날짜만 추출, 없으면 시작 날짜와 동일하게 설정)
+            // 종료 날짜 처리
             let endDate;
             if (info.event.end) {
-                endDate = new Date(info.event.end).toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                }).replace(/\./g, '-').replace(/\s/g, '').replace(/-$/, ''); // 불필요한 하이픈 제거
+                const originalStartDate = new Date(event.start);
+                const originalEndDate = new Date(event.end);
+                const duration = (originalEndDate - originalStartDate) / (1000 * 60 * 60 * 24); // 기간(일 수) 계산
+    
+                const adjustedEndDate = new Date(info.event.start);
+                adjustedEndDate.setDate(adjustedEndDate.getDate() + duration); // 시작일에 원래 기간을 더하여 종료일 설정
+                endDate = adjustedEndDate.toISOString().split('T')[0];
             } else {
                 endDate = startDate;  // 종료 날짜가 없으면 시작 날짜로 설정
             }
@@ -866,29 +516,55 @@ const Calendar = () => {
             updatedEvents[eventIndex].start = startDate;
             updatedEvents[eventIndex].end = endDate;
     
-            // 이벤트 상태를 업데이트
-            setEvents(updatedEvents);
+            // 백엔드에 업데이트 요청 보내기
+            dispatch(updateEvent({
+                id: eventId,
+                title: event.title,
+                calendarName: event.calendarName,
+                start: startDate,
+                end: endDate,
+                memo: event.memo,
+                color: event.color,
+                allDay: event.allDay
+            }))
+            .unwrap()
+            .then((updatedEventFromBackend) => {
+                console.log('백엔드 업데이트 성공:', updatedEventFromBackend);
+    
+                // 성공적으로 업데이트된 경우 이벤트 상태를 업데이트
+                setEvents(updatedEvents);
+            })
+            .catch((error) => {
+                console.error('이벤트 업데이트 에러:', error);
+                info.revert(); // 에러가 발생하면 드롭을 취소
+            });
     
             // FullCalendar 상태를 직접 업데이트하여 달력에서 사라지는 문제 방지
             info.event.setStart(new Date(startDate));  // FullCalendar의 이벤트 상태도 갱신
             info.event.setEnd(new Date(endDate));      // 종료 날짜 갱신
-
         }
     };
-
-    const handleInputFieldClick = (e) => {
-        e.preventDefault();
-        e.target.showPicker();  // date input에서 기본으로 제공되는 날짜 선택기를 강제 실행
-    };
     
+    // FullCalendar에 이벤트를 렌더링할 때 종료 날짜를 하루 추가하여 exclusive 처리 보정
+    const renderEvents = () => {
+        return events.map(event => {
+            console.log("event.end 값:", event.end);
+            const renderedEndDate = new Date(event.end);
+            renderedEndDate.setDate(renderedEndDate.getDate() + 1); // 렌더링 시에만 종료 날짜에 하루 추가
+
+            return {
+                ...event,
+                end: renderedEndDate.toISOString().split('T')[0], // 렌더링 시만 하루 추가된 종료일로 설정
+            };
+        });
+    };
     return (
         <CalendarBackground>
             <CalendarContainer>
                 <SidebarContainer>
                 {/* 왼쪽 사이드바 */}
                     <LeftSidebar>
-                        <EventButton onClick={openModal}>이벤트 추가</EventButton>
-                        {/* <EventButton onClick={openAddCalendarModal}>캘린더 추가</EventButton> */}
+                        <EventButton onClick={openAddEventModal}>이벤트 추가</EventButton>
                         <Divider /> {/* 점선 추가 */}
                         <h3 
                             style={{ 
@@ -907,11 +583,11 @@ const Calendar = () => {
                                 }}>+</button>
                         </h3>
                         <CalendarList>
-                            {calendarOptions.map((calendar, index) => (
+                            {Array.isArray(calendarOptions) && calendarOptions.map((calendar, index) => (
                                 <CalendarItem key={index}>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <ColorCircle color={calendar.color} />
-                                        {calendar.name}
+                                        {calendar.calendarName}
                                     </div>
                                     <EditButton
                                         className="edit-btn"
@@ -925,6 +601,7 @@ const Calendar = () => {
                     </LeftSidebar>
 
                     <MainCalendar>
+                        {/*메인 달력*/}
                         <CalendarToolbar>
                             <StyledFullCalendar
                                 selectable={true}
@@ -932,11 +609,8 @@ const Calendar = () => {
                                 editable={true}
                                 plugins={[dayGridPlugin, interactionPlugin]}
                                 initialView="dayGridMonth"
-                                events={events.map(event => ({ 
-                                    ...event,
-                                    color: event.color,
-                                }))}
-                                 dateClick={handleDateClick}  // 날짜 클릭 시 호출되는 함수
+                                events={renderEvents()}
+                                dateClick={handleDateClick}  // 날짜 클릭 시 호출되는 함수
                                 eventClick={handleEventClick}
                                 eventDrop={handleEventDrop}
                                 headerToolbar={{
@@ -956,6 +630,7 @@ const Calendar = () => {
                             />
                         </CalendarToolbar>
                     </MainCalendar>
+
                     {/* 오른쪽 사이드바 */}
                     <RightSidebar>
                         {selectedDate ? (
@@ -982,113 +657,39 @@ const Calendar = () => {
                 </SidebarContainer>
             </CalendarContainer>
 
-                <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={eventModalStyles}>
-                    <ModalTitle>{selectedEvent ? '일정 수정' : '일정 추가'}</ModalTitle>
-                    <label>
-                        제목:
-                        <InputField
-                            type="text"
-                            name="title"
-                            value={title}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <br />
-                    <label>
-                        캘린더:
-                        <SelectField
-                            name="calendarName"
-                            value={calendarName}
-                            onChange={handleInputChange}
-                        >
-                            <option value="">선택하세요</option>
-                            {calendarOptions.map((option, index) => (
-                                <option key={index} value={option.name}>
-                                    {option.name}
-                                </option>
-                            ))}
-                        </SelectField>
-                    </label>
-                    <br />
-                    <DateContainer>
-                        <DateLabel>
-                            시작 날짜:
-                            <InputField
-                                type="date"
-                                name="startDate"
-                                value={startDate}
-                                onChange={handleInputChange}
-                                onClick={handleInputFieldClick}
-                            />
-                        </DateLabel>
-                        <DateLabel>
-                            종료 날짜:
-                            <InputField
-                                type="date"
-                                name="endDate"
-                                value={endDate}
-                                onChange={handleInputChange}
-                                onClick={handleInputFieldClick}
-                            />
-                        </DateLabel>
-                    </DateContainer>
-                    <label>
-                        메모:
-                        <TextArea
-                            name="memo"
-                            value={memo}
-                            onChange={handleInputChange}
-                        />
-                    </label>
-                    <ButtonContainer2>
-                        {selectedEvent ? (
-                            <>
-                                <ModalButton onClick={handleUpdateEvent} disabled={!isModified}>수정</ModalButton>
-                                <ModalButton onClick={handleDeleteEvent} style={{ backgroundColor: '#7785BE' }}>삭제</ModalButton>
-                            </>
-                        ) : (
-                            <ModalButton onClick={handleAddEvent}>추가</ModalButton>
-                        )}
-                        <ModalButton onClick={closeModal}>취소</ModalButton>
-                    </ButtonContainer2>
-                </Modal>
-
-                {/* 캘린더 수정 모달 */}
-                <Modal isOpen={editCalendarModalIsOpen} onRequestClose={closeEditCalendarModal} style={calendarModalStyles}>
-                    <ModalTitle style={{ marginBottom: '20px' }}> 캘린더 수정</ModalTitle>
-                    <label style={{ marginBottom: '10px' }}>
-                        캘린더 이름:
-                        <InputField
-                            type="text"
-                            name="calendarName"
-                            value={calendarName}
-                            onChange={(e) => setCalendarName(e.target.value)}
-                        />
-                    </label>
-                    <ColorPicker color={color} setColor={setColor} customColor={customColor} setCustomColor={setCustomColor} />
-                    <ButtonContainer>
-                        <ModalButton onClick={handleUpdateCalendar}>수정</ModalButton>
-                        <ModalButton onClick={closeEditCalendarModal}>취소</ModalButton>
-                    </ButtonContainer>
-                </Modal>
-
-                <Modal isOpen={addCalendarModalIsOpen} onRequestClose={closeAddCalendarModal} style={calendarModalStyles}>
-                    <ModalTitle style={{ marginBottom: '20px' }}> 캘린더 추가</ModalTitle>
-                    <label style={{ marginBottom: '10px' }}>
-                        새 캘린더 이름:
-                        <InputField
-                            type="text"
-                            name="calendarName"
-                            value={calendarName}
-                            onChange={(e) => setCalendarName(e.target.value)}
-                        />
-                    </label>
-                    <ColorPicker color={color} setColor={setColor} customColor={customColor} setCustomColor={setCustomColor} />
-                    <ButtonContainer>
-                        <ModalButton onClick={handleAddCalendar}>추가</ModalButton>
-                        <ModalButton onClick={closeAddCalendarModal}>취소</ModalButton>
-                    </ButtonContainer>
-                </Modal>
+            <CalendarAddModal
+                isOpen={addCalendarModalIsOpen}
+                onRequestClose={closeAddCalendarModal}
+                calendarOptions={calendarOptions}
+                setCalendarOptions={setCalendarOptions}
+                closeAddCalendarModal={closeAddCalendarModal}
+            />
+            <CalendarEditModal
+                isOpen={editCalendarModalIsOpen}
+                onRequestClose={closeEditCalendarModal}
+                selectedCalendar={selectedCalendar}
+                calendarOptions={calendarOptions}
+                setCalendarOptions={setCalendarOptions}
+                updateCalendar={updateCalendar}
+                deleteCalendar={deleteCalendar}
+                closeEditCalendarModal={closeEditCalendarModal}
+            />
+            <EventAddModal
+                isOpen={addEventModalIsOpen}
+                onRequestClose={closeAddEventModal}
+                calendarOptions={calendarOptions}
+                closeAddEventModal={closeAddEventModal}
+                addEvent={addEvent}
+            />
+            <EventEditModal
+                isOpen={editEventModalIsOpen}
+                onRequestClose={closeEditEventModal}
+                calendarOptions={calendarOptions}
+                selectedEvent={selectedEvent}
+                updateEvent={updateEvent}
+                deleteEvent={deleteEvent}
+                closeEditEventModal={closeEditEventModal}
+            />
         </CalendarBackground>
     );
 };

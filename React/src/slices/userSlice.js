@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { join, login, logout, telCheck } from '../apis/userApis'; // telCheck import
+import { join, login, logout, telCheck, changePassword } from '../apis/userApis';
 
 const userSlice = createSlice({
     name: 'users',
@@ -16,6 +16,7 @@ const userSlice = createSlice({
         addr: '',
         dep: '',
         nickname:'',
+        changePasswordMsg:'',
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -41,7 +42,6 @@ const userSlice = createSlice({
                 return {
                     ...state,
                     ...action.payload,
-                    accessToken: action.payload.token, // 토큰을 Redux 상태에 저장
                     isLogin: true,
                 };
             })
@@ -74,7 +74,7 @@ const userSlice = createSlice({
                     nickname:'',
                 };
             })
-            .addCase(logout.rejected, (state, action) => {
+            .addCase(logout.rejected, (state) => {
                 alert("에러가 발생했습니다.");
                 return state;
             })
@@ -82,8 +82,19 @@ const userSlice = createSlice({
             .addCase(telCheck.fulfilled, (state, action) => {
                 state.telCheckMsg = action.payload.telCheckMsg;
             })
-            .addCase(telCheck.rejected, (state, action) => {
+            .addCase(telCheck.rejected, (state) => {
                 state.telCheckMsg = 'error';
+            })
+            // Change Password
+            .addCase(changePassword.fulfilled, (state, action) => {
+                state.changePasswordMsg = action.payload.changePasswordMsg;
+                console.log('Action payload:', action.payload);
+                alert('비밀번호가 성공적으로 변경되었습니다.');
+            })
+            .addCase(changePassword.rejected, (state, action) => {
+                state.changePasswordMsg = 'error'
+                console.error('Rejected action:', action);
+                alert(action.payload || '비밀번호 변경 중 에러가 발생했습니다.');
             });
             
             

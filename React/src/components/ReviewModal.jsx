@@ -8,7 +8,9 @@ import { useDispatch } from 'react-redux'; // dispatch 추가
 import { submitForReview } from '../apis/labelTaskApis'; // Thunk import
 import axios from 'axios';
 
-const ReviewModal = ({ isOpen, onClose, taskId, fieldId }) => {
+const ReviewModal = ({ isOpen, onClose, taskId }) => {
+    // 환경 변수에서 API URL 가져오기
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const navigate = useNavigate();
     const dispatch = useDispatch(); // dispatch 초기화
     const [feedback, setFeedback] = useState('');
@@ -17,7 +19,12 @@ const ReviewModal = ({ isOpen, onClose, taskId, fieldId }) => {
 
     const handleApplyClick = async () => {
         try {
-            const response = await dispatch(submitForReview({ taskId, fieldId, comment: feedback }));
+            // 승인 API 호출
+            const response = await axios.patch('http://localhost:3000/labeltask/approve', {
+                taskId: taskId, // 필요한 데이터
+                comment: feedback // textarea의 내용
+            });
+            // const response = await dispatch(submitForReview({ taskId, fieldId, comment: feedback }));
 
             if (response.meta.requestStatus === 'fulfilled') {
                 alert('승인되었습니다.');

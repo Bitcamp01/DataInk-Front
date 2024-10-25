@@ -8,11 +8,9 @@ import CustomizedDataGrid from '../components/adminProjectStructure/CustomizedDa
 import axios from "axios";
 import { wait } from '@testing-library/user-event/dist/utils';
 
-
-
-
-
 export default function MainGrid() {
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const [originalFolderData, setOriginalFolderData] = React.useState([]);//실제 백엔드에서 받는 데이터
   const [folderData, setFolderData] = React.useState([]); //트리뷰에서 사용할 전체 폴더 구조 데이터
@@ -20,7 +18,9 @@ export default function MainGrid() {
 
   const [selectedProject, setSelectedProject] = React.useState(null); // 어떤 프로젝트를 선택하는지
   const [selectedFolder, setSelectedFolder] = React.useState(null); // 현재 선택된 폴더, 트리뷰와 데이터 그리드의 선택 된 폴더 동기화에 이용,선택한 폴더,파일의 id를 가지고 있음
-
+  React.useEffect(()=>{
+    console.log("change flatfolderData",flatFolderData)
+  },[flatFolderData])
 // 트리 데이터를 Flat 데이터로 변환하는 함수
    function flattenTree(treeData, parentId = null,projectId=null) {
     let flatData = [];
@@ -35,7 +35,7 @@ export default function MainGrid() {
         lastModifiedUserId: item.lastModifiedUserId, // 추가된 필드
         lastModifiedDate: item.lastModifiedDate,
         finished: item.finished, // 추가된 필드
-        workStatus: item.workStatus,
+
         projectId:projectId === null ? item.projectId : projectId
       });
       if (item.children && item.children.length > 0) {
@@ -77,14 +77,16 @@ export default function MainGrid() {
   //초기화면 구성시 서버로부터 프로젝트 구조 가져오기, 백엔드 구현시 요청하는 코드로 변경 필요
   const getInitFolderData= async () =>{
     try {
-      const response=await axios.get("http://localhost:9090/projects/all",{
+      const response=await axios.get(`${API_BASE_URL}/projects/all`,{
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
       })
       if (response.status === 200){
-
-
+        setFlatFolderData([])
+        setFolderData([])
+        setOriginalFolderData([])
+        console.log("백엔드 초기 데이터",response.data)
         response.data.forEach(item => {
           const newFolder={
             id:item.projectId,
@@ -96,9 +98,9 @@ export default function MainGrid() {
             isFolder:true,
             parentId:null,
             finished:false,
-            workStatus:"",
             projectId:item.projectId
           }
+          console.log("백엔드 초기 프로젝트 폴더",newFolder)
           setOriginalFolderData(prevData => [...prevData, newFolder]);
         })
 
@@ -108,55 +110,10 @@ export default function MainGrid() {
 
     }
   }
-  const updateFlatFolderData = (newData) => {
- 
-    if (!Array.isArray(newData)) {
-      console.error("newData is not an array", newData);
-      return; // 배열이 아닐 경우 적절한 처리를 수행합니다.
-    }
-  
-    setFlatFolderData((prevFlatData) => {
-      const updatedFlatData = prevFlatData.map((item) => {
-        // 새로운 데이터에서 id가 일치하는 항목 찾기
-        const newItem = newData.find((newItem) => newItem.id === item.id);
-  
-        // 새로운 데이터가 있는 경우에만 업데이트, 그렇지 않으면 기존 데이터 유지
-        if (newItem) {
-          return {
-            ...item, // 기존 데이터를 유지
-            label: newItem.label, // 덮어쓸 필드
-            isFolder: newItem.isFolder,
-            itemId: newItem.itemId,
-            lastModifiedUserId: newItem.lastModifiedUserId,
-            lastModifiedDate: newItem.lastModifiedDate,
-            finished: newItem.finished,
-            workStatus: newItem.workStatus,
-            // parentId와 projectId는 기존 값을 유지
-          };
-        }
-        return item; // 새로운 데이터가 없으면 기존 데이터 그대로 유지
-      });
-  
-      // 기존 데이터에 없는 새 항목을 추가
-      newData.forEach((newItem) => {
-        if (!prevFlatData.some((item) => item.id === newItem.id)) {
-          updatedFlatData.push(newItem); // 새 항목 추가
-        }
-      });
-  
-      return updatedFlatData; // 배열 형태로 반환
-    });
-  
-  };
-  
-  
-
-
-
 
   const getSelectedFolderData = async () => {
     try {
-      const response = await axios.get(`http://localhost:9090/projects/folder`, {
+      const response = await axios.get(`${API_BASE_URL}/projects/folder`, {
         params:{
           selectedFolder: selectedFolder,
           selectedProject: selectedProject
@@ -167,9 +124,25 @@ export default function MainGrid() {
         }
       });
       if (response.status === 200) {
-
-        // 서버로부터 받아온 데이터가 response.data.items라고 가정하고 업데이트합니다.
-        updateFlatFolderData(flattenTree(response.data,null,selectedProject));
+        console.log("response",response)
+        const idsToRemove = response.data.map((x) =>String(x.id));
+        const updatedFolderData = flatFolderData.filter(
+          (folder) => !idsToRemove.includes(String(folder.id))
+        );
+        console.log("updateFolderData",updatedFolderData)
+        setFlatFolderData(updatedFolderData);
+        const newFolders = response.data.map((x) => ({
+          id: x.id,
+          parentId: selectedFolder,
+          label: x.label,
+          isFolder: x.isFolder,
+          lastModifiedUserId: x.lastModifiedUserId,
+          lastModifiedDate: x.lastModifiedDate,
+          finished: x.finished,
+          projectId: selectedProject,
+        }));
+        setFlatFolderData((prevData) => [...prevData, ...newFolders]);
+      
       }
     } catch (err) {
       console.error("Error fetching selected folder data:", err);

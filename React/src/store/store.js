@@ -1,10 +1,15 @@
 import {configureStore, combineReducers} from '@reduxjs/toolkit';
+import thunk from 'redux-thunk';
 import userSlice from '../slices/userSlice';
 import noticeSlice from '../slices/noticeSlice';
 import memberSlice from '../slices/memberSlice';
 import labelTableSlice from '../slices/labelTableSlice';
 import mypageSlice from '../slices/mypageSlice';
 import labelTaskSlice from '../slices/labelTaskSlice';
+import calendarSlice from '../slices/calendarSlice';
+import eventSlice from '../slices/eventSlice';
+import categorySlice from '../slices/categorySlice';
+import memberModalSlice from '../slices/memberModalSlice';
 
 import {
     persistReducer,
@@ -23,8 +28,12 @@ const reducers = combineReducers({
     noticeSlice,
     memberSlice,
     labelTableSlice,
+    labelTaskSlice,
     mypageSlice,
-    labelTaskSlice
+    calendarSlice,
+    eventSlice,
+    categorySlice,
+    memberModalSlice,
 });
 
 const persistConfig = {

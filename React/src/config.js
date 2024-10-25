@@ -1,4 +1,4 @@
-const host = 'http://localhost:8000';
+const host = 'https://localhost:8000';
 
 export default {
     url_list: `${host}/filemanager/list`,

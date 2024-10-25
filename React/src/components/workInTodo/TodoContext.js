@@ -1,37 +1,19 @@
-import React, { useReducer, createContext, useContext, useRef } from 'react';
+import axios from 'axios';
+import React, { useReducer, createContext, useContext, useRef, useEffect } from 'react';
 
-const initialTodos = [
-  {
-    id: 1,
-    text: '프로젝트 생성하기',
-    done: true
-  },
-  {
-    id: 2,
-    text: '컴포넌트 스타일링하기',
-    done: true
-  },
-  {
-    id: 3,
-    text: 'Context 만들기',
-    done: false
-  },
-  {
-    id: 4,
-    text: '기능 구현하기',
-    done: false
-  }
-];
+const initialTodos = [];
 
 function todoReducer(state, action) {
   switch (action.type) {
-    case 'CREATE':
+    case 'SET_TODOS': // 서버에서 불러온 투두리스트 설정
+      return action.todos;
+    case 'CREATE': // 새로운 투두 생성
       return state.concat(action.todo);
-    case 'TOGGLE':
+    case 'TOGGLE': // 투두 완료 상태 토글
       return state.map(todo =>
         todo.id === action.id ? { ...todo, done: !todo.done } : todo
       );
-    case 'REMOVE':
+    case 'REMOVE': // 투두 삭제
       return state.filter(todo => todo.id !== action.id);
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
@@ -45,6 +27,36 @@ const TodoNextIdContext = createContext();
 export function TodoProvider({ children }) {
   const [state, dispatch] = useReducer(todoReducer, initialTodos);
   const nextId = useRef(5);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const token = sessionStorage.getItem('ACCESS_TOKEN');
+      try {
+        const response = await axios.get('http://localhost:9090/TodoList/todoContent', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        });
+        const todos = response.data.map(item => ({
+          id: item.id,
+          text: item.todoContent,
+          done: item.done,
+          createDate: item.create,
+        }));
+
+        console.log(todos);
+
+        dispatch({
+          type: 'SET_TODOS',
+          todos: todos 
+        });
+      } catch (error) {
+        console.error('TodoList를 불러오는 중 에러가 발생했습니다: ', error);
+      }
+    };
+
+    fetchTodos();
+  }, [dispatch]);
 
   return (
     <TodoStateContext.Provider value={state}>
