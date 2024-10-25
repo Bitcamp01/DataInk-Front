@@ -278,7 +278,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
                   variant="outlined"
               />
               <TextField
-                  autoFocus
+                
                   margin="dense"
                   label="프로젝트 설명"
                   multiline
