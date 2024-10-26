@@ -57,7 +57,6 @@ const userSlice = createSlice({
             })
             // Logout
             .addCase(logout.fulfilled, (state) => {
-                alert("로그아웃 완료.");
                 sessionStorage.removeItem("ACCESS_TOKEN");
                 return {
                     ...state,
