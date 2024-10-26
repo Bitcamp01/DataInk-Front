@@ -25,6 +25,7 @@ import {
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'; // Remove 아이콘 import
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from "axios"; // InfiniteScroll 컴포넌트 import
+import { update } from '@react-spring/web';
 
 // 환경 변수에서 API URL 가져오기
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -200,7 +201,20 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
     setRowSelectionModel([]); // 선택된 행 초기화
     setContextMenu(null); // 컨텍스트 메뉴 닫기
 };
-  
+function convertFileUploadResponseToFileFormat(folderData) {
+  return {
+    id: folderData.id,  // ID 그대로 사용
+    label: folderData.label,  // 파일명 그대로 사용
+    itemId: folderData.itemIds ? folderData.itemIds[0] : null,  // itemIds의 첫 번째 항목 또는 기본값 설정
+    parentId: selectedFolder,  // 현재 선택된 폴더 ID로 설정
+    projectId: selectedProject,  // 현재 선택된 프로젝트 ID로 설정
+    lastModifiedUserId: String(folderData.lastModifiedUserId),  // lastModifiedUserId는 문자열로 변환
+    lastModifiedDate: folderData.lastModifiedDate,  // 마지막 수정 날짜 그대로 사용
+    finished: folderData.finished,  // finished 그대로 사용
+    children: [],  // children은 빈 배열로 초기화
+    isFolder: folderData.isFolder  // 폴더 여부 그대로 사용
+  };
+}
 // 파일 선택시 호출되는 핸들러
 const handleFileUpload = async (event) => {
   const selectedFiles = Array.from(event.target.files); // 선택된 파일 배열로 변환
@@ -220,6 +234,11 @@ const handleFileUpload = async (event) => {
         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
       }
     });
+    const newFiles = response.data.map((fileData) => 
+      convertFileUploadResponseToFileFormat(fileData)
+    );
+    
+    setFlatFolderData((prevFlatData) => [...prevFlatData, ...newFiles]);
   }
   catch (e){
 
@@ -227,8 +246,7 @@ const handleFileUpload = async (event) => {
 
   // 체크박스 선택 상태 초기화 (첫 번째 파일 선택)
   setRowSelectionModel([]);
-  //파일 추가
-  setFlatFolderData((prevFlatData) => [...prevFlatData]);
+  
   // 컨텍스트 메뉴 닫기
   handleClose();
 };
@@ -281,7 +299,23 @@ const handleCopy = () => {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
       })
-      
+
+      if (response.status === 200) {
+        setFlatFolderData((prevFlatData) =>
+          prevFlatData.map((item) => {
+            // 자르기 한 로우의 id가 존재할 경우에만 처리
+            const shouldUpdate = cutRows.some((row) => {
+              if (row) {  // row와 row.id가 정의되어 있는지 확인
+                const cutId = row.split("_")[0];  // 자르기 항목의 ID 부분 추출
+                return item.id == cutId;
+              }
+              return false;
+            });
+            // 해당 item의 parentId를 selectedFolder로 변경
+            return shouldUpdate ? { ...item, parentId: selectedFolder } : item;
+          })
+        );
+      }
       setCutRows([]); // 잘라내기 상태 초기화
       handleClose(); // 메뉴 닫기
     } else if (copyRows.length > 0) {
@@ -295,7 +329,10 @@ const handleCopy = () => {
           'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
         }
       })
-      
+      if (response.status === 200) {
+        const newCopiedData = response.data.map((item) => convertFileUploadResponseToFileFormat(item));
+      setFlatFolderData((prevFlatData) => [...prevFlatData, ...newCopiedData]);
+      }
 
       setCopyRows([]); // 복사 상태 초기화
       handleClose(); // 메뉴 닫기
@@ -490,6 +527,7 @@ const handleCopy = () => {
   const handleReloading = () =>{
     getInitFolderData();
   }
+
   // 커스텀 툴바 컴포넌트 정의
   const CustomToolbar = () => {
     const selectedFolderDepth = selectedFolder !== null ? calculateFolderDepth(selectedFolder, flatFolderData) : -1;
@@ -509,7 +547,7 @@ const handleCopy = () => {
         <Button variant="contained" component="label" disabled={selectedFolder === null} sx={{ m: 1 }} onClick={handleCreateNewFolder}>
           새 폴더
         </Button>
-        <Button variant="contained" component="label" sx={{ m: 1 }} onClick={handlePaste} disabled={cutRows < 1 && copyRows < 1}>
+        <Button variant="contained" component="label" sx={{ m: 1 }} onClick={handlePaste} disabled={cutRows < 1 && copyRows < 1 || selectedFolderDepth < 1}>
           붙여넣기
         </Button>
         <Button 
@@ -530,6 +568,7 @@ const handleCopy = () => {
         <Button variant="contained" onClick={handleReloading}>
           다시 로딩
         </Button>
+
       </GridToolbarContainer>
     );
   };

@@ -49,8 +49,9 @@ export default function DataGridDemo() {
 
   const handleRowClick = (params) => {
     const { id } = params.row;  // taskId 대신 id 사용
-    navigate(`/label/detail`);
-    // navigate(`/label/detail/${id}`); // taskId 같이 보내기 가능, 근데 전역 state로 하는 게 낫지 않나?
+    // navigate(`/label/detail`);
+    // navigate(`/review/${id}`); // status가 submitted면 Review 컴포넌트로 이동
+    navigate(`/label/data/${id}`); // taskId 같이 보내기 가능, 근데 전역 state로 하는 게 낫지 않나?
   };
 
   const handleCellClick = (params, event) => {

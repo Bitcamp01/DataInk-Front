@@ -23,8 +23,10 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   const dispatch = useDispatch();
 
   // 상태 정의 (useState)
-  const [selectedAllMembers, setSelectedAllMembers] = useState([]); // 선택된 모든 멤버
-  const [projectMembers, setProjectMembers] = useState([]); // 프로젝트에 참여한 멤버
+  const [selectedLeftMembers, setSelectedLeftMembers] = useState([]); // 왼쪽에서 선택한 멤버
+  const [selectedRightMembers, setSelectedRightMembers] = useState([]); // 오른쪽에서 선택한 멤버
+  const [projectMembers, setProjectMembers] = useState([]); // 오른쪽 그리드에 있는 멤버
+  const [tempProjectMembers, setTempProjectMembers] = useState([]); // 임시 저장용 오른쪽 그리드 멤버
   const [usersData, setUsersData] = useState([]);
   const modalData = useSelector((state) => state.memberModalSlice.modalDatas); // Redux 상태 가져오기
   const [page, setPage] = useState(0); // 페이지 추적
@@ -39,8 +41,9 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     if (open) {
       setPage(0);  // 페이지 초기화
       dispatch(fetchModalData(0));  // 첫 페이지 데이터 불러오기
+      setTempProjectMembers([...projectMembers]); // 현재 상태를 임시 상태에 복사
     }
-  }, [open]);
+  }, [open, projectMembers]);
 
   // Redux의 modalData가 변경될 때마다 usersData 업데이트
   useEffect(() => {
@@ -99,29 +102,56 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     }
   }, [open]);
 
-
-  //선택된 멤버를 프로젝트 참여 멤버로 추가 
+  
+  
+  
+  // Dialog 컴포넌트
+  <Dialog open={open} onClose={handleClose}>
+    {/* 나머지 내용 */}
+  </Dialog>
+  // 멤버를 임시 상태에서 오른쪽 그리드로 추가
   const handleAddMembers = () => {
-    const newMembers = usersData.filter((member) => 
-    selectedAllMembers.includes(member.id));
-
-
+    console.log('selectedLeftMembers 상태 업데이트:', selectedLeftMembers);
+    const newMembers = usersData.filter((member) => selectedLeftMembers.includes(member.id));
+  
     const filteredNewMembers = newMembers.filter(
-      (newMember) => !projectMembers.some((projectMember) => projectMember.id ===newMember.id)
+      (newMember) => !tempProjectMembers.some((projectMember) => projectMember.id === newMember.id)
     );
 
-    setProjectMembers((prev) => [...prev,...filteredNewMembers]);//중복되지 않은 멤버들만 추가 
-    setSelectedAllMembers([]); //선택초기화 
-
+    console.log('Filtered New Members:', filteredNewMembers);
+  
+    setTempProjectMembers((prev) => [...prev, ...filteredNewMembers]); // 오른쪽 임시 그리드에 추가
+    setUsersData((prev) => prev.filter((member) => !selectedLeftMembers.includes(member.id))); // 왼쪽 그리드에서 제거
+    setSelectedLeftMembers([]); // 선택 초기화
+  };
+  
+  // 멤버를 임시 상태에서 왼쪽 그리드로 제거
+  const handleRemoveMembers = () => {
+    const remainingMembers = tempProjectMembers.filter(
+      (member) => !selectedRightMembers.includes(member.id)
+    );
+  
+    const removedMembers = tempProjectMembers.filter((member) =>
+      selectedRightMembers.includes(member.id)
+    );
+  
+    setUsersData((prev) => [...prev, ...removedMembers]); // 왼쪽 그리드에 추가
+    setTempProjectMembers(remainingMembers); // 오른쪽 임시 그리드에서 제거
+    setSelectedRightMembers([]); // 선택 초기화
   };
 
-  //선택된 멤버를 프로젝트에서 제거 
-  const handleRemoveMembers = () =>{
-    const remainingMembers = projectMembers.filter(
-      (member) => !selectedAllMembers.includes(member.id)
-    );
-    setProjectMembers(remainingMembers);
-    setSelectedAllMembers([]);
+  // 저장 버튼을 눌렀을 때, 임시 상태의 데이터를 백엔드와 동기화
+  const handleSaveChanges = async () => {
+    // 여기서 API 호출을 통해 추가/삭제 작업을 수행할 수 있습니다.
+    
+    // 예시:
+    // for (let member of tempProjectMembers) {
+    //   await addMember(member);
+    // }
+
+    // 현재 임시 상태를 실제 상태로 업데이트
+    setProjectMembers([...tempProjectMembers]);
+    onClose(); // 모달 닫기
   };
 
 
@@ -150,7 +180,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
       </IconButton>
 
       <DialogContent sx={{ overflow: 'hidden' }}>
-        <Box sx={{ width: '100%', padding: '20px',}} >
+        <Box className="your-parent-class" sx={{ width: '100%', padding: '20px',}} >
           <Grid container spacing={2}>
             <Grid item xs={5}>
               <h2 style={{color:'#3e3e3e', marginTop:'30px'}}>전체 멤버</h2>
@@ -180,12 +210,14 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                   role: item.authen,
                 }))}
                 columns={columns}
-                checkboxSelection
+                checkboxSelection={true}
+                editMode='row'
+                disableSelectionOnClick={false}
                 sx={{
                   height:'100%',
                   fontFamily:'Pretendard',
                   color:'#3e3e3e',
-                  backgroundColor:'white',    
+                  backgroundColor:'white', 
                   '& .MuiDataGrid-columnHeaders': {//컬럼 헤더의 폰트 설정               
                     color: '#7C97FE',  
                     fontWeight: 'bold',  
@@ -200,10 +232,11 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 }} 
                 hideFooterPagination 
                 hideFooter
-                onSelectionModelChange={(newSelection) => {
-                  setSelectedAllMembers(newSelection);
+                onRowSelectionModelChange={(newSelection) => {
+                  console.log('선택된 멤버:', newSelection);
+                  setSelectedLeftMembers(newSelection);
                 }}
-                selectionModel={selectedAllMembers}
+                selectionModel={selectedLeftMembers}
               />
                 </Box>
               
@@ -214,7 +247,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
             <Stack spacing={2} direction="column" alignItems="center" sx={{ marginTop: '100px' }}>
                   {/* 오른쪽 세모버튼 */}          
                   <Button
-                    onClick={() => console.log('위쪽 화살표 클릭됨')}
+                    onClick={handleAddMembers}
                     sx={{
                       minWidth: 'auto',
                       padding: 0, // 패딩을 제거하여 이미지 크기만큼 버튼이 나타나게  
@@ -237,7 +270,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                     
                   {/* 왼쪽 세모 버튼 */}
                   <Button
-                    onClick={() => console.log('아래쪽 화살표 클릭됨')}
+                    onClick={handleRemoveMembers}
                     sx={{
                       padding: 0,
                       minWidth: 'auto',
@@ -298,7 +331,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
               >    
        
               <DataGrid
-                rows={projectMembers.map((item) => ({
+                rows={tempProjectMembers.map((item) => ({
                   id: item.id,
                   name: item.name,
                   department: item.userDetailDto.dep || '부서 정보 없음',
@@ -323,10 +356,11 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 }}
                 hideFooter
                 hideFooterPagination 
-                onSelectionModelChange={(newSelection) => {
-                  setSelectedAllMembers(newSelection);
+                onRowSelectionModelChange={(newSelection) => {
+                  console.log('선택된 멤버:', newSelection);
+                  setSelectedRightMembers(newSelection);
                 }}
-                selectionModel={selectedAllMembers}
+
               />
               </Box>
             </Grid>
@@ -339,7 +373,9 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
         sx={{ margin: '20px 35px 5px 70px', 
         width:'130px', fontFamily:'Pretendard', 
         color: 'white',backgroundColor: '#7C97FE',
-        '&:hover': { backgroundColor: '#5A7ECF' } }}>
+        '&:hover': { backgroundColor: '#5A7ECF' },
+         }}
+         onClick={handleSaveChanges}>
           저장
         </Button>
       </DialogActions>

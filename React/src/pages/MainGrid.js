@@ -35,7 +35,7 @@ export default function MainGrid() {
         lastModifiedUserId: item.lastModifiedUserId, // 추가된 필드
         lastModifiedDate: item.lastModifiedDate,
         finished: item.finished, // 추가된 필드
-        workStatus: item.workStatus,
+
         projectId:projectId === null ? item.projectId : projectId
       });
       if (item.children && item.children.length > 0) {
@@ -83,6 +83,10 @@ export default function MainGrid() {
         }
       })
       if (response.status === 200){
+        setFlatFolderData([])
+        setFolderData([])
+        setOriginalFolderData([])
+        console.log("백엔드 초기 데이터",response.data)
         response.data.forEach(item => {
           const newFolder={
             id:item.projectId,
@@ -96,6 +100,7 @@ export default function MainGrid() {
             finished:false,
             projectId:item.projectId
           }
+          console.log("백엔드 초기 프로젝트 폴더",newFolder)
           setOriginalFolderData(prevData => [...prevData, newFolder]);
         })
 
