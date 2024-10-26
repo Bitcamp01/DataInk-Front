@@ -128,6 +128,7 @@ export default function DataGridDemo() {
         <DataGrid
           rows={tableData}
           columns={columns}
+          getRowId={(row) => row.taskId || row.id} // taskId 또는 다른 고유 키로 행 ID 설정
           columnVisibilityModel={{
             id: false,  // taskId 컬럼 숨기기
           }}

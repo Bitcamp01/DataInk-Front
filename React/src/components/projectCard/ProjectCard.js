@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
 import '../../css/project-card.css';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setProjectId } from '../../slices/labelTableSlice';
 
 const ProjectCard = ({ projects }) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [isBookmarked, setIsBookmarked] = useState(false);
 
+    // 북마크 클릭 핸들러
     const handleBookmarkClick = () => {
         setIsBookmarked(!isBookmarked);
+    }
+
+    // 카드 클릭 핸들러
+    const handleCardClick = (projectId) => {
+        dispatch(setProjectId(projectId)); // projectId를 전역 상태로 저장
+        navigate(`/label/work`);
     }
   
     return (
         <div className="project-card__container">
             {projects.map((project, index) => (
-                <div className="project-card" key={index}>
+                <div className="project-card" key={index} onClick={() => handleCardClick(project.id)}>
                     <div className="project-card__header">
                         <span className='project-name'>{project.name}</span>
                         <div className="project-card__deadline">D-{project.deadline}</div>
