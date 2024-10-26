@@ -9,6 +9,7 @@ import calendarSlice from '../slices/calendarSlice';
 import eventSlice from '../slices/eventSlice';
 import searchSlice from '../slices/searchSlice';
 import memberModalSlice from '../slices/memberModalSlice';
+import userProjectsSlice from '../slices/userProjectsSlice';
 
 import {
     persistReducer,
@@ -33,6 +34,7 @@ const reducers = combineReducers({
     eventSlice,
     searchSlice,
     memberModalSlice,
+    userProjectsSlice,
 });
 
 const persistConfig = {
