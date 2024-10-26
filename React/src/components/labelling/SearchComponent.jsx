@@ -1,10 +1,10 @@
 import '../../css/labelling-search.css';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import CustomDropdown from './CustomDropdown';
 import { setSelectedCategory1,setSelectedCategory2, setSelectedCategory3, setSelectedWorkStatus, setCategory2Options, 
-  setCategory3Options, setSearchKeyword, fetchSearchResults } from '../../slices/searchSlice';
+  setCategory3Options, fetchSearchResults } from '../../slices/searchSlice';
 import { setTableData } from '../../slices/labelTableSlice';
 
 const mapCategoriesFromFolders = (folders) => {
@@ -34,6 +34,7 @@ const mapCategoriesFromFolders = (folders) => {
 };
 
 const SearchComponent = () => {
+  const [searchKeywordInput, setSearchKeywordInput] = useState([""]);
   const dispatch = useDispatch();
   
   const selectedCategory1 = useSelector((state) => state.searchSlice.selectedCategory1);
@@ -44,7 +45,6 @@ const SearchComponent = () => {
   const category3Options = useSelector((state) => state.searchSlice.category3Options);
   const folderItems = useSelector((state) => state.labelTableSlice.items); 
   const categories = mapCategoriesFromFolders(folderItems);
-  const searchKeyword = useSelector((state) => state.searchSlice.searchKeyword);
 
   const category1Options = Array.from(new Set(categories.map(c => c.category1))).map(cat => ({
     label: cat,
@@ -84,7 +84,7 @@ const SearchComponent = () => {
       category2: selectedCategory2,
       category3: selectedCategory3,
       workStatus: selectedWorkStatus,
-      searchKeyword: searchKeyword,
+      searchKeyword: searchKeywordInput,
       folderItems: folderItems
     };
   
@@ -176,8 +176,8 @@ const SearchComponent = () => {
           <input 
             type="text" 
             className="search__input-field" 
-            value={searchKeyword} 
-            onChange={(e) => dispatch(setSearchKeyword(e.target.value))} 
+            value={searchKeywordInput} 
+            onChange={(e) => setSearchKeywordInput(e.target.value)} 
             placeholder="검색어 입력" 
           />
         </div>
