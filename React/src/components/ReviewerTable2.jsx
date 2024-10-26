@@ -184,23 +184,23 @@ import { DataGridPro } from '@mui/x-data-grid-pro';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLabelTasks, fetchFieldValue, updateFieldValue } from '../apis/labelTaskApis';
 
-<<<<<<< HEAD
+// <<<<<<< HEAD
 const ReviewerTable2 = ({ taskId }) => {
   const dispatch = useDispatch();
-=======
-const fetchData = async () => {
-  // 환경 변수에서 API URL 가져오기
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+// =======
+// const fetchData = async () => {
+//   // 환경 변수에서 API URL 가져오기
+//   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-  const response = await fetch(`${API_BASE_URL}/labeltask/data`);
-  if (!response.ok) {
-    throw new Error('네트워크 응답이 실패했습니다.');
-  }
-  return await response.json();
-};
+//   const response = await fetch(`${API_BASE_URL}/labeltask/data`);
+//   if (!response.ok) {
+//     throw new Error('네트워크 응답이 실패했습니다.');
+//   }
+//   return await response.json();
+// };
 
-const ReviewerTable2 = () => {
->>>>>>> 9e90b4a6992dc679ea99d4c82b009fcb0ecb2439
+// const ReviewerTable2 = () => {
+// >>>>>>> 9e90b4a6992dc679ea99d4c82b009fcb0ecb2439
   const [rowsArray, setRowsArray] = useState([]);
 
   // Redux store에서 상태 가져오기
