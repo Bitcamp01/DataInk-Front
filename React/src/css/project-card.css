@@ -95,7 +95,6 @@ html {
 .project-card__deadline {
     width: 64px;
     height: 26px;
-    background: #FD5B5B;
     border-radius: 15px;
     color: white;
     display: flex;

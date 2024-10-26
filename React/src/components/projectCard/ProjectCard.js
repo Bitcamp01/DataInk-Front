@@ -27,7 +27,12 @@ const ProjectCard = ({ projects }) => {
                 <div className="project-card" key={index} onClick={() => handleCardClick(project.id)}>
                     <div className="project-card__header">
                         <span className='project-name'>{project.name}</span>
-                        <div className="project-card__deadline">D-{project.deadline}</div>
+                        <div
+                            className="project-card__deadline"
+                            style={{ backgroundColor: project.deadline <= 30 ? '#FD5B5B' : '#7C97FE' }}
+                        >
+                            D-{project.deadline}
+                        </div>
                         <button className="project-card__bookmark" onClick={handleBookmarkClick}>
                             <img 
                                 src={isBookmarked ? '/icons/none_pin-icon.svg' : '/icons/pin-icon.svg'}

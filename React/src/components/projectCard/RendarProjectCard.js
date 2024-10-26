@@ -31,13 +31,18 @@ const RendarProjectCard = () => {
     dispatch(getUserProjects()); // JWT를 통해 사용자 정보가 자동으로 처리됨
   }, [dispatch]);
 
+  // 프로젝트 목록을 날짜 차이 순으로 정렬 (가까운 날짜가 위로 오도록)
+  const sortedProjects = projects
+    ? [...projects].sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
+    : [];
+
   return (
     <div style={{ 
         display: 'flex', 
         flexWrap: 'wrap', // 카드가 4개를 초과하면 다음 줄로 넘어가도록 설정
         maxHeight: '400px', // 스크롤 영역의 최대 높이 설정
       }}>
-      {projects.map((project) => {
+      {sortedProjects.map((project) => {
         // 필요한 데이터만 추출하여 ProjectCard에 전달
         const projectData = {
           id: project.projectId,
