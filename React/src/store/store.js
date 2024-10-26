@@ -1,5 +1,4 @@
 import {configureStore, combineReducers} from '@reduxjs/toolkit';
-import thunk from 'redux-thunk';
 import userSlice from '../slices/userSlice';
 import noticeSlice from '../slices/noticeSlice';
 import memberSlice from '../slices/memberSlice';
