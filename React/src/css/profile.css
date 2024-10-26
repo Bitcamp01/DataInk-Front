@@ -102,20 +102,22 @@ h3 {
 .profile-info__intro .profile-info__intro--name {
     color: #3e57b9;
     font-size: 26px;
-    margin-top: 10px;
+    margin-top: 3px;
+    margin-bottom: 2px;
     font-weight: bold;
 }
 
 .profile-info__intro .profile-info__intro--role {
     color: #6975bb;
     font-size: 16px;
-    margin-top: 5px;
+    margin-bottom: 4px;
+    margin-top: 0px;
 }
 
 .profile-info__intro .profile-info__intro--status {
     color: #666;
     font-size: 15px;
-    margin-top: 10px;
+    margin-top: 0;
 }
 
 /* 프로필 버튼들 스타일링 */
@@ -337,4 +339,13 @@ h3 {
 
 .postcode-search:hover {
     background-color: #535db1;
+}
+
+.css-1hr2sou-MuiTablePagination-root .MuiTablePagination-selectLabel {
+    display: block;
+    margin-bottom: 0px;
+}
+
+.css-11cfq65-MuiTablePagination-displayedRows{
+    margin-bottom: 0px;
 }

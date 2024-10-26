@@ -36,29 +36,55 @@ function TodoCreate({ open, setOpen }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (value.trim() === '') return;
-
-    const userId = sessionStorage.getItem('USER_ID'); // 사용자 ID를 가져옴
+  
+    const userId = sessionStorage.getItem('USER_ID');
     const newTodo = {
-      todoContent: value, // 할 일 내용
-      userId: userId, // 사용자 ID 추가
-      done: false, // 완료 여부
+      todoContent: value,
+      userId: userId,
+      done: false,
     };
-
+  
     try {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
-      // 서버에서 새로 생성된 투두의 ID를 받아옴
       const response = await axios.post('http://localhost:9090/TodoList/todoCreate', newTodo, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+  
       const createdTodo = {
         ...newTodo,
-        id: response.data.id, // 서버에서 반환된 ID 추가
+        id: response.data.id,
       };
-
-      dispatch({ type: 'CREATE', todo: createdTodo }); // 새로 생성된 투두 추가
-      setValue(''); // 입력값 초기화
-      setOpen(false); // 입력 폼 닫기
+  
+      dispatch({ type: 'CREATE', todo: createdTodo });
+  
+      // fetchTodos 함수를 직접 정의하여 호출
+      const fetchTodos = async () => {
+        try {
+          const response = await axios.get('http://localhost:9090/TodoList/todoContent', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const todos = response.data.map(item => ({
+            id: item.id,
+            text: item.todoContent,
+            done: item.done,
+            createDate: item.create,
+          }));
+  
+          dispatch({
+            type: 'SET_TODOS',
+            todos: todos,
+          });
+        } catch (error) {
+          console.error('TodoList를 불러오는 중 에러가 발생했습니다: ', error);
+        }
+      };
+  
+      await fetchTodos(); // 직접 정의한 fetchTodos 호출
+  
+      setValue('');
+      setOpen(false);
     } catch (error) {
       console.error('Todo를 생성하는 중 에러가 발생했습니다:', error);
     }

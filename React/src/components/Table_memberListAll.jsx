@@ -34,20 +34,22 @@ const columns = [
 
 
 const Table_memberListAll = () => {
-  const memberListAll= useSelector(state => state.memberSlice.usersData);
-  const page = useSelector(state => state.memberSlice.page);
-  const totalPageCount = useSelector(state => state.memberSlice.totalPages);
+  const memberListAll = useSelector(state => state.memberSlice.usersData);
+  const page = useSelector(state => state.memberSlice.page); // 현재 페이지
+  const totalPageCount = useSelector(state => state.memberSlice.totalPages); // 총 페이지 수
+  
   
 
-  const navi = useNavigate();
   const dispatch = useDispatch();
 
-  const changePage = React.useCallback((e, v) => {
+  const changePage = useCallback((e, v) => {
+    const newPage = parseInt(v) ; // 페이지 번호를 0 기반으로 변경
     dispatch(fetchTabData({
       tab: 'users',
-      page:parseInt(v) -1
+      page: newPage // 0 기반 페이지 전송
     }));
-  },[dispatch]);
+  }, [dispatch]);
+
 
  
   return (
@@ -125,7 +127,7 @@ const Table_memberListAll = () => {
         <Stack spacing={2} sx={{ marginBottom: '80px' }}>
           <Pagination 
             count={totalPageCount} 
-            page={page + 1} 
+            page={page} 
             onChange={changePage} 
             sx={{
               display: 'flex',
@@ -150,12 +152,8 @@ const Table_memberListAll = () => {
         </Stack>
       </div>
 
-
-
-    
     </div>
 
-    
 
     );
 }
