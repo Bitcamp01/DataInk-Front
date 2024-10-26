@@ -610,8 +610,9 @@ const Join = () => {
                                 required
                             >
                                 <option value="">회원 권한을 선택해주세요</option>
-                                <option value="ROLE_ADMIN">관리자</option>
                                 <option value="ROLE_USER">라벨러</option>
+                                <option value="ROLE_MANAGER">검수자</option>
+                                <option value="ROLE_ADMIN">관리자</option>
                             </select>
                             {isAuthenValidField && (
                                 <img
