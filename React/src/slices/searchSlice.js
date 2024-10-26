@@ -19,7 +19,6 @@ const searchSlice = createSlice({
     selectedCategory2: '',
     selectedCategory3: '',
     selectedWorkStatus: '',
-    searchKeyword: '',
     category2Options: [],
     category3Options: [],
     searchResults: [],
@@ -50,9 +49,6 @@ const searchSlice = createSlice({
     },
     setSelectedWorkStatus(state, action) {
       state.selectedWorkStatus = action.payload;
-    },
-    setSearchKeyword(state, action) {
-      state.searchKeyword = action.payload;
     },
   },
   extraReducers: (builder) => {
