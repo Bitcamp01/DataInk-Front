@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/header.css';
+import { useDispatch } from 'react-redux';
+import { logout } from '../apis/userApis';
 
 function Header({ title }) {
     const [showNotifications, setShowNotifications] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false); // 프로필 메뉴 토글 상태
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const toggleNotifications = () => {
         setShowNotifications(!showNotifications);
@@ -50,6 +53,9 @@ function Header({ title }) {
             navigate('/mypage'); // 마이페이지로 이동
         } else if (option === 'mytasks') {
             navigate('/mypage?section=Calendar'); // 내 작업으로 이동 (쿼리 파라미터로 구분)
+        } else if (option === 'logout') {
+            dispatch(logout());
+            navigate('/login');
         }
     };
 
@@ -106,6 +112,7 @@ function Header({ title }) {
                             <div className="profile-dropdown__content">
                                 <div onClick={() => handleProfileSelect('mypage')} className="profile-dropdown__item">마이페이지</div>
                                 <div onClick={() => handleProfileSelect('mytasks')} className="profile-dropdown__item">내 일정</div>
+                                <div onClick={() => handleProfileSelect('logout')} className="profile-dropdown__item">로그아웃</div>
                             </div>
                         </div>
                     )}
