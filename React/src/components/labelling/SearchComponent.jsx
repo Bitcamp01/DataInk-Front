@@ -85,6 +85,7 @@ const SearchComponent = () => {
       category3: selectedCategory3,
       workStatus: selectedWorkStatus,
       searchKeyword: searchKeyword,
+      folderItems: folderItems
     };
   
     try {
