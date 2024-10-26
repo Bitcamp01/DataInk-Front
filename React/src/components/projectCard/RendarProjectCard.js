@@ -17,7 +17,7 @@ const calculateDaysDifference = (endDateString) => {
   const currentDate = new Date();
   const endDate = new Date(endDateString);
   const timeDifference = endDate - currentDate;
-  const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // 밀리초를 일 수로 변환
+  const daysDifference = Math.ceil((timeDifference / (1000 * 60 * 60 * 24)) - 1); // 밀리초를 일 수로 변환
 
   return daysDifference;
 };
