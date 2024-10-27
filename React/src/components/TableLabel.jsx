@@ -50,16 +50,8 @@ export default function DataGridDemo() {
   );
 
   React.useEffect(() => {
-    console.log("currentPage:", currentPage);
-    console.log("rowsPerPage:", rowsPerPage);
-    console.log("tableData:", tableData);
-    console.log("paginatedData:", paginatedData);
-  }, [tableData, currentPage, rowsPerPage, paginatedData]);
-
-  React.useEffect(() => {
     // 첫 렌더링 시 테이블 데이터 초기화
     dispatch(clearTableData());
-    console.log("첫 렌더링 시 테이블 데이터 초기화");
   }, [dispatch]);
 
   const totalPages = !rowsPerPage || rowsPerPage === 0 ? 1 : Math.ceil((tableData.length || 0) / rowsPerPage);
@@ -98,7 +90,6 @@ export default function DataGridDemo() {
   const handleSelectionChange = (newSelectionModel) => {
     setRowSelectionModel(newSelectionModel);  // 선택한 id 바로 저장
     setSelectedTaskIds(newSelectionModel);  // 바로 taskIds로 사용 가능
-    console.log('선택한 ids:', newSelectionModel);
   };
 
   const handleSubmitForReview = () => {
@@ -123,7 +114,6 @@ export default function DataGridDemo() {
   };
 
   const submitTaskForReview = () => {
-    console.log('선택한 taskIds: ', selectedTaskIds);
     dispatch(submitForReview(selectedTaskIds))
       .unwrap()
       .then(() => {

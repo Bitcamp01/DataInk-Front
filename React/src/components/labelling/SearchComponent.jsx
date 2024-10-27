@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import CustomDropdown from './CustomDropdown';
 import { setSelectedCategory1,setSelectedCategory2, setSelectedCategory3, setSelectedWorkStatus, setCategory2Options, 
-  setCategory3Options, fetchSearchResults } from '../../slices/searchSlice';
+  setCategory3Options } from '../../slices/searchSlice';
 import { resetPage, setTableData } from '../../slices/labelTableSlice';
+import { fetchSearchResults } from '../../apis/searchApis';
 
 const mapCategoriesFromFolders = (folders) => {
   const categories = [];
@@ -34,7 +35,7 @@ const mapCategoriesFromFolders = (folders) => {
 };
 
 const SearchComponent = () => {
-  const [searchKeywordInput, setSearchKeywordInput] = useState([""]);
+  const [searchKeywordInput, setSearchKeywordInput] = useState("");
   const dispatch = useDispatch();
   
   const selectedCategory1 = useSelector((state) => state.searchSlice.selectedCategory1);
@@ -48,6 +49,7 @@ const SearchComponent = () => {
 
   useEffect(() => {
     dispatch(setSelectedCategory1(""));
+    dispatch(setSelectedWorkStatus(""));
   }, []);
 
   const category1Options = Array.from(new Set(categories.map(c => c.category1))).map(cat => ({
@@ -92,11 +94,34 @@ const SearchComponent = () => {
       searchKeyword: searchKeywordInput,
       folderItems: folderItems
     };
+
+    // 설정된 검색 기준 콘솔에 출력
+    console.log("Search Criteria:", criteria);
   
     try {
       // 검색 결과 가져오기
       const resultAction = await dispatch(fetchSearchResults(criteria));
       const searchResults = resultAction.payload;
+
+      // 상태 값을 한글로 변환하는 함수
+      const getKoreanWorkStatus = (status) => {
+        switch (status) {
+          case 'in_progress':
+            return '작업 중';
+          case 'submitted':
+            return '제출됨';
+          case 'pending':
+            return '검토 대기중';
+          case 'reviewed':
+            return '검토 완료됨';
+          case 'approved':
+            return '최종 승인됨';
+          case 'rejected':
+            return '반려됨';
+          default:
+            return '알 수 없음';
+        }
+      };
   
       if (searchResults.length === 0) {
         alert("검색 결과가 없습니다.");
@@ -109,7 +134,7 @@ const SearchComponent = () => {
             category1: criteria.category1 || "", // 선택된 대분류 카테고리
             category2: criteria.category2 || "", // 선택된 중분류 카테고리
             category3: criteria.category3 || "", // 선택된 소분류 카테고리
-            workstatus: task.status, // 작업 상태
+            workstatus: getKoreanWorkStatus(task.status), // 작업 상태
             deadline: "마감일 없음", // 마감일 설정
           };
         });

@@ -1,16 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { searchTasks } from '../apis/searchApis';
-
-export const fetchSearchResults = createAsyncThunk(
-  'search/fetchSearchResults',
-  async (criteria, { rejectWithValue }) => {
-    try {
-      return await searchTasks(criteria);
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchSearchResults } from '../apis/searchApis';
 
 const searchSlice = createSlice({
   name: 'search',

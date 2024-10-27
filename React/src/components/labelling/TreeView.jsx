@@ -84,6 +84,26 @@ const handleFolderClick = async (folderId, parentLabels = []) => {
     const projectEndDateAction = await dispatch(fetchProjectEndDate(projectId));
     const projectEndDate = projectEndDateAction.payload;
 
+    // 상태 값을 한글로 변환하는 함수
+    const getKoreanWorkStatus = (status) => {
+      switch (status) {
+        case 'in_progress':
+          return '작업 중';
+        case 'submitted':
+          return '제출됨';
+        case 'pending':
+          return '검토 대기중';
+        case 'reviewed':
+          return '검토 완료됨';
+        case 'approved':
+          return '최종 승인됨';
+        case 'rejected':
+          return '반려됨';
+        default:
+          return '알 수 없음';
+      }
+    };
+
     // 파일(Task) 데이터를 대분류, 중분류, 소분류에 맞춰 매핑
     const folderFiles = tasks.map((task, index) => {
       // updatedParentLabels의 길이에 따른 카테고리 설정
@@ -113,7 +133,7 @@ const handleFolderClick = async (folderId, parentLabels = []) => {
         category1,  // 대분류
         category2,  // 중분류
         category3,  // 소분류
-        workstatus: task.status,  // 작업 상태
+        workstatus: getKoreanWorkStatus(task.status),  // 작업 상태
         deadline: projectEndDate || '마감일 없음',  // 프로젝트 마감일
       };
     });
