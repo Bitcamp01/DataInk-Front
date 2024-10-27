@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import '../../css/profile.css';
 import PasswordChangeModal from './PasswordChangeModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateMypageInfo } from '../../apis/mypageApis';
+import { updateMypageInfo  } from '../../apis/mypageApis';
 
-const Profile = () => {
+const Profile = ({userDetails}) => {
+    console.log("Profile component received userDetails:", userDetails);
     const dispatch = useDispatch();
 
     // Redux에서 사용자 데이터 가져오기
@@ -14,13 +15,24 @@ const Profile = () => {
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     
     // 주소 관련 상태 관리
-    const [nickname, setNickname] = useState('');
-    const [dep, setDep] = useState('');
+    const [nickname, setNickname] = useState(userDetails?.nickname || '');
+    const [dep, setDep] = useState(userDetails?.dep || '');
+    const [address, setAddress] = useState(userDetails?.addr || '');
     const [postcode, setPostcode] = useState('');
-    const [address, setAddress] = useState('');
     const [detailAddress, setDetailAddress] = useState('');
     const [extraAddress, setExtraAddress] = useState('');
 
+    useEffect(() => {
+        if (userDetails?.addr) {
+            const addressParts = userDetails.addr.match(/([0-9]{5})\s(.+?\s\d+)\s(.+?)-(.+?)\s\((.+?)\)/);
+            if (addressParts) {
+                setPostcode(addressParts[1]);           // 우편번호
+                setAddress(addressParts[2]);        // 도로명 주소까지만
+                setDetailAddress(`${addressParts[3]}-${addressParts[4]}`); // 동호수만
+                setExtraAddress(addressParts[5]);       // 참고 항목
+            }
+        }
+    }, [userDetails]);
 
     // Daum 우편번호 API 스크립트 로드
     useEffect(() => {
@@ -104,6 +116,13 @@ const Profile = () => {
         }
     };
 
+    useEffect(() => {
+        // userDetails가 변경될 때마다 nickname, dep, address 값 설정
+        setNickname(userDetails?.nickname || '');
+        setDep(userDetails?.dep || '');
+        setAddress(userDetails?.addr || '');
+    }, [userDetails]);
+
     return (
         <div id="Profile" className="tab-content">
             <div className="profile-header-title">
@@ -141,7 +160,7 @@ const Profile = () => {
                         id="nickname" 
                         name="nickname" 
                         placeholder="닉네임 입력해주세요"
-                        value={nickname}s
+                        value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
                     />
                 </div>
