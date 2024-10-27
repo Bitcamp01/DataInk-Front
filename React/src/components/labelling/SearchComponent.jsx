@@ -113,7 +113,7 @@ const SearchComponent = () => {
           case 'pending':
             return '검토 대기중';
           case 'reviewed':
-            return '검토 완료됨';
+            return '검토 완료';
           case 'approved':
             return '최종 승인됨';
           case 'rejected':
