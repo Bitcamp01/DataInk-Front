@@ -46,20 +46,22 @@ const WorkInList = () => {
 
         const sortedItems = items.map(item => {
 
-          const endDate = moment(item.endDate);
+          const endDate = moment(item.projectDto.endDate);
           const today = moment().startOf('day');
           const diffDays = endDate.diff(today, 'days');
 
           return { 
             id: item.userId,  // userId를 id로 사용
-            name: item.name,     // 프로젝트 이름
-            endDate: item.endDate, // 종료일
+            name: item.projectDto.name,     // 프로젝트 이름
+            endDate: item.projectDto.endDate, // 종료일
             diffDays // 남은 날짜를 항목에 추가
           };
         })
         .filter(item => item.diffDays >= 0) // 오늘 이후나 오늘이 마감일인 항목만 필터링
         .sort((a, b) => a.diffDays - b.diffDays); // 남은 날짜 기준으로 오름차순 정렬
-
+        console.log('Before sorting:', sortedItems);
+        sortedItems.sort((a, b) => a.diffDays - b.diffDays);
+        console.log('After sorting:', sortedItems);
         setWorkItems(sortedItems);
       } catch (error) {
         console.error('Error fetching work items: ', error);
