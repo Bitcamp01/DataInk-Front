@@ -1,11 +1,11 @@
 import '../../css/labelling-search.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import CustomDropdown from './CustomDropdown';
 import { setSelectedCategory1,setSelectedCategory2, setSelectedCategory3, setSelectedWorkStatus, setCategory2Options, 
   setCategory3Options, fetchSearchResults } from '../../slices/searchSlice';
-import { setTableData } from '../../slices/labelTableSlice';
+import { resetPage, setTableData } from '../../slices/labelTableSlice';
 
 const mapCategoriesFromFolders = (folders) => {
   const categories = [];
@@ -46,6 +46,10 @@ const SearchComponent = () => {
   const folderItems = useSelector((state) => state.labelTableSlice.items); 
   const categories = mapCategoriesFromFolders(folderItems);
 
+  useEffect(() => {
+    dispatch(setSelectedCategory1(""));
+  }, []);
+
   const category1Options = Array.from(new Set(categories.map(c => c.category1))).map(cat => ({
     label: cat,
     value: cat,
@@ -79,6 +83,7 @@ const SearchComponent = () => {
   };
 
   const handleSearch = async () => {
+    dispatch(resetPage());
     const criteria = {
       category1: selectedCategory1,
       category2: selectedCategory2,
@@ -117,6 +122,11 @@ const SearchComponent = () => {
     }
   };
   
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   return (
     <div className="search">
@@ -177,7 +187,8 @@ const SearchComponent = () => {
             type="text" 
             className="search__input-field" 
             value={searchKeywordInput} 
-            onChange={(e) => setSearchKeywordInput(e.target.value)} 
+            onChange={(e) => setSearchKeywordInput(e.target.value)}
+            onKeyDown={handleKeyDown} // Enter 키 입력 이벤트 추가
             placeholder="검색어 입력" 
           />
         </div>

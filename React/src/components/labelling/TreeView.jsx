@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import '../../css/tree-view.css';
 import { fetchFolders, fetchProjectEndDate, fetchTasksByFolderId } from '../../apis/labelTableApis';
-import { setTableData } from '../../slices/labelTableSlice';
+import { clearFolders, resetPage, setTableData } from '../../slices/labelTableSlice';
 
 const TreeView = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,6 +23,7 @@ const TreeView = () => {
   // 프로젝트 ID가 있을 때 폴더 데이터를 가져오는 API 호출
   useEffect(() => {
     if (projectId) {
+      dispatch(clearFolders()); // 이전 폴더 데이터 초기화
       dispatch(fetchFolders(projectId)); // 프로젝트 ID로 폴더 데이터 불러옴
     }
   }, [dispatch, projectId]);
@@ -61,6 +62,7 @@ const findFolderById = (folders, folderId, parentLabels = []) => {
 
 // 폴더 클릭 시 처리 함수
 const handleFolderClick = async (folderId, parentLabels = []) => {
+  dispatch(resetPage());
   const { folder, parentLabels: updatedParentLabels } = findFolderById(folders, folderId, parentLabels);
 
   if (!folder || !folder.id) {
