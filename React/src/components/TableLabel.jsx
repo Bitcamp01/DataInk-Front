@@ -10,7 +10,7 @@ import CommonButton from '../components/CommonButton';
 import ConfirmModal from './labelling/ConfirmModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitForReview } from '../apis/labelTableApis';
-import { clearTableData } from '../slices/labelTableSlice';
+import { clearTableData, setCurrentPage, setTableData } from '../slices/labelTableSlice';
 import NoRows from './labelling/NoRows';
 
 const columns = [
@@ -40,12 +40,27 @@ export default function DataGridDemo() {
   const [isConfirmed, setIsConfirmed] = React.useState(false); // 확인 상태 관리
   const [selectedTaskIds, setSelectedTaskIds] = React.useState([]); // taskId를 관리하는 상태
 
+  const currentPage = useSelector((state) => state.labelTableSlice.currentPage);
   const tableData = useSelector((state) => state.labelTableSlice.tableData);
+  const rowsPerPage = 10;
+
+  const paginatedData = React.useMemo(
+    () => tableData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage),
+    [tableData, currentPage, rowsPerPage]
+  );
 
   React.useEffect(() => {
     // 첫 렌더링 시 테이블 데이터 초기화
     dispatch(clearTableData());
   }, [dispatch]);
+
+  const totalPages = !rowsPerPage || rowsPerPage === 0 ? 1 : Math.ceil((tableData.length || 0) / rowsPerPage);
+
+  const handlePageChange = (event, newPage) => {
+    if (newPage !== currentPage) {
+      dispatch(setCurrentPage(newPage)); // 페이지 전환 요청
+    }
+  };
 
   const handleRowClick = (params) => {
     const { id } = params.row;  // taskId 대신 id 사용
@@ -75,7 +90,6 @@ export default function DataGridDemo() {
   const handleSelectionChange = (newSelectionModel) => {
     setRowSelectionModel(newSelectionModel);  // 선택한 id 바로 저장
     setSelectedTaskIds(newSelectionModel);  // 바로 taskIds로 사용 가능
-    console.log('선택한 ids:', newSelectionModel);
   };
 
   const handleSubmitForReview = () => {
@@ -100,7 +114,6 @@ export default function DataGridDemo() {
   };
 
   const submitTaskForReview = () => {
-    console.log('선택한 taskIds: ', selectedTaskIds);
     dispatch(submitForReview(selectedTaskIds))
       .unwrap()
       .then(() => {
@@ -126,7 +139,7 @@ export default function DataGridDemo() {
         }}
       >
         <DataGrid
-          rows={tableData}
+          rows={paginatedData} // 페이지네이션된 데이터 사용
           columns={columns}
           getRowId={(row) => row.taskId || row.id} // taskId 또는 다른 고유 키로 행 ID 설정
           columnVisibilityModel={{
@@ -177,11 +190,16 @@ export default function DataGridDemo() {
         />
       </Box>
 
-      <div className="pagination-container">
-        <Stack spacing={2} sx={{ marginBottom: '20px' }}>
-          <Pagination count={10} color="primary" />
-        </Stack>
-      </div>
+    <div className="pagination-container">
+      <Stack spacing={2} sx={{ marginBottom: '20px' }}>
+        <Pagination 
+            count={totalPages} // NaN 방지 위해 기본값 추가
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary" 
+        />
+      </Stack>
+    </div>
       <ButtonContainer>
         <CommonButton onClick={handleSubmitForReview}>검수 요청</CommonButton>
         {isModalOpen && (
