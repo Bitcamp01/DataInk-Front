@@ -77,14 +77,13 @@ const BackgroundImgModal = ({ isOpen, currentImage, defaultImage, onClose }) => 
         setFileName("기본 이미지로 설정됨");
     };
 
-    // 파일이 변경되었을 때 미리보기 이미지 업데이트
+     // 파일 변경 시 미리보기 업데이트
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
             const previewUrl = URL.createObjectURL(file);
             setPreviewUrl(previewUrl);
-            setIsDefaultImage(false);
             setFileName(file.name);
         }
     };

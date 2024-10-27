@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { passwordChk, getAllProjects, fetchMypageInfo,updateMypageInfo,
+import { passwordChk, getAllProjects,updateMypageInfo,
     updateProfileImage, deleteProfileImage,
-    updateBackgroundImage, deleteBackgroundImage, fetchProfileIntro, updateProfileIntro } from '../apis/mypageApis';
+    updateBackgroundImage, deleteBackgroundImage, fetchProfileIntro, updateProfileIntro, fetchUserDetails } from '../apis/mypageApis';
 
 const mypageSlice = createSlice({
     name: 'mypage',
@@ -9,13 +9,17 @@ const mypageSlice = createSlice({
         profileImage: '/images/dataInk_profile_default.png',
         backgroundImage: '/images/dataInk_background_default.jpg',
         isProfileAuthenticated: false,
-        userDetails: null,
+        userDetails: {
+            dep: '',
+            nickname: '',
+            addr: '',
+        },
         projects: [],
         profileIntro: '소개 글을 입력해 주세요.'
     },
     reducers: {
-        resetProfileAuth: (state) => {
-            state.isProfileAuthenticated = false;
+        resetProfileAuth: (state, action) => {
+            state.isProfileAuthenticated = action.payload;  // 인증 상태 업데이트
         },
         setBackgroundImage: (state, action) => {
             state.backgroundImage = action.payload || '/images/dataInk_background_default.jpg';
@@ -37,22 +41,9 @@ const mypageSlice = createSlice({
                 alert('확인 중 에러가 발생했습니다.');
             }
         })
-        // .addCase(fetchMypageInfo.fulfilled, (state, action) => {
-        //     const userData = action.payload.user;
-        //     state.profileImage = userData?.profileImage || '/images/dataInk_profile_default.png';
-        //     state.backgroundImage = userData?.backgroundImage || '/images/dataInk_background_default.jpg';
-        // })
-        // .addCase(fetchMypageInfo.fulfilled, (state, action) => {
-        //     state.userDetails = {
-        //         ...state.userDetails,
-        //         dep: action.payload.dep,
-        //         nickname: action.payload.nickname,
-        //         addr: action.payload.addr
-        //     };
-        // })
-        // .addCase(fetchMypageInfo.rejected, (state, action) => {
-        //     state.error = action.payload || "정보를 가져오는데 실패했습니다.";
-        // })
+        .addCase(fetchUserDetails.fulfilled, (state, action) => {
+            state.userDetails = action.payload;  // 가져온 유저 정보를 상태에 저장
+        })
         .addCase(updateMypageInfo.fulfilled, (state, action) => {
             // 업데이트된 사용자 정보로 상태 업데이트
             state.userDetails = {
