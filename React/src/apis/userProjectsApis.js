@@ -8,12 +8,33 @@ export const getUserProjects = createAsyncThunk(
     'userProjects/getUserProjects',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/user-projects/user`, {
+            const response = await axios.get(`${API_BASE_URL}/user-projects/projects`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
             });
-            return response.data.items;
+            return response.data;
+        } catch (e) {
+            return thunkApi.rejectWithValue(e);
+        }
+    }
+);
+
+// 북마크 상태 업데이트하기
+export const updateBookmarkStatus = createAsyncThunk(
+    'userProjects/updateBookmarkStatus',
+    async ({ projectId, isBookmarked }, thunkApi) => {
+        try {
+            const response = await axios.put(
+                `${API_BASE_URL}/user-projects/bookmark/${projectId}`,
+                { isBookmarked }, // 요청 본문에 북마크 상태를 포함
+                {
+                    headers: {
+                        Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+                    }
+                }
+            );
+            return response.data.item;
         } catch (e) {
             return thunkApi.rejectWithValue(e);
         }

@@ -31,9 +31,16 @@ const RendarProjectCard = () => {
     dispatch(getUserProjects()); // JWT를 통해 사용자 정보가 자동으로 처리됨
   }, [dispatch]);
 
-  // 프로젝트 목록을 날짜 차이 순으로 정렬 (가까운 날짜가 위로 오도록)
+  // 프로젝트 목록을 정렬: 북마크된 것이 먼저, 날짜 차이 순서로 정렬 (가까운 날짜가 위로 오도록)
   const sortedProjects = projects
-    ? [...projects].sort((a, b) => new Date(a.endDate) - new Date(b.endDate))
+    ? [...projects].sort((a, b) => {
+        // 1. 북마크된 프로젝트를 우선 정렬
+        if (a.isBookmarked !== b.isBookmarked) {
+          return a.isBookmarked ? -1 : 1;
+        }
+        // 2. 날짜 차이로 정렬 (가까운 날짜 순)
+        return new Date(a.endDate) - new Date(b.endDate);
+      })
     : [];
 
   return (
@@ -49,6 +56,7 @@ const RendarProjectCard = () => {
           name: project.name,
           deadline: calculateDaysDifference(project.endDate), // 현재 날짜와 endDate 간의 일 수 차이 계산
           description: project.description,
+          isBookmarked: project.isBookmarked, // 북마크 상태 전달
           progress: 95,
           members: [
             { class: 'manager', role: '관리자', profileImg: '/images/manager-profile_img.png' },
