@@ -3,16 +3,19 @@ import '../../css/project-card.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setProjectId } from '../../slices/labelTableSlice';
+import { updateBookmarkStatus } from '../../apis/userProjectsApis';
 
 const ProjectCard = ({ projects }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [isBookmarked, setIsBookmarked] = useState(false);
-
     // 북마크 클릭 핸들러
-    const handleBookmarkClick = () => {
-        setIsBookmarked(!isBookmarked);
+    const handleBookmarkClick = (event, project) => {
+        event.stopPropagation(); // 클릭 이벤트가 카드로 전파되지 않도록 막음
+        dispatch(updateBookmarkStatus({
+            projectId: project.id,
+            isBookmarked: !project.isBookmarked
+        }));
     }
 
     // 카드 클릭 핸들러
@@ -33,10 +36,10 @@ const ProjectCard = ({ projects }) => {
                         >
                             D-{project.deadline}
                         </div>
-                        <button className="project-card__bookmark" onClick={handleBookmarkClick}>
+                        <button className="project-card__bookmark" onClick={(e) => handleBookmarkClick(e, project)}>
                             <img 
-                                src={isBookmarked ? '/icons/none_pin-icon.svg' : '/icons/pin-icon.svg'}
-                                alt={isBookmarked ? '즐겨찾기 됨' : '즐겨찾기'}
+                                src={project.isBookmarked ? '/icons/pin-icon.svg' : '/icons/none_pin-icon.svg'}
+                                alt={project.isBookmarked ? '즐겨찾기 됨' : '즐겨찾기 안됨'}
                             />
                         </button>
                     </div>
