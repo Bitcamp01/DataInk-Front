@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import RenderProfileCard from '../components/profileCard/RenderProfileCard'
 import Chart from '../components/Chart'
 import RenderWorkInTodo from '../components/workInTodo/RendarWorkInTodo'
@@ -8,9 +8,15 @@ import RendarProjectCard from '../components/projectCard/RendarProjectCard'
 import { useSelector } from 'react-redux'
 
 const Dashboard = () => {
-  const projectCount = useSelector((state) => state.userProjectsSlice.projectCount);
+  // const projectCount = useSelector((state) => state.userProjectsSlice.projectCount);
+  const projectCount = useSelector((state) => {
+    const projects = state.userProjectsSlice.projects || []; // 기본값을 빈 배열로 설정
+    const currentDate = new Date(); // 현재 날짜
+    return projects.filter(project => new Date(project.endDate) >= currentDate).length; // 종료일이 현재 날짜 이후인 프로젝트만 필터링
+  });
 
   useEffect(() => {
+    document.body.classList.add('dashboard');
     const handleWheel = (e) => {
       if (e.ctrlKey) {
         e.preventDefault();
@@ -21,6 +27,7 @@ const Dashboard = () => {
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
+      document.body.classList.remove('dashboard');
     };
   }, []);
 

@@ -15,8 +15,10 @@
     background-color: #F6F6F6;
     -ms-overflow-style: none;
   }
-  ::-webkit-scrollbar {
-    display: none;
+
+  /* 대시보드에서만 페이지 스크롤바 숨김 */
+  body.dashboard {
+    overflow: hidden;
   }
 
   
