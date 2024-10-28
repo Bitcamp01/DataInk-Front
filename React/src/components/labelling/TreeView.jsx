@@ -32,7 +32,7 @@ const TreeView = () => {
   // 폴더 데이터를 재귀적으로 변환하는 함수
   const transformFolderData = (folders) => {
     return folders
-      .filter(folder => folder.folder)  // folder가 true인 항목만 반환
+      .filter(folder => folder.isFolder)  // folder가 true인 항목만 반환
       .map(folder => ({
         id: folder.id,
         label: folder.label,
@@ -43,6 +43,8 @@ const TreeView = () => {
 
   // 폴더 데이터 변환
   const transformedItems = transformFolderData(folders);
+
+  console.log("transformedItems", transformedItems);
 
   // 폴더 ID로 폴더와 그 상위 폴더 경로를 찾기 위한 함수 수정
   const findFolderById = (folders, folderId, parentLabels = []) => {
@@ -69,7 +71,7 @@ const TreeView = () => {
       return;
     }
 
-    const hasSubFolder = folder.children && folder.children.some(child => child.folder === true);
+    const hasSubFolder = folder.children && folder.children.some(child => child.isFolder === true);
     if (hasSubFolder) {
       return;
     }
@@ -78,13 +80,13 @@ const TreeView = () => {
       const resultAction = await dispatch(fetchTasksByFolderId(folder.id));
       let tasks = resultAction.payload;
 
-      if (userAuthen === 'ROLE_USER') {
-        tasks = tasks.filter(task => task.status === 'in_progress' || task.status === 'rejected');
-      } else if (userAuthen === 'ROLE_MANAGER') {
-        tasks = tasks.filter(task => task.status === 'submitted' || task.status === 'pending');
-      } else if (userAuthen === 'ROLE_ADMIN') {
-        tasks = tasks.filter(task => task.status === 'reviewed');
-      }
+      // if (userAuthen === 'ROLE_USER') {
+      //   tasks = tasks.filter(task => task.status === 'in_progress' || task.status === 'rejected');
+      // } else if (userAuthen === 'ROLE_MANAGER') {
+      //   tasks = tasks.filter(task => task.status === 'submitted' || task.status === 'pending');
+      // } else if (userAuthen === 'ROLE_ADMIN') {
+      //   tasks = tasks.filter(task => task.status === 'reviewed');
+      // }
 
       const projectEndDateAction = await dispatch(fetchProjectEndDate(projectId));
       const projectEndDate = projectEndDateAction.payload;
