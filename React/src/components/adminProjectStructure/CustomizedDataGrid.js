@@ -4,8 +4,6 @@ import { DataGrid,GridRowEditStopReasons ,GridRowModes,apiRef,useGridApiRef,Grid
   GridToolbarFilterButton,
     } from '@mui/x-data-grid';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { editableInputTypes } from '@testing-library/user-event/dist/utils';
-import { ConeStriped } from 'react-bootstrap-icons';
 import ItemSettingsModal from "./ItemSettingsModal"
 import {
   Menu,
@@ -20,12 +18,13 @@ import {
   List,
   ListItem,
   IconButton,
-  ListItemText
+  ListItemText,
+  FormControlLabel, 
+  Switch
 } from '@mui/material'; // 누락된 컴포넌트들 import
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'; // Remove 아이콘 import
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from "axios"; // InfiniteScroll 컴포넌트 import
-import { update } from '@react-spring/web';
 import PdfModal from './PdfModal';
 
 // 환경 변수에서 API URL 가져오기
@@ -78,13 +77,17 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   ///////////////////////////////////////////////////////////////////////////////////
   const [conversionList, setConversionList] = useState([]); // 변환 목록
   const [isConversionModalOpen, setIsConversionModalOpen] = useState(false);
+  const [includeIncomplete, setIncludeIncomplete] = useState(false);
+  const [includeProjectStructure, setIncludeProjectStructure] = useState(false);
+
+  const handleToggleIncomplete = () => setIncludeIncomplete((prev) => !prev);
+  const handleToggleProjectStructure = () => setIncludeProjectStructure((prev) => !prev);
   const handleAddToConversion = () => {
     const selectedItems = rowSelectionModel.map(item=>item);
-
+    console.log("convertList",conversionList)
     const newItems = selectedItems.filter(
-      (item) => !conversionList.some((existingItem) => existingItem.id === item.id && existingItem.projectId === item.projectId)
+      (item) => !conversionList.includes(item)
     );
-  
     if (newItems.length > 0) {
       setConversionList((prevList) => [...prevList, ...newItems]);
     }
@@ -348,7 +351,7 @@ const handleCopy = () => {
         setIsModalOpen(true);
         setIsLoading(true);
         try {
-            const response = await axios.get(`http://localhost:9090/projects/pdf/${label}`, {
+            const response = await axios.get(`${API_BASE_URL}/projects/pdf/${label}`, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
@@ -677,15 +680,22 @@ const handleCopy = () => {
               ))}
             </List>
           </InfiniteScroll>
+                <FormControlLabel
+                    control={<Switch checked={includeProjectStructure} onChange={handleToggleProjectStructure} />}
+                    label="프로젝트 구조 포함"
+                />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseConversionModal}>닫기</Button>
           <Button variant="contained" onClick={async () => {
             // 변환 작업을 서버에 요청하는 로직 추가
             console.log('서버로 변환 요청:', conversionList);
-
+            const payload = {
+              conversionList,
+              includeProjectStructure
+            };
             try {
-                const response = await axios.post(`${API_BASE_URL}/projects/conversion`, conversionList, {
+                const response = await axios.post(`${API_BASE_URL}/projects/conversion`, payload, {
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                     }
@@ -697,7 +707,7 @@ const handleCopy = () => {
             handleCloseConversionModal();
             }}>
             변환 시작
-        </Button>
+          </Button>
         </DialogActions>
       </Dialog>
       <ItemSettingsModal

@@ -16,7 +16,9 @@ function PdfModal({ open, onClose, pdfUrl }) {
         if (pdfUrl && open) {
             const loadPdf = async () => {
                 try {
-                    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+                    const proxiedPdfUrl = `/pdf/${encodeURIComponent(pdfUrl)}`;
+                    console.log(proxiedPdfUrl)
+                    const loadingTask = pdfjsLib.getDocument(proxiedPdfUrl);
                     const loadedPdf = await loadingTask.promise;
                     setPdf(loadedPdf);
 

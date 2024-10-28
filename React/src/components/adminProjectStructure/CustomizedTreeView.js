@@ -170,9 +170,13 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
     }
   }
   const handleFolderDoubleClick = (folder) => {
-    console.log(folder)
-    setSelectedProject(folder.projectId);
-    setSelectedFolder(folder.id);
+    if(folder.isFolder){
+      setSelectedProject(folder.projectId);
+      setSelectedFolder(folder.id);
+    }
+    else{
+      
+    }
   };
 
   const handleOpen = () => {
