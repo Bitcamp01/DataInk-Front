@@ -22,7 +22,7 @@ const mapCategoriesFromFolders = (folders) => {
 
     if (folder.children && folder.children.length > 0) {
       folder.children.forEach((childFolder) => {
-        if (childFolder.folder) {
+        if (childFolder.isFolder) {
           traverseFolder(childFolder, updatedParentLabels);
         }
       });
