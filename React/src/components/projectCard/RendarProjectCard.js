@@ -43,13 +43,19 @@ const RendarProjectCard = () => {
       })
     : [];
 
+    // D-Day가 0일차인 것부터 카드 표출
+  const filteredProjects = sortedProjects.filter((project) => {
+    const daysDifference = calculateDaysDifference(project.endDate);
+    return daysDifference >= 0; // 0일차부터 카드 표출
+  });
+
   return (
     <div style={{ 
         display: 'flex', 
         flexWrap: 'wrap', // 카드가 4개를 초과하면 다음 줄로 넘어가도록 설정
         maxHeight: '400px', // 스크롤 영역의 최대 높이 설정
       }}>
-      {sortedProjects.map((project) => {
+      {filteredProjects.map((project) => {
         // 필요한 데이터만 추출하여 ProjectCard에 전달
         const projectData = {
           id: project.projectId,
