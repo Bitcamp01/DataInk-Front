@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import ProfileInit from '../components/mypage/ProfileInit';
 import Profile from '../components/mypage/Profile';
 import Workstatus from '../components/mypage/Workstatus';
@@ -8,35 +9,31 @@ import Calendar from '../components/mypage/Calendar 원본';
 import StatusEditModal from '../components/mypage/StatusEditModal';
 import BackgroundImgModal from '../components/mypage/BackgroundImgModal';
 import ProfileImgModal from '../components/mypage/ProfileImgModal';
+import { fetchProfileIntro, fetchUserDetails } from '../apis/mypageApis';
+import { resetProfileAuth, setBackgroundImage, setProfileImage } from '../slices/mypageSlice';
+import styled from 'styled-components';
 import '../css/profile.css';
-import { useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { passwordChk, fetchMypageInfo } from '../apis/mypageApis';
-import { resetProfileAuth, setBackgroundImage, setProfileImage, setStatus } from '../slices/mypageSlice';
 
 const MypageContainer = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
 `;
 
 const Mypage = () => {
-    // 환경 변수에서 API URL 가져오기
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    
     const dispatch = useDispatch();
-    const { status, profileImage, backgroundImage, isProfileAuthenticated } = useSelector((state) => state.mypageSlice);
-    const { name, id, email, tel, birth, authen} = useSelector(state => state.userSlice);
+    const location = useLocation();
+    const { profileImage, backgroundImage, isProfileAuthenticated, profileIntro = "", userDetails} = useSelector((state) => state.mypageSlice);
+
+    // 이스케이프된 문자열인지 확인하고 파싱
+    const parsedProfileIntro = profileIntro.startsWith('"') && profileIntro.endsWith('"')
+    ? JSON.parse(profileIntro)
+    : profileIntro;
+
+    const { name, authen} = useSelector(state => state.userSlice);
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('Workstatus');
-    const [selectedBackgroundFile, setSelectedBackgroundFile] = useState(null);
-    const [selectedProfileFile, setSelectedProfileFile] = useState(null);
     
-    const location = useLocation();
-
-    const handleProfileAuthentication = async (password) => {
-        await dispatch(passwordChk(password));
-    };
 
     // 모달 열기 & 닫기
     const handleOpenStatusModal = () => {
@@ -47,20 +44,20 @@ const Mypage = () => {
         setStatusModalOpen(false);
     };
 
-    const handleOpenBackgroundModal = () => {
-        setIsBackgroundModalOpen(true);
+    const handleCloseProfileModal = () => {
+        setIsProfileModalOpen(false);
     };
 
     const handleCloseBackgroundModal = () => {
         setIsBackgroundModalOpen(false);
     };
 
-    const handleOpenProfileModal = () => {
-        setIsProfileModalOpen(true);
+    const handleOpenBackgroundModal = () => {
+        setIsBackgroundModalOpen(true);
     };
 
-    const handleCloseProfileModal = () => {
-        setIsProfileModalOpen(false);
+    const handleOpenProfileModal = () => {
+        setIsProfileModalOpen(true);
     };
 
     // userEffect
@@ -77,69 +74,81 @@ const Mypage = () => {
         if (activeTab === 'Profile') {
             dispatch(resetProfileAuth());
         }
-    }, [activeTab]);
+    }, [activeTab, dispatch]);
 
     useEffect(() => {
-        dispatch(fetchMypageInfo()); // Thunk를 디스패치하여 API 호출
+        dispatch(fetchProfileIntro());
+        dispatch(fetchUserDetails());
     }, [dispatch]);
 
     useEffect(() => {
-        if (selectedBackgroundFile) {
-            const imageUrl = URL.createObjectURL(selectedBackgroundFile);
-            dispatch(setBackgroundImage(imageUrl));
+        if (activeTab === 'Profile') {
+            dispatch(resetProfileAuth(false)); // 초기에는 인증을 false로 설정
         }
-    }, [selectedBackgroundFile, dispatch]);
+    }, [activeTab, dispatch]);
 
-    useEffect(() => {
-        if (selectedProfileFile) {
-            const imageUrl = URL.createObjectURL(selectedProfileFile);
-            dispatch(setProfileImage(imageUrl));
-        }
-    }, [selectedProfileFile, dispatch]);
-
-    const handleSaveStatus = (newStatus) => {
-        dispatch(setStatus(newStatus));
+    const handleProfileAuthentication = () => {
+        dispatch(resetProfileAuth(true));  // 인증 성공 시 true로 설정
     };
 
-    const handleProfileImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setSelectedProfileFile(file);
-        }
-    };
+
+    // userDetails 데이터를 콘솔에 출력하여 확인
+console.log("userDetails:", userDetails);
+
+    // userDetails가 로드될 때만 profileImageUrl와 backgroundImageUrl을 설정
+    const profileImageUrl = userDetails?.profileImageUrl 
+        ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.profileImageUrl}`
+        : '/images/default-profile.png'; // 기본 프로필 이미지
+
+    const backgroundImageUrl = userDetails?.backgroundImageUrl 
+        ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.backgroundImageUrl}`
+        : '/images/default-background.jpg'; // 기본 배경 이미지
+
 
     const handleSaveBackground = (file) => {
         if (file) {
-            setSelectedBackgroundFile(file);
+            const imageUrl = URL.createObjectURL(file);
+            dispatch(setBackgroundImage(imageUrl));
         }
         setIsBackgroundModalOpen(false);
     };
 
     const handleSetDefaultBackground = () => {
-        dispatch(setBackgroundImage()); // 인자 없이 호출하여 기본 배경 이미지 사용
-        setSelectedBackgroundFile(null);
+        dispatch(setBackgroundImage('/images/dataInk_background_default.jpg'));
         setIsBackgroundModalOpen(false);
     };
-
+    
     const handleSaveProfile = (file) => {
         if (file) {
-            setSelectedProfileFile(file);
+            const imageUrl = URL.createObjectURL(file);
+            dispatch(setProfileImage(imageUrl));
         }
         setIsProfileModalOpen(false);
     };
 
     const handleSetDefaultProfile = () => {
-        dispatch(setProfileImage()); // 인자 없이 호출하여 기본 프로필 이미지 사용
-        setSelectedProfileFile(null);
+        dispatch(setProfileImage('/images/dataInk_profile_default.png'));
         setIsProfileModalOpen(false);
     };
 
+    // const renderComponent = () => {
+    //     if (activeTab === 'Profile') {
+    //         if (!isProfileAuthenticated) {
+    //             return <ProfileInit onAuthenticate={(password) => { handleProfileAuthentication(password); }} />;
+    //         }
+    //         return <Profile userDetails={userDetails || {}} />;
+    //     }
+    //     if (activeTab === 'Workstatus') return <Workstatus />;
+    //     if (activeTab === 'Alarm') return <Alarm />;
+    //     if (activeTab === 'Calendar') return <Calendar />;
+    // };
     const renderComponent = () => {
         if (activeTab === 'Profile') {
-            if (!isProfileAuthenticated) {
-                return <ProfileInit onAuthenticate={(password) => { handleProfileAuthentication(password); }} />;
-            }
-            return <Profile userDetails={{ name, id, email, tel, birth }} />;
+            return isProfileAuthenticated ? (
+                <Profile userDetails={userDetails} />
+            ) : (
+                <ProfileInit onAuthenticated={() => dispatch(resetProfileAuth(true))} />
+            );
         }
         if (activeTab === 'Workstatus') return <Workstatus />;
         if (activeTab === 'Alarm') return <Alarm />;
@@ -151,7 +160,7 @@ const Mypage = () => {
             <section className="profile-content">
                 <div className="profile-header" 
                     style={{ 
-                        backgroundImage: `url(${backgroundImage})`,
+                        backgroundImage: `url(${backgroundImageUrl})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center center',
                         backgroundSize: 'cover'
@@ -168,28 +177,21 @@ const Mypage = () => {
                         <img 
                             id="profile-image" 
                             className="profile-info__image" 
-                            src={profileImage} 
-                            alt="Profile Image" 
+                            src={profileImageUrl} 
+                            alt="ProfileImage" 
                         />
                         <img 
                             className="profile-info__editicon" 
                             src="/icons/profile_image.svg"
-                            alt="Edit Profile Icon" 
+                            alt="EditProfileIcon" 
                             onClick={handleOpenProfileModal}
-                        />
-                        <input 
-                            type="file" 
-                            id="profile-input" 
-                            style={{ display: 'none' }} 
-                            accept="image/*" 
-                            onChange={handleProfileImageUpload} 
                         />
 
                         <div className="profile-info__intro">
                             <h2 className="profile-info__intro profile-info__intro--name">{name}</h2>
                             <p className="profile-info__intro profile-info__intro--role">{authen}</p>
                             <p className="profile-info__intro profile-info__intro--status">
-                                {status}
+                                {parsedProfileIntro}
                                 <button className="edit-status-btn" onClick={handleOpenStatusModal}>
                                     Edit
                                 </button>
@@ -235,15 +237,14 @@ const Mypage = () => {
 
             <StatusEditModal 
                 isOpen={isStatusModalOpen} 
-                onClose={handleCloseStatusModal} 
-                onSave={handleSaveStatus}
+                onClose={handleCloseStatusModal}
             />
 
             <BackgroundImgModal 
                 isOpen={isBackgroundModalOpen} 
                 currentImage={backgroundImage}
                 defaultImage="/images/dataInk_background_default.jpg"
-                onClose={handleCloseBackgroundModal} 
+                onClose={handleCloseBackgroundModal}
                 onSave={handleSaveBackground} 
                 onSetDefault={handleSetDefaultBackground} 
             />

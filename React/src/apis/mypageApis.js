@@ -45,12 +45,8 @@ export const deleteCalendar = createAsyncThunk(
     'calendar/deleteCalendar',
     async (id, thunkApi) => {
         try {
-            const response = await axios.delete(`http://
-            
-            
-            
-            
-            
+            const response = await axios.delete(`${API_BASE_URL}
+        
             /calendars/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
@@ -200,17 +196,17 @@ export const passwordChk = createAsyncThunk(
     }
 );
 
-// 마이페이지 정보 가져오는 Thunk
-export const fetchMypageInfo = createAsyncThunk(
-    'mypage/fetchMypageInfo',
+// 유저 상세 정보 가져오기 Thunk
+export const fetchUserDetails = createAsyncThunk(
+    'mypage/fetchUserDetails',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/mypage`, {
+            const response = await axios.get(`${API_BASE_URL}/mypage/details`, {
                 headers: {
-                    'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+                    'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
             });
-            return response.data; // 성공 시 데이터 반환
+            return response.data; // 성공 시 백엔드에서 반환한 유저 정보 반환
         } catch (error) {
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }
@@ -232,7 +228,6 @@ export const updateMypageInfo = createAsyncThunk(
             });
             return response.data; // 성공 시 데이터 반환 (배경 이미지, 프로필 이미지, 소개글 등)
         } catch (error) {
-            // 에러 발생 시 rejectWithValue로 에러 메시지 반환
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }
     }
@@ -250,22 +245,22 @@ export const getAllProjects = createAsyncThunk(
             });
             return response.data; // 성공 시 데이터 반환
         } catch (error) {
-            // 에러 발생 시 rejectWithValue로 에러 메시지 반환
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }
     }
 );
 
 // 프로필 이미지 업로드 Thunk
-export const uploadProfileImage = createAsyncThunk(
-    'mypage/uploadProfileImage',
+export const updateProfileImage = createAsyncThunk(
+    'profileimg/updateProfileImage',
     async (file, thunkApi) => {
         try {
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('originalFileName', file.name); // 원본 파일명을 추가
 
             const response = await axios.post(
-                `${API_BASE_URL}/mypage/upload-profile-image`,
+                `${API_BASE_URL}/profileimg/update-profile-image`,
                 formData,
                 {
                     headers: {
@@ -274,24 +269,33 @@ export const uploadProfileImage = createAsyncThunk(
                     },
                 }
             );
+            // 서버 응답에서 파일 경로와 이름을 조합하여 URL 생성
+            const imageUrl = `https://kr.object.ncloudstorage.com/dataink/profile-img/${response.data.fileName}`;
 
-            return response.data;
+            return {
+                imageUrl: imageUrl, // 실제 서버에서 반환되는 키가 맞는지 확인 필요
+                directory: response.data.directory,
+                fileName: response.data.fileName
+            };
         } catch (error) {
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }
     }
 );
 
-// 프로필 이미지 업데이트 Thunk
-export const updateProfileImage = createAsyncThunk(
-    'mypage/updateProfileImage',
+
+
+// 배경 이미지 업로드 Thunk
+export const updateBackgroundImage = createAsyncThunk(
+    'backgroundimg/updateBackgroundImage',
     async (file, thunkApi) => {
         try {
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('originalFileName', file.name); // 원본 파일명을 추가
 
-            const response = await axios.put(
-                `${API_BASE_URL}/mypage/update-profile-image`,
+            const response = await axios.post(
+                `${API_BASE_URL}/backgroundimg/update-background-image`,
                 formData,
                 {
                     headers: {
@@ -300,21 +304,26 @@ export const updateProfileImage = createAsyncThunk(
                     },
                 }
             );
+            // 서버 응답에서 파일 경로와 이름을 조합하여 URL 생성
+            const imageUrl = `https://kr.object.ncloudstorage.com/dataink/profile-img/${response.data.fileName}`;
 
-            return response.data;
+            return {
+                imageUrl: imageUrl, // 실제 서버에서 반환되는 키가 맞는지 확인 필요
+                directory: response.data.directory,
+                fileName: response.data.fileName
+            };
         } catch (error) {
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }
     }
 );
 
-// 프로필 이미지 삭제 Thunk
 export const deleteProfileImage = createAsyncThunk(
-    'mypage/deleteProfileImage',
+    'profileimg/deleteProfileImage',
     async (_, thunkApi) => {
         try {
             const response = await axios.delete(
-                `${API_BASE_URL}/mypage/delete-profile-image`,
+                `${API_BASE_URL}/profileimg/delete-profile-image`,
                 {
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
@@ -324,70 +333,18 @@ export const deleteProfileImage = createAsyncThunk(
 
             return response.data;
         } catch (error) {
-            return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
-        }
-    }
-);
-
-// 배경 이미지 업로드 Thunk
-export const uploadBackgroundImage = createAsyncThunk(
-    'mypage/uploadBackgroundImage',
-    async (file, thunkApi) => {
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const response = await axios.post(
-                `${API_BASE_URL}/mypage/upload-background-image`,
-                formData,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
-                        'Content-Type': 'multipart/form-data',
-                    },
-                }
-            );
-
-            return response.data;
-        } catch (error) {
-            return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
-        }
-    }
-);
-
-// 배경 이미지 업데이트 Thunk
-export const updateBackgroundImage = createAsyncThunk(
-    'mypage/updateBackgroundImage',
-    async (file, thunkApi) => {
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const response = await axios.put(
-                `${API_BASE_URL}/mypage/update-background-image`,
-                formData,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
-                        'Content-Type': 'multipart/form-data',
-                    },
-                }
-            );
-
-            return response.data;
-        } catch (error) {
-            return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
+            return thunkApi.rejectWithValue(error.response?.data?.message || "프로필 이미지 삭제 실패");
         }
     }
 );
 
 // 배경 이미지 삭제 Thunk
 export const deleteBackgroundImage = createAsyncThunk(
-    'mypage/deleteBackgroundImage',
+    'backgroundimg/deleteBackgroundImage',
     async (_, thunkApi) => {
         try {
             const response = await axios.delete(
-                `${API_BASE_URL}/mypage/delete-background-image`,
+                `${API_BASE_URL}/backgroundimg/delete-background-image`,
                 {
                     headers: {
                         'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
@@ -402,6 +359,46 @@ export const deleteBackgroundImage = createAsyncThunk(
     }
 );
 
+export const fetchProfileIntro = createAsyncThunk(
+    'mypage/fetchProfileIntro',
+    async (_, thunkApi) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/mypage/profile-intro`, {
+                headers: {
+                    'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+                },
+            });
+            if (response.status === 200 && response.data.profileIntro) {
+                return response.data;
+            } else {
+                throw new Error("올바르지 않은 응답");
+            }
+        } catch (error) {
+            return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
+        }
+    }
+);
 
+export const updateProfileIntro = createAsyncThunk(
+    'mypage/updateProfileIntro',
+    async (profileIntro, thunkApi) => {
+        try {
+            const response = await axios.post(
+                `${API_BASE_URL}/mypage/profile-intro`,
+                profileIntro,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
+        }
+    }
+);
 
 
