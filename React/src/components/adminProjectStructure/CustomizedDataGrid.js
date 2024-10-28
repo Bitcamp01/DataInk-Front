@@ -587,7 +587,18 @@ const handleCopy = () => {
         <Button variant="contained" onClick={handleOpenConversionModal}>
           변환 목록
         </Button>
-        <Button variant="contained" onClick={()=>console.log(folderData)}>
+        <Button variant="contained" onClick={async()=>{
+          const response = await axios.get(`${API_BASE_URL}/projects/test`,{
+            params:{
+              projectId:67
+            }
+            ,
+            headers: {
+              'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+            }
+          })
+          console.log(response);
+        }}>
           현재 폴더 구조
         </Button>
         <Button variant="contained" onClick={handleReloading}>
