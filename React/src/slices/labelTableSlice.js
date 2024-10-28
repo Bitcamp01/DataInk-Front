@@ -11,6 +11,7 @@ const labelTableSlice = createSlice({
       endDate: null,          // 프로젝트 마감일 상태 추가
       selectedFolderId: null, // 선택된 폴더 ID 상태
       currentPage: 1,         // 페이지네이션 상태 추가
+      loading: false, // 로딩 상태 추가
     },
     reducers: {
       setProjectId: (state, action) => {
@@ -41,23 +42,46 @@ const labelTableSlice = createSlice({
     },
     extraReducers: (builder) => {
       builder
-        .addCase(fetchFolders.fulfilled, (state, action) => {
-          state.items = action.payload; // 폴더 목록 설정
-        })
-        .addCase(fetchTasksByFolderId.fulfilled, (state, action) => {
-          state.tableData = action.payload; // 선택된 폴더의 파일 목록 설정
-        })
-        .addCase(fetchProjectEndDate.fulfilled, (state, action) => {
-          state.endDate = action.payload; // 프로젝트 마감일 설정
-        })
-        // 검수 요청 상태 처리
-        .addCase(submitForReview.fulfilled, (state, action) => {
-          return state;
-        })
-        .addCase(submitForReview.rejected, (state, action) => {
-          return state;
-        });
-    },
+      .addCase(fetchFolders.pending, (state) => {
+        state.loading = true; // 폴더 데이터 로딩 시작
+      })
+      .addCase(fetchFolders.fulfilled, (state, action) => {
+        state.items = action.payload;
+        state.loading = false; // 폴더 데이터 로딩 완료
+      })
+      .addCase(fetchFolders.rejected, (state) => {
+        state.loading = false; // 폴더 데이터 로딩 실패
+      })
+      .addCase(fetchTasksByFolderId.pending, (state) => {
+        state.loading = true; // 작업 데이터 로딩 시작
+      })
+      .addCase(fetchTasksByFolderId.fulfilled, (state, action) => {
+        state.tableData = action.payload;
+        state.loading = false; // 작업 데이터 로딩 완료
+      })
+      .addCase(fetchTasksByFolderId.rejected, (state) => {
+        state.loading = false; // 작업 데이터 로딩 실패
+      })
+      .addCase(fetchProjectEndDate.pending, (state) => {
+        state.loading = true; // 프로젝트 마감일 로딩 시작
+      })
+      .addCase(fetchProjectEndDate.fulfilled, (state, action) => {
+        state.endDate = action.payload;
+        state.loading = false; // 프로젝트 마감일 로딩 완료
+      })
+      .addCase(fetchProjectEndDate.rejected, (state) => {
+        state.loading = false; // 프로젝트 마감일 로딩 실패
+      })
+      .addCase(submitForReview.pending, (state) => {
+        state.loading = true; // 검수 요청 처리 중
+      })
+      .addCase(submitForReview.fulfilled, (state, action) => {
+        state.loading = false; // 검수 요청 처리 완료
+      })
+      .addCase(submitForReview.rejected, (state) => {
+        state.loading = false; // 검수 요청 처리 실패
+      });
+  },
 });
 
 export const { setProjectId, setSelectedFolderId, setTableData, clearTableData, setEndDate, 

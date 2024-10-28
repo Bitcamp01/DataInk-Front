@@ -9,11 +9,13 @@ const TreeView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isVisible, setIsVisible] = useState(true);
   const [isRotated, setIsRotated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
   const dispatch = useDispatch();
   const projectId = useSelector((state) => state.labelTableSlice.projectId); // projectId를 가져옴
   const folders = useSelector((state) => state.labelTableSlice.items); // 폴더 데이터를 가져옴
   const userAuthen = useSelector((state) => state.userSlice.authen); // 유저 권한 가져옴
+  const loading = useSelector((state) => state.labelTableSlice.loading); // 로딩 상태 가져오기
 
   // 버튼 클릭 시 토글
   const toggleVisibility = () => {
@@ -21,12 +23,21 @@ const TreeView = () => {
     setIsRotated(!isRotated);
   };
 
-  // 프로젝트 ID가 있을 때 폴더 데이터를 가져오는 API 호출
   useEffect(() => {
-    if (projectId) {
-      dispatch(clearFolders()); // 이전 폴더 데이터 초기화
-      dispatch(fetchFolders(projectId));
-    }
+    const fetchData = async () => {
+      if (projectId) {
+        setIsLoading(true); // 로딩 시작
+        await dispatch(fetchFolders(projectId));
+        setIsLoading(false); // 로딩 종료
+      }
+    };
+
+    fetchData();
+
+    // 언마운트될 때 폴더 초기화
+    return () => {
+      dispatch(clearFolders());
+    };
   }, [dispatch, projectId]);
 
   // 폴더 데이터를 재귀적으로 변환하는 함수
@@ -43,8 +54,6 @@ const TreeView = () => {
 
   // 폴더 데이터 변환
   const transformedItems = transformFolderData(folders);
-
-  console.log("transformedItems", transformedItems);
 
   // 폴더 ID로 폴더와 그 상위 폴더 경로를 찾기 위한 함수 수정
   const findFolderById = (folders, folderId, parentLabels = []) => {
@@ -153,32 +162,35 @@ const TreeView = () => {
   };
 
   return (
-    <div
-      className="tree-container"
-      style={{
-        width: isVisible ? '15.6rem' : '0',
-      }}
-    >
-      {isVisible && (
-        <>
-          <div className="search-bar">
-            <img src={`/icons/label-search_icon.svg`} alt="Label Search Icon" className="label-search-icon" />
-            <input 
-              type="text" 
-              placeholder="Search" 
-              value={searchTerm} 
-              onChange={handleSearch} 
-              className="search-input"
-            />
+      <div
+        className="tree-container"
+        style={{
+          width: isVisible ? '15.6rem' : '0',
+        }}
+      >
+        <div className="search-bar">
+          <img src={`/icons/label-search_icon.svg`} alt="Label Search Icon" className="label-search-icon" />
+          <input 
+            type="text" 
+            placeholder="Search" 
+            value={searchTerm} 
+            onChange={handleSearch} 
+            className="search-input"
+          />
+        </div>
+
+        {isLoading ? (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img src='/gifs/loading_gif.gif' alt="로딩 중" style={{ width: "40%" }} />
           </div>
+        ) : (
           <RichTreeView 
             items={transformedItems}
             onItemClick={(event, node) => {
               handleFolderClick(node);
             }}
           />
-        </>
-      )}
+        )}
 
       <button className="side-button" onClick={toggleVisibility}>
         <img 
