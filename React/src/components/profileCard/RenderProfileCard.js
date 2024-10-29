@@ -54,9 +54,9 @@ const RenderProfileCard = () => {
         const latestNotices = items.slice(0, 3); // 최신 3개의 공지 추출
 
         const notice = latestNotices.map(item => ({
-          id: item.notice_id,
+          id: item.noticeId,
           title: item.title,
-          content: item.content,
+          dep: item.dep,
         }));
 
         setAnnouncements(notice);
