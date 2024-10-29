@@ -89,7 +89,7 @@ const OwnCalendar = () => {
               const diffDays = endDate.diff(moment(), 'days');
 
               // 남은 날짜에 따라 색상 결정
-              const dotColor = diffDays <= 5 ? '#FF4949' : '#7C97FE';
+              const dotColor = diffDays <= 30 ? '#FF4949' : '#7C97FE';
               
               html.push(
                 <StyledDot key={formattedDate} style={{ backgroundColor: dotColor }} />

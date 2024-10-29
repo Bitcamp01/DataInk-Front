@@ -30,6 +30,7 @@ const NoTodosMessage = styled.p`
   align-items: center;
   height: 100%;
   color: #999;
+  margin-bottom: 0;
 `;
 
 const WorkInList = () => {
