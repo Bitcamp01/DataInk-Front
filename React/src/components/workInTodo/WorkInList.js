@@ -24,6 +24,14 @@ const WorkInListBlock = styled.div`
   }
 `;
 
+const NoTodosMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #999;
+`;
+
 const WorkInList = () => {
   // 환경 변수에서 API URL 가져오기
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -46,14 +54,14 @@ const WorkInList = () => {
 
         const sortedItems = items.map(item => {
 
-          const endDate = moment(item.endDate);
+          const endDate = moment(item.projectDto.endDate);
           const today = moment().startOf('day');
           const diffDays = endDate.diff(today, 'days');
 
           return { 
             id: item.userId,  // userId를 id로 사용
-            name: item.name,     // 프로젝트 이름
-            endDate: item.endDate, // 종료일
+            name: item.projectDto.name,     // 프로젝트 이름
+            endDate: item.projectDto.endDate, // 종료일
             diffDays // 남은 날짜를 항목에 추가
           };
         })
@@ -79,7 +87,7 @@ const WorkInList = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // 로딩 중일 때 메시지 표시
+    return <NoTodosMessage>Loading...</NoTodosMessage>; // 로딩 중일 때 메시지 표시
   }
 
   if (error) {
@@ -88,9 +96,13 @@ const WorkInList = () => {
 
   return (
     <WorkInListBlock>
-      {workItems.map(item => (
-        <WorkItem key={item.id} text={item.name} deadline={item.endDate} />
-      ))}
+      {workItems.length === 0 ? (
+        <NoTodosMessage>참여 중인 프로젝트가 없습니다.</NoTodosMessage>
+      ) : (
+        workItems.map(item => (
+          <WorkItem key={item.id} text={item.name} deadline={item.endDate}/>
+        ))
+      )}
     </WorkInListBlock>
   );
 };

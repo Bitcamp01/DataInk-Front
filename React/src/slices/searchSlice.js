@@ -1,16 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { searchTasks } from '../apis/searchApis';
-
-export const fetchSearchResults = createAsyncThunk(
-  'search/fetchSearchResults',
-  async (criteria, { rejectWithValue }) => {
-    try {
-      return await searchTasks(criteria);
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchSearchResults } from '../apis/searchApis';
 
 const searchSlice = createSlice({
   name: 'search',
@@ -19,7 +8,6 @@ const searchSlice = createSlice({
     selectedCategory2: '',
     selectedCategory3: '',
     selectedWorkStatus: '',
-    searchKeyword: '',
     category2Options: [],
     category3Options: [],
     searchResults: [],
@@ -50,9 +38,6 @@ const searchSlice = createSlice({
     },
     setSelectedWorkStatus(state, action) {
       state.selectedWorkStatus = action.payload;
-    },
-    setSearchKeyword(state, action) {
-      state.searchKeyword = action.payload;
     },
   },
   extraReducers: (builder) => {

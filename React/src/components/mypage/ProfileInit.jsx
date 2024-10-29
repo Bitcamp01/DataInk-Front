@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import '../../css/profileInit.css';
 import { useDispatch  } from 'react-redux';
-import { passwordChk } from '../../apis/mypageApis';
-import { useNavigate } from 'react-router-dom'; // navigate 사용
+import { passwordChk, fetchUserDetails  } from '../../apis/mypageApis';
+// import { useNavigate } from 'react-router-dom';
 
 const BackgroundContainer = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
@@ -14,9 +14,9 @@ const BackgroundContainer = styled.div`
     align-items: center;
 `;
 
-const ProfileInit = () => {
+const ProfileInit = ({ onAuthenticated }) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate(); // navigate 함수 추가
+    // const navigate = useNavigate();
     const [password, setPassword] = useState(''); // 비밀번호 상태 추가
     const [errorMessage, setErrorMessage] = useState(''); // 오류 메시지 상태 추가
 
@@ -28,10 +28,12 @@ const ProfileInit = () => {
         e.preventDefault();
         const resultAction = await dispatch(passwordChk(password));
         if (passwordChk.fulfilled.match(resultAction)) {
-            // 비밀번호 확인 성공 시 profile 페이지로 이동
-            navigate('/mypage?section=Profile');
+            // 비밀번호 확인 후 인증 상태 true로 설정
+            onAuthenticated();  
+            
+            // userDetails 다시 로드
+            await dispatch(fetchUserDetails());
         } else {
-            // 실패한 경우 오류 메시지 설정
             setErrorMessage('비밀번호가 잘못되었습니다. 다시 시도해주세요.');
         }
     };

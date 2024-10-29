@@ -37,14 +37,13 @@ export function TodoProvider({ children }) {
             Authorization: `Bearer ${token}`
           },
         });
-        const todos = response.data.map(item => ({
-          id: item.id,
+        const items = response.data;
+        const todos = items.map(item => ({
+          id: item.todoId,
           text: item.todoContent,
-          done: item.done,
-          createDate: item.create,
+          done: item.completed,
+          createDate: item.createdDate,
         }));
-
-        console.log(todos);
 
         dispatch({
           type: 'SET_TODOS',

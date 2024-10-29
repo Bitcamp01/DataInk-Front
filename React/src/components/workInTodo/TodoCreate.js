@@ -66,16 +66,17 @@ function TodoCreate({ open, setOpen }) {
             },
           });
           const todos = response.data.map(item => ({
-            id: item.id,
+            id: item.todoId,
             text: item.todoContent,
-            done: item.done,
-            createDate: item.create,
+            done: item.completed,
+            createDate: item.createdDate,
           }));
   
           dispatch({
             type: 'SET_TODOS',
             todos: todos,
           });
+          console.log(todos);
         } catch (error) {
           console.error('TodoList를 불러오는 중 에러가 발생했습니다: ', error);
         }

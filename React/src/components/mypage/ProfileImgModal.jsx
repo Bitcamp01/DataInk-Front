@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { updateProfileImage, deleteProfileImage } from '../../apis/mypageApis';
+import { updateProfileImage, deleteProfileImage, fetchUserDetails } from '../../apis/mypageApis';
 import { setProfileImage } from '../../slices/mypageSlice';
 
 const ModalOverlay = styled.div`
@@ -62,7 +62,7 @@ const FileName = styled.span`
     color: #666;
 `;
 
-const ProfileImgModal = ({ isOpen, currentImage, defaultImage, onClose }) => {
+const ProfileImgModal = ({ isOpen, currentImage, defaultImage, onClose, userDetails }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(currentImage);
     const [isDefaultImage, setIsDefaultImage] = useState(false);
@@ -110,9 +110,13 @@ const ProfileImgModal = ({ isOpen, currentImage, defaultImage, onClose }) => {
         setFileName("선택된 파일 없음");
     }, [currentImage, isOpen]);
 
+    useEffect(() => {
+        dispatch(fetchUserDetails());
+    }, [dispatch]);
+    
     if (!isOpen) {
         return null;
-    }
+    };
 
     return (
         <ModalOverlay>

@@ -52,8 +52,7 @@ function App() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/alarm" element={<Alarm />} /> */}
             <Route path="/notice" element={<Notice />} />
-            <Route path="/review" element={<Review />} />
-            {/* <Route path="/review/:id" element={<Review />} /> 이거는 이제 id를 받아오는 경우*/}
+            <Route path="/review/:id" element={<Review />} /> 이거는 이제 id를 받아오는 경우
             <Route path="/notice_write" element={<Notice_write />} />
             <Route path="/notice/:id" element={<Notice_detail />} />
             <Route path="/main_grid" element={<MainGrid />} />

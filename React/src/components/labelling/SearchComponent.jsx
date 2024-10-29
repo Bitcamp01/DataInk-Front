@@ -1,11 +1,12 @@
 import '../../css/labelling-search.css';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import CustomDropdown from './CustomDropdown';
 import { setSelectedCategory1,setSelectedCategory2, setSelectedCategory3, setSelectedWorkStatus, setCategory2Options, 
-  setCategory3Options, setSearchKeyword, fetchSearchResults } from '../../slices/searchSlice';
-import { setTableData } from '../../slices/labelTableSlice';
+  setCategory3Options } from '../../slices/searchSlice';
+import { resetPage, setTableData } from '../../slices/labelTableSlice';
+import { fetchSearchResults } from '../../apis/searchApis';
 
 const mapCategoriesFromFolders = (folders) => {
   const categories = [];
@@ -21,7 +22,7 @@ const mapCategoriesFromFolders = (folders) => {
 
     if (folder.children && folder.children.length > 0) {
       folder.children.forEach((childFolder) => {
-        if (childFolder.folder) {
+        if (childFolder.isFolder) {
           traverseFolder(childFolder, updatedParentLabels);
         }
       });
@@ -34,6 +35,7 @@ const mapCategoriesFromFolders = (folders) => {
 };
 
 const SearchComponent = () => {
+  const [searchKeywordInput, setSearchKeywordInput] = useState("");
   const dispatch = useDispatch();
   
   const selectedCategory1 = useSelector((state) => state.searchSlice.selectedCategory1);
@@ -44,7 +46,11 @@ const SearchComponent = () => {
   const category3Options = useSelector((state) => state.searchSlice.category3Options);
   const folderItems = useSelector((state) => state.labelTableSlice.items); 
   const categories = mapCategoriesFromFolders(folderItems);
-  const searchKeyword = useSelector((state) => state.searchSlice.searchKeyword);
+
+  useEffect(() => {
+    dispatch(setSelectedCategory1(""));
+    dispatch(setSelectedWorkStatus(""));
+  }, []);
 
   const category1Options = Array.from(new Set(categories.map(c => c.category1))).map(cat => ({
     label: cat,
@@ -79,19 +85,43 @@ const SearchComponent = () => {
   };
 
   const handleSearch = async () => {
+    dispatch(resetPage());
     const criteria = {
       category1: selectedCategory1,
       category2: selectedCategory2,
       category3: selectedCategory3,
       workStatus: selectedWorkStatus,
-      searchKeyword: searchKeyword,
+      searchKeyword: searchKeywordInput,
       folderItems: folderItems
     };
+
+    // 설정된 검색 기준 콘솔에 출력
+    console.log("Search Criteria:", criteria);
   
     try {
       // 검색 결과 가져오기
       const resultAction = await dispatch(fetchSearchResults(criteria));
       const searchResults = resultAction.payload;
+
+      // 상태 값을 한글로 변환하는 함수
+      const getKoreanWorkStatus = (status) => {
+        switch (status) {
+          case 'in_progress':
+            return '작업 중';
+          case 'submitted':
+            return '제출됨';
+          case 'pending':
+            return '검토 대기중';
+          case 'reviewed':
+            return '검토 완료';
+          case 'approved':
+            return '최종 승인됨';
+          case 'rejected':
+            return '반려됨';
+          default:
+            return '알 수 없음';
+        }
+      };
   
       if (searchResults.length === 0) {
         alert("검색 결과가 없습니다.");
@@ -104,7 +134,7 @@ const SearchComponent = () => {
             category1: criteria.category1 || "", // 선택된 대분류 카테고리
             category2: criteria.category2 || "", // 선택된 중분류 카테고리
             category3: criteria.category3 || "", // 선택된 소분류 카테고리
-            workstatus: task.status, // 작업 상태
+            workstatus: getKoreanWorkStatus(task.status), // 작업 상태
             deadline: "마감일 없음", // 마감일 설정
           };
         });
@@ -117,6 +147,11 @@ const SearchComponent = () => {
     }
   };
   
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   return (
     <div className="search">
@@ -176,8 +211,9 @@ const SearchComponent = () => {
           <input 
             type="text" 
             className="search__input-field" 
-            value={searchKeyword} 
-            onChange={(e) => dispatch(setSearchKeyword(e.target.value))} 
+            value={searchKeywordInput} 
+            onChange={(e) => setSearchKeywordInput(e.target.value)}
+            onKeyDown={handleKeyDown} // Enter 키 입력 이벤트 추가
             placeholder="검색어 입력" 
           />
         </div>

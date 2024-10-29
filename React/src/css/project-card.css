@@ -27,20 +27,23 @@ html {
 
 .project-card__header {
     display: flex;
-    margin-bottom: 3%;
-    padding-top: 5%;
-    padding-left: 5%;
+    align-items: center; /* 수직 정렬 */
+    padding: 5% 5% 0; /* 상단과 좌우에 패딩 추가 */
 }
 
 .project-name {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
+    flex: 2; /* 공간을 가득 차도록 확장 */
+    overflow: hidden; /* 넘치는 텍스트는 숨김 처리 */
+    white-space: nowrap; /* 한 줄로 표시 */
+    text-overflow: ellipsis; /* 텍스트가 넘치면 ...으로 표시 */
 }
 
 .project-card__bookmark {
     background: none;
     border: none;
-    margin-left: 35%;
+    margin-left: 5%;
     cursor: pointer;
 }
 
@@ -92,7 +95,6 @@ html {
 .project-card__deadline {
     width: 64px;
     height: 26px;
-    background: #FD5B5B;
     border-radius: 15px;
     color: white;
     display: flex;

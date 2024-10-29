@@ -196,17 +196,17 @@ export const passwordChk = createAsyncThunk(
     }
 );
 
-// 마이페이지 정보 가져오는 Thunk
-export const fetchMypageInfo = createAsyncThunk(
-    'mypage/fetchMypageInfo',
+// 유저 상세 정보 가져오기 Thunk
+export const fetchUserDetails = createAsyncThunk(
+    'mypage/fetchUserDetails',
     async (_, thunkApi) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/mypage`, {
+            const response = await axios.get(`${API_BASE_URL}/mypage/details`, {
                 headers: {
-                    'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+                    'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
                 }
             });
-            return response.data; // 성공 시 데이터 반환
+            return response.data; // 성공 시 백엔드에서 반환한 유저 정보 반환
         } catch (error) {
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }

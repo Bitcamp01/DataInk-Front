@@ -9,7 +9,7 @@ import Calendar from '../components/mypage/Calendar 원본';
 import StatusEditModal from '../components/mypage/StatusEditModal';
 import BackgroundImgModal from '../components/mypage/BackgroundImgModal';
 import ProfileImgModal from '../components/mypage/ProfileImgModal';
-import { passwordChk, fetchMypageInfo, fetchProfileIntro } from '../apis/mypageApis';
+import { fetchProfileIntro, fetchUserDetails } from '../apis/mypageApis';
 import { resetProfileAuth, setBackgroundImage, setProfileImage } from '../slices/mypageSlice';
 import styled from 'styled-components';
 import '../css/profile.css';
@@ -21,23 +21,21 @@ const MypageContainer = styled.div`
 const Mypage = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const { profileImage, backgroundImage, isProfileAuthenticated} = useSelector((state) => state.mypageSlice);
-    const { profileIntro = "" } = useSelector((state) => state.mypageSlice);
-
+    const { profileImage, backgroundImage, isProfileAuthenticated, userDetails} = useSelector((state) => state.mypageSlice);
+    const profileIntro = userDetails?.profileIntro || "소개 글을 입력해 주세요.";
     // 이스케이프된 문자열인지 확인하고 파싱
     const parsedProfileIntro = profileIntro.startsWith('"') && profileIntro.endsWith('"')
     ? JSON.parse(profileIntro)
     : profileIntro;
+    console.log("profileIntro:", profileIntro); // 리덕스에서 가져온 상태
+    console.log("parsedProfileIntro:", parsedProfileIntro); // 파싱한 후 값
 
-    const { name, id, email, tel, birth, authen} = useSelector(state => state.userSlice);
+    const { name, authen } = useSelector(state => state.userSlice);
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('Workstatus');
     
-    const handleProfileAuthentication = async (password) => {
-        await dispatch(passwordChk(password));
-    };
 
     // 모달 열기 & 닫기
     const handleOpenStatusModal = () => {
@@ -64,7 +62,7 @@ const Mypage = () => {
         setIsProfileModalOpen(true);
     };
 
-    // userEffect
+    // userEffect//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const section = queryParams.get('section');
@@ -78,15 +76,31 @@ const Mypage = () => {
         if (activeTab === 'Profile') {
             dispatch(resetProfileAuth());
         }
-    }, [activeTab]);
-
-    // useEffect(() => {
-    //     dispatch(fetchMypageInfo());
-    // }, [dispatch]);
+    }, [activeTab, dispatch]);
 
     useEffect(() => {
         dispatch(fetchProfileIntro());
+        dispatch(fetchUserDetails());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (activeTab === 'Profile') {
+            dispatch(resetProfileAuth(false)); // 초기에는 인증을 false로 설정
+        }
+    }, [activeTab, dispatch]);
+
+    // userDetails 데이터를 콘솔에 출력하여 확인
+    console.log("userDetails:", userDetails);
+
+    // userDetails가 로드될 때만 profileImageUrl와 backgroundImageUrl을 설정
+    const profileImageUrl = userDetails?.profileImageUrl 
+        ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.profileImageUrl}`
+        : '/images/default-profile.png'; // 기본 프로필 이미지
+
+    const backgroundImageUrl = userDetails?.backgroundImageUrl 
+        ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.backgroundImageUrl}`
+        : '/images/default-background.jpg'; // 기본 배경 이미지
+
 
     const handleSaveBackground = (file) => {
         if (file) {
@@ -116,10 +130,11 @@ const Mypage = () => {
 
     const renderComponent = () => {
         if (activeTab === 'Profile') {
-            if (!isProfileAuthenticated) {
-                return <ProfileInit onAuthenticate={(password) => { handleProfileAuthentication(password); }} />;
-            }
-            return <Profile userDetails={{ name, id, email, tel, birth }} />;
+            return isProfileAuthenticated ? (
+                <Profile userDetails={userDetails} />
+            ) : (
+                <ProfileInit onAuthenticated={() => dispatch(resetProfileAuth(true))} />
+            );
         }
         if (activeTab === 'Workstatus') return <Workstatus />;
         if (activeTab === 'Alarm') return <Alarm />;
@@ -131,7 +146,7 @@ const Mypage = () => {
             <section className="profile-content">
                 <div className="profile-header" 
                     style={{ 
-                        backgroundImage: `url(${backgroundImage})`,
+                        backgroundImage: `url(${backgroundImageUrl})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundPosition: 'center center',
                         backgroundSize: 'cover'
@@ -148,13 +163,13 @@ const Mypage = () => {
                         <img 
                             id="profile-image" 
                             className="profile-info__image" 
-                            src={profileImage} 
-                            alt="Profile Image" 
+                            src={profileImageUrl} 
+                            alt="ProfileImage" 
                         />
                         <img 
                             className="profile-info__editicon" 
                             src="/icons/profile_image.svg"
-                            alt="Edit Profile Icon" 
+                            alt="EditProfileIcon" 
                             onClick={handleOpenProfileModal}
                         />
 
