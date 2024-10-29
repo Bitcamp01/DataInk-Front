@@ -1,25 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMember } from "../apis/memberProjectApis";
+import { fetchProjectMembers } from "../apis/memberManagementApis";
 
-const memberSlice = createSlice({
+const memberProjectSlice = createSlice({
     name: 'memberProject',
     initialState: {
-        member: { content: [], pageable: { pageNumber: 0, totalPages: 1 } },
-        page:0
+      projectMembers: [], // 특정 프로젝트의 멤버 목록
+      allMembers: [], // 전체 멤버 목록
+      status: 'idle', // 요청 상태
+      error: null,
     },
-  
+    reducers: {
+      setProjectMembers(state, action) {
+        state.projectMembers = action.payload;
+      },
+    },
     extraReducers: (builder) => {
-        builder.addCase(getProject.fulfilled, (state, action) => {
-            state.project = action.payload.pageItems ?? [];
-            state.page = action.payload.pageItems?.pageable?.pageNumber ?? 0;
+      builder
+        .addCase(fetchProjectMembers.pending, (state) => {
+          state.status = 'loading';
         })
-        .addCase(getMember.rejected, (state, action) => {
-            console.error('데이터를 가져오는 중 에러가 발생했습니다.', action.payload);
-              });
-
-    
-            }
-        });
-        
-
-export default memberProjectSlice.reducer;
+        .addCase(fetchProjectMembers.fulfilled, (state, action) => ({
+          ...state,
+          projectMembers: action.payload.items
+        }))
+        .addCase(fetchProjectMembers.rejected, (state, action) => {
+          state.status = 'failed';
+          state.error = action.payload;
+        })
+    },
+  });
+  
+  export const { setProjectMembers } = memberProjectSlice.actions;
+  
+  export default memberProjectSlice.reducer;

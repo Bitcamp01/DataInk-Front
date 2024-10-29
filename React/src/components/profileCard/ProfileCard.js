@@ -1,10 +1,31 @@
-import React from 'react';
-import '../../css/profile-card.css'
+import React, { useEffect, useState } from 'react';
+import '../../css/profile-card.css';
 
 const ProfileCard = ({ profile, announcements }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (announcements.length > 0) {
+      setLoading(false); // announcements가 로드되면 로딩 상태 해제
+    }
+  }, [announcements]);
+
   if (!profile) {
-    return <div className='bm-profileCard'>프로필 정보를 불러오는 중...</div>;
+    return <div className='bm-profileCard loading-profile'>프로필 정보를 불러오는 중...</div>;
   }
+
+  const getRoleName = (role) => {
+    switch (role) {
+      case 'ROLE_ADMIN':
+        return '관리자';
+      case 'ROLE_MANAGER':
+        return '검수자';
+      case 'ROLE_USER':
+        return '라벨러';
+      default:
+        return '배정되지 않음';
+    }
+  };
 
   return (
     <div className="bm-profileCard">
@@ -31,13 +52,8 @@ const ProfileCard = ({ profile, announcements }) => {
           </div>
           <div className="bm-role">
             <span style={{ color: '#929292', fontSize: '0.9rem' }}>역할</span>
-            <span 
-              className='bm-role-detail'
-              style={
-                {fontSize: profile.authen !== 'ROLE_MANAGER' &&  profile.authen !== '배정되지 않음' ? '1rem' : '0.85rem'}
-              }
-            >
-              {profile.authen ? profile.authen : "배정되지 않음"}
+            <span className='bm-role-detail'>
+              {getRoleName(profile.authen)}
             </span>
           </div>
         </div>
@@ -48,20 +64,24 @@ const ProfileCard = ({ profile, announcements }) => {
               더보기
             </a>
           </span>
-          {announcements.map((announcement, index) => (
+          {loading ? (
+            <div className='loading-text'>Loading...</div>
+          ) : (
+            announcements.map((announcement, index) => (
               <div key={index} className="bm-detailInfo">
                 <img
                   src={announcement.urgent ? '/icons/urgent-speaker_icon.svg' : '/icons/speaker_icon.svg'}
                   alt={announcement.urgent ? '긴급아이콘' : '일반아이콘'}
                 />
                 <span style={announcement.urgent ? { color: '#F67171' } : { color: '#7C97FE' }}>
-                  [{announcement.title}]
+                  [{`${announcement.dep} 부서`}]
                 </span>
-                <a href="/" style={{ fontSize: '0.8rem' }}>
-                  {announcement.content}
+                <a href={`/notice/${announcement.id}`} style={{ fontSize: '0.8rem' }}>
+                  {announcement.title}
                 </a>
               </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
