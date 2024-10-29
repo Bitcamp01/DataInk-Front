@@ -126,11 +126,10 @@ export default function MainGrid() {
       if (response.status === 200) {
         console.log("response",response)
         const idsToRemove = response.data.map((x) =>String(x.id));
+        console.log("idsToRemove",idsToRemove)
         const updatedFolderData = flatFolderData.filter(
           (folder) => !idsToRemove.includes(String(folder.id))
         );
-        console.log("updateFolderData",updatedFolderData)
-        setFlatFolderData(updatedFolderData);
         const newFolders = response.data.map((x) => ({
           id: x.id,
           parentId: selectedFolder,
@@ -141,21 +140,25 @@ export default function MainGrid() {
           finished: x.finished,
           projectId: selectedProject,
         }));
-        setFlatFolderData((prevData) => [...prevData, ...newFolders]);
+        setFlatFolderData([...updatedFolderData, ...newFolders]);
       
       }
     } catch (err) {
       console.error("Error fetching selected folder data:", err);
     }
   };
-  //초기화//////////////////////
-  React.useEffect(()=>{
-    getSelectedFolderData();
-  },[selectedFolder,selectedProject])
+
+  React.useEffect(() => {
+    
+    if (selectedProject !==undefined && selectedFolder !==undefined) {
+      getSelectedFolderData();
+    }
+  }, [selectedFolder, selectedProject]);
+  
   React.useEffect(()=>{
     getInitFolderData();
   },[])
-  //초기화//////////////////////
+
   React.useEffect(()=>{
     setFlatFolderData(flattenTree(originalFolderData))
   },[originalFolderData])

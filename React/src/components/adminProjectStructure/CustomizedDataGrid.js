@@ -59,7 +59,7 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
 
  
   // flatFolderData를 Map 형태로 관리하여 탐색 성능 향상
-  const [flatFolderMap, setFlatFolderMap] = useState(new Map(flatFolderData.map(item => [`${item.id}_${item.projectId}`, item])));
+  const [flatFolderMap, setFlatFolderMap] = useState(new Map());
 
 
   useEffect(()=>{
@@ -67,12 +67,21 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
   },[rowSelectionModel])
   //데이터 그리드 영역 업데이트 부분
   useEffect(()=>{
-    setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder));
-  },[selectedFolder,selectedProject,flatFolderMap])
+    if(selectedFolder !== undefined && selectedProject !==undefined){
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+      console.log(flatFolderMap)
+      setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder));
+    }
+    console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqq")
+  },[flatFolderMap])
 
   // flatFolderData가 변경될 때 Map으로 업데이트
   useEffect(() => {
-    setFlatFolderMap(new Map(flatFolderData.map(item => [`${item.id}_${item.projectId}`, item])));
+    if(selectedFolder !== undefined && selectedProject !==undefined){
+      console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+      setFlatFolderMap(new Map(flatFolderData.map(item => [`${item.id}_${item.projectId}`, item])));
+    }
+    
   }, [flatFolderData]);
   ///////////////////////////////////////////////////////////////////////////////////
   const [conversionList, setConversionList] = useState([]); // 변환 목록
