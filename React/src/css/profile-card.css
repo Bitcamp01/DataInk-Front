@@ -46,6 +46,9 @@
     margin-bottom: 10px;
 }
 
+.bm-statusInfo {
+    position: relative;
+}
 
 .bm-roleInfo {
     display: flex;
@@ -60,6 +63,11 @@
     text-align: center;
     font-size: 1rem;
     margin-left: 10px;
+    
+}
+
+.bm-affiliation span{
+    display: block;
 }
 
 .bm-role {
@@ -68,14 +76,19 @@
     margin-right: 10px;
 }
 
+.bm-role span {
+    display: block;
+}
+
 .bm-announcement {
+    position: absolute;
+    top: 70px;
+    left: 117px;
+    transform: translateX(-50%);
     border: 1px dotted #DBDBDB;
     background: #F6F8FF;
     width: 220px;
     height: 100px;
-    margin-left: 6px;
-    margin-right: 6px;
-    margin-top: 20px;
 }
 
 .bm-announcementDetail {

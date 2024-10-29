@@ -11,7 +11,7 @@ const ProfileCard = ({ profile, announcements }) => {
       <div className="bm-profile">
         <span className='bm-prodile-title'>좋은 하루입니다!</span>
         <img 
-          src={profile.profileImg ? profile.profileImg : '/icons/dataink-logo_icon.svg'} 
+          src={profile.profileImg !== null ? profile.profileImg : '/icons/dataink-logo_icon.svg'} 
           alt={`${profile.username} 프로필 이미지`} />
         <h3 className="bm-username">
           {profile.username}
@@ -22,11 +22,23 @@ const ProfileCard = ({ profile, announcements }) => {
         <div className="bm-roleInfo">
           <div className="bm-affiliation">
             <span style={{ color: '#929292', fontSize: '0.9rem' }}>소속</span>
-            <span className='bm-affiliation-detail'>{profile.dep ? profile.dep : "배정되지 않음"}</span>
+            <span 
+              className="bm-affiliation-detail"
+              style={{ fontSize: profile.dep && profile.dep !== '배정되지 않음' ? '1rem' : '0.85rem' }}
+            >
+              {profile.dep ? profile.dep : "배정되지 않음"}
+            </span>
           </div>
           <div className="bm-role">
             <span style={{ color: '#929292', fontSize: '0.9rem' }}>역할</span>
-            <span className='bm-role-detail'>{profile.authen ? profile.authen : "배정되지 않음"}</span>
+            <span 
+              className='bm-role-detail'
+              style={
+                {fontSize: profile.authen !== 'ROLE_MANAGER' &&  profile.authen !== '배정되지 않음' ? '1rem' : '0.85rem'}
+              }
+            >
+              {profile.authen ? profile.authen : "배정되지 않음"}
+            </span>
           </div>
         </div>
         <div className="bm-announcement">
