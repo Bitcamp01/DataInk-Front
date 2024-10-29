@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'; 
+import React, { useState, useEffect, useRef, useCallback } from 'react'; 
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import { DataGrid } from '@mui/x-data-grid';
@@ -11,9 +11,26 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button'; 
 import Stack from '@mui/material/Stack';
 import { fetchModalData } from '../apis/memberManagementApis';
+import axios from 'axios';
+import { fetchProjectMembers } from '../apis/memberManagementApis';
+
+// 역할을 한국어로 변환하는 함수
+const translateRole = (role) => {
+  switch (role) {
+    case 'ROLE_USER':
+      return '라벨러';
+    case 'ROLE_ADMIN':
+      return '관리자';
+    case 'ROLE_MANAGER':
+      return '검수자';
+    default:
+      return role; // 변환할 내용이 없으면 원래의 역할을 반환
+  }
+};
 
 const columns = [
-  { field: 'id', headerName: '이름', width: 120, resizable: false  },
+  // {field: 'id', headerName :'유저id', width: 50},
+  { field: 'name', headerName: '이름', width: 120, resizable: false  },
   { field: 'department', headerName: '소속(부서)', width: 150 },
   { field: 'role', headerName: '역할', width: 150},
 ];
@@ -23,33 +40,64 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   const dispatch = useDispatch();
 
   // 상태 정의 (useState)
-  const [selectedLeftMembers, setSelectedLeftMembers] = useState([]); // 왼쪽에서 선택한 멤버
+  const [selectedLeftMemberIds, setSelectedLeftMemberIds] = useState([]); // 왼쪽에서 선택한 멤버
   const [selectedRightMembers, setSelectedRightMembers] = useState([]); // 오른쪽에서 선택한 멤버
+  const [modalData, setModalData] = useState([]); // 왼쪽 그리드에 있는 멤버
   const [projectMembers, setProjectMembers] = useState([]); // 오른쪽 그리드에 있는 멤버
   const [tempProjectMembers, setTempProjectMembers] = useState([]); // 임시 저장용 오른쪽 그리드 멤버
-  const [usersData, setUsersData] = useState([]);
-  const modalData = useSelector((state) => state.memberModalSlice.modalDatas); // Redux 상태 가져오기
   const [page, setPage] = useState(0); // 페이지 추적
-  
+
+  const allMembersDB = useSelector((state) => state.memberModalSlice.modalDatas); // 전체 맴버 가져오기
+  const projectMembersDB = useSelector((state) => state.memberProjectSlice.projectMembers);
+
+  // modalData = allMembersDB;
   
   // 각 DataGrid의 스크롤 컨테이너 참조
   const containerRef1 = useRef(null);
   const containerRef2 = useRef(null);
 
+  useEffect(() => {
+    // projectMembersDB에 없는 멤버만 modalData에 저장
+    const filteredMembers = allMembersDB.filter(
+      (member) => !projectMembersDB.some((projectMember) => projectMember.id === member.id)
+    );
+    setModalData(filteredMembers);
+  }, [allMembersDB, projectMembersDB]); // allMembersDB나 projectMembersDB가 변경될 때마다 실행
+
+
+
   // 모달이 열릴 때 초기 데이터 불러오기
   useEffect(() => {
     if (open) {
-      setPage(0);  // 페이지 초기화
-      dispatch(fetchModalData(0));  // 첫 페이지 데이터 불러오기
-      setTempProjectMembers([...projectMembers]); // 현재 상태를 임시 상태에 복사
+      if (selectedRow) {
+        dispatch(fetchProjectMembers(selectedRow.id)); // 특정 프로젝트의 멤버 불러오기
+        setPage(0);  // 페이지 초기화
+        dispatch(fetchModalData(0));  // 첫 페이지 데이터 불러오기
+        // setTempProjectMembers([...projectMembers]); // 현재 상태를 임시 상태에 복사
+      }
     }
-  }, [open, projectMembers]);
+  }, [open, selectedRow, dispatch]);
+
+
 
   // Redux의 modalData가 변경될 때마다 usersData 업데이트
   useEffect(() => {
-    console.log('Updated modalData:', modalData);
-    setUsersData(modalData);
+    console.log('Redux에서 가져온 modalData:', modalData);
+    setProjectMembers([...modalData])
   }, [modalData]);
+
+    // Redux의 modalData가 변경될 때마다 usersData 업데이트
+    useEffect(() => {
+        console.log('leftMembers:', projectMembersDB);
+    setTempProjectMembers(
+      projectMembersDB.map((member) => ({
+        userId: member.userId,
+        name: member.name,
+        department: member.userDetailDto?.dep || '부서 정보 없음',
+        role: member.authen ? translateRole(member.authen) : '역할 정보 없음',
+      }))
+    );
+    }, [projectMembersDB]);
 
   // 첫 번째 DataGrid의 스크롤 이벤트 처리
   const handleScroll1 = () => {
@@ -71,87 +119,111 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     }
   };
 
-  // 페이지가 변경될 때마다 데이터 추가 불러오기
-  useEffect(() => {
-    if (open && page > 0) {
-      dispatch(fetchModalData({ page })); // 페이지 증가 시 데이터 요청
-    }
-  }, [page, open, dispatch]);
-
-  // 첫 번째 DataGrid의 스크롤 이벤트 연결 및 해제
-  useEffect(() => {
-    if (open && containerRef1.current) {
-      const container = containerRef1.current;
-      container.addEventListener('scroll', handleScroll1);
-
-      return () => {
-        container.removeEventListener('scroll', handleScroll1);
-      };
-    }
-  }, [open]);
-
-  // 두 번째 DataGrid의 스크롤 이벤트 연결 및 해제
-  useEffect(() => {
-    if (open && containerRef2.current) {
-      const container = containerRef2.current;
-      container.addEventListener('scroll', handleScroll2);
-
-      return () => {
-        container.removeEventListener('scroll', handleScroll2);
-      };
-    }
-  }, [open]);
-
-  
-  
-  
   // Dialog 컴포넌트
   <Dialog open={open} onClose={handleClose}>
     {/* 나머지 내용 */}
   </Dialog>
+
   // 멤버를 임시 상태에서 오른쪽 그리드로 추가
   const handleAddMembers = () => {
-    console.log('selectedLeftMembers 상태 업데이트:', selectedLeftMembers);
-    const newMembers = usersData.filter((member) => selectedLeftMembers.includes(member.id));
-  
-    const filteredNewMembers = newMembers.filter(
-      (newMember) => !tempProjectMembers.some((projectMember) => projectMember.id === newMember.id)
-    );
+    const newMembers = [];
 
-    console.log('Filtered New Members:', filteredNewMembers);
+    for(const selectedLeftMemberId of selectedLeftMemberIds) {
+      for(const [index, projectMember] of projectMembers.entries()) {
+
+        if(projectMember.userId === selectedLeftMemberId) {
+          
+        const department = projectMember.userDetailDto?.dep || '부서 정보 없음';
+        const role = projectMember.authen ? translateRole(projectMember.authen) : '역할 정보 없음';
+
+          const newMember = {
+            'completedInspection': 0,
+            department,
+            isBookmarked: false,
+            pendingInspection: 0,
+            projectId: selectedRow.id,
+            role,
+            totalWorkcnt : 0,
+            userId: projectMember.userId,
+            name:projectMember.name,
+            userWorkcnt: 0,
+          }
+          newMembers.push(newMember);
+          projectMembers.splice(index,1);
+        }
+      }
+    }
   
-    setTempProjectMembers((prev) => [...prev, ...filteredNewMembers]); // 오른쪽 임시 그리드에 추가
-    setUsersData((prev) => prev.filter((member) => !selectedLeftMembers.includes(member.id))); // 왼쪽 그리드에서 제거
-    setSelectedLeftMembers([]); // 선택 초기화
+  
+    setTempProjectMembers((prev) => [...prev, ...newMembers]); // 오른쪽 임시 그리드에 추가
+    setProjectMembers([...projectMembers]); // 왼쪽 그리드에서 제거
+    setSelectedLeftMemberIds([]); // 선택 초기화
   };
   
   // 멤버를 임시 상태에서 왼쪽 그리드로 제거
   const handleRemoveMembers = () => {
     const remainingMembers = tempProjectMembers.filter(
-      (member) => !selectedRightMembers.includes(member.id)
+      (member) => !selectedRightMembers.includes(member.userId)
     );
   
     const removedMembers = tempProjectMembers.filter((member) =>
-      selectedRightMembers.includes(member.id)
+      selectedRightMembers.includes(member.userId)
     );
+
+    // 제거된 멤버의 역할 정보 확인
+  console.log('제거된 멤버:', removedMembers); // 로그 추가
+
+  // 제거된 멤버가 역할 정보를 포함하고 있는지 확인
+  removedMembers.forEach((member) => {
+    console.log(`UserId: ${member.userId}, Role: ${member.role}`); // 각 멤버의 UserId와 Role 출력
+  });
+
   
-    setUsersData((prev) => [...prev, ...removedMembers]); // 왼쪽 그리드에 추가
+    setProjectMembers((prev) => [...prev, ...removedMembers]); // 왼쪽 그리드에 추가
     setTempProjectMembers(remainingMembers); // 오른쪽 임시 그리드에서 제거
     setSelectedRightMembers([]); // 선택 초기화
   };
 
   // 저장 버튼을 눌렀을 때, 임시 상태의 데이터를 백엔드와 동기화
   const handleSaveChanges = async () => {
-    // 여기서 API 호출을 통해 추가/삭제 작업을 수행할 수 있습니다.
-    
-    // 예시:
-    // for (let member of tempProjectMembers) {
-    //   await addMember(member);
-    // }
 
-    // 현재 임시 상태를 실제 상태로 업데이트
-    setProjectMembers([...tempProjectMembers]);
-    onClose(); // 모달 닫기
+  console.log('tempProjectMembers:', tempProjectMembers);
+  console.log('projectId:', tempProjectMembers[0]?.projectId);
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    try{  
+
+    // 요청할 데이터 구조 설정
+    const projectMemberSaveRequests = {
+      projectId: tempProjectMembers[0].projectId, // 프로젝트 ID
+      members: tempProjectMembers.map(member => ({
+        userId: member.userId,
+        name: member.name,
+        department: member.department,
+        role: member.role
+      })) // 멤버 정보 배열
+    };
+   
+
+    console.log('저장할 데이터:', projectMemberSaveRequests); // 로그 추가 (디버깅 용도)
+
+    const response = await axios.post(
+      `${API_BASE_URL}/member/modal-add/${tempProjectMembers[0].projectId}`
+      , projectMemberSaveRequests
+      , {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+        }
+    });
+
+    if(response.status === 200) {
+      alert('사용자 저장 성공');
+      setTempProjectMembers([...response.data]);//실제 상태로 업데이트
+      onClose();
+     }
+    }catch(error){
+      console.error('사용자 저장 중 오류 발생:', error);
+      alert('사용자 저장 중 오류가 발생했습니다.');
+    }
   };
 
 
@@ -203,11 +275,11 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 
                       
               <DataGrid
-                rows={(usersData).map((item) => ({
-                  id: item.id,
+                rows={(projectMembers).map((item) => ({
+                  id: item.userId,
                   name: item.name,
-                  department: item.userDetailDto.dep || '부서 정보 없음',
-                  role: item.authen,
+                  department: item?.userDetailDto?.dep || '부서 정보 없음',
+                  role:translateRole(item.authen),
                 }))}
                 columns={columns}
                 checkboxSelection={true}
@@ -233,10 +305,9 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 hideFooterPagination 
                 hideFooter
                 onRowSelectionModelChange={(newSelection) => {
-                  console.log('선택된 멤버:', newSelection);
-                  setSelectedLeftMembers(newSelection);
+                  setSelectedLeftMemberIds(newSelection);
                 }}
-                selectionModel={selectedLeftMembers}
+                selectionModel={selectedLeftMemberIds}
               />
                 </Box>
               
@@ -330,12 +401,13 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 onScroll={handleScroll2} // 스크롤 이벤트 핸들러 등록
               >    
        
+      
               <DataGrid
-                rows={tempProjectMembers.map((item) => ({
-                  id: item.id,
+                rows={tempProjectMembers.map((item, index) => ({
+                  id: item.userId,
                   name: item.name,
-                  department: item.userDetailDto.dep || '부서 정보 없음',
-                  role: item.authen,
+                  department: item.department || '부서 정보 없음',
+                  role: item.role,
                 }))}
                 columns={columns}
                 checkboxSelection
@@ -357,7 +429,6 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 hideFooter
                 hideFooterPagination 
                 onRowSelectionModelChange={(newSelection) => {
-                  console.log('선택된 멤버:', newSelection);
                   setSelectedRightMembers(newSelection);
                 }}
 

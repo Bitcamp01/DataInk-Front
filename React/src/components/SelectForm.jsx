@@ -5,7 +5,7 @@ import '../css/reviewer.css';
 import { useDispatch } from 'react-redux';
 import { rejectLabelTask } from '../apis/labelTaskApis';
 
-const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
+const SelectForm = ({ taskId , transformedData}) => { // taskId를 props로 받도록 수정
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAdminInputChecked, setIsAdminInputChecked] = useState(false);
     const [selectedReasons, setSelectedReasons] = useState([]);
@@ -47,12 +47,22 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
         setTextareaContent(e.target.value);
     };
 
+    // const getFinalSubmission = () => {
+    //     const submissionReasons = selectedReasons.join(', ');
+    //     return textareaContent ? `${submissionReasons} ${textareaContent}`.trim() : submissionReasons;
+    // };
+    const getFinalSubmission = () => {
+        const submissionReasons = selectedReasons.join(', ');
+        return textareaContent ? `${submissionReasons} ${textareaContent.trim()}` : submissionReasons;
+    };
+
     const handleRejectClick = () => {
         const userConfirmed = window.confirm('반려시키시겠습니까?');
         if (userConfirmed) {
             dispatch(rejectLabelTask({
-                taskId: taskId, // props로 받은 taskId 사용
+                taskId: taskId,
                 rejectionReason: getFinalSubmission(),
+                transformedData: transformedData, // 반려할 데이터 전달
             }))
             .then((result) => {
                 if (rejectLabelTask.fulfilled.match(result)) {
@@ -63,11 +73,6 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
                 }
             });
         }
-    };
-
-    const getFinalSubmission = () => {
-        const submissionReasons = selectedReasons.join(', ');
-        return textareaContent ? `${submissionReasons} ${textareaContent}`.trim() : submissionReasons;
     };
 
     return (
@@ -124,7 +129,6 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
             </div>
 
             <div className="review-submit-container">
-                <button className="prev-button" onClick={handlePrevClick}>이전 작업</button>
                 <button
                     className="reject-button"
                     onClick={handleRejectClick}
@@ -138,10 +142,9 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
                 >
                     승인
                 </button>
-                <button className="next-button" onClick={handleNextClick}>다음 작업</button>
             </div>
 
-            <ReviewModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            <ReviewModal isOpen={isModalOpen} onClose={handleCloseModal} taskId={taskId} transformedData={transformedData}/>
         </>
     );
 };
