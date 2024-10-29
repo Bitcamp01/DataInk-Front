@@ -5,10 +5,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import '../css/reviewer.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'; // dispatch 추가
-import { submitForReview } from '../apis/labelTaskApis'; // Thunk import
+import { submitForReview , approveLabelTask } from '../apis/labelTaskApis'; // Thunk import
 import axios from 'axios';
 
-const ReviewModal = ({ isOpen, onClose, taskId }) => {
+const ReviewModal = ({ isOpen, onClose, taskId, transformedData }) => {
     // 환경 변수에서 API URL 가져오기
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const navigate = useNavigate();
@@ -20,15 +20,23 @@ const ReviewModal = ({ isOpen, onClose, taskId }) => {
     const handleApplyClick = async () => {
         try {
             // 승인 API 호출
-            const response = await axios.patch('http://localhost:3000/labeltask/approve', {
-                taskId: taskId, // 필요한 데이터
-                comment: feedback // textarea의 내용
-            });
-            // const response = await dispatch(submitForReview({ taskId, fieldId, comment: feedback }));
+            // const response = await axios.patch('http://localhost:3000/labeltask/approve', {
+            //     taskId: taskId, // 필요한 데이터
+            //     comment: feedback // textarea의 내용
+            // });
+            // // const response = await dispatch(submitForReview({ taskId, fieldId, comment: feedback }));
 
-            if (response.meta.requestStatus === 'fulfilled') {
+            // if (response.meta.requestStatus === 'fulfilled') {
+            //     alert('승인되었습니다.');
+            //     navigate('/label/work'); // 승인 후 이동
+            // } else {
+            //     alert('승인 중 오류가 발생했습니다.');
+            // }
+            const result = await dispatch(approveLabelTask({ taskId, comment: feedback , transformedData })); // fieldId 포함
+
+            if (approveLabelTask.fulfilled.match(result)) { // 승인 성공 확인
                 alert('승인되었습니다.');
-                navigate('/label/work'); // 승인 후 이동
+                navigate('/label/work');
             } else {
                 alert('승인 중 오류가 발생했습니다.');
             }
