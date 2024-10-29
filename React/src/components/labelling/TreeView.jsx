@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import '../../css/tree-view.css';
-import { fetchFolders, fetchProjectEndDate, fetchTasksByFolderId } from '../../apis/labelTableApis';
+import { fetchFolders, fetchTasksByFolderId } from '../../apis/labelTableApis';
 import { clearFolders, resetPage, setTableData } from '../../slices/labelTableSlice';
 
 const TreeView = () => {
@@ -97,9 +97,6 @@ const TreeView = () => {
       //   tasks = tasks.filter(task => task.status === 'reviewed');
       // }
 
-      const projectEndDateAction = await dispatch(fetchProjectEndDate(projectId));
-      const projectEndDate = projectEndDateAction.payload;
-
       const getKoreanWorkStatus = (status) => {
         switch (status) {
           case 'in_progress':
@@ -147,7 +144,6 @@ const TreeView = () => {
           category2,
           category3,
           workstatus: getKoreanWorkStatus(task.status),
-          deadline: projectEndDate || '마감일 없음',
         };
       });
 

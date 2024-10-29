@@ -31,10 +31,10 @@ const SearchContainer = styled.div`
 const RefreshButton = styled.button`
   background-color: white;
   color: #717171;
-  border: 1px solid #7785BE;
+  border: none;
   padding: 5.5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 0.3rem;
+  box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
   font-size: 12px;
   margin-right: 10px; /* SearchComponent와의 간격 */
   

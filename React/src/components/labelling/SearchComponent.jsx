@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CustomDropdown from './CustomDropdown';
 import { setSelectedCategory1,setSelectedCategory2, setSelectedCategory3, setSelectedWorkStatus, setCategory2Options, 
   setCategory3Options } from '../../slices/searchSlice';
-import { resetPage, setTableData } from '../../slices/labelTableSlice';
+import { clearTableData, resetPage, setTableData } from '../../slices/labelTableSlice';
 import { fetchSearchResults } from '../../apis/searchApis';
 
 const mapCategoriesFromFolders = (folders) => {
@@ -124,6 +124,7 @@ const SearchComponent = () => {
       };
   
       if (searchResults.length === 0) {
+        dispatch(clearTableData());
         alert("검색 결과가 없습니다.");
       } else {
         const mappedResults = searchResults.map((task, index) => {
@@ -135,7 +136,6 @@ const SearchComponent = () => {
             category2: criteria.category2 || "", // 선택된 중분류 카테고리
             category3: criteria.category3 || "", // 선택된 소분류 카테고리
             workstatus: getKoreanWorkStatus(task.status), // 작업 상태
-            deadline: "마감일 없음", // 마감일 설정
           };
         });
   
