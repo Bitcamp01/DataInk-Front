@@ -233,22 +233,22 @@ export const updateMypageInfo = createAsyncThunk(
     }
 );
 
-// 모든 프로젝트 데이터를 가져오는 Thunk 추가
-export const getAllProjects = createAsyncThunk(
-    'mypage/getAllProjects',
-    async (_, thunkApi) => {
-        try {
-            const response = await axios.get(`${API_BASE_URL}/projects/all`, {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
-                },
-            });
-            return response.data; // 성공 시 데이터 반환
-        } catch (error) {
-            return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
-        }
-    }
-);
+// // 모든 프로젝트 데이터를 가져오는 Thunk 추가
+// export const getAllProjects = createAsyncThunk(
+//     'mypage/getAllProjects',
+//     async (_, thunkApi) => {
+//         try {
+//             const response = await axios.get(`${API_BASE_URL}/projects/all`, {
+//                 headers: {
+//                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+//                 },
+//             });
+//             return response.data; // 성공 시 데이터 반환
+//         } catch (error) {
+//             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
+//         }
+//     }
+// );
 
 // 프로필 이미지 업로드 Thunk
 export const updateProfileImage = createAsyncThunk(
@@ -397,6 +397,31 @@ export const updateProfileIntro = createAsyncThunk(
             return response.data;
         } catch (error) {
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
+        }
+    }
+);
+
+export const getProjectsBySearch = createAsyncThunk(
+    'user-projects/getProjectsBySearch',
+    async(searchObj, thunkApi) => {
+        console.log("Received searchObj:", searchObj); // 전달된 파라미터 확인
+        try {
+            const response = await axios.get(`${API_BASE_URL}/user-projects`,  {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+                },
+                params: {
+                    searchCondition: searchObj.searchCondition,
+                    searchKeyword: searchObj.searchKeyword,
+                    page: searchObj.page,
+                    startDate: searchObj.startDate,
+                    endDate: searchObj.endDate
+                }
+            });
+
+            return response.data;
+        } catch(e) {
+            return thunkApi.rejectWithValue(e);
         }
     }
 );
