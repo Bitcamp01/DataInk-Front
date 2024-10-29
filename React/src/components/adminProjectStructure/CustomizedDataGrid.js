@@ -604,7 +604,16 @@ const handleCopy = () => {
         <Button variant="contained" onClick={handleReloading}>
           다시 로딩
         </Button>
-
+        <Button variant="contained" onClick={async()=>{
+          const response = await axios.get(`${API_BASE_URL}/projects/progress/${1}`,{
+            headers: {
+              'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+            }
+          })
+          console.log(response);
+        }}>
+          프로젝트 진행률
+        </Button>
       </GridToolbarContainer>
     );
   };
