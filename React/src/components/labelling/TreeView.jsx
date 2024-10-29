@@ -15,7 +15,6 @@ const TreeView = () => {
   const projectId = useSelector((state) => state.labelTableSlice.projectId); // projectId를 가져옴
   const folders = useSelector((state) => state.labelTableSlice.items); // 폴더 데이터를 가져옴
   const userAuthen = useSelector((state) => state.userSlice.authen); // 유저 권한 가져옴
-  const loading = useSelector((state) => state.labelTableSlice.loading); // 로딩 상태 가져오기
 
   // 버튼 클릭 시 토글
   const toggleVisibility = () => {
@@ -164,6 +163,8 @@ const TreeView = () => {
           width: isVisible ? '15.6rem' : '0',
         }}
       >
+        {isVisible && (
+          <>
         <div className="search-bar">
           <img src={`/icons/label-search_icon.svg`} alt="Label Search Icon" className="label-search-icon" />
           <input 
@@ -185,7 +186,8 @@ const TreeView = () => {
             onItemClick={(event, node) => {
               handleFolderClick(node);
             }}
-          />
+            />
+        )}</>
         )}
 
       <button className="side-button" onClick={toggleVisibility}>
