@@ -95,7 +95,7 @@ export default function MainGrid() {
             itemId:null,
             lastModifiedUserId:item.userId,
             lastModifiedDate:item.startDate,
-            isFolder:item.isFolder,
+            isFolder:true,
             parentId:null,
             finished:false,
             projectId:item.projectId

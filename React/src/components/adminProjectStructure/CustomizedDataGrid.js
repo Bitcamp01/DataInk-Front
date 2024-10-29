@@ -382,21 +382,26 @@ const handleCopy = () => {
 
   ////////////////////////////////////////////////////////////////////////////////////
 
-
-  const handleRowDoubleClick=(params)=>{
+  const handleRowDoubleClick=(params,event)=>{
+    event.preventDefault();
+    event.defaultMuiPrevented = true;
     setLoading(true);
     setRowSelectionModel([]);
     apiRef.current.setCellFocus(null)
-    if(apiRef.current){
-      console.log("포커스 셀 정보",apiRef.current.state.focus.cell);
-    }
-    const row = params.row;
-    if (row.isFolder) {
-      setSelectedProject(row.projectId);
-      setSelectedFolder(row.id);
-    } else {
-      handleOpenModal(row.label);
-    }
+    setTimeout(() => {
+      if (apiRef.current) {
+        apiRef.current.setCellFocus(null);
+        console.log("포커스 셀 정보", apiRef.current.state.focus.cell);
+      }
+  
+      const row = params.row;
+      if (row.isFolder) {
+        setSelectedProject(row.projectId);
+        setSelectedFolder(row.id);
+      } else {
+        handleOpenModal(row.label);
+      }
+    }, 0);
   }
 
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -641,7 +646,10 @@ const handleCopy = () => {
             getRowId={(row) => `${row.id}_${row.projectId}`}
             columns={columns}
             editMode='row'
+            
             onCellDoubleClick={(params, event) => {
+              event.preventDefault();
+              event.defaultMuiPrevented = true;
               if (!event.ctrlKey) {
                 event.defaultMuiPrevented = true;
               }
