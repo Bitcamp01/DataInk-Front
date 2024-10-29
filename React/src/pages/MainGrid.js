@@ -7,6 +7,7 @@ import CustomizedTreeView from '../components/adminProjectStructure/CustomizedTr
 import CustomizedDataGrid from '../components/adminProjectStructure/CustomizedDataGrid';
 import axios from "axios";
 import { wait } from '@testing-library/user-event/dist/utils';
+import ErrorBoundary from '../components/adminProjectStructure/ErrorBoundary.js';
 
 export default function MainGrid() {
   // 환경 변수에서 API URL 가져오기
@@ -35,7 +36,6 @@ export default function MainGrid() {
         lastModifiedUserId: item.lastModifiedUserId, // 추가된 필드
         lastModifiedDate: item.lastModifiedDate,
         finished: item.finished, // 추가된 필드
-
         projectId:projectId === null ? item.projectId : projectId
       });
       if (item.children && item.children.length > 0) {
@@ -43,7 +43,7 @@ export default function MainGrid() {
       }
 
     });
-
+    console.log("flatData",flatData);
     return flatData;
   }
 
@@ -95,15 +95,13 @@ export default function MainGrid() {
             itemId:null,
             lastModifiedUserId:item.userId,
             lastModifiedDate:item.startDate,
-            isFolder:true,
+            isFolder:item.isFolder,
             parentId:null,
             finished:false,
             projectId:item.projectId
           }
-          console.log("백엔드 초기 프로젝트 폴더",newFolder)
           setOriginalFolderData(prevData => [...prevData, newFolder]);
         })
-
       }
     }
     catch(err){
@@ -161,6 +159,7 @@ export default function MainGrid() {
 
   React.useEffect(()=>{
     setFlatFolderData(flattenTree(originalFolderData))
+    console.log("origin Data",originalFolderData)
   },[originalFolderData])
   React.useEffect(()=>{
     const newTreeData = unflatten(flatFolderData);
@@ -183,6 +182,7 @@ export default function MainGrid() {
           </Stack>
         </Grid>
           <Grid size={{ md: 12, lg: 9 }} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <ErrorBoundary>
           <CustomizedDataGrid getSelectedFolderData={getSelectedFolderData}
                               folderData={folderData}
                               setFolderData={setFolderData}
@@ -193,6 +193,7 @@ export default function MainGrid() {
                               setSelectedProject={setSelectedProject}
                               selectedProject={selectedProject}
                               getInitFolderData={getInitFolderData}/>
+                              </ErrorBoundary>
         </Grid>
       </Grid>
     </Box>

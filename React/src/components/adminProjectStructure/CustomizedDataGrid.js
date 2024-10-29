@@ -60,28 +60,29 @@ export default function CustomizedDataGrid({getSelectedFolderData,folderData,set
  
   // flatFolderData를 Map 형태로 관리하여 탐색 성능 향상
   const [flatFolderMap, setFlatFolderMap] = useState(new Map());
-
+  const [loading, setLoading] = useState(false);
 
   useEffect(()=>{
     console.log(rowSelectionModel)
   },[rowSelectionModel])
-  //데이터 그리드 영역 업데이트 부분
   useEffect(()=>{
-    if(selectedFolder !== undefined && selectedProject !==undefined){
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-      console.log(flatFolderMap)
-      setRows(Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder));
-    }
-    console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqq")
-  },[flatFolderMap])
+    console.log("rows",rows)
+    setLoading(false);
+  },[rows])
+  //데이터 그리드 영역 업데이트 부분
+  useEffect(() => {
+      const filteredRows = Array.from(flatFolderMap.values()).filter(item => item.parentId === selectedFolder);
+      console.log("qweqweqweqweqweqw")
+      setRows(filteredRows);
+  }, [selectedFolder,flatFolderMap]);
 
   // flatFolderData가 변경될 때 Map으로 업데이트
   useEffect(() => {
+    setLoading(true);
     if(selectedFolder !== undefined && selectedProject !==undefined){
       console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
       setFlatFolderMap(new Map(flatFolderData.map(item => [`${item.id}_${item.projectId}`, item])));
     }
-    
   }, [flatFolderData]);
   ///////////////////////////////////////////////////////////////////////////////////
   const [conversionList, setConversionList] = useState([]); // 변환 목록
@@ -383,6 +384,12 @@ const handleCopy = () => {
 
 
   const handleRowDoubleClick=(params)=>{
+    setLoading(true);
+    setRowSelectionModel([]);
+    apiRef.current.setCellFocus(null)
+    if(apiRef.current){
+      console.log("포커스 셀 정보",apiRef.current.state.focus.cell);
+    }
     const row = params.row;
     if (row.isFolder) {
       setSelectedProject(row.projectId);
@@ -622,9 +629,11 @@ const handleCopy = () => {
 
   return (
     <>
+    {isLoading ? (<div>Loading...</div>) :
       <Box sx={{ display: 'flex', flexDirection: 'column',height: 'calc(100vh - 100px)' }}>
         <Box flexGrow={1} height="100%">
           <DataGrid
+            loading={isLoading}
             apiRef={apiRef}
             checkboxSelection
             disableDoubleClickEdit={true}
@@ -677,6 +686,7 @@ const handleCopy = () => {
           />
         </Box>
       </Box>
+}
       <PdfModal open={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
       <Dialog open={isConversionModalOpen} onClose={handleCloseConversionModal} fullWidth maxWidth="sm">
         <DialogTitle>변환 목록</DialogTitle>
@@ -737,6 +747,7 @@ const handleCopy = () => {
         setSelectedItem={setSelectedItemId}
         selectedItem={selectedItemId}
       />
+          
       {/* 컨텍스트 메뉴 */}
       <Menu
         open={contextMenu !== null}
@@ -762,8 +773,6 @@ const handleCopy = () => {
         <MenuItem onClick={handleOpenItemModal}>항목 지정</MenuItem>
         <MenuItem onClick={handleAddToConversion}>변환 목록 추가</MenuItem>
       </Menu>
-
-    
     </>
   );
 }
