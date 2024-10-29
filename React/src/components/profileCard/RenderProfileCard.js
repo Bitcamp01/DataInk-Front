@@ -22,7 +22,9 @@ const RenderProfileCard = () => {
           username: response.data.username,
           authen: response.data.authen,
           dep: response.data.dep,
-          profileImg: `https://kr.object.ncloudstorage.com/dataink/${response.data.profileImg}`
+          profileImg: response.data.profileImg
+            ? `https://kr.object.ncloudstorage.com/dataink/${response.data.profileImg}`
+            : '/icons/dataink-logo_icon.svg' // profileImg가 null 값일 때 기본 이미지로 설정하기
         };
         // console.log(profile);
         setProfile(profile);
