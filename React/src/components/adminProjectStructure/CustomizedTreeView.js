@@ -236,7 +236,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
   return (
       <Card variant="outlined" sx={{ display: 'flex', flexDirection: 'column', gap: '8px', flexGrow: 1 }}>
         <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom:'5px' }}>
               <Button variant="contained" sx={{ ml: 'auto' }} onClick={handleOpen}>
                 새 프로젝트
               </Button>
