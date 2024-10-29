@@ -27,14 +27,18 @@ const Mypage = () => {
     const parsedProfileIntro = profileIntro.startsWith('"') && profileIntro.endsWith('"')
     ? JSON.parse(profileIntro)
     : profileIntro;
-    console.log("profileIntro:", profileIntro); // 리덕스에서 가져온 상태
-    console.log("parsedProfileIntro:", parsedProfileIntro); // 파싱한 후 값
 
     const { name, authen } = useSelector(state => state.userSlice);
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('Workstatus');
+
+    // 역할 라벨 설정
+    const roleLabel = authen === 'ROLE_USER' ? '라벨러'
+                    : authen === 'ROLE_MANAGER' ? '검수자'
+                    : authen === 'ROLE_ADMIN' ? '관리자'
+                    : '';
     
 
     // 모달 열기 & 닫기
@@ -88,9 +92,6 @@ const Mypage = () => {
             dispatch(resetProfileAuth(false)); // 초기에는 인증을 false로 설정
         }
     }, [activeTab, dispatch]);
-
-    // userDetails 데이터를 콘솔에 출력하여 확인
-    console.log("userDetails:", userDetails);
 
     // userDetails가 로드될 때만 profileImageUrl와 backgroundImageUrl을 설정
     const profileImageUrl = userDetails?.profileImageUrl 
@@ -175,7 +176,7 @@ const Mypage = () => {
 
                         <div className="profile-info__intro">
                             <h2 className="profile-info__intro profile-info__intro--name">{name}</h2>
-                            <p className="profile-info__intro profile-info__intro--role">{authen}</p>
+                            <p className="profile-info__intro profile-info__intro--role">{roleLabel}</p>
                             <p className="profile-info__intro profile-info__intro--status">
                                 {parsedProfileIntro}
                                 <button className="edit-status-btn" onClick={handleOpenStatusModal}>

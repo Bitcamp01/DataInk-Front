@@ -264,6 +264,7 @@ const Alarm = () => {
                 headerHeight={50}
                 autoHeight
                 disableRowSelectionOnClick
+                hideFooter
                 classes={{
                     cell: 'alarm__custom-cell',
                     columnHeader: 'alarm__custom-header',
