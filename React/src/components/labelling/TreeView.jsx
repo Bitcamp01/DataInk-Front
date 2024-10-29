@@ -9,11 +9,13 @@ const TreeView = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isVisible, setIsVisible] = useState(true);
   const [isRotated, setIsRotated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
   const dispatch = useDispatch();
   const projectId = useSelector((state) => state.labelTableSlice.projectId); // projectId를 가져옴
   const folders = useSelector((state) => state.labelTableSlice.items); // 폴더 데이터를 가져옴
   const userAuthen = useSelector((state) => state.userSlice.authen); // 유저 권한 가져옴
+  const loading = useSelector((state) => state.labelTableSlice.loading); // 로딩 상태 가져오기
 
   // 버튼 클릭 시 토글
   const toggleVisibility = () => {
@@ -21,18 +23,27 @@ const TreeView = () => {
     setIsRotated(!isRotated);
   };
 
-  // 프로젝트 ID가 있을 때 폴더 데이터를 가져오는 API 호출
   useEffect(() => {
-    if (projectId) {
-      dispatch(clearFolders()); // 이전 폴더 데이터 초기화
-      dispatch(fetchFolders(projectId));
-    }
+    const fetchData = async () => {
+      if (projectId) {
+        setIsLoading(true); // 로딩 시작
+        await dispatch(fetchFolders(projectId));
+        setIsLoading(false); // 로딩 종료
+      }
+    };
+
+    fetchData();
+
+    // 언마운트될 때 폴더 초기화
+    return () => {
+      dispatch(clearFolders());
+    };
   }, [dispatch, projectId]);
 
   // 폴더 데이터를 재귀적으로 변환하는 함수
   const transformFolderData = (folders) => {
     return folders
-      .filter(folder => folder.folder)  // folder가 true인 항목만 반환
+      .filter(folder => folder.isFolder)  // folder가 true인 항목만 반환
       .map(folder => ({
         id: folder.id,
         label: folder.label,
@@ -69,7 +80,7 @@ const TreeView = () => {
       return;
     }
 
-    const hasSubFolder = folder.children && folder.children.some(child => child.folder === true);
+    const hasSubFolder = folder.children && folder.children.some(child => child.isFolder === true);
     if (hasSubFolder) {
       return;
     }
@@ -78,13 +89,13 @@ const TreeView = () => {
       const resultAction = await dispatch(fetchTasksByFolderId(folder.id));
       let tasks = resultAction.payload;
 
-      if (userAuthen === 'ROLE_USER') {
-        tasks = tasks.filter(task => task.status === 'in_progress' || task.status === 'rejected');
-      } else if (userAuthen === 'ROLE_MANAGER') {
-        tasks = tasks.filter(task => task.status === 'submitted' || task.status === 'pending');
-      } else if (userAuthen === 'ROLE_ADMIN') {
-        tasks = tasks.filter(task => task.status === 'reviewed');
-      }
+      // if (userAuthen === 'ROLE_USER') {
+      //   tasks = tasks.filter(task => task.status === 'in_progress' || task.status === 'rejected');
+      // } else if (userAuthen === 'ROLE_MANAGER') {
+      //   tasks = tasks.filter(task => task.status === 'submitted' || task.status === 'pending');
+      // } else if (userAuthen === 'ROLE_ADMIN') {
+      //   tasks = tasks.filter(task => task.status === 'reviewed');
+      // }
 
       const projectEndDateAction = await dispatch(fetchProjectEndDate(projectId));
       const projectEndDate = projectEndDateAction.payload;
@@ -151,32 +162,35 @@ const TreeView = () => {
   };
 
   return (
-    <div
-      className="tree-container"
-      style={{
-        width: isVisible ? '15.6rem' : '0',
-      }}
-    >
-      {isVisible && (
-        <>
-          <div className="search-bar">
-            <img src={`/icons/label-search_icon.svg`} alt="Label Search Icon" className="label-search-icon" />
-            <input 
-              type="text" 
-              placeholder="Search" 
-              value={searchTerm} 
-              onChange={handleSearch} 
-              className="search-input"
-            />
+      <div
+        className="tree-container"
+        style={{
+          width: isVisible ? '15.6rem' : '0',
+        }}
+      >
+        <div className="search-bar">
+          <img src={`/icons/label-search_icon.svg`} alt="Label Search Icon" className="label-search-icon" />
+          <input 
+            type="text" 
+            placeholder="Search" 
+            value={searchTerm} 
+            onChange={handleSearch} 
+            className="search-input"
+          />
+        </div>
+
+        {isLoading ? (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img src='/gifs/loading_gif.gif' alt="로딩 중" style={{ width: "40%" }} />
           </div>
+        ) : (
           <RichTreeView 
             items={transformedItems}
             onItemClick={(event, node) => {
               handleFolderClick(node);
             }}
           />
-        </>
-      )}
+        )}
 
       <button className="side-button" onClick={toggleVisibility}>
         <img 

@@ -34,6 +34,8 @@
 .bm-profile img {
     width: 130px;
     height: 130px;
+    object-fit: cover; /* 이미지의 왜곡 없이 원형에 맞도록 크기 조정 */
+    border-radius: 50%;
 }
 
 .bm-prodile-title {

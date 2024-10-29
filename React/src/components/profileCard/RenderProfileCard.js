@@ -22,7 +22,7 @@ const RenderProfileCard = () => {
           username: response.data.username,
           authen: response.data.authen,
           dep: response.data.dep,
-          profileImg: response.data.profileImg
+          profileImg: `https://kr.object.ncloudstorage.com/dataink/${response.data.profileImg}`
         };
         // console.log(profile);
         setProfile(profile);

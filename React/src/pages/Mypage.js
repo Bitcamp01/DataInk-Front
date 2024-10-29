@@ -21,14 +21,16 @@ const MypageContainer = styled.div`
 const Mypage = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const { profileImage, backgroundImage, isProfileAuthenticated, profileIntro = "", userDetails} = useSelector((state) => state.mypageSlice);
-
+    const { profileImage, backgroundImage, isProfileAuthenticated, userDetails} = useSelector((state) => state.mypageSlice);
+    const profileIntro = userDetails?.profileIntro || "소개 글을 입력해 주세요.";
     // 이스케이프된 문자열인지 확인하고 파싱
     const parsedProfileIntro = profileIntro.startsWith('"') && profileIntro.endsWith('"')
     ? JSON.parse(profileIntro)
     : profileIntro;
+    console.log("profileIntro:", profileIntro); // 리덕스에서 가져온 상태
+    console.log("parsedProfileIntro:", parsedProfileIntro); // 파싱한 후 값
 
-    const { name, authen} = useSelector(state => state.userSlice);
+    const { name, authen } = useSelector(state => state.userSlice);
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -60,7 +62,7 @@ const Mypage = () => {
         setIsProfileModalOpen(true);
     };
 
-    // userEffect
+    // userEffect//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const section = queryParams.get('section');
@@ -87,13 +89,8 @@ const Mypage = () => {
         }
     }, [activeTab, dispatch]);
 
-    const handleProfileAuthentication = () => {
-        dispatch(resetProfileAuth(true));  // 인증 성공 시 true로 설정
-    };
-
-
     // userDetails 데이터를 콘솔에 출력하여 확인
-console.log("userDetails:", userDetails);
+    console.log("userDetails:", userDetails);
 
     // userDetails가 로드될 때만 profileImageUrl와 backgroundImageUrl을 설정
     const profileImageUrl = userDetails?.profileImageUrl 
@@ -131,17 +128,6 @@ console.log("userDetails:", userDetails);
         setIsProfileModalOpen(false);
     };
 
-    // const renderComponent = () => {
-    //     if (activeTab === 'Profile') {
-    //         if (!isProfileAuthenticated) {
-    //             return <ProfileInit onAuthenticate={(password) => { handleProfileAuthentication(password); }} />;
-    //         }
-    //         return <Profile userDetails={userDetails || {}} />;
-    //     }
-    //     if (activeTab === 'Workstatus') return <Workstatus />;
-    //     if (activeTab === 'Alarm') return <Alarm />;
-    //     if (activeTab === 'Calendar') return <Calendar />;
-    // };
     const renderComponent = () => {
         if (activeTab === 'Profile') {
             return isProfileAuthenticated ? (
