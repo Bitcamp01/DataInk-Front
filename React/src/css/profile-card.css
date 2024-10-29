@@ -144,3 +144,19 @@
     margin: 0;
     font-size: 0.8rem;
 }
+
+.loading-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    color: #999;
+}
+
+.loading-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #999;
+}

@@ -1,12 +1,19 @@
-import React from 'react';
-import '../../css/profile-card.css'
+import React, { useEffect, useState } from 'react';
+import '../../css/profile-card.css';
 
 const ProfileCard = ({ profile, announcements }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (announcements.length > 0) {
+      setLoading(false); // announcements가 로드되면 로딩 상태 해제
+    }
+  }, [announcements]);
+
   if (!profile) {
-    return <div className='bm-profileCard'>프로필 정보를 불러오는 중...</div>;
+    return <div className='bm-profileCard loading-profile'>프로필 정보를 불러오는 중...</div>;
   }
 
-  // authen 필드를 역할명으로 변환하는 함수
   const getRoleName = (role) => {
     switch (role) {
       case 'ROLE_ADMIN':
@@ -45,9 +52,7 @@ const ProfileCard = ({ profile, announcements }) => {
           </div>
           <div className="bm-role">
             <span style={{ color: '#929292', fontSize: '0.9rem' }}>역할</span>
-            <span 
-              className='bm-role-detail'
-            >
+            <span className='bm-role-detail'>
               {getRoleName(profile.authen)}
             </span>
           </div>
@@ -59,7 +64,10 @@ const ProfileCard = ({ profile, announcements }) => {
               더보기
             </a>
           </span>
-          {announcements.map((announcement, index) => (
+          {loading ? (
+            <div className='loading-text'>Loading...</div>
+          ) : (
+            announcements.map((announcement, index) => (
               <div key={index} className="bm-detailInfo">
                 <img
                   src={announcement.urgent ? '/icons/urgent-speaker_icon.svg' : '/icons/speaker_icon.svg'}
@@ -72,7 +80,8 @@ const ProfileCard = ({ profile, announcements }) => {
                   {announcement.title}
                 </a>
               </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
