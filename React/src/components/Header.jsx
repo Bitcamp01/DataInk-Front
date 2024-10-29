@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/header.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../apis/userApis';
 
 function Header({ title }) {
@@ -9,6 +9,8 @@ function Header({ title }) {
     const [showProfileMenu, setShowProfileMenu] = useState(false); // 프로필 메뉴 토글 상태
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    const profileImageUrlDB = useSelector((state) => state.userSlice.profileImageUrl);
 
     const toggleNotifications = () => {
         setShowNotifications(!showNotifications);
@@ -59,6 +61,10 @@ function Header({ title }) {
         }
     };
 
+    const profileImageUrl = profileImageUrlDB 
+    ? `https://kr.object.ncloudstorage.com/dataink/${profileImageUrlDB}`
+    : '/images/default-profile.png';  // 기본값으로 설정
+
     return (
         <header className="header">
             <div className="header__back-icon" onClick={handleBackClick}>
@@ -104,7 +110,7 @@ function Header({ title }) {
                     )}
                 </div>
                 <div className="header__profile-wrapper">
-                    <img src="/images/profile_img.png" alt="프로필" onClick={toggleProfileMenu} className="header__icon header__icon--profile" />
+                    <img src={profileImageUrl} alt="프로필" onClick={toggleProfileMenu} className="header__icon header__icon--profile" />
                     <img src="/icons/profile-drop_icon.svg" alt="드롭다운" className="header__icon header__icon--dropdown" onClick={toggleProfileMenu} />
                     {showProfileMenu && (
                         <div className="profile-dropdown">
