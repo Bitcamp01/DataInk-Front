@@ -71,12 +71,7 @@ function Header({ title }) {
                 <img src="/icons/back_icon.svg" alt="뒤로가기" />
             </div>
             <div className="header__title">{title}</div>
-            <div className="header__search">
-                <input type="text" className="header__search-input" />
-                <img src="/icons/search_icon.svg" alt="검색 아이콘" className="header__search-icon" />
-            </div>
             <div className="header__icons">
-                <img src="/icons/chat_icon.svg" alt="채팅" className="header__icon header__icon--chat" />
                 <div className="header__icon-wrapper">
                     <img 
                         src="/icons/alert_icon.svg" 
