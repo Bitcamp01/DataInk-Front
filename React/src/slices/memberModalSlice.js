@@ -22,7 +22,8 @@ const memberModalSlice = createSlice({
       .addCase(fetchModalData.fulfilled, (state, action) => {
         const data = action.payload;
 
-        state.modalDatas = data.content; // 기존 데이터에 새 데이터 병합
+       // 기존 데이터와 새로 불러온 데이터를 병합
+        state.modalDatas = [...state.modalDatas, ...data.content];
         state.totalPages = data.totalPages || 1;
         state.loading = false;
         console.log("리듀서 쪽: ", [...state.modalDatas, ...data.content]);

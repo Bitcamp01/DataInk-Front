@@ -79,6 +79,26 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   }, [open, selectedRow, dispatch]);
 
 
+  //모달무한스크롤
+  const loadMoreUsers = async (page) => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/modal`, {
+        params: { page, size: 10 },
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const newUsers = response.data.pageItems.content;
+        setModalData((prevData) => [...prevData, ...newUsers]); // 이전 데이터에 이어붙임
+      }
+    } catch (error) {
+      console.error('사용자 목록을 가져오는 중 오류 발생:', error);
+    }
+  };
+
+
 
   // Redux의 modalData가 변경될 때마다 usersData 업데이트
   useEffect(() => {
@@ -91,6 +111,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
         console.log('leftMembers:', projectMembersDB);
     setTempProjectMembers(
       projectMembersDB.map((member) => ({
+        projectId: selectedRow?.id,
         userId: member.userId,
         name: member.name,
         department: member.userDetailDto?.dep || '부서 정보 없음',
@@ -99,7 +120,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     );
     }, [projectMembersDB]);
 
-  // 첫 번째 DataGrid의 스크롤 이벤트 처리
+  // // 첫 번째 DataGrid의 스크롤 이벤트 처리
   const handleScroll1 = () => {
     if (!containerRef1.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef1.current;
@@ -186,6 +207,20 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
 
   // 저장 버튼을 눌렀을 때, 임시 상태의 데이터를 백엔드와 동기화
   const handleSaveChanges = async () => {
+      // tempProjectMembers 배열이 비어 있는지 확인
+      if (!tempProjectMembers.length) {
+        console.error("tempProjectMembers 배열이 비어 있습니다.");
+        alert("저장할 멤버 데이터가 없습니다.");
+        return;
+    }
+   
+      // 배열의 첫 번째 객체에 projectId가 있는지 확인
+      const projectId = selectedRow?.id; // 상위 projectId에서 가져오기
+      if (!projectId) {
+          console.error("projectId가 정의되지 않았습니다.");
+          alert("프로젝트 ID가 없습니다.");
+          return;
+      }
 
   console.log('tempProjectMembers:', tempProjectMembers);
   console.log('projectId:', tempProjectMembers[0]?.projectId);
@@ -194,9 +229,11 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
 
     // 요청할 데이터 구조 설정
     const projectMemberSaveRequests = {
-      projectId: tempProjectMembers[0].projectId, // 프로젝트 ID
+      projectId:projectId,
+      // projectId: tempProjectMembers[0].projectId, // 프로젝트 ID
       members: tempProjectMembers.map(member => ({
         userId: member.userId,
+        projectId: projectId,
         name: member.name,
         department: member.department,
         role: member.role
@@ -204,10 +241,10 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     };
    
 
-    console.log('저장할 데이터:', projectMemberSaveRequests); // 로그 추가 (디버깅 용도)
+    console.log('저장할 데이터:', projectMemberSaveRequests); 
 
     const response = await axios.post(
-      `${API_BASE_URL}/member/modal-add/${tempProjectMembers[0].projectId}`
+      `${API_BASE_URL}/member/modal-save/${projectId}`
       , projectMemberSaveRequests
       , {
         headers: {
@@ -275,8 +312,9 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 
                       
               <DataGrid
-                rows={(projectMembers).map((item) => ({
-                  id: item.userId,
+                rows={(projectMembers).map((item, index) => ({
+                  // id: item.userId,
+                  id: `${item.userId}_${index}`,  // 고유한 id 설정 (userId와 index를 조합)
                   name: item.name,
                   department: item?.userDetailDto?.dep || '부서 정보 없음',
                   role:translateRole(item.authen),
