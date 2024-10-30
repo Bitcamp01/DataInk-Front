@@ -29,6 +29,7 @@ const ButtonContainer = styled.div`
 export default function DataGridDemo() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // const authen = useSelector((state) => state.users.authen);
 
   const [rowSelectionModel, setRowSelectionModel] = React.useState([]); // 선택된 행을 관리하는 상태
   const [modalMessage, setModalMessage] = React.useState('선택한 작업을 검수 요청하시겠습니까?');
@@ -60,9 +61,12 @@ export default function DataGridDemo() {
 
   const handleRowClick = (params) => {
     const { id } = params.row;  // taskId 대신 id 사용
-    // navigate(`/label/detail`);
-    navigate(`/review/${id}`); // status가 submitted면 Review 컴포넌트로 이동
-    // navigate(`/label/data/${id}`); // taskId 같이 보내기 가능, 근데 전역 state로 하는 게 낫지 않나?
+    // if (authen === 'ROLE_USER') {
+      // navigate(`/label/detail/${id}`); // ROLE_USER일 때
+    // } else if (authen === 'ROLE_MANAGER') {
+      navigate(`/review/${id}`); // ROLE_MANAGER일 때
+    // }
+
   };
 
   return (

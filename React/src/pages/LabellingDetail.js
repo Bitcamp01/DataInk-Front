@@ -20,10 +20,8 @@ const LabellingDetail = () => {
             </div>
             <div className="work-space">
                 <div className="review-work-container">
-                    <LabelingTable />
-                    {/* <LabelingTable taskId={id} onDataTransform={setTransformedData}/> */}
-                    <LabelSelectForm />
-                    {/* <LabelSelectForm taskId={id} transformedData={transformedData}/> */}
+                    <LabelingTable taskId={id} onDataTransform={setTransformedData}/>
+                    <LabelSelectForm taskId={id} transformedData={transformedData}/>
                 </div>
             </div>
         </section>
