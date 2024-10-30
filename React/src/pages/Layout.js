@@ -7,45 +7,47 @@ import { Outlet, useLocation } from 'react-router-dom';
 function Layout() {
   const location = useLocation();
   const [pageTitle, setPageTitle] = useState('Data Labeling');
+  const [activeIcon, setActiveIcon] = useState('');
 
-  // 페이지 제목을 설정하는 함수
-  const getPageTitle = (path) => {
+  // 페이지 제목과 activeIcon을 설정하는 함수
+  const getPageInfo = (path) => {
     switch (path) {
       case '/dashboard':
-        return 'Dashboard';
+        return { title: 'Dashboard', icon: 'dashboard' };
       case '/label/main':
-        return 'Labelling Select';
+        return { title: 'Labelling Select', icon: 'label' };
       case '/label/work':
-        return 'Labelling Work';
+        return { title: 'Labelling Work', icon: 'label' };
       case '/label/detail':
-        return 'Labelling Detail';
+        return { title: 'Labelling Detail', icon: 'label' };
       case '/member':
-        return 'Member Management';
+        return { title: 'Member Management', icon: 'member' };
       case '/mypage':
-        return 'MyPage';
+        return { title: 'MyPage', icon: '' };
       case '/notice':
-        return 'Notice';
+        return { title: 'Notice', icon: 'notice' };
       case '/review':
-        return 'Labelling Review';
+        return { title: 'Labelling Review', icon: 'label' };
       case '/notice_write':
-        return 'Notice';
+        return { title: 'Notice', icon: 'notice' };
       case '/notice_detail':
-        return 'Notice';
+        return { title: 'Notice', icon: 'notice' };
       default:
-        return 'Data Labeling'; // 기본 제목
+        return { title: 'Data Labeling', icon: '' };
     }
   };
-
+  
   useEffect(() => {
-    const title = getPageTitle(location.pathname);
+    const { title, icon } = getPageInfo(location.pathname);
     setPageTitle(title);
+    setActiveIcon(icon);
   }, [location]);
 
 
   return (
     <div className="layout">
       {/* 사이드바 */}
-      <Sidebar />
+      <Sidebar activeIcon={activeIcon} />
       
       {/* 메인 영역 */}
       <div className="main">

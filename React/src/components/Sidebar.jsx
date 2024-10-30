@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/sidebar.css'; // CSS 파일 연결
 import { Link } from 'react-router-dom';
 
-function Sidebar() {
+function Sidebar({ activeIcon: initialActiveIcon }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false); // extra-sidebar의 열림 상태 관리
-  // 현재 활성화된 아이콘 상태 관리
-  const [activeIcon, setActiveIcon] = useState('');
+  const [hoverIcon, setHoverIcon] = useState(''); // 마우스 오버 상태 관리
 
-  // 마우스가 아이콘 위로 올려졌을 때 활성화
+  // 마우스 오버 시 아이콘 활성화
   const handleMouseEnter = (iconName) => {
-    setActiveIcon(iconName);
+    setHoverIcon(iconName);
   };
 
-  // 마우스가 아이콘에서 벗어났을 때 비활성화
+  // 마우스가 벗어나면 아이콘 비활성화
   const handleMouseLeave = () => {
-    setActiveIcon('');
+    setHoverIcon('');
   };
 
   // 마우스를 올리면 extra-sidebar가 열림
@@ -35,42 +34,50 @@ function Sidebar() {
     >
       {/* 고정 사이드바 */}
       <aside className="sidebar">
-      <img className="sidebar__logo" src="/icons/dataink-logo_icon.svg" alt="데이터잉크 아이콘" />
-      <div className="sidebar__menu">
-        <Link
-          to="/dashboard"
-          className={`sidebar__icon ${activeIcon === 'dashboard' ? 'sidebar__icon--active' : ''}`}
-          onMouseEnter={() => handleMouseEnter('dashboard')}
-          onMouseLeave={handleMouseLeave}
-        >
-          <img src="/icons/main-home_icon.svg" alt="메인홈" />
-        </Link>
-        <Link
-          to="/label/main"
-          className={`sidebar__icon ${activeIcon === 'label' ? 'sidebar__icon--active' : ''}`}
-          onMouseEnter={() => handleMouseEnter('label')}
-          onMouseLeave={handleMouseLeave}
-        >
-          <img src="/icons/data_icon.svg" alt="데이터라벨링" />
-        </Link>
-        <Link
-          to="/member"
-          className={`sidebar__icon ${activeIcon === 'member' ? 'sidebar__icon--active' : ''}`}
-          onMouseEnter={() => handleMouseEnter('member')}
-          onMouseLeave={handleMouseLeave}
-        >
-          <img src="/icons/member_icon.svg" alt="멤버관리" />
-        </Link>
-        <Link
-          to="/notice"
-          className={`sidebar__icon ${activeIcon === 'notice' ? 'sidebar__icon--active' : ''}`}
-          onMouseEnter={() => handleMouseEnter('notice')}
-          onMouseLeave={handleMouseLeave}
-        >
-          <img src="/icons/notice_icon.svg" alt="공지사항" />
-        </Link>
-      </div>
-    </aside>
+        <img className="sidebar__logo" src="/icons/dataink-logo_icon.svg" alt="데이터잉크 아이콘" />
+        <div className="sidebar__menu">
+          <Link
+            to="/dashboard"
+            className={`sidebar__icon ${
+              initialActiveIcon === 'dashboard' || hoverIcon === 'dashboard' ? 'sidebar__icon--active' : ''
+            }`}
+            onMouseEnter={() => handleMouseEnter('dashboard')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img src="/icons/main-home_icon.svg" alt="메인홈" />
+          </Link>
+          <Link
+            to="/label/main"
+            className={`sidebar__icon ${
+              initialActiveIcon === 'label' || hoverIcon === 'label' ? 'sidebar__icon--active' : ''
+            }`}
+            onMouseEnter={() => handleMouseEnter('label')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img src="/icons/data_icon.svg" alt="데이터라벨링" />
+          </Link>
+          <Link
+            to="/member"
+            className={`sidebar__icon ${
+              initialActiveIcon === 'member' || hoverIcon === 'member' ? 'sidebar__icon--active' : ''
+            }`}
+            onMouseEnter={() => handleMouseEnter('member')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img src="/icons/member_icon.svg" alt="멤버관리" />
+          </Link>
+          <Link
+            to="/notice"
+            className={`sidebar__icon ${
+              initialActiveIcon === 'notice' || hoverIcon === 'notice' ? 'sidebar__icon--active' : ''
+            }`}
+            onMouseEnter={() => handleMouseEnter('notice')}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img src="/icons/notice_icon.svg" alt="공지사항" />
+          </Link>
+        </div>
+      </aside>
 
       {/* extra-sidebar */}
       <aside className={`extra-sidebar ${isSidebarOpen ? 'open' : ''}`}>
