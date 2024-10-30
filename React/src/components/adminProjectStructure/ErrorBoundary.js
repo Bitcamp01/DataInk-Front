@@ -38,12 +38,19 @@ class ErrorBoundary extends React.Component {
     return { hasError: true };
   }
 
+  // componentDidCatch(error, errorInfo) {
+  //   // 에러를 무시하는 대신 콘솔에 경고만 남김
+  //   console.warn('An error occurred:', error);
+  //   console.warn('Error details:', errorInfo);
+  //   const additionalStateInfo = {
+  //     props:this.props
+  //   };
+  //   console.warn('An error rows',additionalStateInfo)
+  // }
   componentDidCatch(error, errorInfo) {
-    // 에러를 무시하는 대신 콘솔에 경고만 남김
-    console.warn('An error occurred:', error);
-    console.warn('Error details:', errorInfo);
+    console.error("Error captured in ErrorBoundary:", error, errorInfo.componentStack);
+    this.setState({ hasError: false });  // 에러 이후에도 렌더링을 유지하도록 설정
   }
-
   render() {
     if (this.state.hasError) {
       return this.props.children; // 여전히 자식 컴포넌트를 렌더링
