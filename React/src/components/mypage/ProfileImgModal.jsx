@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateProfileImage, deleteProfileImage, fetchUserDetails } from '../../apis/mypageApis';
 import { setProfileImage } from '../../slices/mypageSlice';
+
 
 const ModalOverlay = styled.div`
     position: fixed;
@@ -62,7 +63,8 @@ const FileName = styled.span`
     color: #666;
 `;
 
-const ProfileImgModal = ({ isOpen, currentImage, defaultImage, onClose, userDetails }) => {
+const ProfileImgModal = ({ isOpen, currentImage, defaultImage, onClose }) => {
+    const { profileImage, userDetails} = useSelector((state) => state.mypageSlice);
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(currentImage);
     const [isDefaultImage, setIsDefaultImage] = useState(false);
@@ -104,10 +106,12 @@ const ProfileImgModal = ({ isOpen, currentImage, defaultImage, onClose, userDeta
 
     // 모달 열릴 때마다 미리보기 상태를 초기화
     useEffect(() => {
+        if(isOpen) {
         setPreviewUrl(currentImage);
         setSelectedFile(null);
         setIsDefaultImage(false);
         setFileName("선택된 파일 없음");
+        }
     }, [currentImage, isOpen]);
 
     useEffect(() => {
@@ -117,6 +121,10 @@ const ProfileImgModal = ({ isOpen, currentImage, defaultImage, onClose, userDeta
     if (!isOpen) {
         return null;
     };
+
+    const profileImageUrl = profileImage || (userDetails?.profileImageUrl 
+        ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.profileImageUrl}`
+        : '/images/dataInk_profile_default.png');
 
     return (
         <ModalOverlay>

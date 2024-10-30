@@ -18,7 +18,7 @@ const mypageSlice = createSlice({
         searchCondition: 'all',
         searchKeyword: '',
         profileIntro: '소개 글을 입력해 주세요.',
-        page: 1
+        page: 1,
     },
     reducers: {
         resetProfileAuth: (state, action) => {

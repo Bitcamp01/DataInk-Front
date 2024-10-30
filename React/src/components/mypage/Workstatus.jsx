@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -40,12 +40,12 @@ const Workstatus = () => {
     const searchKeyword = useSelector(state => state.mypageSlice.searchKeyword);
     const page = useSelector(state => state.mypageSlice.page);
 
-        // 입력용 상태 (검색 버튼을 누르기 전 임시 저장 상태)
-        const [searchConditionInput, setSearchConditionInput] = useState("all");
-        const [searchKeywordInput, setSearchKeywordInput] = useState("");
-        const [period, setPeriod] = useState("all");
-        const [inputStartDate, setInputStartDate] = useState(dayjs().subtract(1, 'month'));
-        const [inputEndDate, setInputEndDate] = useState(dayjs());
+    // 입력용 상태 (검색 버튼을 누르기 전 임시 저장 상태)
+    const [searchConditionInput, setSearchConditionInput] = useState("all");
+    const [searchKeywordInput, setSearchKeywordInput] = useState("");
+    const [period, setPeriod] = useState("all");
+    const [inputStartDate, setInputStartDate] = useState(dayjs().subtract(1, 'month'));
+    const [inputEndDate, setInputEndDate] = useState(dayjs());
     
 
     const commonSelectStyles = {
@@ -72,16 +72,6 @@ const Workstatus = () => {
     const changeSearchKeyword = (e) => {
         setSearchKeywordInput(e.target.value);
     };
-
-    // const fetchProjects = useCallback(() => {
-    //     dispatch(getProjectsBySearch({
-    //         searchCondition,
-    //         searchKeyword,
-    //         page,
-    //         startDate: period === 'all' ? '' : startDate.format('YYYY-MM-DDTHH:mm:ss'),
-    //         endDate: period === 'all' ? '' : endDate.format('YYYY-MM-DDTHH:mm:ss'),
-    //     }));
-    // }, [dispatch, searchCondition, searchKeyword, period, startDate, endDate, page]);
 
     // 처음 렌더링 시 기본 검색 조건으로 데이터 로드
     useEffect(() => {

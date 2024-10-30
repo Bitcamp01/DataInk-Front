@@ -5,7 +5,7 @@ import ProfileInit from '../components/mypage/ProfileInit';
 import Profile from '../components/mypage/Profile';
 import Workstatus from '../components/mypage/Workstatus';
 import Alarm from '../components/mypage/Alarm';
-import Calendar from '../components/mypage/Calendar 원본';
+import Calendar from '../components/mypage/Calendar';
 import StatusEditModal from '../components/mypage/StatusEditModal';
 import BackgroundImgModal from '../components/mypage/BackgroundImgModal';
 import ProfileImgModal from '../components/mypage/ProfileImgModal';
@@ -229,7 +229,7 @@ const Mypage = () => {
 
             <BackgroundImgModal 
                 isOpen={isBackgroundModalOpen} 
-                currentImage={backgroundImage}
+                currentImage={backgroundImageUrl}
                 defaultImage="/images/dataInk_background_default.jpg"
                 onClose={handleCloseBackgroundModal}
                 onSave={handleSaveBackground} 
@@ -238,7 +238,7 @@ const Mypage = () => {
 
             <ProfileImgModal 
                 isOpen={isProfileModalOpen}
-                currentImage={profileImage}
+                currentImage={profileImageUrl}
                 defaultImage="/images/dataInk_profile_default.png"
                 onClose={handleCloseProfileModal}
                 onSave={handleSaveProfile}

@@ -11,8 +11,7 @@ import CalendarEditModal from './CalendarEditModal';
 import EventAddModal from './EventAddModal';
 import EventEditModal from './EventEditModal';
 import 'react-datepicker/dist/react-datepicker.css';
-import calendarSlice from '../../slices/calendarSlice';
-import eventSlice from '../../slices/eventSlice';
+import { setEvents } from '../../slices/eventSlice';
 Modal.setAppElement('#root'); // 'root'는 App이 렌더링되는 최상위 DOM 엘리먼트의 ID입니다.
 
 const CalendarBackground = styled.div`
@@ -137,7 +136,7 @@ const ScheduleItem = styled.div`
 // 구분선
 const Divider = styled.hr`
     border: none;
-    border-top: 1px dotted #ccc; /* 점선 스타일 */
+    border-top: 3px dotted #bbb; /* 점선 스타일 */
     margin: 10px 0; /* 위아래 간격 추가 */
 `;
 
@@ -168,7 +167,7 @@ const EditButton = styled.button`
     border-radius: 4px;
     cursor: pointer;
     padding: 4px 8px;
-    font-size: 10px;
+    font-size: 12px;
     display: none;
     &:hover {
         background-color: #535db1;
@@ -203,9 +202,8 @@ const ColorCircle = styled.span`
 
 const Calendar = () => {
     const dispatch = useDispatch();
-    const { calendars, status: calendarStatus, error: calendarError } = useSelector((state) => state.calendar);
-    // const { events, status: eventStatus, error: eventError } = useSelector((state) => state.event);
-    const [events, setEvents] = useState([]);
+    const calendars = useSelector((state) => state.calendarSlice.calendars);
+    const events = useSelector((state) => state.eventSlice.events);
     const [selectedDate, setSelectedDate] = useState(null);  // 선택한 날짜 상태
     const [selectedEvent, setSelectedEvent] = useState(null);// 선택한 이벤트
     const [selectedEvents, setSelectedEvents] = useState([]);  // 선택한 날짜의 이벤트 위에꺼랑 다른거임
@@ -219,24 +217,11 @@ const Calendar = () => {
     const [endDate, setEndDate] = useState('');
     const [memo, setMemo] = useState('');
     const [color, setColor] = useState('');
-    const [calendarOptions, setCalendarOptions] = useState([]);
     const [selectedCalendar, setSelectedCalendar] = useState(null); // 수정할 캘린더 정보 저장
     const [isModified, setIsModified] = useState(false);
     const [customColor, setCustomColor] = useState('');
-
 //---------------------------------------------------------------------------------------------------------------------------------------------
-// 지금이게 드래그하면 그날짜대로 설정해서 만드는건데 하나만클릭했을떄도 모달뜨는 오류나서 얼림
-    const handleSelect = (selectionInfo) => {
-        const start = selectionInfo.startStr;  // 선택한 범위의 시작 날짜
-        const end = new Date(selectionInfo.endStr); // 선택한 범위의 끝 날짜
 
-        // 종료일에서 하루를 빼서 실제로 선택한 마지막 날까지 포함되도록 처리
-        end.setDate(end.getDate() - 1);
-
-        setStartDate(start);  // 모달에 표시될 시작 날짜 설정
-        setEndDate(end.toISOString().split('T')[0]);  // 모달에 표시될 종료 날짜 설정
-        // openModal();  // 모달 열기
-    };
 //---------------------------------------------------------------------------------------------------------------------------------------------
     // 날짜 클릭 핸들러
     const handleDateClick = (arg) => {
@@ -336,18 +321,16 @@ const Calendar = () => {
     };
 
     // 캘린더 수정 모달 열기
-    const openEditCalendarModal = (calendar) => {
-        console.log("Selected calendar for editing:", calendar); // 추가된 로그
-        setSelectedCalendar(calendar);
-        setCalendarName(calendar.calendarName);
-        setColor(calendar.color);
-        setCustomColor(calendar.customColor || calendar.color); // customColor 초기화
+    const openEditCalendarModal = (calendars) => {
+        setSelectedCalendar(calendars);
+        setCalendarName(calendars.calendarName);
+        setColor(calendars.color);
+        setCustomColor(calendars.customColor || calendars.color); // customColor 초기화
         setEditCalendarModalIsOpen(true);
     };
 
     // 캘린더 수정 모달 닫기
     const closeEditCalendarModal = () => {
-        console.log('취소 버튼 클릭됨');
         setEditCalendarModalIsOpen(false);
         setSelectedCalendar(null);  // 선택된 캘린더 초기화
         resetForm();
@@ -364,6 +347,11 @@ const Calendar = () => {
         setIsModified(false);
     };
 
+    useEffect(() => {
+        dispatch(fetchCalendars());
+        dispatch(fetchEvents());
+    }, [dispatch]);
+
     // 모달 열릴 때마다 상태 초기화
     useEffect(() => {
         if (addEventModalIsOpen && selectedEvent) {
@@ -379,185 +367,184 @@ const Calendar = () => {
         }
     }, [addEventModalIsOpen, selectedEvent]);
 
-    useEffect(() => {
-        const loadCalendars = async () => {
-            try {
-                const calendarsData = await fetchCalendars();
-                if (Array.isArray(calendarsData)) {
-                setCalendarOptions(calendarsData);
-                } else {
-                console.error("캘린더 데이터 형식이 올바르지 않습니다.", calendarsData);
-                setCalendarOptions([]);
-                }
-            } catch (error) {
-                console.error("캘린더 로드 에러:", error);
-                setCalendarOptions([]);
-            }
-        };
-        loadCalendars();
-    }, []);
-
 
     // 이벤트 정보 조회 및 공휴일 적용
     useEffect(() => {
         const loadEvents = async () => {
             try {
-                const eventsData = await fetchEvents(); // API 함수 호출
-    
+                const eventsData = await dispatch(fetchEvents()).unwrap();
                 // 각 이벤트의 calendarId와 매칭하여 calendarName 설정
                 const formattedEvents = eventsData.map(event => {
-                    const matchedCalendar = calendarOptions.find(option => option.id === event.calendarId);
+                    const matchedCalendar = calendars.find(option => option.id === event.calendarId);
                     
-                    // 시작 및 종료 날짜가 유효한지 확인
                     const startDate = new Date(event.startDate);
                     const endDate = new Date(event.endDate);
                     
                     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
                         console.error('유효하지 않은 날짜 형식입니다:', event.startDate, event.endDate);
-                        return null; // 유효하지 않은 이벤트는 제외
+                        return null;
                     }
-    
+
                     return {
-                        id: event.id.toString(),  // ID를 문자열로 변환
+                        id: event.id.toString(),
                         title: event.title,
-                        calendarName: matchedCalendar ? matchedCalendar.calendarName : '', // 매칭된 캘린더 이름 사용
+                        calendarName: matchedCalendar ? matchedCalendar.calendarName : '',
                         start: startDate,
                         end: endDate,
                         color: event.color,
-                        allDay: event.allDay ? true : false,  // allDay 필드가 있으면 적용
+                        allDay: event.allDay || false,
+                        memo: event.memo,
                     };
-                }).filter(event => event !== null); // 유효하지 않은 이벤트는 필터링
+                    
+                }).filter(event => event !== null);
     
-                const holidayEvents = getHolidayEvents(); // 공휴일 이벤트 가져오기
+                const holidayEvents = getHolidayEvents();
     
-                // 기존 이벤트와 공휴일 데이터를 합쳐서 상태에 저장
-                setEvents([...formattedEvents, ...holidayEvents]);
+                // Redux 상태에 이벤트 저장
+                dispatch(setEvents([...formattedEvents, ...holidayEvents]));
             } catch (error) {
                 console.error("이벤트 로드 에러:", error);
             }
         };
     
         loadEvents();
-    }, [calendarOptions]);
+    }, [dispatch, calendars]);
     
     const handleEventClick = (info) => {
         const eventId = info.event.id;
-        const event = events.find(event => event.id === eventId);
-        console.log("클릭한 이벤트 ID:", eventId);
-        console.log("이벤트 리스트에서 찾은 이벤트:", event);
-    
-        if (event) {
-            if (event.isHoliday) {
+        const clickedEvent  = events.find(event => event.id === eventId);
+
+        if (clickedEvent) {
+            if (clickedEvent.isHoliday) {
                 alert('공휴일은 클릭할 수 없습니다.');
             } else {
-                console.log("선택된 이벤트:", event);
-                setSelectedEvent(event);
-                setTitle(event.title);
+                setSelectedEvent(clickedEvent);
+                setTitle(clickedEvent.title);
     
-                const selectedCalendar = calendarOptions.find(option => option.id === event.calendarId || option.calendarName === event.calendarName);
-                setCalendarName(selectedCalendar ? selectedCalendar.calendarName : '');
-    
-                // 날짜를 "yyyy-MM-dd" 형식으로 변환하여 설정
-                const startDate = new Date(event.start).toISOString().split("T")[0];
-                const endDate = new Date(event.end).toISOString().split("T")[0];
-    
-                // 종료일은 exclusive이므로 하루를 빼서 설정
-                const adjustedEndDate = new Date(event.end);
+                // calendarName을 기준으로 calendars에서 일치하는 캘린더를 찾습니다.
+                const selectedCalendar = calendars.find(option => option.calendarName === clickedEvent.calendarName);
+                if (selectedCalendar) {
+                    setCalendarName(selectedCalendar.calendarName);
+                    setColor(selectedCalendar.color);
+                } else {
+                    setCalendarName('');
+                }
+
+                // 시작 날짜를 "yyyy-MM-dd" 형식으로 변환하여 설정
+                const startDate = new Date(clickedEvent.start).toISOString().split("T")[0];
+                setStartDate(startDate);
+
+                // 종료 날짜를 하루 줄여서 설정
+                const adjustedEndDate = new Date(clickedEvent.end);
                 adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
                 setEndDate(adjustedEndDate.toISOString().split("T")[0]);
-    
-                setStartDate(startDate);
-                setMemo(event.memo || '');
-                setColor(event.color || '');
+                setMemo(clickedEvent.memo);
+                setColor(clickedEvent.color || '');
                 setIsModified(false);
-                openAddEventModal();
+                openEditEventModal();
             }
         } else {
             console.error('이벤트를 찾을 수 없습니다:', eventId);
         }
     };
 
-    const handleEventDrop = (info) => {
-        const eventId = info.event.id;
-        const event = events.find(event => event.id === eventId);
+    // 드롭
+    // const handleEventDrop = (info) => {
+    //     const eventId = info.event.id;
+    //     const event = events.find(event => event.id === eventId);
     
-        console.log('드롭된 이벤트:', event); // 디버깅용
+    //     if (!event) {
+    //         console.error('이벤트를 찾을 수 없습니다:', eventId);
+    //         info.revert();
+    //         return;
+    //     }
     
-        // 공휴일인 경우 드롭을 취소합니다.
-        if (event && event.extendedProps && event.extendedProps.isHoliday) {
-            console.log('공휴일 이벤트, 드롭 취소됨'); // 디버깅용
-            info.revert(); // 드롭을 취소
-            return;
-        }
+    //     if (event.extendedProps && event.extendedProps.isHoliday) {
+    //         console.log('공휴일 이벤트, 드롭 취소됨');
+    //         info.revert();
+    //         return;
+    //     }
     
-        const eventIndex = events.findIndex(event => event.id === eventId);
+    //     const eventIndex = events.findIndex(evt => evt.id === eventId);
     
-        if (eventIndex !== -1) {
-            const updatedEvents = [...events];
+    //     if (eventIndex !== -1) {
+    //         const updatedEvents = [...events];
+    //         const startDate = new Date(info.event.start).toISOString().split('T')[0];
     
-            // 시작 날짜 업데이트
-            const startDate = new Date(info.event.start).toISOString().split('T')[0];
+    //         let endDate;
+    //         if (info.event.end) {
+    //             const originalStartDate = new Date(event.start);
+    //             const originalEndDate = new Date(event.end);
+    //             const duration = (originalEndDate - originalStartDate) / (1000 * 60 * 60 * 24);
+    //             const adjustedEndDate = new Date(info.event.start);
+    //             adjustedEndDate.setDate(adjustedEndDate.getDate() + duration);
+    //             endDate = adjustedEndDate.toISOString().split('T')[0];
+    //         } else {
+    //             endDate = startDate;
+    //         }
     
-            // 종료 날짜 처리
-            let endDate;
-            if (info.event.end) {
-                const originalStartDate = new Date(event.start);
-                const originalEndDate = new Date(event.end);
-                const duration = (originalEndDate - originalStartDate) / (1000 * 60 * 60 * 24); // 기간(일 수) 계산
+    //         updatedEvents[eventIndex] = {
+    //             ...updatedEvents[eventIndex],
+    //             start: startDate,
+    //             end: endDate,
+    //         };
     
-                const adjustedEndDate = new Date(info.event.start);
-                adjustedEndDate.setDate(adjustedEndDate.getDate() + duration); // 시작일에 원래 기간을 더하여 종료일 설정
-                endDate = adjustedEndDate.toISOString().split('T')[0];
-            } else {
-                endDate = startDate;  // 종료 날짜가 없으면 시작 날짜로 설정
-            }
+    //         dispatch(updateEvent({
+    //             id: eventId,
+    //             title: event.title,
+    //             calendarName: event.calendarName,
+    //             start: startDate,
+    //             end: endDate,
+    //             memo: event.memo,
+    //             color: event.color,
+    //             allDay: event.allDay
+    //         }))
+    //         .unwrap()
+    //         .then((updatedEventFromBackend) => {
+    //             console.log('백엔드 업데이트 성공:', updatedEventFromBackend);
+    //             const updatedEventsFromBackend = events.map(evt => 
+    //                 evt.id === eventId ? { ...updatedEventFromBackend } : evt
+    //             );
+    //             dispatch(setEvents(updatedEventsFromBackend));
+    //         })
+    //         .catch((error) => {
+    //             console.error('이벤트 업데이트 에러 발생:', error);
+    //             info.revert();
+    //         });
     
-            // 기존 이벤트의 시작 및 종료 날짜를 업데이트
-            updatedEvents[eventIndex].start = startDate;
-            updatedEvents[eventIndex].end = endDate;
-    
-            // 백엔드에 업데이트 요청 보내기
-            dispatch(updateEvent({
-                id: eventId,
-                title: event.title,
-                calendarName: event.calendarName,
-                start: startDate,
-                end: endDate,
-                memo: event.memo,
-                color: event.color,
-                allDay: event.allDay
-            }))
-            .unwrap()
-            .then((updatedEventFromBackend) => {
-                console.log('백엔드 업데이트 성공:', updatedEventFromBackend);
-    
-                // 성공적으로 업데이트된 경우 이벤트 상태를 업데이트
-                setEvents(updatedEvents);
-            })
-            .catch((error) => {
-                console.error('이벤트 업데이트 에러:', error);
-                info.revert(); // 에러가 발생하면 드롭을 취소
-            });
-    
-            // FullCalendar 상태를 직접 업데이트하여 달력에서 사라지는 문제 방지
-            info.event.setStart(new Date(startDate));  // FullCalendar의 이벤트 상태도 갱신
-            info.event.setEnd(new Date(endDate));      // 종료 날짜 갱신
-        }
-    };
+    //         info.event.setStart(new Date(startDate));
+    //         info.event.setEnd(new Date(endDate));
+    //     }
+    // };
     
     // FullCalendar에 이벤트를 렌더링할 때 종료 날짜를 하루 추가하여 exclusive 처리 보정
     const renderEvents = () => {
         return events.map(event => {
-            console.log("event.end 값:", event.end);
-            const renderedEndDate = new Date(event.end);
-            renderedEndDate.setDate(renderedEndDate.getDate() + 1); // 렌더링 시에만 종료 날짜에 하루 추가
-
+            const startDate = event.start ? new Date(event.start) : null;
+            const endDate = event.end ? new Date(event.end) : null;
+            const matchedCalendar = calendars.find(calendar => calendar.id === event.calendarId);
+            const eventColor = matchedCalendar ? matchedCalendar.color : event.color;
+            const calendarName = matchedCalendar ? matchedCalendar.calendarName : '';
+            if (!startDate || isNaN(startDate.getTime()) || !endDate || isNaN(endDate.getTime())) {
+                console.warn("Invalid date for event:", event);
+                return null;  // 유효하지 않은 날짜가 있으면 건너뜁니다.
+            }
+    
+            const renderedEndDate = new Date(endDate);
+            renderedEndDate.setDate(renderedEndDate.getDate() + 1);
             return {
                 ...event,
-                end: renderedEndDate.toISOString().split('T')[0], // 렌더링 시만 하루 추가된 종료일로 설정
+                color: eventColor,
+                calendarName: calendarName,
+                start: startDate.toISOString().split('T')[0],
+                end: renderedEndDate.toISOString().split('T')[0],
+                memo
             };
-        });
+
+            
+        }).filter(event => event !== null); // 유효하지 않은 이벤트는 필터링합니다.
     };
+
     return (
         <CalendarBackground>
             <CalendarContainer>
@@ -570,7 +557,8 @@ const Calendar = () => {
                             style={{ 
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'center' 
+                                alignItems: 'center',
+                                fontSize: '25px'
                             }}>
                             내 캘린더
                             <button 
@@ -578,12 +566,13 @@ const Calendar = () => {
                                 style={{ 
                                     backgroundColor: '#7785BE', 
                                     color: 'white', border: 'none', 
-                                    borderRadius: '4px', padding: '5px 10px', 
-                                    cursor: 'pointer' 
+                                    borderRadius: '4px', padding: '0px 8px 2px',
+                                    cursor: 'pointer' , fontSize: '22px',
+                                    paddingBottom: '2px'
                                 }}>+</button>
                         </h3>
                         <CalendarList>
-                            {Array.isArray(calendarOptions) && calendarOptions.map((calendar, index) => (
+                            {Array.isArray(calendars) && calendars.map((calendar, index) => (
                                 <CalendarItem key={index}>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <ColorCircle color={calendar.color} />
@@ -605,14 +594,13 @@ const Calendar = () => {
                         <CalendarToolbar>
                             <StyledFullCalendar
                                 selectable={true}
-                                select={handleSelect}  // 드래그로 날짜 선택 시 호출되는 함수
                                 editable={true}
                                 plugins={[dayGridPlugin, interactionPlugin]}
                                 initialView="dayGridMonth"
                                 events={renderEvents()}
                                 dateClick={handleDateClick}  // 날짜 클릭 시 호출되는 함수
                                 eventClick={handleEventClick}
-                                eventDrop={handleEventDrop}
+                                // eventDrop={handleEventDrop}
                                 headerToolbar={{
                                     left: 'prev,next today',
                                     center: 'title',
@@ -643,8 +631,8 @@ const Calendar = () => {
                                 })}</DateHeader>
                                 <Divider />
                                 {selectedEvents.length > 0 ? (
-                                    selectedEvents.map(event => (
-                                        <ScheduleItem key={event.id}>{event.title}</ScheduleItem>
+                                    selectedEvents.map(events => (
+                                        <ScheduleItem key={events.id}>{events.title}</ScheduleItem>
                                     ))
                                 ) : (
                                     <p>스케줄이 없습니다.</p>
@@ -660,16 +648,12 @@ const Calendar = () => {
             <CalendarAddModal
                 isOpen={addCalendarModalIsOpen}
                 onRequestClose={closeAddCalendarModal}
-                calendarOptions={calendarOptions}
-                setCalendarOptions={setCalendarOptions}
                 closeAddCalendarModal={closeAddCalendarModal}
             />
             <CalendarEditModal
                 isOpen={editCalendarModalIsOpen}
                 onRequestClose={closeEditCalendarModal}
                 selectedCalendar={selectedCalendar}
-                calendarOptions={calendarOptions}
-                setCalendarOptions={setCalendarOptions}
                 updateCalendar={updateCalendar}
                 deleteCalendar={deleteCalendar}
                 closeEditCalendarModal={closeEditCalendarModal}
@@ -677,14 +661,12 @@ const Calendar = () => {
             <EventAddModal
                 isOpen={addEventModalIsOpen}
                 onRequestClose={closeAddEventModal}
-                calendarOptions={calendarOptions}
                 closeAddEventModal={closeAddEventModal}
                 addEvent={addEvent}
             />
             <EventEditModal
                 isOpen={editEventModalIsOpen}
                 onRequestClose={closeEditEventModal}
-                calendarOptions={calendarOptions}
                 selectedEvent={selectedEvent}
                 updateEvent={updateEvent}
                 deleteEvent={deleteEvent}
