@@ -14,7 +14,6 @@ import Notice from './pages/Notice';
 import Notice_write from './pages/Notice_write';
 import Notice_detail from './pages/Notice_detail';
 import FindAccount from './pages/FindAccount';
-import LabellingDetail from './pages/LabellingDetail';
 import MainGrid from './pages/MainGrid';
 import ProfileInit from './components/mypage/ProfileInit';
 import Profile from './components/mypage/Profile';
@@ -27,6 +26,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import PrivateRoute from './components/PrivateRoute';
 import ItemStructure from "./components/adminProjectStructure/ItemStructure";
+import LabellingDetail from './pages/LabellingDetail';
 
 function App() {
   const persiststore = persistStore(store);
@@ -43,8 +43,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/label/main" element={<LabellingMain />} />
             <Route path="/label/work" element={<Labelling />} />
-            {/* <Route path="/label/detail/:id" element={<LabellingDetail />} /> */}
-            <Route path="/label/detail" element={<LabellingDetail />} />
+            <Route path="/label/detail/:id" element={<LabellingDetail />} />
             <Route path="/member" element={<MemberManagement />} />
             <Route path="/mypage" element={<Mypage />} />
             {/* <Route path="/profileinit" element={<ProfileInit />} />

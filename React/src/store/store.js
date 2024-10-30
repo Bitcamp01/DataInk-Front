@@ -11,6 +11,7 @@ import searchSlice from '../slices/searchSlice';
 import memberModalSlice from '../slices/memberModalSlice';
 import memberProjectSlice from '../slices/memberProjectSlice';
 import userProjectsSlice from '../slices/userProjectsSlice';
+import labelDetailSlice from '../slices/labelDetailSlice';
 
 import {
     persistReducer,
@@ -37,6 +38,8 @@ const reducers = combineReducers({
     memberModalSlice,
     memberProjectSlice,
     userProjectsSlice,
+    labelTableSlice,
+    labelDetailSlice,
 });
 
 const persistConfig = {
