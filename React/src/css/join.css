@@ -1,0 +1,275 @@
+/* src/css/join.css */
+
+/* 모달 오버레이 */
+.join__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(96, 117, 235, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 컨테이너 */
+.join__container {
+  max-width: 600px;
+  width: 500px;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px 15px 40px 30px;
+  box-sizing: border-box;
+  position: relative;
+  max-height: 100vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 로고 및 제목, 뒤로가기 버튼 */
+.join__logo-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.join__logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.join__title {
+  margin-bottom: 10px;
+  font-size: 34px;
+  font-weight: 700;
+  color: black;
+}
+
+.join__back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 0;
+}
+
+.join__back-button img {
+  width: 24px;
+  height: 24px;
+  transition: opacity 0.3s ease;
+}
+
+.join__back-button:hover img {
+  opacity: 0.7;
+}
+
+/* 회원가입 제목 */
+.join__signup-title {
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.join__signup-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.join__signup-title p {
+  margin: 5px 0 0 0;
+  font-size: 16px;
+  font-weight: 300;
+  color: #72737B;
+}
+
+/* 폼 그룹 */
+.join__form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  transition: margin-bottom 0.3s ease;
+}
+
+.join__form-group.active {
+  margin-bottom: 20px;
+}
+
+.join__form-group label {
+  position: relative;
+  width: 120px;
+  font-size: 16px;
+  color: #6988fb;
+  display: flex;
+  align-items: center;
+}
+
+.join__required {
+  color: #3751B4;
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+/* 입력 래퍼 */
+.join__input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.join__date-input {
+  /* 추가적인 스타일이 필요한 경우 여기에 작성 */
+}
+
+/* 입력 필드 */
+.join__form-group input,
+.join__form-group select {
+  width: 90%;
+  padding: 10px 40px 10px 12px;
+  border: none;
+  border-bottom: 1px solid #525252;
+  font-size: 16px;
+  color: #8E8989;
+  transition: border-bottom 0.3s ease;
+}
+
+.join__form-group input::placeholder,
+.join__form-group select::placeholder {
+  text-align: left;
+}
+
+.join__form-group input:focus,
+.join__form-group select:focus {
+  outline: none;
+}
+
+.join__input-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.join__input-icon.visible {
+  opacity: 1;
+}
+
+.join__validation-messages {
+  position: relative;
+  margin-left: 120px;
+  margin-bottom: 20px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.join__validation-messages.visible {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.join__validation-messages p {
+  margin: 2px 0;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.join__validation-messages p.valid {
+  color: #3751B4;
+}
+
+.join__validation-messages p.invalid {
+  color: #8E8989;
+}
+
+/* 제출 버튼 */
+.join__submit-button {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.join__submit-button button {
+  width: 50%;
+  padding: 12px 0;
+  background-color: #cccccc;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: not-allowed;
+  transition: background-color 0.3s ease;
+}
+
+.join__submit-button button:enabled {
+  background-color: #7C97FE;
+  cursor: pointer;
+}
+
+.join__submit-button button:hover:enabled {
+  background-color: #0041ff;
+}
+
+.join__submit-button button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* 유효성 검사에 따른 스타일 */
+.join__form-group input.valid,
+.join__form-group select.valid {
+  border-bottom: 2px solid #3751B4;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .join__container {
+      width: 90%;
+      padding: 20px;
+  }
+
+  .join__signup-title {
+      text-align: left;
+  }
+
+  .join__form-group {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 10px;
+  }
+
+  .join__form-group.active {
+      margin-bottom: 20px;
+  }
+
+  .join__form-group label {
+      width: 100%;
+      margin-bottom: 5px;
+  }
+
+  .join__validation-messages {
+      margin-left: 0;
+  }
+
+  .join__submit-button button {
+      width: 100%;
+  }
+
+  .join__social-buttons {
+      flex-wrap: wrap;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+      right: 35px;
+  }
+
+  .join__input-wrapper.join__date-input .join__input-icon {
+      right: 10px;
+  }
+}

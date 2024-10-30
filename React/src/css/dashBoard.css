@@ -1,0 +1,116 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    margin-bottom: 0 !important;
+}
+
+#overView-text {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    font-size: 1.7rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.content {
+    padding: 1.25rem;
+    flex: 1;
+}
+
+@media (max-width: 1530px) {
+    .content {
+        transform: scale(0.8);
+        transform-origin: top left;
+    }
+}
+
+@media (max-width: 1400px) {
+    .content {
+        transform: scale(0.8);
+        transform-origin: top left;
+    }
+}
+
+.work {
+    width: 436px;
+    height: 423px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #C4C4C4;
+}
+
+
+.total {
+    width: 100vw;
+    height: 425px;
+    margin-left: 20px;
+    display: flex;
+    gap: 40px;
+}
+
+@media (max-width: 1530px) {
+    .total {
+        height: 440px;
+    }
+}
+
+@media (max-width: 1400px) {
+    .total {
+        height: 440px;
+    }
+}
+
+
+.project {
+    margin-left: 20px;
+}
+
+.project-header {
+    display: flex;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+
+#card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 20px;
+    height: 270px;
+    overflow-y: scroll;
+}
+
+@media (max-width: 1530px) {
+    #card-container {
+        width: 127%;
+    }
+}
+
+@media (max-width: 1400px) {
+    #card-container {
+        width: 127%;
+    }
+}
+
+#card-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+#card-container::-webkit-scrollbar-thumb {
+    background: #7C97FE; /*스크롤바 색상*/
+    border-radius: 10px;   /*스크롤바 둥글게 */
+}
+
+#card-container::-webkit-scrollbar-track {
+    background: #F6F6F6;
+}
+
+.project-count {
+    color: #7C97FE;
+}

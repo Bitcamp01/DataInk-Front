@@ -11,19 +11,19 @@
     <div class="layout">
         <!-- 사이드바 -->
         <aside class="sidebar">
-            <img class="sidebar__logo" src="assets/images/datalnk-logo.png" alt="데이터잉크 아이콘">
+            <img class="sidebar__logo" src="assets/icons/datalnk-logo_icon.png" alt="데이터잉크 아이콘">
             <div class="sidebar__menu">
                 <a href="/main" class="sidebar__icon sidebar__icon--active">
-                    <img src="assets/images/main-home-icon.png" alt="메인홈">
+                    <img src="assets/icons/main-home_icon.png" alt="메인홈">
                 </a>
                 <a href="/data" class="sidebar__icon">
-                    <img src="assets/images/data-icon.png" alt="데이터라벨링">
+                    <img src="assets/icons/data_icon.png" alt="데이터라벨링">
                 </a>
                 <a href="/member" class="sidebar__icon">
-                    <img src="assets/images/member-icon.png" alt="멤버관리">
+                    <img src="assets/icons/member_icon.png" alt="멤버관리">
                 </a>
                 <a href="/" class="sidebar__icon">
-                    <img src="assets/images/notice-icon.png" alt="공지사항">
+                    <img src="assets/icons/notice_icon.png" alt="공지사항"> 
                 </a>
             </div>
         </aside>
@@ -34,7 +34,7 @@
                 <a href="/data" class="extra-sidebar__link">데이터라벨링</a>
                 <a href="/member" class="extra-sidebar__link">멤버관리</a>
                 <a href="/" class="extra-sidebar__link">공지사항</a>
-            </div>
+            </div>  
         </aside>
 
         <!-- 메인(헤더 + 콘텐츠) 영역 -->
@@ -43,18 +43,18 @@
             <!-- 헤더 영역 -->
             <header class="header">
                 <div class="header__back-icon">
-                    <img src="assets/images/back-icon.png" alt="뒤로가기">
+                    <img src="assets/icons/back_icon.png" alt="뒤로가기">
                 </div>
                 <div class="header__title">Data Labeling</div>
                 <div class="header__search">
                     <input type="text" class="header__search-input">
-                    <img src="assets/images/search-icon.png" alt="검색 아이콘" class="header__search-icon">
+                    <img src="assets/icons/search_icon.png" alt="검색 아이콘" class="header__search-icon">
                 </div>
                 <div class="header__icons">
-                    <img src="assets/images/chat.png" alt="채팅" class="header__icon header__icon--chat">
-                    <img src="assets/images/alert.png" alt="알람" class="header__icon header__icon--alert">
-                    <img src="assets/images/profile.png" alt="프로필" class="header__icon header__icon--profile">
-                    <img src="assets/images/profile-drop.png" alt="드롭다운" class="header__icon header__icon--dropdown">
+                    <img src="assets/icons/chat_icon.png" alt="채팅" class="header__icon header__icon--chat">
+                    <img src="assets/icons/alert_icon.png" alt="알람" class="header__icon header__icon--alert">
+                    <img src="assets/images/profile_img.png" alt="프로필" class="header__icon header__icon--profile">
+                    <img src="assets/icons/profile-drop_icon.png" alt="드롭다운" class="header__icon header__icon--dropdown">
                 </div>
             </header>
 
@@ -63,38 +63,80 @@
                 <div class="search">
                     <div class="search__filters">
                         <div class="search__group">
-                            <div class="search__select">
-                                <select>
-                                    <option value="" disabled selected hidden>게시날짜</option>
-                                    <option value="2024-09-10">2024.09.10</option>
-                                    <option value="2024-09-11">2024.09.11</option>
-                                </select>
+                            <!-- 게시날짜 커스텀 드롭다운 -->
+                            <div class="search__select custom-dropdown">
+                                <div class="custom-dropdown__selected">게시날짜</div>
+                                <ul class="custom-dropdown__options">
+                                    <li class="custom-dropdown__option" data-value="today">
+                                        <input type="radio" name="date" class="custom-dropdown__radio" id="custom-dropdown-today" />
+                                        <label class="custom-dropdown__label" for="custom-dropdown-today">Today</label>
+                                    </li>
+                                    <li class="custom-dropdown__option" data-value="this-week">
+                                        <input type="radio" name="date" class="custom-dropdown__radio" id="custom-dropdown-this-week" />
+                                        <label class="custom-dropdown__label" for="custom-dropdown-this-week">This week</label>
+                                    </li>
+                                    <li class="custom-dropdown__option" data-value="this-month">
+                                        <input type="radio" name="date" class="custom-dropdown__radio" id="custom-dropdown-this-month" />
+                                        <label class="custom-dropdown__label" for="custom-dropdown-this-month">This month</label>
+                                    </li>
+                                    <li class="custom-dropdown__option" data-value="this-year">
+                                        <input type="radio" name="date" class="custom-dropdown__radio" id="custom-dropdown-this-year" />
+                                        <label class="custom-dropdown__label" for="custom-dropdown-this-year">This year</label>
+                                    </li>
+                                    <li class="custom-dropdown__option" data-value="set-up">
+                                        <input type="radio" name="date" class="custom-dropdown__radio" id="custom-dropdown-set-up" />
+                                        <label class="custom-dropdown__label" for="custom-dropdown-set-up">Set up</label>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="search__select">
-                                <select>
-                                    <option value="" disabled selected hidden>작업인원</option>
-                                    <option value="worker1">작업인원 1</option>
-                                    <option value="worker2">작업인원 2</option>
-                                </select>
+                            
+                             <!-- 작업인원 커스텀 드롭다운 -->
+                            <div class="search__select custom-dropdown">
+                                <div class="custom-dropdown__selected">작업인원</div>
+                                <ul class="custom-dropdown__options">
+                                    <li class="custom-dropdown__option" data-value="worker1">
+                                        <input type="radio" name="worker" class="custom-dropdown__radio" id="custom-dropdown-worker1" />
+                                        <label for="custom-dropdown-worker1" class="custom-dropdown__label">작업인원 1</label>
+                                    </li>
+                                    <li class="custom-dropdown__option" data-value="worker2">
+                                        <input type="radio" name="worker" class="custom-dropdown__radio" id="custom-dropdown-worker2" />
+                                        <label for="custom-dropdown-worker2" class="custom-dropdown__label">작업인원 2</label>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-    
+
                         <div class="search__divider"></div>
-    
+
                         <div class="search__group">
-                            <div class="search__select">
-                                <select>
-                                    <option value="" disabled selected hidden>대분류</option>
-                                    <option value="category1">카테고리 1</option>
-                                    <option value="category2">카테고리 2</option>
-                                </select>
+                            <!-- 대분류 커스텀 드롭다운 -->
+                            <div class="search__select custom-dropdown">
+                                <div class="custom-dropdown__selected">대분류</div>
+                                <ul class="custom-dropdown__options">
+                                    <li class="custom-dropdown__option" data-value="category1">
+                                        <input type="radio" name="category" class="custom-dropdown__radio" id="custom-dropdown-category1" />
+                                        <label for="custom-dropdown-category1" class="custom-dropdown__label">카테고리 1</label>
+                                    </li>
+                                    <li class="custom-dropdown__option" data-value="category2">
+                                        <input type="radio" name="category" class="custom-dropdown__radio" id="custom-dropdown-category2" />
+                                        <label for="custom-dropdown-category2" class="custom-dropdown__label">카테고리 2</label>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="search__select">
-                                <select>
-                                    <option value="" disabled selected hidden>중분류</option>
-                                    <option value="subcategory1">서브카테고리 1</option>
-                                    <option value="subcategory2">서브카테고리 2</option>
-                                </select>
+
+                            <!-- 중분류 커스텀 드롭다운 -->
+                            <div class="search__select custom-dropdown">
+                                <div class="custom-dropdown__selected">중분류</div>
+                                <ul class="custom-dropdown__options">
+                                    <li class="custom-dropdown__option" data-value="subcategory1">
+                                        <input type="radio" name="subcategory" class="custom-dropdown__radio" id="custom-dropdown-subcategory1" />
+                                        <label for="custom-dropdown-subcategory1" class="custom-dropdown__label">서브카테고리 1</label>
+                                    </li>
+                                    <li class="custom-dropdown__option" data-value="subcategory2">
+                                        <input type="radio" name="subcategory" class="custom-dropdown__radio" id="custom-dropdown-subcategory2" />
+                                        <label for="custom-dropdown-subcategory2" class="custom-dropdown__label">서브카테고리 2</label>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="search__input">
@@ -107,5 +149,6 @@
         </div>
     </div>
     <script src="assets/scripts/sidebar.js"></script>
+    <script src="assets/scripts/searchbar.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'; // useEffect, useState와 함께 React import
 import { Box, Typography, Button, TextField, Avatar, Paper } from '@mui/material';
+
 import { Navigate, useParams, useNavigate } from 'react-router-dom'; // useParams로 URL 파라미터 가져오기
 import { useSelector } from 'react-redux';
 import EditIcon from '@mui/icons-material/Edit';
@@ -12,20 +13,25 @@ const Notice_detail = () => {
   const { id } = useParams(); // URL에서 공지사항 ID 추출
   const [notice, setNotice] = useState(null);
   const noticeList = useSelector(state => state.noticeSlice.notice); // 공지사항 리스트 가져오기
+
   const navigate = useNavigate(); // navigate를 컴포넌트의 최상단에서 호출
   const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
   const [editedContent, setEditedContent] = useState(''); // 수정된 내용 상태
+
 
   useEffect(() => {
     // 공지사항 리스트에서 ID에 해당하는 데이터 찾기
     const selectedNotice = noticeList.content.find(item => item.noticeId === parseInt(id));
     setNotice(selectedNotice);
+
     setEditedContent(selectedNotice?.content || ''); // 초기값 설정
+
   }, [id, noticeList]);
 
   if (!notice) {
     return null; // 빈 화면 처리
   }
+
 
   const handledelete = async () => {
     const token = sessionStorage.getItem('ACCESS_TOKEN');
@@ -90,6 +96,31 @@ const Notice_detail = () => {
               {/* 작성자 정보와 수정 / 삭제 버튼 */}
               <Box display="flex" justifyContent="space-between" alignItems="flex-start">
                 <Box display="flex" alignItems="center">
+
+  return (
+  <>
+    {/* 콘텐츠 영역 */}
+    <section className="member-list">
+      <Box display="flex" flexDirection="column" alignItems="center" p={2}  maxWidth='1135px'  minWidth='1135px' >
+
+        {/* 공지사항 본문 */}
+        <Paper elevation={3} 
+          sx={{ mt: -2,  
+          minHeight: '600px', 
+          width: '100%', p: 4 ,
+          borderRadius: '10px' ,
+          flexDirection: 'column', // 위에서 아래로 배치
+          justifyContent: 'space-between', // 댓글 창을 하단으로 밀기 위한 설정
+          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',}}
+        >
+          <Box display="flex" flexDirection="column">
+
+              {/* 제목 */}
+           <Typography variant="h6" fontFamily="Pretendard" sx={{ mb: 3, height:'50px', borderBottom: 'solid 1.5px #eaeaea', }}>{notice.title}</Typography>
+
+            {/* 작성자 정보와 수정 / 삭제 버튼 */}
+              <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+                <Box display="flex" alignItems="center">
                   {/* 작성자 아바타 */}
                   <Avatar alt="작성자" src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2 , mb:3}} />
                   <Box>
@@ -100,6 +131,7 @@ const Notice_detail = () => {
 
                 {/* 수정 / 삭제 버튼 */}
                 <Box>
+
                   {isEditing ? (
                     // 수정 모드일 때 등록 버튼 표시
                     <Button variant="outlined" onClick={handleEdit} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
