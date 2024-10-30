@@ -187,6 +187,20 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
 
   // 저장 버튼을 눌렀을 때, 임시 상태의 데이터를 백엔드와 동기화
   const handleSaveChanges = async () => {
+      // tempProjectMembers 배열이 비어 있는지 확인
+      if (!tempProjectMembers.length) {
+        console.error("tempProjectMembers 배열이 비어 있습니다.");
+        alert("저장할 멤버 데이터가 없습니다.");
+        return;
+    }
+   
+      // 배열의 첫 번째 객체에 projectId가 있는지 확인
+      const projectId = selectedRow?.id; // 상위 projectId에서 가져오기
+      if (!projectId) {
+          console.error("projectId가 정의되지 않았습니다.");
+          alert("프로젝트 ID가 없습니다.");
+          return;
+      }
 
   console.log('tempProjectMembers:', tempProjectMembers);
   console.log('projectId:', tempProjectMembers[0]?.projectId);
@@ -195,10 +209,11 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
 
     // 요청할 데이터 구조 설정
     const projectMemberSaveRequests = {
-      projectId: tempProjectMembers[0].projectId, // 프로젝트 ID
+      projectId:projectId,
+      // projectId: tempProjectMembers[0].projectId, // 프로젝트 ID
       members: tempProjectMembers.map(member => ({
         userId: member.userId,
-        projectId: selectedRow?.id,
+        projectId: projectId,
         name: member.name,
         department: member.department,
         role: member.role
@@ -206,10 +221,10 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     };
    
 
-    console.log('저장할 데이터:', projectMemberSaveRequests); // 로그 추가 (디버깅 용도)
+    console.log('저장할 데이터:', projectMemberSaveRequests); 
 
     const response = await axios.post(
-      `${API_BASE_URL}/member/modal-add/${tempProjectMembers[0].projectId}`
+      `${API_BASE_URL}/member/modal-save/${projectId}`
       , projectMemberSaveRequests
       , {
         headers: {
