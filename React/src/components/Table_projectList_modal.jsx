@@ -79,6 +79,26 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   }, [open, selectedRow, dispatch]);
 
 
+  //모달무한스크롤
+  const loadMoreUsers = async (page) => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/modal`, {
+        params: { page, size: 10 },
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const newUsers = response.data.pageItems.content;
+        setModalData((prevData) => [...prevData, ...newUsers]); // 이전 데이터에 이어붙임
+      }
+    } catch (error) {
+      console.error('사용자 목록을 가져오는 중 오류 발생:', error);
+    }
+  };
+
+
 
   // Redux의 modalData가 변경될 때마다 usersData 업데이트
   useEffect(() => {
@@ -100,7 +120,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     );
     }, [projectMembersDB]);
 
-  // 첫 번째 DataGrid의 스크롤 이벤트 처리
+  // // 첫 번째 DataGrid의 스크롤 이벤트 처리
   const handleScroll1 = () => {
     if (!containerRef1.current) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef1.current;
@@ -292,8 +312,9 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
                 
                       
               <DataGrid
-                rows={(projectMembers).map((item) => ({
-                  id: item.userId,
+                rows={(projectMembers).map((item, index) => ({
+                  // id: item.userId,
+                  id: `${item.userId}_${index}`,  // 고유한 id 설정 (userId와 index를 조합)
                   name: item.name,
                   department: item?.userDetailDto?.dep || '부서 정보 없음',
                   role:translateRole(item.authen),
