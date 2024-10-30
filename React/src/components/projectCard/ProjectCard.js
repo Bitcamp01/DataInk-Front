@@ -48,33 +48,41 @@ const ProjectCard = ({ projects }) => {
                         <span>
                             진행률 <span className="project-card__percent"> {project.progress}</span>%
                         </span>
-                        <div className="project-card__progress-container">
-                            <span className="project-card__progress" style={{ width: `${project.progress}%` }}></span>
-                            <span className="project-card__progress-background"></span>
+                        <div>
+                            {project.progress === 'Loading...' ? (
+                                <div>
+                                    <span className="project-card__loading-text">Loading...</span>
+                                </div>
+                            ) : (
+                                <div className="project-card__progress-container">
+                                    <span className="project-card__progress" style={{ width: `${project.progress}%` }}></span>
+                                    <span className="project-card__progress-background"></span>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="project-card__members">
-                        <div className="project-card__manager">
-                            <span>관리자</span>
-                            <img src="/images/manager-profile_img.png" alt="관리자 프로필" />
+                        <div className="project-card__admin">
+                            <span className='project-card__admin-text'>관리자</span>
+                            <span className='admin'>홍길동</span>
                         </div>
-                        <div className="project-card__reviewer">
-                            <span>검수자</span>
-                            <img src="/images/reviewer-profile_img.png" alt="검수자 프로필" />
+                        <div className="project-card__manager">
+                            <span className='project-card__manager-text'>검수자</span>
+                            <span className='manager'>홍길동</span>
                         </div>
                         <div className="project-card__labeler">
                             <span className="project-card__labeler-text">멤버</span>
-                            <div className="project-card__labeler-profile">
+                            <div className="labeler">
                                 {project.members
-                                    .filter(member => member.class === 'labeler')
-                                    .map((member, idx) => (
-                                        <img
-                                            key={idx}
-                                            style={idx === 0 ? { width: '43px', height: '43px' } : {}}
-                                            src={member.profileImg}
-                                            alt={`라벨러 프로필 ${idx + 1}`}
-                                        />
+                                    .map((member) => member.memberName) // 이름만 추출
+                                    .filter((name) => name) // 빈 이름 제거
+                                    .slice(0, 4) // 최대 5명만 표시
+                                    .map((name, idx) => (
+                                        <span key={idx} className="labeler">{name}</span>
                                     ))}
+                                {project.members.filter((member) => member.memberName).length > 5 && (
+                                    <span className="labeler">...</span>
+                                )}
                             </div>
                         </div>
                     </div>

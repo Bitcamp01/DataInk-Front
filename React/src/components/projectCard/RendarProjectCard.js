@@ -25,6 +25,7 @@ const calculateDaysDifference = (endDateString) => {
 const RendarProjectCard = () => {
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.userProjectsSlice.projects);
+  console.log(projects);
 
     // 개별 프로젝트의 진행률을 관리하는 상태
     const [progressMap, setProgressMap] = useState({});
@@ -82,22 +83,27 @@ const RendarProjectCard = () => {
           deadline: calculateDaysDifference(project.endDate), // 현재 날짜와 endDate 간의 일 수 차이 계산
           description: project.description,
           isBookmarked: project.isBookmarked, // 북마크 상태 전달
-          progress: progressMap[project.projectId] || 0, // progressMap에서 개별 진행률 가져오기
+          // progress: progressMap[project.projectId] || 0, // progressMap에서 개별 진행률 가져오기
+          progress: progressMap[project.projectId] !== undefined 
+                    ? progressMap[project.projectId]
+                    : 'Loading...', // 로딩 중일 때 'Loading...' 텍스트 설정,
           members: [
-            { class: 'manager', role: '관리자', profileImg: '/images/manager-profile_img.png' },
-            { class: 'reviewer', role: '검수자', profileImg: '/images/reviewer-profile_img.png' },
-            { class: 'labeler', role: '멤버', profileImg: '/images/labeler-profile-00_img.png' },
-            { class: 'labeler', role: '', profileImg: '/images/labeler-profile-01_img.png' },
-            { class: 'labeler', role: '', profileImg: '/images/labeler-profile-02_img.png' },
-            { class: 'labeler', role: '', profileImg: '/images/labeler-profile-03_img.png' }
+            { memberName: '홍길동'},
+            { memberName: '홍길동'},
+            { memberName: '홍길동'},
+            { memberName: '홍길동'},
+            { memberName: '홍길동'},
+            { memberName: '홍길동'},
           ],
         };
-
+        // progress 값 콘솔에 출력
+        console.log(`Project ID: ${project.projectId}, Progress: ${projectData.progress}`);
+        
         return <ProjectCard 
         key={project.projectId} 
         projects={[{
             ...projectData, 
-            progress: (progressMap[project.projectId] || 0).toFixed(1) // 표시할 때 반올림
+            progress: progressMap[project.projectId] === null ? 'Loading...' : (progressMap[project.projectId] || 0).toFixed(1) // 표시할 때 반올림
         }]} 
     />;
       })}

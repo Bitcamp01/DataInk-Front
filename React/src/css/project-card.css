@@ -117,42 +117,55 @@ html {
     padding-right: 20px;
 }
 
-.project-card__manager {
+.project-card__admin {
     display: flex;
-    font-size: 13px;
     text-align: center;
     flex-direction: column;
-    color: #616161;
     border-right: 1px dotted #D0D0D0;
     height: 60px;
     padding-right: 10px;
+    margin-top: 3px;
 }
 
-.project-card__reviewer {
-    display: flex;
+.project-card__admin-text {
     font-size: 13px;
+    color: #616161;
+}
+
+.admin {
+    margin-top: 2px;
+}
+
+.project-card__manager {
+    display: flex;
     text-align: center;
     flex-direction: column;
-    color: #616161;
     border-right: 1px dotted #D0D0D0;
     height: 60px;
     padding-left: 10px;
     padding-right: 10px;
+    margin-top: 3px;
 }
 
-.project-card__labeler {
-    position: relative;
-    align-items: center;
+.project-card__manager-text {
+    font-size: 13px;
+    color: #616161;
+}
+
+.manager {
+    margin-top: 2px;
+}
+
+.project-card__labeler-text {
     font-size: 13px;
     color: #616161;
     margin-left: 10px;
 }
-
-.project-card__labeler img:first-child {
-    display: inline;
-    margin-left: 0;
+.project-card__labeler {
+    margin-left: 10px;
 }
 
-.project-card__labeler img {
-    margin-left: -20px;
+.labeler {
+    margin-left: 5px;
+    margin-right: 0.5px;
 }
