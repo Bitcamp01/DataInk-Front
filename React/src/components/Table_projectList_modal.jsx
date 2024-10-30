@@ -91,6 +91,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
         console.log('leftMembers:', projectMembersDB);
     setTempProjectMembers(
       projectMembersDB.map((member) => ({
+        projectId: selectedRow?.id,
         userId: member.userId,
         name: member.name,
         department: member.userDetailDto?.dep || '부서 정보 없음',
@@ -197,6 +198,7 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
       projectId: tempProjectMembers[0].projectId, // 프로젝트 ID
       members: tempProjectMembers.map(member => ({
         userId: member.userId,
+        projectId: selectedRow?.id,
         name: member.name,
         department: member.department,
         role: member.role
