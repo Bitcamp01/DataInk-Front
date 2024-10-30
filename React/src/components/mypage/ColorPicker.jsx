@@ -15,9 +15,9 @@ const ColorButton = styled.button`
 // 사용자화 색상 버튼
 const CustomButton = styled.button`
     background-color: ${props => props.color};
-    border: ${props => props.isHovered ? '2px solid lightgray' : props.selected ? '2px solid #666' : '1px solid #777'};
+    border: ${props => props.isHovered ? '1px solid lightgray' : props.selected ? '1px solid #666' : '1px solid #777'};
     color: black; /* 텍스트 색상 */
-    border-radius: 4px; /* 네모난 모양 */
+    border-radius: 2px; /* 네모난 모양 */
     padding: 7px 14px;
     cursor: pointer;
     margin-left: 10px;
