@@ -7,8 +7,10 @@ const ReviewerTable2 = ({ taskId, onDataTransform }) => {
   const dispatch = useDispatch();
   const [rowsArray, setRowsArray] = useState([]);
 
-  // const { labelTaskData, loading, error } = useSelector((state) => state.labelTask);
-  const { labelTaskData, loading, error } = useSelector((state) => state.labelTask || {});
+  // const { labelTaskData, loading, error } = useSelector((state) => state.labelTaskSlice);
+  // const { labelTaskData, loading, error } = useSelector((state) => state.labelTaskSlice || {}); // 이게 일단은 정배
+  const { labelTaskData = null, loading, error } = useSelector((state) => state.labelTaskSlice || {});
+
 
   useEffect(() => {
     if (taskId) {
@@ -16,21 +18,19 @@ const ReviewerTable2 = ({ taskId, onDataTransform }) => {
     }
   }, [taskId, dispatch]);
 
-  const transformData = (data, hierarchy = []) => {
+  const transformData = (data, hierarchy = [], index = 0) => {
     const transformed = {};
-    let index = 0; // 인덱스를 위한 변수
-  
-    data.forEach((item) => {
+    
+    data.forEach((item, idx) => {
       const currentHierarchy = [...hierarchy, item.fieldName];
-  
-      // 각 hierarchy 레벨을 동적으로 추가
-      const row = {};
-      currentHierarchy.forEach((level, idx) => {
-        row[idx === 0 ? "hierarchy" : `hierarchy${idx + 1}`] = level; // 첫 번째는 "hierarchy"로 설정
+      const row = { id: index + idx }; // 각 행에 고유한 ID 추가
+    
+      currentHierarchy.forEach((level, levelIdx) => {
+        row[levelIdx === 0 ? "hierarchy" : `hierarchy${levelIdx + 1}`] = level;
       });
-  
-      const contentValue = item.subFields ? item.subFields.content : "undefined"; // content가 없을 경우 "undefined"로 설정
-  
+    
+      const contentValue = item.subFields ? item.subFields.content : "undefined";
+    
       if (typeof item.subFields === 'string') {
         transformed[index++] = {
           ...row,
@@ -38,55 +38,44 @@ const ReviewerTable2 = ({ taskId, onDataTransform }) => {
           checked: false,
         };
       } else if (Array.isArray(item.subFields)) {
-        // 하위 항목이 있을 경우 재귀적으로 호출
-        const subFieldsTransformed = transformData(item.subFields, currentHierarchy);
+        const subFieldsTransformed = transformData(item.subFields, currentHierarchy, index);
         Object.keys(subFieldsTransformed).forEach((key) => {
-          transformed[index++] = subFieldsTransformed[key];
+          transformed[index++] = { ...subFieldsTransformed[key], id: index++ };
         });
       } else if (typeof item.subFields === 'object') {
         transformed[index++] = {
           ...row,
-          content: contentValue, // 내용 추출
+          content: contentValue,
           checked: false,
         };
       }
     });
-  
-    return transformed;
+
+    onDataTransform(transformed);
+    
+    return Object.values(transformed); // 객체 대신 배열로 반환
   };
-
-  // useEffect(() => {
-  //   if (labelTaskData) {
-  //     const transformedData = transformData(labelTaskData);
-  //     setRowsArray(transformedData);
-  //     // 변환된 데이터 전달
-  //     if (onDataTransform) {
-  //       onDataTransform(transformedData);
-  //     }
-  //   }
-  // }, [labelTaskData]);
-
   useEffect(() => {
     // labelTaskData가 존재할 때만 변환 수행
     if (labelTaskData) { // 변경된 부분
       const transformedData = transformData(labelTaskData);
       setRowsArray(transformedData);
-      if (onDataTransform) {
-        onDataTransform(transformedData);
-      }
+      // if (onDataTransform) {
+      //   onDataTransform(transformedData);
+      // }
     }
   }, [labelTaskData]);
+
 
   const columns = [
     {
       field: 'content',
       headerName: '내용',
       width: 300,
-      renderCell: (params) => (
-        <div style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>
-          {params.value}
-        </div>
-      ),
+      renderCell: (params) => {
+        // 숫자 부분을 제거하고 싶다면 여기에 맞는 내용으로 변경
+        return <div>{params.row.subFields ? '' : ''}</div>; // 빈 문자열 반환
+      },
     },
     {
       field: 'checked',
@@ -108,14 +97,22 @@ const ReviewerTable2 = ({ taskId, onDataTransform }) => {
   };
 
   return (
-    <div className="review-table-container">
+    rowsArray && <div className="review-table-container">
       <div style={{ height: 400, width: '100%' }}>
         <DataGridPro
           treeData
           rows={rowsArray}
           columns={columns}
-          checkboxSelection
-          getTreeDataPath={(row) => row.hierarchy}
+          // checkboxSelection
+          getTreeDataPath={(row) => {
+            // hierarchy 계층의 모든 레벨을 추출하여 배열로 반환
+            const path = Object.keys(row)
+              .filter((key) => key.startsWith("hierarchy"))
+              .sort((a, b) => a.localeCompare(b)) // 순서 정렬
+              .map((key) => row[key]);
+
+            return path.length > 0 ? path : ["root"]; // path가 비어있으면 기본값 "root" 설정
+          }}
           onRowEdit={handleRowEdit}
         />
       </div>
