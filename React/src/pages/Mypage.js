@@ -96,11 +96,11 @@ const Mypage = () => {
     // userDetails가 로드될 때만 profileImageUrl와 backgroundImageUrl을 설정
     const profileImageUrl = userDetails?.profileImageUrl 
         ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.profileImageUrl}`
-        : '../../public/images/dataInk_profile_default.png'; // 기본 프로필 이미지
+        : '/images/dataInk_profile_default.png'; // 기본 프로필 이미지
 
     const backgroundImageUrl = userDetails?.backgroundImageUrl 
         ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.backgroundImageUrl}`
-        : '../../public/images/dataInk_background_default.jpg'; // 기본 배경 이미지
+        : '/images/dataInk_background_default.jpg'; // 기본 배경 이미지
 
 
     const handleSaveBackground = (file) => {
