@@ -43,6 +43,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/label/main" element={<LabellingMain />} />
             <Route path="/label/work" element={<Labelling />} />
+            {/* <Route path="/label/detail/:id" element={<LabellingDetail />} /> */}
             <Route path="/label/detail" element={<LabellingDetail />} />
             <Route path="/member" element={<MemberManagement />} />
             <Route path="/mypage" element={<Mypage />} />
@@ -52,7 +53,7 @@ function App() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/alarm" element={<Alarm />} /> */}
             <Route path="/notice" element={<Notice />} />
-            <Route path="/review/:id" element={<Review />} /> 이거는 이제 id를 받아오는 경우
+            <Route path="/review/:id" element={<Review />} />
             <Route path="/notice_write" element={<Notice_write />} />
             <Route path="/notice/:id" element={<Notice_detail />} />
             <Route path="/main_grid" element={<MainGrid />} />

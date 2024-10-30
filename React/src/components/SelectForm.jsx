@@ -17,14 +17,6 @@ const SelectForm = ({ taskId , transformedData}) => { // taskId를 props로 받�
         setIsModalOpen(true);
     };
 
-    const handlePrevClick = () => {
-        navigate('/review');
-    };
-
-    const handleNextClick = () => {
-        navigate('/review');
-    };
-
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
@@ -108,11 +100,18 @@ const SelectForm = ({ taskId , transformedData}) => { // taskId를 props로 받�
                         <label>
                             <input
                                 type="checkbox"
+                                onChange={() => handleCheckboxChange('기타')}
+                                checked={selectedReasons.includes('기타')}
+                            />
+                            기타
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
                                 onChange={handleAdminInputChange}
                             />
                             관리자 별도 입력
                         </label>
-                        <button className="select-button" onClick={handlePrevClick}>입력</button>
                     </div>
                     <div className="detailboxes">
                         <label>
