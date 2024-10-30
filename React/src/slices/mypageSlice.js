@@ -25,10 +25,10 @@ const mypageSlice = createSlice({
             state.isProfileAuthenticated = action.payload;  // 인증 상태 업데이트
         },
         setBackgroundImage: (state, action) => {
-            state.backgroundImage = action.payload || '/images/dataInk_background_default.jpg';
+            state.backgroundImage = action.payload || '/images/dataInk_profile_default.png';
         },
         setProfileImage: (state, action) => {
-            state.profileImage = action.payload || '/images/dataInk_profile_default.png';
+            state.profileImage = action.payload || '/images/dataInk_background_default.jpg';
         },
         change_searchCondition: (state, action) => ({
             ...state,
@@ -37,7 +37,11 @@ const mypageSlice = createSlice({
         change_searchKeyword: (state, action) => ({
             ...state,
             searchKeyword: action.payload
-        })
+        }),
+        reset_page: (state, action) => ({
+            ...state,
+            page: 1
+        }),
     },
     extraReducers: (builder) => {
         builder
@@ -122,6 +126,6 @@ const mypageSlice = createSlice({
     }
 });
 
-export const { change_searchCondition, change_searchKeyword, resetProfileAuth, setBackgroundImage, setProfileImage } = mypageSlice.actions;
+export const { change_searchCondition, change_searchKeyword, resetProfileAuth, setBackgroundImage, setProfileImage, reset_page } = mypageSlice.actions;
 
 export default mypageSlice.reducer;

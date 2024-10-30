@@ -47,6 +47,8 @@ export const fetchLabelTaskByTasksId = createAsyncThunk(
 export const rejectLabelTask = createAsyncThunk(
   'labelTask/rejectLabelTask',
   async (obj, { rejectWithValue }) => {
+    console.log("!11111111111111111111111111111111");
+    console.log(obj);
     try {
       const { taskId, rejectionReason, transformedData } = obj; // 각각의 값 분리
       const response = await axios.patch(`${API_BASE_URL}/labeltask/reject`,
@@ -192,6 +194,7 @@ export const fetchLabelTaskDetails = createAsyncThunk(
       const response = await axios.get(`${API_BASE_URL}/labeltask/taskDetails/${taskId}`, {
         headers: AUTH_HEADER,
       });
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || '에러 발생');
