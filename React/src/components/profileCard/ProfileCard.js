@@ -32,7 +32,7 @@ const ProfileCard = ({ profile, announcements }) => {
       <div className="bm-profile">
         <span className='bm-prodile-title'>좋은 하루입니다!</span>
         <img 
-          src={profile.profileImg !== null ? profile.profileImg : '/icons/dataink-logo_icon.svg'} 
+          src={profile.profileImg} 
           alt={`${profile.username} 프로필 이미지`} />
         <h3 className="bm-username">
           {profile.username}

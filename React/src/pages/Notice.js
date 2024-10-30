@@ -58,7 +58,6 @@ const Notice = () => {
                   '& .MuiPaginationItem-ellipsis': {
                     color: '#3e3e3e', // 페이지 사이의 점 색상
                   },
-                
                 }} />
             </Stack>
           </div>

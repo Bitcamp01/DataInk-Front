@@ -10,61 +10,58 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import axios from 'axios';
 
 const Notice_detail = () => {
-  const { id } = useParams(); // URL에서 공지사항 ID 추출
-  const [notice, setNotice] = useState(null);
-  const noticeList = useSelector(state => state.noticeSlice.notice); // 공지사항 리스트 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-  const navigate = useNavigate(); // navigate를 컴포넌트의 최상단에서 호출
-  const [isEditing, setIsEditing] = useState(false); // 수정 모드 상태
-  const [editedContent, setEditedContent] = useState(''); // 수정된 내용 상태
+  const { id } = useParams();
+  const [notice, setNotice] = useState(null);
+  const noticeList = useSelector(state => state.noticeSlice.notice);
+
+  const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState('');
 
   useEffect(() => {
-    // 공지사항 리스트에서 ID에 해당하는 데이터 찾기
     const selectedNotice = noticeList.content.find(item => item.noticeId === parseInt(id));
     setNotice(selectedNotice);
-
-    setEditedContent(selectedNotice?.content || ''); // 초기값 설정
-
+    setEditedContent(selectedNotice?.content || '');
   }, [id, noticeList]);
 
   if (!notice) {
-    return null; // 빈 화면 처리
+    return null;
   }
 
-  const handledelete = async () => {
-    const token = sessionStorage.getItem('ACCESS_TOKEN');
-    try {
-      await axios.delete(`http://localhost:9090/notice/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      });
-      alert('정상적으로 삭제되었습니다.');
-      // 삭제 후 공지사항 페이지로 이동하기
-      navigate('/notice'); // navigate를 호출하여 페이지 이동
-    } catch(error) {
-      console.error('공지사항 삭제 실패: ', error);
-      alert('삭제에 실패했습니다. 관리자에게 문의하세요.');
-    }
-  };
   const handleEdit = async () => {
     const token = sessionStorage.getItem('ACCESS_TOKEN');
     try {
-      // 공지사항 수정 요청
-      await axios.patch(`http://localhost:9090/notice/${id}`, {
-        content: editedContent, // 수정된 내용
+      await axios.patch(`${API_BASE_URL}/notice/${id}`, {
+        content: editedContent,
       }, {
         headers: {
           Authorization: `Bearer ${token}`
         },
       });
       alert('수정이 정상적으로 완료되었습니다.');
-      setNotice(prev => ({ ...prev, content: editedContent })); // 상태 업데이트
-      setIsEditing(false); // 수정모드 종료
-      
+      setNotice(prev => ({ ...prev, content: editedContent }));
+      setIsEditing(false);
     } catch (error) {
       console.error('공지사항 수정 실패: ', error);
       alert('수정에 실패했습니다. 관리자에게 문의하세요.');
+    }
+  };
+
+  const handledelete = async () => {
+    const token = sessionStorage.getItem('ACCESS_TOKEN');
+    try {
+      await axios.delete(`${API_BASE_URL}/notice/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+      alert('정상적으로 삭제되었습니다.');
+      navigate('/notice');
+    } catch (error) {
+      console.error('공지사항 삭제 실패: ', error);
+      alert('삭제에 실패했습니다. 관리자에게 문의하세요.');
     }
   };
 
@@ -72,58 +69,38 @@ const Notice_detail = () => {
     setIsEditing(true);
   };
 
-  // 현재 공지사항의 인덱스 찾기
   const currentIndex = noticeList.content.findIndex(item => item.noticeId === notice.noticeId);
   const previousNoticeId = currentIndex > 0 ? noticeList.content[currentIndex - 1].noticeId : null;
   const nextNoticeId = currentIndex < noticeList.content.length - 1 ? noticeList.content[currentIndex + 1].noticeId : null;
 
   return (
-  <>
-    {/* 콘텐츠 영역 */}
-    <section className="member-list">
-      <Box display="flex" flexDirection="column" alignItems="center" p={2}  maxWidth='1135px'  minWidth='1135px' >
+    <>
+      <section className="member-list">
+        <Box display="flex" flexDirection="column" alignItems="center" p={2} maxWidth='1135px' minWidth='1135px'>
+          <Paper elevation={3} sx={{ mt: -2, minHeight: '600px', width: '100%', p: 4, borderRadius: '10px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
+            <Box display="flex" flexDirection="column">
+              <Typography variant="h6" fontFamily="Pretendard" sx={{ mb: 3, height: '50px', borderBottom: 'solid 1.5px #eaeaea' }}>{notice.title}</Typography>
 
-        {/* 공지사항 본문 */}
-        <Paper elevation={3} 
-          sx={{ mt: -2,  
-          minHeight: '600px', 
-          width: '100%', p: 4 ,
-          borderRadius: '10px' ,
-          flexDirection: 'column', // 위에서 아래로 배치
-          justifyContent: 'space-between', // 댓글 창을 하단으로 밀기 위한 설정
-          boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',}}
-        >
-          <Box display="flex" flexDirection="column">
-
-              {/* 제목 */}
-           <Typography variant="h6" fontFamily="Pretendard" sx={{ mb: 3, height:'50px', borderBottom: 'solid 1.5px #eaeaea', }}>{notice.title}</Typography>
-
-            {/* 작성자 정보와 수정 / 삭제 버튼 */}
               <Box display="flex" justifyContent="space-between" alignItems="flex-start">
                 <Box display="flex" alignItems="center">
-                  {/* 작성자 아바타 */}
-                  <Avatar alt="작성자" src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2 , mb:3}} />
+                  <Avatar alt="작성자" src={notice.profileImg || '/icons/dataink-logo_icon.svg'} sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
                   <Box>
                     <Typography variant="body1" fontFamily="Pretendard">{notice.name}</Typography>
-                    <Typography variant="body2"  fontFamily="Pretendard" color="textSecondary" sx={{ mb: 3}}>{new Date(notice.created).toLocaleString()}</Typography>
+                    <Typography variant="body2" fontFamily="Pretendard" color="textSecondary" sx={{ mb: 3 }}>{new Date(notice.created).toLocaleString()}</Typography>
                   </Box>
                 </Box>
 
-                {/* 수정 / 삭제 버튼 */}
                 <Box>
-
                   {isEditing ? (
-                    // 수정 모드일 때 등록 버튼 표시
                     <Button variant="outlined" onClick={handleEdit} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
                       등록
                     </Button>
                   ) : (
-                    // 수정 모드가 아닐 때 수정 및 삭제 버튼 표시
                     <>
-                      <Button variant="outlined" startIcon={<EditIcon />} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }} onClick={handleEditClick}>
+                      <Button variant="outlined" startIcon={<EditIcon />} onClick={handleEditClick} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
                         수정
                       </Button>
-                      <Button variant="outlined" startIcon={<DeleteIcon />} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }} onClick={handledelete}>
+                      <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handledelete} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
                         삭제
                       </Button>
                     </>
@@ -132,7 +109,6 @@ const Notice_detail = () => {
               </Box>
             </Box>
 
-            {/* 공지 내용 */}
             <Box sx={{ minHeight: '300px' }}>
               {isEditing ? (
                 <TextField
@@ -145,30 +121,40 @@ const Notice_detail = () => {
                   sx={{ mb: 2 }}
                 />
               ) : (
-                <Typography variant="body1" fontFamily="Pretendard" sx={{color:"#3e3e3e"}}>
+                <Typography variant="body1" fontFamily="Pretendard" sx={{ color: "#3e3e3e" }}>
                   {notice.content}
                 </Typography>
               )}
             </Box>
-
           </Paper>
 
-          {/* 이전글/다음글 */}
           <Box display="flex" justifyContent="center" mt={2} maxWidth="800px" width="100%">
-            {previousNoticeId && (
-              <Button startIcon={<ArrowBackIcon />} sx={{ mr: 2 , fontFamily: 'Pretendard', color: "#7C97FE" }} onClick={() => navigate(`/notice/${previousNoticeId}`)}>이전글</Button>
-            )}
-            <Button variant="contained" disabled   
-            sx={{
-                fontFamily: 'Pretendard', 
-                '&.Mui-disabled': {         // disabled 상태일 때의 스타일
-                  backgroundColor: '#e3e8f9', 
-                  color: '#7c97fe',        
-                  }  
-              }}>현재글</Button>
-              {nextNoticeId && (
-                <Button endIcon={<ArrowForwardIcon />}  sx={{ ml: 2 , fontFamily: 'Pretendard',color: "#7C97FE" }} onClick={() => navigate(`/notice/${nextNoticeId}`)}>다음글</Button>
-              )}
+            <Button
+              startIcon={<ArrowBackIcon />}
+              sx={{
+                mr: 2,
+                fontFamily: 'Pretendard',
+                color: previousNoticeId ? "#7C97FE" : "#ddd",
+                cursor: previousNoticeId ? "pointer" : "default"
+              }}
+              onClick={previousNoticeId ? () => navigate(`/notice/${previousNoticeId}`) : null}
+              disabled={!previousNoticeId}
+            >
+              이전글
+            </Button>
+            <Button
+              endIcon={<ArrowForwardIcon />}
+              sx={{
+                ml: 2,
+                fontFamily: 'Pretendard',
+                color: nextNoticeId ? "#7C97FE" : "#ddd",
+                cursor: nextNoticeId ? "pointer" : "default"
+              }}
+              onClick={nextNoticeId ? () => navigate(`/notice/${nextNoticeId}`) : null}
+              disabled={!nextNoticeId}
+            >
+              다음글
+            </Button>
           </Box>
         </Box>
       </section>
