@@ -49,7 +49,7 @@ const Notice = () => {
                     color: '#7c97fe', // 기본 페이지 버튼의 색상
                   },
                   '& .Mui-selected': {
-                    backgroundColor: '#7c97fe', // 선택된 페이지 속성
+                    backgroundColor: '#7c97fe !important' , // 선택된 페이지 속성
                     color: '#ffffff', 
                   },
                   '& .MuiPaginationItem-root:not(.Mui-selected)': {
