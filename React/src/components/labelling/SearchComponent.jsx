@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CustomDropdown from './CustomDropdown';
 import { setSelectedCategory1,setSelectedCategory2, setSelectedCategory3, setSelectedWorkStatus, setCategory2Options, 
   setCategory3Options } from '../../slices/searchSlice';
-import { resetPage, setTableData } from '../../slices/labelTableSlice';
+import { clearTableData, resetPage, setTableData } from '../../slices/labelTableSlice';
 import { fetchSearchResults } from '../../apis/searchApis';
 
 const mapCategoriesFromFolders = (folders) => {
@@ -32,6 +32,22 @@ const mapCategoriesFromFolders = (folders) => {
   folders.forEach((folder) => traverseFolder(folder));
 
   return categories;
+};
+
+// findFolderById 함수 (폴더 ID로 계층을 찾는 함수)
+const findFolderById = (folders, folderId, parentLabels = []) => {
+  for (const folder of folders) {
+    if (folder.id === folderId) {
+      return { folder, parentLabels };
+    }
+    if (folder.children && folder.children.length > 0) {
+      const found = findFolderById(folder.children, folderId, [...parentLabels, folder.label]);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
 };
 
 const SearchComponent = () => {
@@ -124,18 +140,24 @@ const SearchComponent = () => {
       };
   
       if (searchResults.length === 0) {
+        dispatch(clearTableData());
         alert("검색 결과가 없습니다.");
       } else {
         const mappedResults = searchResults.map((task, index) => {
+          // 폴더 ID를 기준으로 카테고리 계층 정보 가져오기
+          const { parentLabels } = findFolderById(folderItems, task.parentFolderId) || { parentLabels: [] };
+          let category1 = parentLabels[0] || "";
+          let category2 = parentLabels[1] || "";
+          let category3 = parentLabels[2] || "";
+  
           return {
-            id: task.id, // 고유 ID로 설정
-            no: index + 1, // 테이블 행 번호
+            id: task.id,
+            no: index + 1,
             workname: task.taskName,
-            category1: criteria.category1 || "", // 선택된 대분류 카테고리
-            category2: criteria.category2 || "", // 선택된 중분류 카테고리
-            category3: criteria.category3 || "", // 선택된 소분류 카테고리
-            workstatus: getKoreanWorkStatus(task.status), // 작업 상태
-            deadline: "마감일 없음", // 마감일 설정
+            category1, // 대분류
+            category2, // 중분류
+            category3, // 소분류
+            workstatus: getKoreanWorkStatus(task.status),
           };
         });
   

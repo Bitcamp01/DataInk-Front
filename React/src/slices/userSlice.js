@@ -17,6 +17,7 @@ const userSlice = createSlice({
         dep: '',
         nickname:'',
         changePasswordMsg:'',
+        profileImageUrl:''
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -39,10 +40,12 @@ const userSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 alert(`${action.payload.id}님 환영합니다.`);
                 sessionStorage.setItem('ACCESS_TOKEN', action.payload.token);
+                console.log("action.payload.userDetailDto.profileImageUrl",  action.payload.userDetailDto.profileImageUrl);
                 return {
                     ...state,
                     ...action.payload,
                     isLogin: true,
+                    profileImageUrl: action.payload.userDetailDto.profileImageUrl
                 };
             })
             .addCase(login.rejected, (state, action) => {
@@ -71,6 +74,7 @@ const userSlice = createSlice({
                     addr: '',
                     dep: '',
                     nickname:'',
+                    profileImageUrl:'',
                 };
             })
             .addCase(logout.rejected, (state) => {

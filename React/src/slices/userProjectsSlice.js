@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserProjects, updateBookmarkStatus } from "../apis/userProjectsApis";
+import { getProgress, getUserProjects, updateBookmarkStatus } from "../apis/userProjectsApis";
 
 const userProjectsSlice = createSlice({
   name: 'userProjects',
   initialState: {
     projects: [],        // 참여 중인 project들 정보
     userProjects: [],    // 유저와 프로젝트 관계 정보 (북마크 상태 등)
-    projectCount: 0      // 프로젝트 개수 상태 추가
+    projectCount: 0,      // 프로젝트 개수 상태 추가
+    progress: {} // 프로젝트별 진행률 저장
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -45,6 +46,19 @@ const userProjectsSlice = createSlice({
       })
       .addCase(updateBookmarkStatus.rejected, (state, action) => {
         return state;
+      })
+      // 진행률 업데이트
+      .addCase(getProgress.fulfilled, (state, action) => {
+        const { projectId, progress } = action.payload;
+        // 진행률이 저장될 때 `progress` 객체에 projectId별로 안전하게 할당
+        if (state.progress) {
+          state.progress[projectId] = progress; // projectId별 진행률을 설정
+        } else {
+          state.progress = { [projectId]: progress }; // fallback, 만약 progress가 undefined일 경우
+        }
+      })
+      .addCase(getProgress.rejected, (state, action) => {
+        console.error("진행률 가져오기 실패:", action.error);
       });
   },
 });

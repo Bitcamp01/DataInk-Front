@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProjectCard from './ProjectCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserProjects } from '../../apis/userProjectsApis';
+import { getProgress, getUserProjects } from '../../apis/userProjectsApis';
 
 // 날짜 변환 함수
 const formatDate = (dateString) => {
@@ -26,10 +26,29 @@ const RendarProjectCard = () => {
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.userProjectsSlice.projects);
 
+    // 개별 프로젝트의 진행률을 관리하는 상태
+    const [progressMap, setProgressMap] = useState({});
+
   // 컴포넌트가 마운트될 때 프로젝트 목록을 가져오기 위해 useEffect 사용
   useEffect(() => {
     dispatch(getUserProjects()); // JWT를 통해 사용자 정보가 자동으로 처리됨
   }, [dispatch]);
+
+   // 프로젝트별 진행률 요청 후 상태 업데이트
+   useEffect(() => {
+    if (projects) {
+      projects.forEach((project) => {
+        dispatch(getProgress(project.projectId)).then((result) => {
+          if (result.payload) {
+            setProgressMap((prevProgressMap) => ({
+              ...prevProgressMap,
+              [project.projectId]: result.payload.progress
+            }));
+          }
+        });
+      });
+    }
+  }, [dispatch, projects]);
 
   // 프로젝트 목록을 정렬: 북마크된 것이 먼저, 날짜 차이 순서로 정렬 (가까운 날짜가 위로 오도록)
   const sortedProjects = projects
@@ -63,7 +82,7 @@ const RendarProjectCard = () => {
           deadline: calculateDaysDifference(project.endDate), // 현재 날짜와 endDate 간의 일 수 차이 계산
           description: project.description,
           isBookmarked: project.isBookmarked, // 북마크 상태 전달
-          progress: 95,
+          progress: progressMap[project.projectId] || 0, // progressMap에서 개별 진행률 가져오기
           members: [
             { class: 'manager', role: '관리자', profileImg: '/images/manager-profile_img.png' },
             { class: 'reviewer', role: '검수자', profileImg: '/images/reviewer-profile_img.png' },
@@ -74,7 +93,13 @@ const RendarProjectCard = () => {
           ],
         };
 
-        return <ProjectCard key={project.projectId} projects={[projectData]} />;
+        return <ProjectCard 
+        key={project.projectId} 
+        projects={[{
+            ...projectData, 
+            progress: (progressMap[project.projectId] || 0).toFixed(1) // 표시할 때 반올림
+        }]} 
+    />;
       })}
     </div>
   );

@@ -1,140 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { DataGridPro } from '@mui/x-data-grid-pro';
-// import '../css/reviewer.css';
-
-// const LabelingTable = () => {
-//   const [rowsData, setRowsData] = useState([]);
-//   const [hoveredRow, setHoveredRow] = useState(null);
-//   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
-//   const [editRowsModel, setEditRowsModel] = useState({});
-
-//   const fetchData = async () => {
-//     try {
-//       const response = await fetch('https://example.com/api/rows');
-//       const data = await response.json();
-//       const formattedData = Object.entries(data).map(([id, row]) => {
-//         // hierarchy 관련 필드를 배열로 수집
-//         const hierarchyArray = [];
-//         Object.keys(row).forEach(key => {
-//           if (key.startsWith('hierarchy')) {
-//             hierarchyArray.push(row[key]);
-//           }
-//         });
-//         return {
-//           id: Number(id),
-//           content: row.content,
-//           hierarchyArray, // 수집한 hierarchy 배열
-//           checked: row.checked,
-//         };
-//       });
-//       setRowsData(formattedData);
-//     } catch (error) {
-//       console.error('데이터를 가져오는 데 실패했습니다:', error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
-
-//   const handleMouseEnter = (event, rowId) => {
-//     setHoveredRow(rowId);
-//     setTooltipPos({ x: event.clientX, y: event.clientY });
-//   };
-
-//   const handleMouseLeave = () => {
-//     setHoveredRow(null);
-//   };
-
-//   const handleEditRowsModelChange = (model) => {
-//     setEditRowsModel(model);
-//   };
-
-//   const handleProcessRowUpdate = (newRow) => {
-//     const updatedRows = rowsData.map(row => (row.id === newRow.id ? newRow : row));
-//     setRowsData(updatedRows);
-//     return newRow;
-//   };
-
-//   const columns = [
-//     { 
-//       field: 'content', 
-//       headerName: '내용', 
-//       width: 300,
-//       editable: true,
-//       renderCell: (params) => (
-//         <div 
-//           style={{ 
-//             whiteSpace: 'normal', 
-//             wordWrap: 'break-word', 
-//             display: 'flex', 
-//             flexDirection: 'column', 
-//             alignItems: 'flex-start', 
-//             position: 'relative'
-//           }}
-//           onMouseEnter={(event) => handleMouseEnter(event, params.id)}
-//           onMouseLeave={handleMouseLeave}
-//         >
-//           <div style={{ color: 'black' }}>{params.value}</div>
-//           <div style={{ padding: '5px', borderRadius: '4px', marginTop: '5px' }}>
-//             {params.row.hierarchyArray.join(' > ')} {/* hierarchyArray를 사용하여 계층 구조 표시 */}
-//           </div>
-//         </div>
-//       ),
-//     },
-//     {
-//       field: 'checked',
-//       headerName: '체크 상태',
-//       width: 150,
-//       renderCell: (params) => (
-//         <input 
-//           type="checkbox" 
-//           checked={params.value} 
-//           readOnly
-//         />
-//       ),
-//     },
-//   ];
-
-//   return (
-//     <div className="label-table-container">
-//       <div style={{ height: '100%', width: '100%' }}>
-//         <DataGridPro
-//           treeData
-//           rows={rowsData}
-//           columns={columns}
-//           getTreeDataPath={(row) => row.hierarchyArray.filter(Boolean)} // 빈 값 제외
-//           defaultGroupingExpansionDepth={-1}
-//           editRowsModel={editRowsModel}
-//           onEditRowsModelChange={handleEditRowsModelChange}
-//           processRowUpdate={handleProcessRowUpdate}
-//         />
-//       </div>
-
-//       {hoveredRow !== null && (
-//         <div 
-//           className="tooltip" 
-//           style={{ 
-//             position: 'absolute', 
-//             top: `${tooltipPos.y}px`, 
-//             left: `${tooltipPos.x}px`, 
-//             backgroundColor: 'white', 
-//             border: '1px solid black', 
-//             padding: '5px', 
-//             zIndex: 1000 
-//           }}
-//         >
-//           <p>설명창 자리입니다</p>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default LabelingTable;
-
-
-
 import React, { useState } from 'react';
 import { DataGridPro } from '@mui/x-data-grid-pro';
 import '../css/reviewer.css';
@@ -286,3 +149,124 @@ export default LabelingTable;
 
 
 
+
+
+
+
+
+
+
+
+
+// import React, { useEffect, useState } from 'react';
+// import { DataGridPro } from '@mui/x-data-grid-pro';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { fetchLabelTaskDetails } from '../apis/labelDetailApis';
+
+// const LabelingTable = ({ taskId, onDataTransform }) => {
+//   const dispatch = useDispatch();
+//   const [rowsArray, setRowsArray] = useState([]);
+
+//   const { labelTaskData, loading, error } = useSelector((state) => state.labelTask || {});
+
+//   useEffect(() => {
+//     if (taskId) {
+//       dispatch(fetchLabelTaskDetails(taskId));
+//     }
+//   }, [taskId, dispatch]);
+
+//   const transformData = (data, hierarchy = []) => {
+//     const transformed = {};
+//     let index = 0; // 인덱스를 위한 변수
+  
+//     data.forEach((item) => {
+//       const currentHierarchy = [...hierarchy, item.fieldName];
+
+//       const row = {};
+//       currentHierarchy.forEach((level, idx) => {
+//         row[idx === 0 ? "hierarchy" : `hierarchy${idx + 1}`] = level; // 첫 번째는 "hierarchy"로 설정
+//       });
+
+//       const contentValue = item.subFields ? item.subFields.content : "undefined"; // content가 없을 경우 "undefined"로 설정
+
+//       if (typeof item.subFields === 'string') {
+//         transformed[index++] = {
+//           ...row,
+//           content: contentValue,
+//           checked: false,
+//         };
+//       } else if (Array.isArray(item.subFields)) {
+//         const subFieldsTransformed = transformData(item.subFields, currentHierarchy);
+//         Object.keys(subFieldsTransformed).forEach((key) => {
+//           transformed[index++] = subFieldsTransformed[key];
+//         });
+//       } else if (typeof item.subFields === 'object') {
+//         transformed[index++] = {
+//           ...row,
+//           content: contentValue, // 내용 추출
+//           checked: false,
+//         };
+//       }
+//     });
+
+//     return transformed;
+//   };
+
+//   useEffect(() => {
+//     if (labelTaskData) {
+//       const transformedData = transformData(labelTaskData);
+//       setRowsArray(transformedData);
+//       if (onDataTransform) {
+//         onDataTransform(transformedData);
+//       }
+//     }
+//   }, [labelTaskData]);
+
+//   const columns = [
+//     {
+//       field: 'content',
+//       headerName: '내용',
+//       width: 300,
+//       editable: true, // **content 수정 가능하게 설정**
+//       renderCell: (params) => (
+//         <div style={{ whiteSpace: 'normal', wordWrap: 'break-word' }}>
+//           {params.value}
+//         </div>
+//       ),
+//       // **수정 완료 시 오직 엔터 키를 누를 때의 동작 정의**
+//       renderEditCell: (params) => (
+//         <input
+//           defaultValue={params.value}
+//           onKeyDown={(event) => {
+//             if (event.key === 'Enter') {
+//               params.api.stopEditing(); // 엔터 키로 수정 완료
+//             }
+//           }}
+//         />
+//       ),
+//     },
+//     {
+//       field: 'checked',
+//       headerName: '선택',
+//       width: 100,
+//       type: 'boolean',
+//       editable: false, // **체크박스 수정 불가능하게 설정**
+//     },
+//   ];
+
+//   return (
+//     <div className="label-table-container">
+//       <div style={{ height: 400, width: '100%' }}>
+//         <DataGridPro
+//           treeData
+//           rows={rowsArray}
+//           columns={columns}
+//           checkboxSelection
+//           getTreeDataPath={(row) => row.hierarchy}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default LabelingTable;
