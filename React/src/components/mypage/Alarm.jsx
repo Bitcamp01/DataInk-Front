@@ -48,7 +48,7 @@ const Alarm = () => {
         { field: 'category', headerName: '카테고리', width: 200 },
         { field: 'content', headerName: '내용', width: 380 },
         { field: 'level', headerName: '알림 레벨', width: 180 },
-        { field: 'writer', headerName: '보낸 사람', width: 180 },
+        { field: 'writer', headerName: '보낸 사람', width: 160 },
         { field: 'time', headerName: '발생 시간', width: 250 },
         { field: 'status', headerName: '상태', width: 200 },
     ];
@@ -252,11 +252,11 @@ const Alarm = () => {
             />
 
             {/* 검색 버튼 */}
-            <button type='button' className="alarm__search-btn">검색</button>
+            <button type='button' className="alarm__search-btn" >검색</button>
         </div>
 
         {/* 데이터 그리드 섹션 */}
-        <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)' }}>
+        <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', backgroundColor: 'white' }}>
             <DataGrid
                 rows={rows}
                 columns={columns}

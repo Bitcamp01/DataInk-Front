@@ -3,11 +3,13 @@
     display: flex;
     align-items: center;
     background-color: white;
-    padding: 8px 20px;
+    padding: 8px 12px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     gap: 0.7rem;
     margin-bottom: 20px;
+    width: 1400px; /* 컨테이너 너비 고정 */
+    height: 60px; /* 컨테이너 높이 고정 */
 }
 
 /* 구분선 스타일 */
@@ -26,6 +28,7 @@
 .alarm__custom-header {
     color: #7785BE;
     font-weight: bold !important;
+    background-color: rgb(235, 240, 245);
 }
 
 /* 검색 입력 스타일 */
@@ -42,7 +45,7 @@
 /* 검색 버튼 스타일 */
 .alarm__search-btn {
     font-size: 16px;
-    padding: 8px 20px;
+    padding: 8px 17px;
     border-radius: 5px;
     border: 1px solid #7785BE;
     color: #7785BE;
