@@ -7,7 +7,7 @@
 }
 
 .profileinit-box {
-    background-color: #f9f9f9; /* 원래 사용하던 배경색 */
+    background-color: #f2f2f2; /* 원래 사용하던 배경색 */
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -35,7 +35,6 @@ h3 {
 .profileinit-form__group {
     display: flex;
     align-items: center; /* 수직 정렬 */
-    margin-right: 10px;
 }
 
 .profileinit-form label {

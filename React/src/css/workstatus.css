@@ -8,6 +8,20 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     gap: 0.7rem;
     margin-bottom: 20px;
+    width: 1400px; /* 컨테이너 너비 고정 */
+    height: 60px; /* 컨테이너 높이 고정 */
+}
+
+/* 데이터 그리드 셀 스타일 */
+.workstatus__custom-cell {
+    color: #3e3e3e;
+}
+
+/* 데이터 그리드 헤더 스타일 */
+.workstatus__custom-header {
+    color: #7785BE;
+    font-weight: bold !important;
+    background-color: rgb(235, 240, 245);
 }
 
 /* 구분선 스타일 */

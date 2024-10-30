@@ -7,7 +7,7 @@ import { passwordChk, fetchUserDetails  } from '../../apis/mypageApis';
 
 const BackgroundContainer = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
-    background-color: white; /* 배경을 흰색으로 설정 */
+    background-color: #f9f9f9; /* 배경을 흰색으로 설정 */
     height: 85vh;
     display: flex;
     justify-content: center;
@@ -64,7 +64,7 @@ const ProfileInit = ({ onAuthenticated }) => {
 
                     {/* 비밀번호 검증 실패 시 오류 메시지 표시 */}
                     {errorMessage && (
-                        <p style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</p>
+                        <p style={{ color: 'red', marginTop: '10px', fontSize: '15px' }}>{errorMessage}</p>
                     )}
                 </div>
             </div>
