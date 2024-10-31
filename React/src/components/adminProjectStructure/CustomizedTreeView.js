@@ -234,7 +234,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
   };
   const navi=useNavigate();
   return (
-      <Card variant="outlined" sx={{ display: 'flex', flexDirection: 'column', gap: '8px', flexGrow: 1 }}>
+      <Card variant="outlined" sx={{ display: 'flex', flexDirection: 'column', gap: '8px', flexGrow: 1 ,       overflowY: 'auto',      maxHeight:'90vh'}}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom:'5px' }}>
               <Button variant="contained" sx={{ ml: 'auto' }} onClick={handleOpen}>
@@ -258,6 +258,7 @@ export default function CustomizedTreeView({ folderData, setSelectedFolder,setSe
                 height: 'fit-content',
                 flexGrow: 1,
                 overflowY: 'auto',
+   
               }}
               slots={{
                 item: (props) => (
