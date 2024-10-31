@@ -1,4 +1,4 @@
-import React,{ useCallback, useState } from 'react';
+import React,{ useCallback, useEffect, useState } from 'react';
 import '../css/memberManagement.css';
 import { Box, Typography, Button, TextField, IconButton, Avatar, Paper, List, ListItem, ListItemText, ListItemIcon  } from '@mui/material';
 import InputFileUpload from '../components/InputFileUpload';
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import '../slices/userSlice';
 import { post } from '../apis/noticeApis';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Notice_write = () => {
 
@@ -22,11 +23,30 @@ const Notice_write = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [files, setFiles] = useState([]);
+  const [notice, setNotice] = useState({});
 
   const dispatch = useDispatch();
   const navi = useNavigate();
 
   const uploadFiles = [];
+
+  useEffect(() => {
+    const fetchedProfileImg = async () => {
+      const token = sessionStorage.getItem('ACCESS_TOKEN');
+      try{
+        const response = await axios.post(`${API_BASE_URL}/notice`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        return response.data;
+      } catch(error) {
+        console.error(error);
+      }
+    };
+    fetchedProfileImg();
+  }, []);
 
   //파일업로드 핸들러
   const handleFileChange =(selectedFiles) =>{
@@ -61,6 +81,12 @@ const Notice_write = () => {
     });
 
 }, [dispatch, navi, uploadFiles]); 
+
+  if (!notice) {
+    return null;
+  }
+  
+  console.log(notice.profileImg);
     
   return (
     <>
@@ -111,7 +137,7 @@ const Notice_write = () => {
               <Box display="flex" justifyContent="space-between" alignItems="flex-start">
                 <Box display="flex" alignItems="center">
                   {/* 작성자 아바타 */}
-                  <Avatar alt={userName} src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
+                  <Avatar alt="작성자" src={notice.profileImg ? `https://kr.object.ncloudstorage.com/dataink/${notice.profileImg}` : '/icons/dataink-logo_icon.svg'} sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
                   <Box>
                   <Typography variant="body1" fontFamily="Pretendard">{userName}</Typography> 
                   </Box>
