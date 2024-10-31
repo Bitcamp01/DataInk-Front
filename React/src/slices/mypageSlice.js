@@ -18,7 +18,7 @@ const mypageSlice = createSlice({
         searchCondition: 'all',
         searchKeyword: '',
         profileIntro: '소개 글을 입력해 주세요.',
-        page: 1
+        page: 1,
     },
     reducers: {
         resetProfileAuth: (state, action) => {
@@ -120,9 +120,9 @@ const mypageSlice = createSlice({
         }))
         builder.addCase(getProjectsBySearch.rejected, (state, action) => {
             console.log(action.payload);
-            alert('에러가 발생했습니다.');
+            alert('getProjectsBySearch 에러가 발생했습니다.');
             return state;
-        });
+        });        
     }
 });
 

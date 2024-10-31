@@ -63,7 +63,7 @@ function Header({ title }) {
 
     const profileImageUrl = profileImageUrlDB 
     ? `https://kr.object.ncloudstorage.com/dataink/${profileImageUrlDB}`
-    : '/images/default-profile.png';  // 기본값으로 설정
+    : '/images/dataInk_profile_default.png';  // 기본값으로 설정
 
     return (
         <header className="header">

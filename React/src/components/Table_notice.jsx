@@ -73,7 +73,7 @@ const Table_notice = () => {
           id: item.noticeId,
           title: item.title,
           writer: item.name,
-          department: item.department || '부서 정보 없음',
+          department: item.dep ? item.dep : '부서 정보 없음',
           regdate: formatDate(item.created)
         }))}
         columns={columns}

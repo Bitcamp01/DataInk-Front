@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate  } from 'react-router-dom';
 import ProfileInit from '../components/mypage/ProfileInit';
 import Profile from '../components/mypage/Profile';
 import Workstatus from '../components/mypage/Workstatus';
 import Alarm from '../components/mypage/Alarm';
-import Calendar from '../components/mypage/Calendar 원본';
+import Calendar from '../components/mypage/Calendar';
 import StatusEditModal from '../components/mypage/StatusEditModal';
 import BackgroundImgModal from '../components/mypage/BackgroundImgModal';
 import ProfileImgModal from '../components/mypage/ProfileImgModal';
@@ -21,13 +21,13 @@ const MypageContainer = styled.div`
 const Mypage = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const { profileImage, backgroundImage, isProfileAuthenticated, userDetails} = useSelector((state) => state.mypageSlice);
+    const navigate = useNavigate();
+    const { isProfileAuthenticated, userDetails} = useSelector((state) => state.mypageSlice);
     const profileIntro = userDetails?.profileIntro || "소개 글을 입력해 주세요.";
     // 이스케이프된 문자열인지 확인하고 파싱
     const parsedProfileIntro = profileIntro.startsWith('"') && profileIntro.endsWith('"')
     ? JSON.parse(profileIntro)
     : profileIntro;
-
     const { name, authen } = useSelector(state => state.userSlice);
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
@@ -66,7 +66,6 @@ const Mypage = () => {
         setIsProfileModalOpen(true);
     };
 
-    // userEffect//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const section = queryParams.get('section');
@@ -75,6 +74,11 @@ const Mypage = () => {
             setActiveTab(section);
         }
     }, [location.search]);
+
+    // 탭 변경 시 URL 쿼리 파라미터 업데이트
+    useEffect(() => {
+        navigate(`?section=${activeTab}`, { replace: true, scroll: false  }); // navigate 사용
+    }, [activeTab, navigate]);
 
     useEffect(() => {
         if (activeTab === 'Profile') {
@@ -96,11 +100,11 @@ const Mypage = () => {
     // userDetails가 로드될 때만 profileImageUrl와 backgroundImageUrl을 설정
     const profileImageUrl = userDetails?.profileImageUrl 
         ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.profileImageUrl}`
-        : '../../public/images/dataInk_profile_default.png'; // 기본 프로필 이미지
+        : '/images/dataInk_profile_default.png'; // 기본 프로필 이미지
 
     const backgroundImageUrl = userDetails?.backgroundImageUrl 
         ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.backgroundImageUrl}`
-        : '../../public/images/dataInk_background_default.jpg'; // 기본 배경 이미지
+        : '/images/dataInk_background_default.jpg'; // 기본 배경 이미지
 
 
     const handleSaveBackground = (file) => {
@@ -229,7 +233,7 @@ const Mypage = () => {
 
             <BackgroundImgModal 
                 isOpen={isBackgroundModalOpen} 
-                currentImage={backgroundImage}
+                currentImage={backgroundImageUrl}
                 defaultImage="/images/dataInk_background_default.jpg"
                 onClose={handleCloseBackgroundModal}
                 onSave={handleSaveBackground} 
@@ -238,7 +242,7 @@ const Mypage = () => {
 
             <ProfileImgModal 
                 isOpen={isProfileModalOpen}
-                currentImage={profileImage}
+                currentImage={profileImageUrl}
                 defaultImage="/images/dataInk_profile_default.png"
                 onClose={handleCloseProfileModal}
                 onSave={handleSaveProfile}

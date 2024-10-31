@@ -1,4 +1,4 @@
-import React,{ useCallback, useState } from 'react';
+import React,{ useCallback, useEffect, useState } from 'react';
 import '../css/memberManagement.css';
 import { Box, Typography, Button, TextField, IconButton, Avatar, Paper, List, ListItem, ListItemText, ListItemIcon  } from '@mui/material';
 import InputFileUpload from '../components/InputFileUpload';
@@ -8,20 +8,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import '../slices/userSlice';
 import { post } from '../apis/noticeApis';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Notice_write = () => {
 
   // 환경 변수에서 API URL 가져오기
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
   
   // Redux에서 로그인한 사용자 정보 가져오기, 기본값으로 빈 객체 제공
   const user = useSelector((state) => state.userSlice || {});
-  const { name: userName } = user;  // 'name'을 'userName'으로 변경
+  const { name: userName, profileImageUrl} = user;  // 'name'을 'userName'으로 변경
+
+  const profileImg = profileImageUrl 
+    ? `https://kr.object.ncloudstorage.com/dataink/${profileImageUrl}` 
+    : '/icons/dataink-logo_icon.svg';
+
   //제목과 내용을 상태로 관리 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [files, setFiles] = useState([]);
+
+  const [notice, setNotice] = useState({});
 
   const dispatch = useDispatch();
   const navi = useNavigate();
@@ -61,6 +68,10 @@ const Notice_write = () => {
     });
 
 }, [dispatch, navi, uploadFiles]); 
+  
+  // if (!notice) {
+  //   return null;
+  // }
     
   return (
     <>
@@ -111,7 +122,7 @@ const Notice_write = () => {
               <Box display="flex" justifyContent="space-between" alignItems="flex-start">
                 <Box display="flex" alignItems="center">
                   {/* 작성자 아바타 */}
-                  <Avatar alt={userName} src="/path/to/avatar.jpg" sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
+                  <Avatar alt="작성자" src={profileImg} sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
                   <Box>
                   <Typography variant="body1" fontFamily="Pretendard">{userName}</Typography> 
                   </Box>

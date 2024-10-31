@@ -32,7 +32,7 @@ const ProfileCard = ({ profile, announcements }) => {
       <div className="bm-profile">
         <span className='bm-prodile-title'>좋은 하루입니다!</span>
         <img 
-          src={profile.profileImg !== null ? profile.profileImg : '/icons/dataink-logo_icon.svg'} 
+          src={profile.profileImg} 
           alt={`${profile.username} 프로필 이미지`} />
         <h3 className="bm-username">
           {profile.username}
@@ -74,7 +74,7 @@ const ProfileCard = ({ profile, announcements }) => {
                   alt={announcement.urgent ? '긴급아이콘' : '일반아이콘'}
                 />
                 <span style={announcement.urgent ? { color: '#F67171' } : { color: '#7C97FE' }}>
-                  [{`${announcement.dep} 부서`}]
+                  [{announcement.dep ? `${announcement.dep} 부서` : '부서 정보없음'}]
                 </span>
                 <a href={`/notice/${announcement.id}`} style={{ fontSize: '0.8rem' }}>
                   {announcement.title}

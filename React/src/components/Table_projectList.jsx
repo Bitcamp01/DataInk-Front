@@ -57,13 +57,22 @@ useEffect(() => {
     const projectDataWithMembers = await Promise.all(
       (projectListAll ?? []).map(async (project) => {
         const memberNames = await dispatch(getUserNames(project.projectId));
-        console.log("Fetched member names:", memberNames);
-        return {
-          ...project,
-          member: memberNames.payload.join(', '), // 멤버 이름을 쉼표로 구분하여 문자열로 반환
-        };
-      })
-    );
+
+      // 데이터가 예상한 형태인지 확인
+          if (Array.isArray(memberNames.payload)) {
+            return {
+              ...project,
+              member: memberNames.payload.join(', '), // 멤버 이름을 쉼표로 구분하여 문자열로 반환
+            };
+          } else {
+            console.error("Expected an array but got:", memberNames.payload);
+            return {
+              ...project,
+              member: '데이터 형식 오류', // 오류 발생 시 기본값 설정
+            };
+          }
+        })
+      );
     setProcessedProjects(projectDataWithMembers);
   };
 

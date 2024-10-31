@@ -7,6 +7,7 @@ import CustomizedTreeView from '../components/adminProjectStructure/CustomizedTr
 import CustomizedDataGrid from '../components/adminProjectStructure/CustomizedDataGrid';
 import axios from "axios";
 import { wait } from '@testing-library/user-event/dist/utils';
+import ErrorBoundary from '../components/adminProjectStructure/ErrorBoundary.js';
 
 export default function MainGrid() {
   // 환경 변수에서 API URL 가져오기
@@ -35,7 +36,6 @@ export default function MainGrid() {
         lastModifiedUserId: item.lastModifiedUserId, // 추가된 필드
         lastModifiedDate: item.lastModifiedDate,
         finished: item.finished, // 추가된 필드
-
         projectId:projectId === null ? item.projectId : projectId
       });
       if (item.children && item.children.length > 0) {
@@ -43,7 +43,7 @@ export default function MainGrid() {
       }
 
     });
-
+    console.log("flatData",flatData);
     return flatData;
   }
 
@@ -100,10 +100,8 @@ export default function MainGrid() {
             finished:false,
             projectId:item.projectId
           }
-          console.log("백엔드 초기 프로젝트 폴더",newFolder)
           setOriginalFolderData(prevData => [...prevData, newFolder]);
         })
-
       }
     }
     catch(err){
@@ -126,11 +124,10 @@ export default function MainGrid() {
       if (response.status === 200) {
         console.log("response",response)
         const idsToRemove = response.data.map((x) =>String(x.id));
+        console.log("idsToRemove",idsToRemove)
         const updatedFolderData = flatFolderData.filter(
           (folder) => !idsToRemove.includes(String(folder.id))
         );
-        console.log("updateFolderData",updatedFolderData)
-        setFlatFolderData(updatedFolderData);
         const newFolders = response.data.map((x) => ({
           id: x.id,
           parentId: selectedFolder,
@@ -141,23 +138,28 @@ export default function MainGrid() {
           finished: x.finished,
           projectId: selectedProject,
         }));
-        setFlatFolderData((prevData) => [...prevData, ...newFolders]);
+        setFlatFolderData([...updatedFolderData, ...newFolders]);
       
       }
     } catch (err) {
       console.error("Error fetching selected folder data:", err);
     }
   };
-  //초기화//////////////////////
-  React.useEffect(()=>{
-    getSelectedFolderData();
-  },[selectedFolder,selectedProject])
+
+  React.useEffect(() => {
+    
+    if (selectedProject !==undefined && selectedFolder !==undefined) {
+      getSelectedFolderData();
+    }
+  }, [selectedFolder, selectedProject]);
+  
   React.useEffect(()=>{
     getInitFolderData();
   },[])
-  //초기화//////////////////////
+
   React.useEffect(()=>{
     setFlatFolderData(flattenTree(originalFolderData))
+    console.log("origin Data",originalFolderData)
   },[originalFolderData])
   React.useEffect(()=>{
     const newTreeData = unflatten(flatFolderData);
@@ -180,6 +182,7 @@ export default function MainGrid() {
           </Stack>
         </Grid>
           <Grid size={{ md: 12, lg: 9 }} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <ErrorBoundary>
           <CustomizedDataGrid getSelectedFolderData={getSelectedFolderData}
                               folderData={folderData}
                               setFolderData={setFolderData}
@@ -190,6 +193,7 @@ export default function MainGrid() {
                               setSelectedProject={setSelectedProject}
                               selectedProject={selectedProject}
                               getInitFolderData={getInitFolderData}/>
+                              </ErrorBoundary>
         </Grid>
       </Grid>
     </Box>

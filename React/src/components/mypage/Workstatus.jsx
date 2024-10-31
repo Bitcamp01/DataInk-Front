@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -13,20 +13,20 @@ import { getProjectsBySearch } from '../../apis/mypageApis';
 import { change_searchCondition, change_searchKeyword } from '../../slices/mypageSlice';
 
 const columns = [
-    { field: 'projectId', headerName: 'No', width: 100, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
-    { field: 'name', headerName: '프로젝트명', width: 300 },
-    { field: 'description', headerName: '프로젝트 설명', width: 400 },
-    { field: 'totalWorkCnt',headerName: '총 작업수',width: 225 },
+    { field: 'projectId', headerName: 'No', flex: 0.5, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
+    { field: 'name', headerName: '프로젝트명', flex: 1.5 },
+    { field: 'description', headerName: '프로젝트 설명', flex: 2 },
+    // { field: 'totalWorkCnt',headerName: '총 작업수',width: 225 },
     { 
         field: 'startDate', 
         headerName: '시작일', 
-        width: 180,
+        flex: 1,
         valueFormatter: (value) => dayjs(value).format('YYYY-MM-DD')
     },
     { 
         field: 'endDate', 
         headerName: '기한일', 
-        width: 180,
+        flex: 1,
         valueFormatter: (value) => dayjs(value).format('YYYY-MM-DD')
     },
 ];
@@ -34,18 +34,16 @@ const columns = [
 const Workstatus = () => {
     const dispatch = useDispatch();
     const projects = useSelector((state) => state.mypageSlice.projects) || [];
-    const [startDate, setStartDate] = useState(dayjs().subtract(1, 'month'));
-    const [endDate, setEndDate] = useState(dayjs());
     const searchCondition = useSelector(state => state.mypageSlice.searchCondition);
     const searchKeyword = useSelector(state => state.mypageSlice.searchKeyword);
     const page = useSelector(state => state.mypageSlice.page);
 
-        // 입력용 상태 (검색 버튼을 누르기 전 임시 저장 상태)
-        const [searchConditionInput, setSearchConditionInput] = useState("all");
-        const [searchKeywordInput, setSearchKeywordInput] = useState("");
-        const [period, setPeriod] = useState("all");
-        const [inputStartDate, setInputStartDate] = useState(dayjs().subtract(1, 'month'));
-        const [inputEndDate, setInputEndDate] = useState(dayjs());
+    // 입력용 상태 (검색 버튼을 누르기 전 임시 저장 상태)
+    const [searchConditionInput, setSearchConditionInput] = useState("all");
+    const [searchKeywordInput, setSearchKeywordInput] = useState("");
+    const [period, setPeriod] = useState("all");
+    const [inputStartDate, setInputStartDate] = useState(dayjs().subtract(1, 'month'));
+    const [inputEndDate, setInputEndDate] = useState(dayjs());
     
 
     const commonSelectStyles = {
@@ -62,7 +60,7 @@ const Workstatus = () => {
         ".MuiSelect-icon": {
             color: "#7785BE",
         },
-        width: '140px',
+        width: '8.75rem',
     };
 
     const changeSearchCondition = (e) => {
@@ -72,16 +70,6 @@ const Workstatus = () => {
     const changeSearchKeyword = (e) => {
         setSearchKeywordInput(e.target.value);
     };
-
-    // const fetchProjects = useCallback(() => {
-    //     dispatch(getProjectsBySearch({
-    //         searchCondition,
-    //         searchKeyword,
-    //         page,
-    //         startDate: period === 'all' ? '' : startDate.format('YYYY-MM-DDTHH:mm:ss'),
-    //         endDate: period === 'all' ? '' : endDate.format('YYYY-MM-DDTHH:mm:ss'),
-    //     }));
-    // }, [dispatch, searchCondition, searchKeyword, period, startDate, endDate, page]);
 
     // 처음 렌더링 시 기본 검색 조건으로 데이터 로드
     useEffect(() => {
@@ -143,8 +131,12 @@ const Workstatus = () => {
 
             <form onSubmit={handleSearch}>
                 <div className="workstatus__filter-container">
-                    <FormControl size="small" sx={{ minWidth: 120 }}>
-                        <InputLabel sx={{ color: "#7785BE" }}>카테고리</InputLabel>
+                    <FormControl size="small" sx={{ minWidth: '7.5rem' }}>
+                        <InputLabel sx={{ 
+                            color: "#7785BE",
+                            fontSize: "0.9375rem"
+                            }}>
+                            카테고리</InputLabel>
                         <Select
                             className="workstatus__filter-select"
                             value={searchConditionInput}
@@ -161,7 +153,7 @@ const Workstatus = () => {
                         </Select>
                     </FormControl>
 
-                    <Box sx={{ minWidth: 120 }}>
+                    <Box sx={{ minWidth: '7.5rem' }}>
                         <FormControl fullWidth size="small">
                             <InputLabel className="workstatus__filter-group"
                             sx={{
@@ -187,10 +179,10 @@ const Workstatus = () => {
 
                     {period === 'custom' && (
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <div className="workstatus__filter-group" style={{ display: 'flex', gap: '8px' }}>
+                            <div className="workstatus__filter-group" style={{ display: 'flex', gap: '0.5rem' }}>
                                 <DatePicker
                                     label="시작 날짜"
-                                    slotProps={{ textField: { size: 'small', sx: { width: '222.4px' }}}}
+                                    slotProps={{ textField: { size: 'small', sx: { width: '9.375rem' }}}}
                                     value={inputStartDate}
                                     format="YYYY-MM-DD"
                                     onChange={(newValue) => setInputStartDate(newValue)}
@@ -198,7 +190,7 @@ const Workstatus = () => {
                                 />
                                 <DatePicker
                                     label="종료 날짜"
-                                    slotProps={{ textField: { size: 'small', sx: { width: '222.4px' }}}}
+                                    slotProps={{ textField: { size: 'small', sx: { width: '9.375rem' }}}}
                                     value={inputEndDate}
                                     format="YYYY-MM-DD"
                                     onChange={(newValue) => setInputEndDate(newValue)}
@@ -210,10 +202,9 @@ const Workstatus = () => {
 
                     {/* 최근 1일, 1주일, 1개월 선택 시 */}
                     {(period === 'today' || period === 'week' || period === 'month') && (
-                        <div className="workstatus__filter-group" style={{ display: 'flex', gap: '8px' }}>
+                        <div className="workstatus__filter-group" style={{ display: 'flex', gap: '0.5rem' }}>
                             <TextField
                                 label="시작 날짜"
-                                // value={startDate.format('YYYY-MM-DD')}
                                 value={inputStartDate.format('YYYY-MM-DD')}
                                 className="workstatus__filter-select"
                                 size="small"
@@ -221,7 +212,6 @@ const Workstatus = () => {
                             />
                             <TextField
                                 label="종료 날짜"
-                                // value={endDate.format('YYYY-MM-DD')}
                                 value={inputEndDate.format('YYYY-MM-DD')}
                                 className="workstatus__filter-select"
                                 size="small"
@@ -231,7 +221,7 @@ const Workstatus = () => {
                     )}
 
                     {(period === '' || period === 'all') && (
-                        <div className="workstatus__filter-group" style={{ display: 'flex', gap: '8px' }}>
+                        <div className="workstatus__filter-group" style={{ display: 'flex', gap: '0.5rem' }}>
                             <TextField
                                 label="시작 날짜"
                                 value=""
@@ -263,14 +253,22 @@ const Workstatus = () => {
                             }
                         }}
                         variant='outlined'
-                        sx={{ width: '400px'}}
+                        sx={{ width: '25rem'}}
                     />
 
                     <button type='submit' className="workstatus__search-btn">검색</button>
                 </div>
             </form>
 
-            <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)', backgroundColor: 'white' }}>
+            <Box sx={{ width: '83.6%',
+                        marginBottom: '2.4375rem',
+                        boxShadow: '0px 0.25rem 1.25rem 0.3125rem rgba(0, 0, 0, 0.08)',
+                        backgroundColor: 'white',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        margin: '0 auto'
+            }}>
                 <DataGrid
                     rows={projects && projects.content ? projects.content : []}
                     columns={columns}

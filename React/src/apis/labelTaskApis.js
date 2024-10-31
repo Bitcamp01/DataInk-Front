@@ -201,3 +201,26 @@ export const fetchLabelTaskDetails = createAsyncThunk(
     }
   }
 );
+
+// 관리자에서 승인 버튼 누를 때 사용
+export const adminLabelTask = createAsyncThunk(
+  'labelTask/adminLabelTask',
+  async (obj, { rejectWithValue }) => {
+    console.log("!11111111111111111111111111111111");
+    console.log(obj);
+    try {
+      const { taskId, transformedData } = obj; // 각각의 값 분리
+      const response = await axios.patch(`${API_BASE_URL}/labeltask/adminapprove`,
+      {
+        transformedData // 본문으로 transformedData 전달
+      },
+      {
+        headers: AUTH_HEADER,
+        params: { taskId }
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'An error occurred');
+    }
+  }
+);

@@ -6,7 +6,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // 캘린더 추가 Thunk
 export const addCalendar = createAsyncThunk(
-    'calendar/addCalendar',
+    'calendars/addCalendar',
     async ({ calendarName, color }, thunkApi) => {
         try {
             const newCalendar = { calendarName, color };
@@ -24,7 +24,7 @@ export const addCalendar = createAsyncThunk(
 
 // 캘린더 수정 Thunk
 export const updateCalendar = createAsyncThunk(
-    'calendar/updateCalendar',
+    'calendars/updateCalendar',
     async ({ id, calendarName, color }, thunkApi) => {
         try {
             const updatedCalendar = { calendarName, color };
@@ -42,12 +42,11 @@ export const updateCalendar = createAsyncThunk(
 
 // 캘린더 삭제 Thunk
 export const deleteCalendar = createAsyncThunk(
-    'calendar/deleteCalendar',
+    'calendars/deleteCalendar',
     async (id, thunkApi) => {
         try {
-            const response = await axios.delete(`${API_BASE_URL}
-        
-            /calendars/${id}`, {
+            const response = await axios.delete(`${API_BASE_URL}/calendars/${id}`, 
+                {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
@@ -61,7 +60,7 @@ export const deleteCalendar = createAsyncThunk(
 
 // 일정 추가 Thunk
 export const addEvent = createAsyncThunk(
-    'event/addEvent',
+    'events/addEvent',
     async ({ calendarId, title, startDate, endDate, memo }, thunkApi) => {
         try {
             if (new Date(startDate) > new Date(endDate)) {
@@ -71,7 +70,7 @@ export const addEvent = createAsyncThunk(
             const adjustedEndDate = new Date(endDate);
             adjustedEndDate.setDate(adjustedEndDate.getDate());
 
-            const newEvent = { calendarId, title, startDate, endDate: adjustedEndDate.toISOString().split("T")[0], memo };
+            const newEvent = { calendarId, title, startDate, endDate: adjustedEndDate.toISOString(), memo };
             const response = await axios.post(`${API_BASE_URL}/events`, newEvent, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
@@ -88,17 +87,19 @@ export const addEvent = createAsyncThunk(
 
 // 일정 수정 Thunk
 export const updateEvent = createAsyncThunk(
-    'event/updateEvent',
-    async ({ id, title, startDate, endDate, memo }, thunkApi) => {
+    'events/updateEvent',
+    async ({ id, title, calendarId, startDate, endDate, memo }, thunkApi) => {
         try {
             if (new Date(startDate) > new Date(endDate)) {
                 throw new Error('종료일은 시작일보다 늦어야 합니다.');
             }
-
             const adjustedEndDate = new Date(endDate);
             adjustedEndDate.setDate(adjustedEndDate.getDate());
 
-            const updatedEvent = { title, startDate, endDate: adjustedEndDate.toISOString().split("T")[0], memo };
+            const updatedEvent = { title, calendarId, startDate, endDate: adjustedEndDate.toISOString(), memo };
+
+            console.log("updatedEventupdatedEatedEvent",updatedEvent);
+
             const response = await axios.put(`${API_BASE_URL}/events/${id}`, updatedEvent, {
                 headers: {
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
@@ -122,7 +123,7 @@ export const deleteEvent = createAsyncThunk(
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
             });
-            return id; // 삭제된 일정의 ID 반환
+            return response.data;
         } catch (error) {
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }
@@ -131,7 +132,7 @@ export const deleteEvent = createAsyncThunk(
 
 // 캘린더 가지고오기
 export const fetchCalendars = createAsyncThunk(
-    'calendar/fetchCalendars',
+    'calendars/fetchCalendars',
     async (thunkApi) => {
         try {
             const response = await axios.get(`${API_BASE_URL}/calendars`, {
@@ -149,7 +150,7 @@ export const fetchCalendars = createAsyncThunk(
 
 // 이벤트 가지고오기
 export const fetchEvents = createAsyncThunk(
-    'event/fetchEvents',
+    'events/fetchEvents',
     async (thunkApi) => {
         try {
             const response = await axios.get(`${API_BASE_URL}/events`, {
@@ -342,6 +343,7 @@ export const deleteBackgroundImage = createAsyncThunk(
     }
 );
 
+// 프로필 소개글 가져오기
 export const fetchProfileIntro = createAsyncThunk(
     'mypage/fetchProfileIntro',
     async (_, thunkApi) => {
@@ -362,6 +364,7 @@ export const fetchProfileIntro = createAsyncThunk(
     }
 );
 
+// 프로필 소개글 업데이트
 export const updateProfileIntro = createAsyncThunk(
     'mypage/updateProfileIntro',
     async (profileIntro, thunkApi) => {
@@ -384,10 +387,10 @@ export const updateProfileIntro = createAsyncThunk(
     }
 );
 
+// 프로젝트 검색해서 가지고오기
 export const getProjectsBySearch = createAsyncThunk(
     'user-projects/getProjectsBySearch',
     async(searchObj, thunkApi) => {
-        console.log("Received searchObj:", searchObj); // 전달된 파라미터 확인
         try {
             const response = await axios.get(`${API_BASE_URL}/user-projects`,  {
                 headers: {

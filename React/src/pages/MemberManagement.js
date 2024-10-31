@@ -6,6 +6,7 @@ import Modal_addMember from '../components/Modal_addMember';
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTabData } from '../apis/memberManagementApis';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const MemberManagement = () => {
   const [activeTab, setActiveTab] = useState('users');
@@ -14,9 +15,16 @@ const MemberManagement = () => {
   const [page, setPage] = useState(1); // 페이지 상태
   
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // // Redux 상태를 가져오기
-  // const {  data = [], totalPages, loading, error } = useSelector((state) => state.memberManagement || {});
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const tab = queryParams.get('tab');
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [location.search]);
 
 
   // 탭 전환 시 데이터를 가져오기 위해 useEffect 사용
@@ -35,6 +43,11 @@ const MemberManagement = () => {
     console.log("Tab 변경됨, tabName:", tabName); // 로그 추가
     setActiveTab(tabName);
     setPage(1); // 탭이 변경될 때 페이지를 초기화
+
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set('tab', tabName);
+    navigate({ search: queryParams.toString() });
+  
   };
 
   // 모달 열기
@@ -86,28 +99,6 @@ const MemberManagement = () => {
             
               </div>
 
-              {/* 멤버 삭제 버튼: activeTab이 'users'일 때만 보이게 */}
-              {activeTab === 'users' && (
-                    <Button
-                      variant="contained" 
-                      onClick={handleClickOpen}
-                      sx={{
-                        width:'130px',
-                        height:'42px',
-                        marginBottom:'10px',
-                        fontFamily: 'Pretendard', // 폰트 설정
-                        backgroundColor: '#FFFFFF', // 버튼 배경 색상
-                        color: '#7C97FE', // 버튼 텍스트 색상
-                        borderColor:'#7C97FE',
-                        '&:hover': { 
-                        backgroundColor: '#6B88E6',
-                        },
-                      }} 
-                    >
-                      멤버 삭제
-                    </Button>
-                  )}
-
               {/* 멤버 추가 버튼: activeTab이 'users'일 때만 보이게 */}
               {activeTab === 'users' && (
                     <Button
@@ -146,6 +137,6 @@ const MemberManagement = () => {
         </section>
       </>
   );
-}
+};
 
 export default MemberManagement;
