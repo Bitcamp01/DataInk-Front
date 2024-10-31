@@ -6,7 +6,7 @@ import { fetchLabelTaskDetails } from '../apis/labelDetailApis';
 const LabelingTable = ({ taskId, onDataTransform }) => {
   const dispatch = useDispatch();
   const [rowsArray, setRowsArray] = useState([]);
-  const { labelDetailData=null, loading, error } = useSelector((state) => state.labelDetailSlice || {});
+  const { labelDetailData = null, loading, error } = useSelector((state) => state.labelDetailSlice || {});
 
   useEffect(() => {
     if (taskId) {
@@ -14,14 +14,13 @@ const LabelingTable = ({ taskId, onDataTransform }) => {
     }
   }, [taskId, dispatch]);
 
-  const transformData = (data, hierarchy = [], index = 0) => {
+  const transformData = (data) => {
     const transformed = {};
 
-    const parsedData = Array.isArray(data) ? data[0] : data;
-
-    Object.keys(parsedData).forEach((key, idx) => {
-      const item = parsedData[key];
-      const row = { id: index + idx };
+    // Array 형태로 데이터 변환
+    Object.keys(data).forEach((key, idx) => {
+      const item = data[key];
+      const row = { id: idx };
 
       Object.keys(item).forEach((field) => {
         if (field.startsWith('hierarchy')) {
@@ -32,20 +31,21 @@ const LabelingTable = ({ taskId, onDataTransform }) => {
       row.content = item.content || "undefined";
       row.checked = item.checked || false;
 
-      transformed[index++] = row;
+      transformed[idx] = row;
     });
 
     console.log(transformed);
 
-    onDataTransform(transformed);
-    
-    return Object.values(transformed);
+    // onDataTransform 호출 시 변환된 배열 전달
+    onDataTransform(Object.values(transformed));
+
+    // 상태 업데이트
+    setRowsArray(transformed);
   };
 
   useEffect(() => {
     if (labelDetailData) {
-      const transformedData = transformData(labelDetailData);
-      setRowsArray(transformedData);
+      transformData(labelDetailData);
     }
   }, [labelDetailData]);
 
@@ -79,7 +79,7 @@ const LabelingTable = ({ taskId, onDataTransform }) => {
   };
 
   return (
-    rowsArray && <div className="review-table-container">
+    <div className="review-table-container">
       <div style={{ height: 400, width: '100%' }}>
         <DataGridPro
           treeData

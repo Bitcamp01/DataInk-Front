@@ -61,11 +61,12 @@ export default function DataGridDemo() {
 
   const handleRowClick = (params) => {
     const { id } = params.row;  // taskId 대신 id 사용
-    // if (authen === 'ROLE_USER') {
-      // navigate(`/label/detail/${id}`); // ROLE_USER일 때
+    // // if (authen === 'ROLE_USER') {
+      navigate(`/label/detail/${id}`); // ROLE_USER일 때
     // } else if (authen === 'ROLE_MANAGER') {
-      navigate(`/review/${id}`); // ROLE_MANAGER일 때
+      // navigate(`/review/${id}`); // ROLE_MANAGER일 때
     // }
+
 
   };
 
