@@ -74,7 +74,7 @@ const ProfileCard = ({ profile, announcements }) => {
                   alt={announcement.urgent ? '긴급아이콘' : '일반아이콘'}
                 />
                 <span style={announcement.urgent ? { color: '#F67171' } : { color: '#7C97FE' }}>
-                  [{`${announcement.dep} 부서`}]
+                  [{announcement.dep ? `${announcement.dep} 부서` : '부서 정보없음'}]
                 </span>
                 <a href={`/notice/${announcement.id}`} style={{ fontSize: '0.8rem' }}>
                   {announcement.title}

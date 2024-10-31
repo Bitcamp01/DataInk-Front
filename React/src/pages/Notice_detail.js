@@ -30,6 +30,18 @@ const Notice_detail = () => {
     return null;
   }
 
+  const userData = sessionStorage.getItem('persist:root'); // persist:root로 저장된 데이터 가져오기
+  let userId = null;
+  if(userData) {
+    const parsedData = JSON.parse(userData); // JSON 문자열을 객체로 반환
+    const userSlice = JSON.parse(parsedData.userSlice); // userSlice 부분을 다시 파싱
+
+    userId = userSlice.userId;
+    console.log(userId); // 가져온 userId 출력
+  } else {
+    console.log("세션 스토리지에 사용자 데이터가 없습니다.");
+  }
+
   const handleEdit = async () => {
     const token = sessionStorage.getItem('ACCESS_TOKEN');
     try {
@@ -49,7 +61,7 @@ const Notice_detail = () => {
     }
   };
 
-  const handledelete = async () => {
+  const handleDelete = async () => {
     const token = sessionStorage.getItem('ACCESS_TOKEN');
     try {
       await axios.delete(`${API_BASE_URL}/notice/${id}`, {
@@ -69,10 +81,12 @@ const Notice_detail = () => {
     setIsEditing(true);
   };
 
+  // 공지사항을 작성한 유저의 아이디
+  console.log(notice.userId); // 얘는 정상 출력됌
+
   const currentIndex = noticeList.content.findIndex(item => item.noticeId === notice.noticeId);
   const previousNoticeId = currentIndex > 0 ? noticeList.content[currentIndex - 1].noticeId : null;
   const nextNoticeId = currentIndex < noticeList.content.length - 1 ? noticeList.content[currentIndex + 1].noticeId : null;
-  console.log(notice.profileImg);
   return (
     <>
       <section className="member-list">
@@ -91,18 +105,22 @@ const Notice_detail = () => {
                 </Box>
 
                 <Box>
-                  {isEditing ? (
-                    <Button variant="outlined" onClick={handleEdit} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
-                      등록
-                    </Button>
-                  ) : (
+                  {userId === notice.userId && ( // 작성자 ID와 로그인한 유저 ID가 일치하는 경우에만 버튼 렌더링
                     <>
-                      <Button variant="outlined" startIcon={<EditIcon />} onClick={handleEditClick} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
-                        수정
-                      </Button>
-                      <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handledelete} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
-                        삭제
-                      </Button>
+                      {isEditing ? (
+                        <Button variant="outlined" onClick={handleEdit} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
+                          등록
+                        </Button>
+                      ) : (
+                        <>
+                          <Button variant="outlined" startIcon={<EditIcon />} onClick={handleEditClick} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
+                            수정
+                          </Button>
+                          <Button variant="outlined" startIcon={<DeleteIcon />} onClick={handleDelete} sx={{ padding: '0px', borderColor: 'transparent', fontFamily: 'Pretendard', color: '#7c97fe' }}>
+                            삭제
+                          </Button>
+                        </>
+                      )}
                     </>
                   )}
                 </Box>
