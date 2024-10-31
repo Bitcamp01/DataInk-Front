@@ -72,7 +72,7 @@ const Notice_detail = () => {
   const currentIndex = noticeList.content.findIndex(item => item.noticeId === notice.noticeId);
   const previousNoticeId = currentIndex > 0 ? noticeList.content[currentIndex - 1].noticeId : null;
   const nextNoticeId = currentIndex < noticeList.content.length - 1 ? noticeList.content[currentIndex + 1].noticeId : null;
-
+  console.log(notice.profileImg);
   return (
     <>
       <section className="member-list">
@@ -83,7 +83,7 @@ const Notice_detail = () => {
 
               <Box display="flex" justifyContent="space-between" alignItems="flex-start">
                 <Box display="flex" alignItems="center">
-                  <Avatar alt="작성자" src={notice.profileImg || '/icons/dataink-logo_icon.svg'} sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
+                  <Avatar alt="작성자" src={notice.profileImg ? `https://kr.object.ncloudstorage.com/dataink/${notice.profileImg}` : '/icons/dataink-logo_icon.svg'} sx={{ width: 40, height: 40, mr: 2, mb: 3 }} />
                   <Box>
                     <Typography variant="body1" fontFamily="Pretendard">{notice.name}</Typography>
                     <Typography variant="body2" fontFamily="Pretendard" color="textSecondary" sx={{ mb: 3 }}>{new Date(notice.created).toLocaleString()}</Typography>
