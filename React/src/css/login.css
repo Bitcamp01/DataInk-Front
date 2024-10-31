@@ -84,6 +84,7 @@
 .login__social-icon {
   width: 2.5625rem;
   object-fit: contain;
+  cursor: pointer;
 }
 
 /* 구분선 */
