@@ -396,7 +396,7 @@ const handleCopy = () => {
       } else {
         handleOpenModal(row.label);
       }
-
+      handleClose()
     }
   };
   const handleRowDoubleClick=(params,event)=>{
@@ -634,6 +634,9 @@ const handleCopy = () => {
         <Button variant="contained" onClick={handleReloading}>
           다시 로딩
         </Button>
+        {/* <Button variant="contained" onClick={()=>console.log(`Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`)}>
+          토큰 정보
+        </Button> */}
       </GridToolbarContainer>
     );
   };
@@ -746,10 +749,6 @@ const handleCopy = () => {
               ))}
             </List>
           </InfiniteScroll>
-                <FormControlLabel
-                    control={<Switch checked={includeProjectStructure} onChange={handleToggleProjectStructure} />}
-                    label="프로젝트 구조 포함"
-                />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseConversionModal}>닫기</Button>
@@ -757,8 +756,7 @@ const handleCopy = () => {
             // 변환 작업을 서버에 요청하는 로직 추가
             console.log('서버로 변환 요청:', conversionList);
             const payload = {
-              conversionList,
-              includeProjectStructure
+              conversionList
             };
             try {
                 const response = await axios.post(`${API_BASE_URL}/projects/conversion`, payload, {
@@ -767,6 +765,20 @@ const handleCopy = () => {
                     }
                 });
                 console.log(response.data); // 서버 응답 처리
+                const jsonData = JSON.stringify(response.data, null, 2); // JSON 형식으로 들여쓰기
+                const blob = new Blob([jsonData], { type: 'application/json' });
+                const downloadUrl = URL.createObjectURL(blob);
+        
+                // 다운로드 링크 생성 및 클릭 이벤트 트리거
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = 'converted_data.json';
+                document.body.appendChild(link);
+                link.click();
+        
+                // 링크 제거
+                document.body.removeChild(link);
+                URL.revokeObjectURL(downloadUrl); // 메모리 해제
             } catch (error) {
                 console.error('Error during conversion:', error);
             }
