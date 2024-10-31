@@ -14,7 +14,7 @@ const ReviewerTable2 = ({ taskId, onDataTransform }) => {
 
   useEffect(() => {
     if (taskId) {
-      dispatch(fetchLabelTaskDetails(taskId));  
+      dispatch(fetchLabelTaskDetails(taskId));
     }
   }, [taskId, dispatch]);
 
