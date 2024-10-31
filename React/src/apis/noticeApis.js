@@ -28,7 +28,6 @@ export const post = createAsyncThunk(
     async (searchObj, thunkApi) => {
         const { page } = searchObj; 
         try {
-            console.log("Fetching notices...");
             const response = await axios.get(`${API_BASE_URL}/notice`,  {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
