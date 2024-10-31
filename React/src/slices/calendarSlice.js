@@ -23,7 +23,6 @@ const calendarSlice = createSlice({
             .addCase(addCalendar.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.calendars.push(action.payload);
-                alert('캘린더가 성공적으로 추가되었습니다.');
             })
             .addCase(addCalendar.rejected, (state, action) => {
                 state.status = 'failed';
@@ -37,7 +36,6 @@ const calendarSlice = createSlice({
                 if (index !== -1) {
                     state.calendars[index] = updatedCalendar;
                 }
-                alert('캘린더가 성공적으로 수정되었습니다.');
             })
             .addCase(updateCalendar.rejected, (state, action) => {
                 state.status = 'failed';
@@ -48,7 +46,6 @@ const calendarSlice = createSlice({
                 state.status = 'succeeded';
                 const deletedCalendarId = action.payload;
                 state.calendars = state.calendars.filter(calendar => calendar.id !== deletedCalendarId);
-                alert('캘린더가 성공적으로 삭제되었습니다.');
             })
             .addCase(deleteCalendar.rejected, (state, action) => {
                 state.status = 'failed';

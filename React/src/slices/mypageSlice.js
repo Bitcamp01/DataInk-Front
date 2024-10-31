@@ -120,7 +120,7 @@ const mypageSlice = createSlice({
         }))
         builder.addCase(getProjectsBySearch.rejected, (state, action) => {
             console.log(action.payload);
-            alert('에러가 발생했습니다.');
+            alert('getProjectsBySearch 에러가 발생했습니다.');
             return state;
         });
     }

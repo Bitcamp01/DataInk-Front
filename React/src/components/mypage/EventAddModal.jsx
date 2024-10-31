@@ -164,6 +164,16 @@ const EventAddModal = ({isOpen, closeAddEventModal}) => {
         }
     }, [events]);
 
+    useEffect(() => {
+        if (isOpen) {
+            setTitle('');
+            setCalendarName('');
+            setStartDate('');
+            setEndDate('');
+            setMemo('');
+        }
+    }, [isOpen]);
+
     const handleInputFieldClick = (e) => {
         e.preventDefault();
         e.target.showPicker();  // date input에서 기본으로 제공되는 날짜 선택기를 강제 실행
@@ -197,7 +207,6 @@ const EventAddModal = ({isOpen, closeAddEventModal}) => {
 
         setIsModified(hasChanges);
     };
-
 
     return (
             <Modal isOpen={isOpen} onRequestClose={closeAddEventModal} style={eventModalStyles}>

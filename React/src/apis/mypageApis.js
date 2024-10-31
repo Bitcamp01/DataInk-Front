@@ -111,7 +111,8 @@ export const updateEvent = createAsyncThunk(
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }
     }
-); 
+);
+
 // 일정 삭제 Thunk
 export const deleteEvent = createAsyncThunk(
     'event/deleteEvent',
@@ -122,7 +123,7 @@ export const deleteEvent = createAsyncThunk(
                     'Authorization': `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
                 },
             });
-            return id; // 삭제된 일정의 ID 반환
+            return response.data;
         } catch (error) {
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
         }
@@ -342,6 +343,7 @@ export const deleteBackgroundImage = createAsyncThunk(
     }
 );
 
+// 프로필 소개글 가져오기
 export const fetchProfileIntro = createAsyncThunk(
     'mypage/fetchProfileIntro',
     async (_, thunkApi) => {
@@ -362,6 +364,7 @@ export const fetchProfileIntro = createAsyncThunk(
     }
 );
 
+// 프로필 소개글 업데이트
 export const updateProfileIntro = createAsyncThunk(
     'mypage/updateProfileIntro',
     async (profileIntro, thunkApi) => {
@@ -384,6 +387,7 @@ export const updateProfileIntro = createAsyncThunk(
     }
 );
 
+// 프로젝트 검색해서 가지고오기
 export const getProjectsBySearch = createAsyncThunk(
     'user-projects/getProjectsBySearch',
     async(searchObj, thunkApi) => {
