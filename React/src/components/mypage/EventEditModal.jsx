@@ -3,7 +3,6 @@ import Modal from 'react-modal';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEvent, deleteEvent } from '../../apis/mypageApis';
-import { setEvents } from '../../slices/eventSlice';
 
 // 모달 이름 (모달안에 제목 캘린더, 일정 둘 다 씀)
 const ModalTitle = styled.h2`
@@ -131,7 +130,7 @@ const EventEditModal = ({ isOpen, closeEditEventModal, selectedEvent}) => {
         }
     }, [isOpen, selectedEvent]); // isOpen과 selectedEvent의 변경을 감지
 
-    const handleUpdateEvent = () => {
+    const handleUpdateEvent = (() => {
         if (selectedEvent) {
             if (title && startDate && endDate) {
                 if (new Date(startDate) > new Date(endDate)) {
@@ -160,42 +159,19 @@ const EventEditModal = ({ isOpen, closeEditEventModal, selectedEvent}) => {
                     allDay: selectedEvent.allDay,
                 };
                 
-                dispatch(updateEvent(updatedEvent))
-                    .unwrap()
-                    .then((updatedEventFromBackend) => {
-                        const adjustedEvent = {
-                            ...updatedEventFromBackend,
-                            start: updatedEvent.start,
-                            end: updatedEvent.end,
-                        };
-                        const updatedEvents = events.map(event => (event.id === selectedEvent.id ? adjustedEvent : event));
-                        dispatch(setEvents(updatedEvents));
-                        closeEditEventModal();
-                    })
-                    
-                    .catch((error) => {
-                        console.error('이벤트 수정 에러:', error);
-                        alert('이벤트 수정 중 오류가 발생했습니다. 다시 시도해 주세요.');
-                    });
+                dispatch(updateEvent(updatedEvent));
+                closeEditEventModal();
             } else {
                 alert('제목, 캘린더 이름, 시작 날짜 및 종료 날짜를 모두 입력해야 합니다.');
             }
         }
-    };
+    });
 
     // 이벤트 삭제 처리
     const handleDeleteEvent = () => {
         if (selectedEvent && !selectedEvent.isHoliday) {
-            // 백엔드에 삭제 요청 보내기 (추가된 부분)
-            dispatch(deleteEvent(selectedEvent.id))
-                .unwrap()
-                .then(() => {
-                    setEvents(events.filter(event => event.id !== selectedEvent.id));
-                    closeEditEventModal();
-                })
-                .catch((error) => {
-                    console.error('이벤트 삭제 에러:', error);
-                });
+            dispatch(deleteEvent(selectedEvent.id));
+            closeEditEventModal();
         } else {
             alert('공휴일은 삭제할 수 없습니다.');
         }

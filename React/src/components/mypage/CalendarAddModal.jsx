@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import ColorPicker from './ColorPicker'
@@ -76,6 +76,15 @@ const CalendarAddModal = ({ isOpen, onRequestClose, calendarOptions, setCalendar
     const [calendarName, setCalendarName] = useState('');
     const [color, setColor] = useState('');
     const [customColor, setCustomColor] = useState('');
+
+    // 모달이 열릴 때마다 상태 초기화
+    useEffect(() => {
+        if (isOpen) {
+            setCalendarName('');
+            setColor('');
+            setCustomColor('');
+        }
+    }, [isOpen]);
 
     // 캘린더 추가 핸들러
     const handleAddCalendar = () => {
