@@ -30,7 +30,7 @@ export const fetchTabData = createAsyncThunk(
 
 export const fetchModalData = createAsyncThunk(
   'modalManagement/fetchModalData',
-  async ({ page, size = 10 }, thunkApi) =>{
+  async ({ page, size = 15 }, thunkApi) =>{
     try{
       const response = await axios.get(`${API_BASE_URL}/member/modal`,{
         params:{
