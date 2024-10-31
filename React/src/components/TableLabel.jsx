@@ -61,10 +61,12 @@ export default function DataGridDemo() {
 
   const handleRowClick = (params) => {
     const { id } = params.row;  // taskId 대신 id 사용
-    // // if (authen === 'ROLE_USER') {
+    // if (authen === 'ROLE_USER') {
       navigate(`/label/detail/${id}`); // ROLE_USER일 때
     // } else if (authen === 'ROLE_MANAGER') {
-      // navigate(`/review/${id}`); // ROLE_MANAGER일 때
+    //   navigate(`/review/${id}`); // ROLE_MANAGER일 때
+    // } else if (authen === 'ROLE_ADMIN') {
+    //   navigate(`/review/${id}`); // ROLE ADMIN일 때, 이 경우 승인 버튼을 누르면 모달창이 열리는게 아니라 그냥 ststus가 바뀌면서 저장된다.
     // }
 
 
