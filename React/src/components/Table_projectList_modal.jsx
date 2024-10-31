@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'; 
+import React, { useState, useEffect, useRef, useCallback , handleSaveSuccess } from 'react'; 
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import { DataGrid } from '@mui/x-data-grid';
@@ -14,6 +14,7 @@ import { fetchModalData } from '../apis/memberManagementApis';
 import axios from 'axios';
 import { fetchProjectMembers } from '../apis/memberManagementApis';
 import { resetModalData } from '../slices/memberModalSlice';
+import { useNavigate } from 'react-router-dom';
 
 // 역할을 한국어로 변환하는 함수
 const translateRole = (role) => {
@@ -39,6 +40,8 @@ const columns = [
 
 export default function Table_projectList_Modal({ open, onClose, selectedRow , handleClose}) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   // 상태 정의 (useState)
   const [selectedLeftMemberIds, setSelectedLeftMemberIds] = useState([]); // 왼쪽에서 선택한 멤버
@@ -78,36 +81,25 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     }
   }, [open, selectedRow, dispatch]);
 
-  // 모달이 열릴 때 초기 데이터 불러오기
-    // useEffect(() => {
-    //   if (open) {
-    //     if (selectedRow) {
-    //       dispatch(resetModalData()); // 상태 초기화
-    //       dispatch(fetchProjectMembers(selectedRow.id)); // 특정 프로젝트의 멤버 불러오기
-    //       dispatch(fetchModalData(0)); // 첫 페이지 데이터 불러오기
-    //     }
-    //   }
-    // }, [open, selectedRow, dispatch]);
-
 
   //모달무한스크롤
-  const loadMoreUsers = async (page) => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/modal`, {
-        params: { page, size: 10 },
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
-        },
-      });
+  // const loadMoreUsers = async (page) => {
+  //   try {
+  //     const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/modal`, {
+  //       params: { page, size: 15 },
+  //       headers: {
+  //         Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+  //       },
+  //     });
 
-      if (response.status === 200) {
-        const newUsers = response.data.pageItems.content;
-        setModalData((prevData) => [...prevData, ...newUsers]); // 이전 데이터에 이어붙임
-      }
-    } catch (error) {
-      console.error('사용자 목록을 가져오는 중 오류 발생:', error);
-    }
-  };
+  //     if (response.status === 200) {
+  //       const newUsers = response.data.pageItems.content;
+  //       setModalData((prevData) => [...prevData, ...newUsers]); // 이전 데이터에 이어붙임
+  //     }
+  //   } catch (error) {
+  //     console.error('사용자 목록을 가져오는 중 오류 발생:', error);
+  //   }
+  // };
 
 
 
@@ -132,66 +124,38 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     }, [projectMembersDB]);
 
   // // 첫 번째 DataGrid의 스크롤 이벤트 처리
-  const handleScroll1 = () => {
-    if (!containerRef1.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = containerRef1.current;
+  // const handleScroll1 = () => {
+  //   if (!containerRef1.current) return;
+  //   const { scrollTop, scrollHeight, clientHeight } = containerRef1.current;
 
-    if (scrollHeight - scrollTop <= clientHeight + 50 ) { // 끝에서 30px 남았을 때
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  //   if (scrollHeight - scrollTop <= clientHeight + 50 ) { // 끝에서 30px 남았을 때
+  //     setPage((prevPage) => {
+  //       const newPage = prevPage + 1;
+  //       loadMoreUsers(newPage); // 새로운 페이지 데이터 불러오기
+  //       return newPage;
+  //     });
+  //   }
+  // };
 
-  // 두 번째 DataGrid의 스크롤 이벤트 처리
-  const handleScroll2 = () => {
-    if (!containerRef2.current) return;
-    const { scrollTop, scrollHeight, clientHeight } = containerRef2.current;
-
-    if (scrollHeight - scrollTop <= clientHeight + 30) { // 끝에서 30px 남았을 때
-      setPage((prevPage) => prevPage + 1);
-    }
-  };
+  // // 두 번째 DataGrid의 스크롤 이벤트 처리
+  // const handleScroll2 = () => {
+  //   if (!containerRef2.current) return;
+  //   const { scrollTop, scrollHeight, clientHeight } = containerRef2.current;
+  
+  //   if (scrollHeight - scrollTop <= clientHeight + 30) { // 끝에서 30px 남았을 때
+  //     setPage((prevPage) => {
+  //       const newPage = prevPage + 1;
+  //       loadMoreUsers(newPage); // 새로운 페이지 데이터 불러오기
+  //       return newPage;
+  //     });
+  //   }
+  // };
 
   // Dialog 컴포넌트
   <Dialog open={open} onClose={handleClose}>
     {/* 나머지 내용 */}
 
   </Dialog>
-
-  // 멤버를 임시 상태에서 오른쪽 그리드로 추가
-  // const handleAddMembers = () => {
-  //   const newMembers = [];
-
-  //   for(const selectedLeftMemberId of selectedLeftMemberIds) {
-  //     for(const [index, projectMember] of projectMembers.entries()) {
-  //       console.log(1);
-  //       console.log('현재 projectMembers:', projectMembers);
-  //       console.log('선택된 멤버 ID들:', selectedLeftMemberIds);
-
-  //       if(projectMember.userId === selectedLeftMemberId) {
-          
-  //       const department = projectMember.userDetailDto?.dep || '부서 정보 없음';
-  //       const role = projectMember.authen ? translateRole(projectMember.authen) : '역할 정보 없음';
-  //         console.log(2);
-  //         const newMember = {
-  //           department,
-  //           isBookmarked: false,
-  //           projectId: selectedRow.id,
-  //           role,
-  //           userId: projectMember.userId,
-  //           name:projectMember.name,
-  //         }
-  //         newMembers.push(newMember);
-  //         console.log(3);
-  //         projectMembers.splice(index,1);
-  //         console.log(4);
-  //       }
-  //     }
-  //   }
-
-  //   setTempProjectMembers((prev) => [...prev, ...newMembers]); // 오른쪽 임시 그리드에 추가 
-  //   setProjectMembers([...projectMembers]); // 왼쪽 그리드에서 제거
-  //   setSelectedLeftMemberIds([]); // 선택 초기화
-  // };
 
   // 멤버를 임시 상태에서 오른쪽 그리드로 추가
 const handleAddMembers = () => {
@@ -304,6 +268,7 @@ const handleAddMembers = () => {
     if(response.status === 200) {
       alert('사용자 저장 성공');
       setTempProjectMembers([...response.data]);//실제 상태로 업데이트
+      window.location.href = '/member?tab=projects'; // 페이지 리로드
       onClose();
      }
     }catch(error){
@@ -356,7 +321,7 @@ const handleAddMembers = () => {
                   overflowY: 'auto', 
         
                 }}
-                onScroll={handleScroll1} // 스크롤 이벤트 핸들러 등록
+                // onScroll={handleScroll1} // 스크롤 이벤트 핸들러 등록
               >        
                 
                       
@@ -372,6 +337,8 @@ const handleAddMembers = () => {
                 checkboxSelection={true}
                 editMode='row'
                 disableSelectionOnClick={false}
+                pagination={true} // 페이지네이션 활성화
+                pageSize={10} // 한 페이지당 표시할 항목 수
                 sx={{
                   height:'100%',
                   fontFamily:'Pretendard',
@@ -389,6 +356,7 @@ const handleAddMembers = () => {
                   },
                 
                 }} 
+                
                 hideFooterPagination 
                 hideFooter
                 onRowSelectionModelChange={(newSelection) => {
@@ -485,7 +453,7 @@ const handleAddMembers = () => {
                   },
                   
                 }}
-                onScroll={handleScroll2} // 스크롤 이벤트 핸들러 등록
+                // onScroll={handleScroll2} // 스크롤 이벤트 핸들러 등록
               >    
        
       
