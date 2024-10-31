@@ -92,18 +92,18 @@ const ReviewModal = ({ isOpen, onClose, taskId, transformedData }) => {
                     />
                     <div className="profile-details">
                         <p style={{ margin: '0 0 1rem 0' }}>
-                            <strong className="modal-labelingname">고기천</strong>님의 작업입니다
+                            <strong className="modal-labelingname">작업</strong>승인 코멘트를 적어주세요
                         </p>
-                        <p style={{ margin: '0.5rem 0' }}>AI Clova | 인턴 (라벨러)</p>
+                        {/* <p style={{ margin: '0.5rem 0' }}>AI Clova | 인턴 (라벨러)</p>
                         <p style={{ margin: '0.5rem 0' }}>참여중인 작업: 5건</p>
-                        <p style={{ margin: '0.5rem 0' }}>완료한 작업: 12503건</p>
+                        <p style={{ margin: '0.5rem 0' }}>완료한 작업: 12503건</p> */}
                     </div>
                 </div>
                 <div className="report-section">
-                    <h4 style={{ color: '#7C97FE', margin: '0.5rem 0' }}>작업 특이사항</h4>
+                    {/* <h4 style={{ color: '#7C97FE', margin: '0.5rem 0' }}>작업 특이사항</h4>
                     <p style={{ margin: '0.5rem 0' }}>페이지 수: 5 페이지</p>
                     <p style={{ margin: '0.5rem 0' }}>작업 소요시간: 0.38시간</p>
-                    <p style={{ margin: '0.5rem 0' }}>반려 횟수: 0회</p>
+                    <p style={{ margin: '0.5rem 0' }}>반려 횟수: 0회</p> */}
                     <textarea 
                         placeholder="특이사항을 입력하세요" 
                         rows="5" 
