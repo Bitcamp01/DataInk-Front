@@ -81,9 +81,6 @@ const Notice_detail = () => {
     setIsEditing(true);
   };
 
-  // 공지사항을 작성한 유저의 아이디
-  console.log(notice.userId); // 얘는 정상 출력됌
-
   const currentIndex = noticeList.content.findIndex(item => item.noticeId === notice.noticeId);
   const previousNoticeId = currentIndex > 0 ? noticeList.content[currentIndex - 1].noticeId : null;
   const nextNoticeId = currentIndex < noticeList.content.length - 1 ? noticeList.content[currentIndex + 1].noticeId : null;
