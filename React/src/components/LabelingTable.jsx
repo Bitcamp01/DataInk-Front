@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { DataGridPro } from '@mui/x-data-grid-pro';
+import { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLabelTaskDetails } from '../apis/labelDetailApis';
 
 const LabelingTable = ({ taskId, onDataTransform }) => {
   const dispatch = useDispatch();
+  const apiRef = useGridApiRef();  // **apiRef 사용하여 트리 상태 관리**
   const [rowsArray, setRowsArray] = useState([]);
-  const { labelDetailData = null, loading, error } = useSelector((state) => state.labelDetailSlice || {});
+  const { labelTaskData = null, loading, error } = useSelector((state) => state.labelDetailSlice || {});
+
+  useEffect(() => {console.log(labelTaskData)}, [labelTaskData]);
 
   useEffect(() => {
     if (taskId) {
@@ -15,10 +18,7 @@ const LabelingTable = ({ taskId, onDataTransform }) => {
   }, [taskId, dispatch]);
 
   const transformData = (data) => {
-    const transformed = {};
-
-    // Array 형태로 데이터 변환
-    Object.keys(data).forEach((key, idx) => {
+    const transformedArray = Object.keys(data).map((key, idx) => {
       const item = data[key];
       const row = { id: idx };
 
@@ -31,23 +31,27 @@ const LabelingTable = ({ taskId, onDataTransform }) => {
       row.content = item.content || "undefined";
       row.checked = item.checked || false;
 
-      transformed[idx] = row;
+      return row;
     });
 
-    console.log(transformed);
+    console.log("Transformed Array:", transformedArray);
 
-    // onDataTransform 호출 시 변환된 배열 전달
-    onDataTransform(Object.values(transformed));
+    // **변환된 배열 상태 설정**
+    setRowsArray(transformedArray);
 
-    // 상태 업데이트
-    setRowsArray(transformed);
+    // **객체 형식으로 다시 변환하여 onDataTransform에 전달**
+    const transformedObject = transformedArray.reduce((acc, curr, idx) => {
+      acc[idx] = curr;
+      return acc;
+    }, {});
+    onDataTransform(transformedObject);
   };
 
   useEffect(() => {
-    if (labelDetailData) {
-      transformData(labelDetailData);
+    if (labelTaskData) {
+      transformData(labelTaskData);
     }
-  }, [labelDetailData]);
+  }, [labelTaskData]);
 
   const columns = [
     {
@@ -68,7 +72,17 @@ const LabelingTable = ({ taskId, onDataTransform }) => {
   // Enter 키로만 저장되도록 하는 processRowUpdate 함수 추가
   const processRowUpdate = (newRow, oldRow) => {
     if (newRow.content !== oldRow.content) {
-      return { ...newRow, content: newRow.content };
+      const updatedRowsArray = rowsArray.map(row => row.id === newRow.id ? newRow : row);
+      setRowsArray(updatedRowsArray);
+
+      // **객체 형식으로 변환하여 onDataTransform에 전달**
+      const updatedObject = updatedRowsArray.reduce((acc, curr, idx) => {
+        acc[idx] = curr;
+        return acc;
+      }, {});
+
+      onDataTransform(updatedObject);
+      return newRow;
     }
     return oldRow;
   };
@@ -95,6 +109,7 @@ const LabelingTable = ({ taskId, onDataTransform }) => {
           processRowUpdate={processRowUpdate}  // processRowUpdate 추가
           onProcessRowUpdateError={handleProcessRowUpdateError}  // 오류 핸들링 추가
           experimentalFeatures={{ newEditingApi: true }}  // 새로운 편집 API 활성화
+          keepNonExistentRowsSelected  // **트리 상태 유지**
         />
       </div>
     </div>
@@ -102,6 +117,7 @@ const LabelingTable = ({ taskId, onDataTransform }) => {
 };
 
 export default LabelingTable;
+
 
 
 

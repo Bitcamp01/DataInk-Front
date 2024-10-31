@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import ReviewModal from './ReviewModal';
 import { useNavigate } from 'react-router-dom';
 import '../css/reviewer.css';
-import { useDispatch } from 'react-redux';
-import { rejectLabelTask } from '../apis/labelTaskApis';
+import { useDispatch , useSelector} from 'react-redux';
+import { rejectLabelTask, adminLabelTask } from '../apis/labelTaskApis';
 
 const SelectForm = ({ taskId , transformedData}) => { // taskId를 props로 받도록 수정
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,8 +13,26 @@ const SelectForm = ({ taskId , transformedData}) => { // taskId를 props로 받�
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const authen = useSelector((state) => state.users.authen);
+
     const handleApproveClick = () => {
-        setIsModalOpen(true);
+        if (authen === 'ROLE_ADMIN') { // **여기 수정이요**
+            dispatch(adminLabelTask({
+                taskId: taskId,
+                transformedData: transformedData, // 반려할 데이터 전달
+            }))
+            .then((result) => {
+                if (adminLabelTask.fulfilled.match(result)) {
+                    alert('승인이 완료되었습니다.');
+                    navigate('/label/work');
+                } else {
+                    alert('승인에 실패했습니다.');
+                }
+            });
+        } else {
+            // **일반 사용자일 경우 모달 열기**
+            setIsModalOpen(true);
+        }
     };
 
     const handleCloseModal = () => {

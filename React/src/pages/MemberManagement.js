@@ -86,28 +86,6 @@ const MemberManagement = () => {
             
               </div>
 
-              {/* 멤버 삭제 버튼: activeTab이 'users'일 때만 보이게 */}
-              {activeTab === 'users' && (
-                    <Button
-                      variant="contained" 
-                      onClick={handleClickOpen}
-                      sx={{
-                        width:'130px',
-                        height:'42px',
-                        marginBottom:'10px',
-                        fontFamily: 'Pretendard', // 폰트 설정
-                        backgroundColor: '#FFFFFF', // 버튼 배경 색상
-                        color: '#7C97FE', // 버튼 텍스트 색상
-                        borderColor:'#7C97FE',
-                        '&:hover': { 
-                        backgroundColor: '#6B88E6',
-                        },
-                      }} 
-                    >
-                      멤버 삭제
-                    </Button>
-                  )}
-
               {/* 멤버 추가 버튼: activeTab이 'users'일 때만 보이게 */}
               {activeTab === 'users' && (
                     <Button
