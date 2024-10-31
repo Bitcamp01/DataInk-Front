@@ -28,7 +28,6 @@ const Mypage = () => {
     const parsedProfileIntro = profileIntro.startsWith('"') && profileIntro.endsWith('"')
     ? JSON.parse(profileIntro)
     : profileIntro;
-
     const { name, authen } = useSelector(state => state.userSlice);
     const [isStatusModalOpen, setStatusModalOpen] = useState(false);
     const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);

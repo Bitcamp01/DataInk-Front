@@ -34,6 +34,8 @@ const ModalTitle = styled.h2`
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 `;
 
 // 모달안에 버튼컨테이너
@@ -130,7 +132,7 @@ const CalendarEditModal = ({ isOpen, onRequestClose, selectedCalendar, calendarO
             <Modal isOpen={isOpen} onRequestClose={closeEditCalendarModal} style={calendarModalStyles}>
                 <ModalTitle style={{ marginBottom: '20px' }}> 캘린더 수정</ModalTitle>
                 <label style={{ marginBottom: '10px' }}>
-                    캘린더 이름:
+                    캘린더 이름
                     <InputField
                         type="text"
                         name="calendarName"

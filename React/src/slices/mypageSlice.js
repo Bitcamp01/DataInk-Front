@@ -122,7 +122,7 @@ const mypageSlice = createSlice({
             console.log(action.payload);
             alert('getProjectsBySearch 에러가 발생했습니다.');
             return state;
-        });
+        });        
     }
 });
 
