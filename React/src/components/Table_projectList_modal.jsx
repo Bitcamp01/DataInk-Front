@@ -13,6 +13,7 @@ import Stack from '@mui/material/Stack';
 import { fetchModalData } from '../apis/memberManagementApis';
 import axios from 'axios';
 import { fetchProjectMembers } from '../apis/memberManagementApis';
+import { resetModalData } from '../slices/memberModalSlice';
 
 // 역할을 한국어로 변환하는 함수
 const translateRole = (role) => {
@@ -42,8 +43,8 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   // 상태 정의 (useState)
   const [selectedLeftMemberIds, setSelectedLeftMemberIds] = useState([]); // 왼쪽에서 선택한 멤버
   const [selectedRightMembers, setSelectedRightMembers] = useState([]); // 오른쪽에서 선택한 멤버
-  const [modalData, setModalData] = useState([]); // 왼쪽 그리드에 있는 멤버
-  const [projectMembers, setProjectMembers] = useState([]); // 오른쪽 그리드에 있는 멤버
+  const [modalData, setModalData] = useState([]); // 왼쪽 그리드에 있는 멤버 (프로젝트에 아직참여하지 않은 멤버 )초기 멤버 소스 
+  const [projectMembers, setProjectMembers] = useState([]); // 왼쪽그리드의 멤버 (오른쪽으로 이동하기위한)현재 선택가능한 멤버 
   const [tempProjectMembers, setTempProjectMembers] = useState([]); // 임시 저장용 오른쪽 그리드 멤버
   const [page, setPage] = useState(0); // 페이지 추적
 
@@ -73,10 +74,20 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
         dispatch(fetchProjectMembers(selectedRow.id)); // 특정 프로젝트의 멤버 불러오기
         setPage(0);  // 페이지 초기화
         dispatch(fetchModalData(0));  // 첫 페이지 데이터 불러오기
-        // setTempProjectMembers([...projectMembers]); // 현재 상태를 임시 상태에 복사
       }
     }
   }, [open, selectedRow, dispatch]);
+
+  // 모달이 열릴 때 초기 데이터 불러오기
+    // useEffect(() => {
+    //   if (open) {
+    //     if (selectedRow) {
+    //       dispatch(resetModalData()); // 상태 초기화
+    //       dispatch(fetchProjectMembers(selectedRow.id)); // 특정 프로젝트의 멤버 불러오기
+    //       dispatch(fetchModalData(0)); // 첫 페이지 데이터 불러오기
+    //     }
+    //   }
+    // }, [open, selectedRow, dispatch]);
 
 
   //모달무한스크롤
@@ -143,43 +154,81 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   // Dialog 컴포넌트
   <Dialog open={open} onClose={handleClose}>
     {/* 나머지 내용 */}
+
   </Dialog>
 
   // 멤버를 임시 상태에서 오른쪽 그리드로 추가
-  const handleAddMembers = () => {
-    const newMembers = [];
+  // const handleAddMembers = () => {
+  //   const newMembers = [];
 
-    for(const selectedLeftMemberId of selectedLeftMemberIds) {
-      for(const [index, projectMember] of projectMembers.entries()) {
+  //   for(const selectedLeftMemberId of selectedLeftMemberIds) {
+  //     for(const [index, projectMember] of projectMembers.entries()) {
+  //       console.log(1);
+  //       console.log('현재 projectMembers:', projectMembers);
+  //       console.log('선택된 멤버 ID들:', selectedLeftMemberIds);
 
-        if(projectMember.userId === selectedLeftMemberId) {
+  //       if(projectMember.userId === selectedLeftMemberId) {
           
+  //       const department = projectMember.userDetailDto?.dep || '부서 정보 없음';
+  //       const role = projectMember.authen ? translateRole(projectMember.authen) : '역할 정보 없음';
+  //         console.log(2);
+  //         const newMember = {
+  //           department,
+  //           isBookmarked: false,
+  //           projectId: selectedRow.id,
+  //           role,
+  //           userId: projectMember.userId,
+  //           name:projectMember.name,
+  //         }
+  //         newMembers.push(newMember);
+  //         console.log(3);
+  //         projectMembers.splice(index,1);
+  //         console.log(4);
+  //       }
+  //     }
+  //   }
+
+  //   setTempProjectMembers((prev) => [...prev, ...newMembers]); // 오른쪽 임시 그리드에 추가 
+  //   setProjectMembers([...projectMembers]); // 왼쪽 그리드에서 제거
+  //   setSelectedLeftMemberIds([]); // 선택 초기화
+  // };
+
+  // 멤버를 임시 상태에서 오른쪽 그리드로 추가
+const handleAddMembers = () => {
+  const newMembers = [];
+
+  for (const selectedLeftMemberId of selectedLeftMemberIds) {
+    // selectedLeftMemberId에서 userId 부분만 추출 (예: '28_3'에서 '28' 추출)
+    const [userId] = selectedLeftMemberId.split('_');
+
+    for (const [index, projectMember] of projectMembers.entries()) {
+
+      if (projectMember.userId.toString() === userId) {
+
         const department = projectMember.userDetailDto?.dep || '부서 정보 없음';
         const role = projectMember.authen ? translateRole(projectMember.authen) : '역할 정보 없음';
 
-          const newMember = {
-            'completedInspection': 0,
-            department,
-            isBookmarked: false,
-            pendingInspection: 0,
-            projectId: selectedRow.id,
-            role,
-            totalWorkcnt : 0,
-            userId: projectMember.userId,
-            name:projectMember.name,
-            userWorkcnt: 0,
-          }
-          newMembers.push(newMember);
-          projectMembers.splice(index,1);
-        }
+        const newMember = {
+          department,
+          isBookmarked: false,
+          projectId: selectedRow.id,
+          role,
+          userId: projectMember.userId,
+          name: projectMember.name,
+        };
+        newMembers.push(newMember);
+        projectMembers.splice(index, 1);
+        break; // 해당 멤버를 찾으면 반복문 종료
       }
     }
-  
-  
-    setTempProjectMembers((prev) => [...prev, ...newMembers]); // 오른쪽 임시 그리드에 추가
-    setProjectMembers([...projectMembers]); // 왼쪽 그리드에서 제거
-    setSelectedLeftMemberIds([]); // 선택 초기화
-  };
+  }
+
+  setTempProjectMembers((prev) => [...prev, ...newMembers]); // 오른쪽 임시 그리드에 추가
+  setProjectMembers([...projectMembers]); // 왼쪽 그리드에서 제거
+  setSelectedLeftMemberIds([]); // 선택 초기화
+};
+
+
   
   // 멤버를 임시 상태에서 왼쪽 그리드로 제거
   const handleRemoveMembers = () => {

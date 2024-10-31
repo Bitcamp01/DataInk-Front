@@ -15,8 +15,15 @@ const memberModalSlice = createSlice({
         // page 값을 증가시키는 액션 추가
         incrementPage: (state) => {
         state.page += 1;
-      }
-    },
+      },
+        // 상태 초기화 액션 추가
+        resetModalData: (state) => {
+          state.modalDatas = [];
+          state.page = 0;
+          state.totalPages = 1;
+        }
+      },
+
     extraReducers: (builder) => {
       builder
       .addCase(fetchModalData.fulfilled, (state, action) => {
@@ -35,4 +42,5 @@ const memberModalSlice = createSlice({
     }
   });
   
+  export const { incrementPage, resetModalData } = memberModalSlice.actions;
   export default memberModalSlice.reducer;
