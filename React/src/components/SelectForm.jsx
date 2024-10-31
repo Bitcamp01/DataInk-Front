@@ -13,7 +13,7 @@ const SelectForm = ({ taskId , transformedData}) => { // taskId를 props로 받�
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const authen = useSelector((state) => state.users.authen);
+    const authen = useSelector((state) => state.users?.authen ?? null);
 
     const handleApproveClick = () => {
         if (authen === 'ROLE_ADMIN') { // **여기 수정이요**
