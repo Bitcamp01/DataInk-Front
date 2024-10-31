@@ -182,7 +182,8 @@ h3 {
     z-index: 5;
     color: #5d66a4;
     font-weight: bold;
-    background-color: white;
+    background-color: #f9f9f9;
+    /* border-bottom: 2px solid #8799df; */
 }
 
 /* 탭 콘텐츠 스타일 */

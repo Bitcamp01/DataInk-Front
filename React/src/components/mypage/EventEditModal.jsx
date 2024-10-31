@@ -4,14 +4,6 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEvent, deleteEvent } from '../../apis/mypageApis';
 
-// 모달 이름 (모달안에 제목 캘린더, 일정 둘 다 씀)
-const ModalTitle = styled.h2`
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-`;
-
 // 이벤트 모달 스타일
 const eventModalStyles = {
     content: {
@@ -22,8 +14,8 @@ const eventModalStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         padding: '30px',
-        width: '420px', // 이벤트 추가 모달의 너비 설정
-        height: '600px', // 이벤트 추가 모달의 높이 설정
+        width: '415px', // 이벤트 추가 모달의 너비 설정
+        height: '595px', // 이벤트 추가 모달의 높이 설정
         borderRadius: '10px',
         border: 'none',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
@@ -34,6 +26,16 @@ const eventModalStyles = {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
 };
+
+// 모달 이름 (모달안에 제목 캘린더, 일정 둘 다 씀)
+const ModalTitle = styled.h2`
+    font-size: 25px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+`;
 
 // 일정 안에 버튼들 감싸는 컨테이너 (일정사용)
 const ButtonContainer2 = styled.div`
@@ -49,7 +51,7 @@ const ModalButton = styled.button`
     border-radius: 4px;
     cursor: pointer;
     padding: 10px 20px;
-    font-size: 14px;
+    font-size: 15px;
     margin: 10px;
     transition: background-color 0.3s ease;
     width: 100px;
@@ -65,7 +67,7 @@ const InputField = styled.input`
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-bottom: 15px;
-    margin-top: 10px;
+    margin-top: 5px;
     font-size: 14px;
 `;
 
@@ -75,7 +77,7 @@ const SelectField = styled.select`
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 15px;
     font-size: 14px;
 `;
@@ -87,6 +89,7 @@ const TextArea = styled.textarea`
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-bottom: 15px;
+    margin-top: 5px;
     font-size: 14px;
     height: 100px;
 `;
@@ -215,7 +218,7 @@ const EventEditModal = ({ isOpen, closeEditEventModal, selectedEvent}) => {
             <Modal isOpen={isOpen} onRequestClose={closeEditEventModal} style={eventModalStyles}>
                 <ModalTitle>일정 수정</ModalTitle>
                 <label>
-                제목:
+                제목
                 <InputField
                     type="text"
                     name="title"
@@ -225,7 +228,7 @@ const EventEditModal = ({ isOpen, closeEditEventModal, selectedEvent}) => {
                 </label>
                 <br />
                 <label>
-                캘린더:
+                캘린더
                 <SelectField
                     name="calendarName"
                     value={calendarName}
@@ -242,7 +245,7 @@ const EventEditModal = ({ isOpen, closeEditEventModal, selectedEvent}) => {
                 <br />
                 <DateContainer>
                 <DateLabel>
-                    시작 날짜:
+                    시작 날짜
                     <InputField
                     type="date"
                     name="startDate"
@@ -252,7 +255,7 @@ const EventEditModal = ({ isOpen, closeEditEventModal, selectedEvent}) => {
                     />
                 </DateLabel>
                 <DateLabel>
-                    종료 날짜:
+                    종료 날짜
                     <InputField
                     type="date"
                     name="endDate"
@@ -263,7 +266,7 @@ const EventEditModal = ({ isOpen, closeEditEventModal, selectedEvent}) => {
                 </DateLabel>
                 </DateContainer>
                 <label>
-                메모:
+                메모
                 <TextArea
                     name="memo"
                     value={memo}
@@ -272,7 +275,7 @@ const EventEditModal = ({ isOpen, closeEditEventModal, selectedEvent}) => {
                 </label>
                 <ButtonContainer2>
                 <ModalButton onClick={handleUpdateEvent} disabled={!isModified}>수정</ModalButton>
-                <ModalButton onClick={handleDeleteEvent} style={{ backgroundColor: '#7785BE' }}>삭제</ModalButton>
+                <ModalButton onClick={handleDeleteEvent}>삭제</ModalButton>
                 <ModalButton onClick={closeEditEventModal}>취소</ModalButton>
                 </ButtonContainer2>
             </Modal>

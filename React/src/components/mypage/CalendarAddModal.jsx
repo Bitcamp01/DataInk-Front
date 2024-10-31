@@ -34,6 +34,8 @@ const ModalTitle = styled.h2`
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 `;
 
 // 모달안에 버튼컨테이너
@@ -106,9 +108,9 @@ const CalendarAddModal = ({ isOpen, onRequestClose, calendarOptions, setCalendar
 
     return (
         <Modal isOpen={isOpen} onRequestClose={closeAddCalendarModal} style={calendarModalStyles}>
-            <ModalTitle style={{ marginBottom: '20px' }}> 캘린더 추가</ModalTitle>
+            <ModalTitle style={{ marginBottom: '20px' }}>캘린더 추가</ModalTitle>
             <label style={{ marginBottom: '10px' }}>
-                새 캘린더 이름:
+                새 캘린더 이름
                 <InputField
                     type="text"
                     name="calendarName"

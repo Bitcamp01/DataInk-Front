@@ -134,14 +134,15 @@ const CalendarContainer = styled.div`
 const StyledEvent = styled.div`
     background-color: ${props => props.color};
     color: ${props => 
-        (props.color === '#FFFFB3' ? '#636369' :
-         props.color === '#FFFF00' ? '#636369' :
-         props.color === '#B3FFB3' ? '#636369' :
-         props.color === '#ADFF2F' ? '#636369' :
+        (props.color === '#FFFFB3' ? '#635' :
+         props.color === '#FFFF00' ? '#635' :
+         props.color === '#B3FFB3' ? '#635' :
+         props.color === '#ADFF2F' ? '#635' :
+         props.color === '#D4FF33' ? '#635' :
          'white')};
     text-align: center;
     margin: 1px 0;
-    font-size: 0.9em; // 글자 크기도 함께 줄이기 (원래 크기의 70%)
+    font-size: 0.95em; // 글자 크기도 함께 줄이기 (원래 크기의 70%)
     height: 70%;
     width: 100%; // 셀 전체 너비를 채우도록 설정
     border-radius: 4px;
@@ -194,12 +195,76 @@ const DateHeader = styled.h3`
     color: #333;
 `;
 
-// 오른쪽 사이드바에 스케출 표출시
+// 오른쪽 사이드바에 스케줄 표출시
 const ScheduleItem = styled.div`
     margin-top: 10px;
     font-size: 16px;
     color: #333;
+    display: flex;
+    flex-direction: column;  /* 수직 방향으로 정렬 */
+    padding: 5px;
+    position: relative;
+
+     /* 버튼이 있는 행 */
+    .schedule-row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* 초기 상태에서 ToggleButton은 보이지 않도록 설정 */
+    .toggle-btn {
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    &:hover .toggle-btn {
+        opacity: 1;
+        transform: scale(1); /* 살짝 확대하는 효과 */
+    }
 `;
+
+
+
+// 메모 내용 스타일
+const MemoContainer = styled.div`
+    font-size: 14px;
+    color: #666;
+    background-color: white;
+    padding: 5px;
+    border-radius: 4px;
+    margin-top: 5px;
+    width: 100%; /* 스케줄 항목 너비에 맞춤 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+`;
+
+
+// 메모 보기 버튼
+const ToggleButton = styled.button`
+    font-size: 12px;
+    padding: 2px 5px;
+    border: none;
+    background-color: #7785be;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0; /* 초기 상태에서 보이지 않음 */
+    transform: scale(0.95);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+
+    /* ScheduleItem 호버 시 보임 */
+    ${ScheduleItem}:hover & {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    &:hover {
+        background-color: #535db1;
+    }
+`;
+
 
 // 구분선
 const Divider = styled.hr`
@@ -222,8 +287,16 @@ const CalendarItem = styled.li`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* 초기 상태에서 EditButton은 보이지 않도록 설정 */
+    .edit-btn {
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
     &:hover .edit-btn {
-        display: block;
+        opacity: 1;
+        transform: scale(1); /* 살짝 확대하는 효과 */
     }
 `;
 
@@ -236,7 +309,20 @@ const EditButton = styled.button`
     cursor: pointer;
     padding: 4px 8px;
     font-size: 12px;
-    display: none;
+    &:hover {
+        background-color: #535db1;
+    }
+`;
+
+const AddCalendarButton = styled.button`
+    background-color: #7785BE;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0px 8px 2px;
+    cursor: pointer;
+    font-size: 22px;
+
     &:hover {
         background-color: #535db1;
     }
@@ -266,6 +352,7 @@ const ColorCircle = styled.span`
     background-color: ${props => props.color};
     margin-right: 10px;
 `;
+
 //---------위로 스타일드 컴포넌트--------------------------------------------------------------------------------------------------------------------------------
 
 const Calendar = () => {
@@ -289,6 +376,7 @@ const Calendar = () => {
     const [isModified, setIsModified] = useState(false);
     const [customColor, setCustomColor] = useState('');
     const [displayEvents, setDisplayEvents] = useState([]);
+    const [expandedEventIds, setExpandedEventIds] = useState([]);
 //---------------------------------------------------------------------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------------------------------------------------------------------
@@ -574,137 +662,148 @@ const Calendar = () => {
         }).filter(event => event !== null); // 유효하지 않은 이벤트는 필터링합니다.
     }, [displayEvents]);
 
+    const toggleMemo = (eventId) => {
+        setExpandedEventIds((prevIds) =>
+            prevIds.includes(eventId)
+                ? prevIds.filter((id) => id !== eventId)
+                : [...prevIds, eventId]
+        );
+    };
+
     return (
-        <Scroll>
-        <CalendarBackground>
-            <CalendarContainer>
-                <SidebarContainer>
-                {/* 왼쪽 사이드바 */}
-                    <LeftSidebar>
-                        <EventButton onClick={openAddEventModal}>이벤트 추가</EventButton>
-                        <Divider /> {/* 점선 추가 */}
-                        <h3 
-                            style={{ 
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                fontSize: '25px'
-                            }}>
-                            내 캘린더
-                            <button 
-                                onClick={openAddCalendarModal}
-                                style={{ 
-                                    backgroundColor: '#7785BE', 
-                                    color: 'white', border: 'none', 
-                                    borderRadius: '4px', padding: '0px 8px 2px',
-                                    cursor: 'pointer' , fontSize: '22px',
-                                    paddingBottom: '2px'
-                                }}>+</button>
-                        </h3>
-                        <CalendarList>
-                            {Array.isArray(calendars) && calendars.map((calendar, index) => (
-                                <CalendarItem key={index}>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <ColorCircle color={calendar.color} />
-                                        {calendar.calendarName}
-                                    </div>
-                                    <EditButton
-                                        className="edit-btn"
-                                        onClick={() => openEditCalendarModal(calendar)}
-                                    >
-                                        수정
-                                    </EditButton>
-                                </CalendarItem>
-                            ))}
-                        </CalendarList>
-                    </LeftSidebar>
+            <Scroll>
+                <CalendarBackground>
+                    <CalendarContainer>
+                        <SidebarContainer>
+                        {/* 왼쪽 사이드바 */}
+                            <LeftSidebar>
+                                <EventButton onClick={openAddEventModal}>새 일정 추가</EventButton>
+                                <Divider /> {/* 점선 추가 */}
+                                <h3 
+                                    style={{ 
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        fontSize: '23px'
+                                    }}>
+                                    내 캘린더
+                                    <AddCalendarButton onClick={openAddCalendarModal}>+</AddCalendarButton>
+                                </h3>
+                                <CalendarList>
+                                    {Array.isArray(calendars) && calendars.map((calendar, index) => (
+                                        <CalendarItem key={index}>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                <ColorCircle color={calendar.color} />
+                                                {calendar.calendarName}
+                                            </div>
+                                            <EditButton
+                                                className="edit-btn"
+                                                onClick={() => openEditCalendarModal(calendar)}
+                                            >
+                                                수정
+                                            </EditButton>
+                                        </CalendarItem>
+                                    ))}
+                                </CalendarList>
+                            </LeftSidebar>
 
-                    <MainCalendar>
-                        {/*메인 달력*/}
-                        <CalendarToolbar>
-                            <StyledFullCalendar
-                                selectable={true}
-                                editable={true}
-                                plugins={[dayGridPlugin, interactionPlugin]}
-                                initialView="dayGridMonth"
-                                events={renderEvents()}
-                                dateClick={handleDateClick}  // 날짜 클릭 시 호출되는 함수
-                                eventClick={handleEventClick}
-                                // eventDrop={handleEventDrop}
-                                headerToolbar={{
-                                    left: 'prev,next today',
-                                    center: 'title',
-                                    right: 'dayGridMonth,dayGridWeek,dayGridDay',
-                                }}
-                                timeZone="local"
-                                eventContent={(eventInfo) => {
-                                    const isHoliday = eventInfo.event.extendedProps.isHoliday;
-                                    const eventColor = eventInfo.event.backgroundColor || eventInfo.event.extendedProps.color;
-                                    return (
-                                        <StyledEvent color={eventColor} style={{ cursor: isHoliday ? 'not-allowed' : 'pointer', }}>
-                                            {eventInfo.event.title}
-                                        </StyledEvent>
-                                    );
-                                }}
-                            />
-                        </CalendarToolbar>
-                    </MainCalendar>
+                            <MainCalendar>
+                                {/*메인 달력*/}
+                                <CalendarToolbar>
+                                    <StyledFullCalendar
+                                        selectable={true}
+                                        editable={true}
+                                        plugins={[dayGridPlugin, interactionPlugin]}
+                                        initialView="dayGridMonth"
+                                        events={renderEvents()}
+                                        dateClick={handleDateClick}  // 날짜 클릭 시 호출되는 함수
+                                        eventClick={handleEventClick}
+                                        // eventDrop={handleEventDrop}
+                                        headerToolbar={{
+                                            left: 'prev,next today',
+                                            center: 'title',
+                                            right: 'dayGridMonth,dayGridWeek,dayGridDay',
+                                        }}
+                                        timeZone="local"
+                                        eventOrder="isHoliday, start,-duration"
+                                        eventContent={(eventInfo) => {
+                                            const isHoliday = eventInfo.event.extendedProps.isHoliday;
+                                            const eventColor = eventInfo.event.backgroundColor || eventInfo.event.extendedProps.color;
+                                            return (
+                                                <StyledEvent color={eventColor} style={{ cursor: isHoliday ? 'not-allowed' : 'pointer', }}>
+                                                    {eventInfo.event.title}
+                                                </StyledEvent>
+                                            );
+                                        }}
+                                    />
+                                </CalendarToolbar>
+                            </MainCalendar>
 
-                    {/* 오른쪽 사이드바 */}
-                    <RightSidebar>
-                        {selectedDate ? (
-                            <>
-                                <DateHeader>{new Date(selectedDate).toLocaleDateString('ko-KR', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                    weekday: 'long'
-                                })}</DateHeader>
-                                <Divider />
-                                {selectedEvents.length > 0 ? (
-                                    selectedEvents.map(events => (
-                                        <ScheduleItem key={events.id}>{events.title}</ScheduleItem>
-                                    ))
+                            {/* 오른쪽 사이드바 */}
+                            <RightSidebar>
+                                {selectedDate ? (
+                                    <>
+                                        <DateHeader>{new Date(selectedDate).toLocaleDateString('ko-KR', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            weekday: 'long'
+                                        })}</DateHeader>
+                                        <Divider />
+                                        {selectedEvents.length > 0 ? (
+                                            selectedEvents.map((event) => (
+                                                <ScheduleItem key={event.id}>
+                                                    <div className="schedule-row">
+                                                        <span>{event.title}</span>
+                                                        <ToggleButton onClick={() => toggleMemo(event.id)} className="toggle-btn">
+                                                            {expandedEventIds.includes(event.id) ? "접기" : "메모 보기"}
+                                                        </ToggleButton>
+                                                    </div>
+                                                    {expandedEventIds.includes(event.id) && event.memo && (
+                                                        <MemoContainer>{event.memo}</MemoContainer>
+                                                    )}
+                                                </ScheduleItem>
+                                            ))
+                                        ) : (
+                                            <p>스케줄이 없습니다.</p>
+                                        )}
+                                    </>
                                 ) : (
-                                    <p>스케줄이 없습니다.</p>
+                                    <p>날짜를 선택하세요.</p>
                                 )}
-                            </>
-                        ) : (
-                            <p>날짜를 선택하세요.</p>
-                        )}
-                    </RightSidebar>
-                </SidebarContainer>
-            </CalendarContainer>
+                            </RightSidebar>
+                        </SidebarContainer>
+                    </CalendarContainer>
 
-            <CalendarAddModal
-                isOpen={addCalendarModalIsOpen}
-                onRequestClose={closeAddCalendarModal}
-                closeAddCalendarModal={closeAddCalendarModal}
-            />
-            <CalendarEditModal
-                isOpen={editCalendarModalIsOpen}
-                onRequestClose={closeEditCalendarModal}
-                selectedCalendar={selectedCalendar}
-                updateCalendar={updateCalendar}
-                deleteCalendar={deleteCalendar}
-                closeEditCalendarModal={closeEditCalendarModal}
-            />
-            <EventAddModal
-                isOpen={addEventModalIsOpen}
-                onRequestClose={closeAddEventModal}
-                closeAddEventModal={closeAddEventModal}
-                addEvent={addEvent}
-            />
-            <EventEditModal
-                isOpen={editEventModalIsOpen}
-                onRequestClose={closeEditEventModal}
-                selectedEvent={selectedEvent}
-                updateEvent={updateEvent}
-                deleteEvent={deleteEvent}
-                closeEditEventModal={closeEditEventModal}
-            />
-        </CalendarBackground>
-        </Scroll>
+                    <CalendarAddModal
+                        isOpen={addCalendarModalIsOpen}
+                        onRequestClose={closeAddCalendarModal}
+                        closeAddCalendarModal={closeAddCalendarModal}
+                    />
+                    <CalendarEditModal
+                        isOpen={editCalendarModalIsOpen}
+                        onRequestClose={closeEditCalendarModal}
+                        selectedCalendar={selectedCalendar}
+                        updateCalendar={updateCalendar}
+                        deleteCalendar={deleteCalendar}
+                        closeEditCalendarModal={closeEditCalendarModal}
+                    />
+                    <EventAddModal
+                        isOpen={addEventModalIsOpen}
+                        onRequestClose={closeAddEventModal}
+                        closeAddEventModal={closeAddEventModal}
+                        addEvent={addEvent}
+                    />
+                    <EventEditModal
+                        isOpen={editEventModalIsOpen}
+                        onRequestClose={closeEditEventModal}
+                        selectedEvent={selectedEvent}
+                        updateEvent={updateEvent}
+                        deleteEvent={deleteEvent}
+                        closeEditEventModal={closeEditEventModal}
+                    />
+                </CalendarBackground>
+            </Scroll>
     );
 };
 

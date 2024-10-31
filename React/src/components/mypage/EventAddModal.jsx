@@ -5,6 +5,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addEvent } from '../../apis/mypageApis';
 import { setEvents } from '../../slices/eventSlice';
 
+const FixedMUIContainer = styled.div`
+    /* 크기 조정 시 레이아웃 흔들림 방지 */
+    box-sizing: border-box;
+
+    /* transition 속성 제거 */
+    transition: none;
+
+    /* 불필요한 애니메이션 방지 */
+    animation: none;
+
+    /* 필요할 경우 특정 움직임 방지 */
+    will-change: auto;
+`;
+
 // 이벤트 모달 스타일
 const eventModalStyles = {
     content: {
@@ -15,8 +29,8 @@ const eventModalStyles = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         padding: '30px',
-        width: '420px', // 이벤트 추가 모달의 너비 설정
-        height: '600px', // 이벤트 추가 모달의 높이 설정
+        width: '415px', // 이벤트 추가 모달의 너비 설정
+        height: '590px', // 이벤트 추가 모달의 높이 설정
         borderRadius: '10px',
         border: 'none',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
@@ -30,10 +44,12 @@ const eventModalStyles = {
 
 // 모달 이름 (모달안에 제목 캘린더, 일정 둘 다 씀)
 const ModalTitle = styled.h2`
-    font-size: 24px;
+    font-size: 25px;
     font-weight: bold;
     color: #333;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 `;
 
 // 일정 안에 버튼들 감싸는 컨테이너 (일정사용)
@@ -66,7 +82,7 @@ const InputField = styled.input`
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-bottom: 15px;
-    margin-top: 10px;
+    margin-top: 5px;
     font-size: 14px;
 `;
 
@@ -76,13 +92,14 @@ const SelectField = styled.select`
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 15px;
     font-size: 14px;
 `;
 
 // 일정에서 메모
 const TextArea = styled.textarea`
+    margin-top: 5px;
     width: 167%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -209,10 +226,11 @@ const EventAddModal = ({isOpen, closeAddEventModal}) => {
     };
 
     return (
+        <FixedMUIContainer>
             <Modal isOpen={isOpen} onRequestClose={closeAddEventModal} style={eventModalStyles}>
-                <ModalTitle>일정 추가</ModalTitle>
+                <ModalTitle>새 일정</ModalTitle>
                 <label>
-                제목:
+                제목
                 <InputField
                     type="text"
                     name="title"
@@ -222,7 +240,7 @@ const EventAddModal = ({isOpen, closeAddEventModal}) => {
                 </label>
                 <br />
                 <label>
-                캘린더:
+                캘린더
                 <SelectField
                     name="calendarName"
                     value={calendarName}
@@ -239,7 +257,7 @@ const EventAddModal = ({isOpen, closeAddEventModal}) => {
                 <br />
                 <DateContainer>
                 <DateLabel>
-                    시작 날짜:
+                    시작 날짜
                     <InputField
                     type="date"
                     name="startDate"
@@ -249,7 +267,7 @@ const EventAddModal = ({isOpen, closeAddEventModal}) => {
                     />
                 </DateLabel>
                 <DateLabel>
-                    종료 날짜:
+                    종료 날짜
                     <InputField
                     type="date"
                     name="endDate"
@@ -260,7 +278,7 @@ const EventAddModal = ({isOpen, closeAddEventModal}) => {
                 </DateLabel>
                 </DateContainer>
                 <label>
-                메모:
+                메모
                 <TextArea
                     name="memo"
                     value={memo}
@@ -272,6 +290,7 @@ const EventAddModal = ({isOpen, closeAddEventModal}) => {
                 <ModalButton onClick={closeAddEventModal}>취소</ModalButton>
                 </ButtonContainer2>
             </Modal>
+        </FixedMUIContainer>
     );
 };
 

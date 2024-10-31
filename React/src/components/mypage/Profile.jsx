@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../css/profile.css';
 import PasswordChangeModal from './PasswordChangeModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateMypageInfo  } from '../../apis/mypageApis';
+import { fetchUserDetails, updateMypageInfo } from '../../apis/mypageApis';
 
 const Profile = ({userDetails}) => {
     console.log("Profile component received userDetails:", userDetails);
@@ -33,6 +33,7 @@ const Profile = ({userDetails}) => {
             }
         }
     }, [userDetails]);
+
 
     // Daum 우편번호 API 스크립트 로드
     useEffect(() => {
