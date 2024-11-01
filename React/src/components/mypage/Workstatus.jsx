@@ -16,7 +16,6 @@ const columns = [
     { field: 'projectId', headerName: 'No', flex: 0.5, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
     { field: 'name', headerName: '프로젝트명', flex: 1.5 },
     { field: 'description', headerName: '프로젝트 설명', flex: 2 },
-    // { field: 'totalWorkCnt',headerName: '총 작업수',width: 225 },
     { 
         field: 'startDate', 
         headerName: '시작일', 
