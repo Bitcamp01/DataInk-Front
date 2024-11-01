@@ -16,6 +16,8 @@
 
 .bm-profileCard {
     width: 235px;
+    min-width: 235px;  /* 최소 너비 */
+    max-width: 235px;  /* 최대 너비 */
     height: 421px;
     background: white;
     border-radius: 7px;
