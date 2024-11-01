@@ -45,7 +45,7 @@ function Header({ title }) {
     // "더 보기" 클릭 시 알림창 닫기 및 페이지 이동
     const handleMoreClick = () => {
         setShowNotifications(false); // 알림창 닫기
-        navigate('/mypage'); // 페이지 이동
+        navigate('/mypage?section=Alarm'); // 페이지 이동
     };
 
     // 프로필 메뉴에서 선택 시 이동 처리

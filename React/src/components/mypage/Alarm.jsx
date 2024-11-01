@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Box, TextField, Select, MenuItem, InputLabel, FormControl, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -8,10 +9,21 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import dayjs from 'dayjs';
 import '../../css/alarm.css'; // 스타일 임포트
+// import { getProjectsBySearch } from '../../apis/mypageApis';
+// import { change_searchCondition, change_searchKeyword } from '../../slices/mypageSlice';
+
+const columns = [
+    { field: 'category', headerName: '카테고리', flex: 1 },
+    { field: 'content', headerName: '내용', flex: 2 },
+    { field: 'writer', headerName: '보낸 사람', flex: 1 },
+    { field: 'time', headerName: '발생 시간', flex: 1 },
+    { field: 'status', headerName: '상태', flex: 1 },
+];
 
 const Alarm = () => {
     // State for period filter and date range
     const [category, setCategory] = useState(''); // 카테고리 상태 추가
+    const [notification, setNotification] = useSelector((state) => state.mypageSlice.notification) || [];
     const [status, setStatus] = useState('');
     const [period, setPeriod] = useState('');
     const [startDate, setStartDate] = useState(dayjs().subtract(1, 'day'));
@@ -43,28 +55,6 @@ const Alarm = () => {
             setStartDate(dayjs());
         }
     };
-
-    const columns = [
-        { field: 'category', headerName: '카테고리', flex: 1 },
-        { field: 'content', headerName: '내용', flex: 2 },
-        { field: 'level', headerName: '알림 레벨', flex: 1 },
-        { field: 'writer', headerName: '보낸 사람', flex: 1 },
-        { field: 'time', headerName: '발생 시간', flex: 1 },
-        { field: 'status', headerName: '상태', flex: 1 },
-    ];
-
-    const rows = [
-        { "id": 1, "category": "전체공지", "content": "시스템 상태 정상", "level": "Warning", "writer": "관리자", "time": "2024-09-27 09:02", "status": "읽지않음" },
-        { "id": 2, "category": "메세지", "content": "데이터 백업 성공", "level": "Success", "writer": "시스템 관리자", "time": "2024-09-15 09:49", "status": "읽지않음" },
-        { "id": 3, "category": "작업현황", "content": "서버 과부하 위험", "level": "Critical", "writer": "운영팀", "time": "2024-09-11 16:53", "status": "읽음" },
-        { "id": 4, "category": "작업공지", "content": "데이터 백업 성공", "level": "Info", "writer": "관리자", "time": "2024-09-25 09:56", "status": "읽지않음" },
-        { "id": 5, "category": "전체공지", "content": "백업 작업 성공적으로 완료", "level": "Notice", "writer": "관리자", "time": "2024-09-17 23:15", "status": "읽음" },
-        { "id": 6, "category": "작업현황", "content": "백업 작업 성공적으로 완료", "level": "Urgent", "writer": "관리자", "time": "2024-09-27 11:19", "status": "읽음" },
-        { "id": 7, "category": "전체공지", "content": "디스크 사용량 초과 알림", "level": "Notice", "writer": "기술 지원팀", "time": "2024-09-23 04:28", "status": "읽음" },
-        { "id": 8, "category": "전체공지", "content": "시스템 업데이트 완료", "level": "Notice", "writer": "관리자", "time": "2024-09-19 21:12", "status": "읽지않음" },
-        { "id": 9, "category": "메세지", "content": "데이터 백업 성공", "level": "Info", "writer": "시스템 관리자", "time": "2024-09-24 03:46", "status": "읽지않음" },
-        { "id": 10, "category": "전체공지", "content": "보안 침해 발생", "level": "Urgent", "writer": "운영팀", "time": "2024-09-01 15:16", "status": "읽음" }
-    ]
 
     const commonSelectStyles = {
         color: "#7785BE",
@@ -244,7 +234,7 @@ const Alarm = () => {
                 margin: '0 auto'
             }}>
                 <DataGrid
-                    rows={rows}
+                    rows={notification}
                     columns={columns}
                     rowHeight={40}
                     headerHeight={50}
