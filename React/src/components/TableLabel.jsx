@@ -29,7 +29,8 @@ const ButtonContainer = styled.div`
 export default function DataGridDemo() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const authen = useSelector((state) => state.users.authen);
+  // const authen = useSelector((state) => state.userSlice.authen);
+  // console.log("authen:", authen);
 
   const [rowSelectionModel, setRowSelectionModel] = React.useState([]); // 선택된 행을 관리하는 상태
   const [modalMessage, setModalMessage] = React.useState('선택한 작업을 검수 요청하시겠습니까?');
@@ -67,6 +68,8 @@ export default function DataGridDemo() {
     //   navigate(`/review/${id}`); // ROLE_MANAGER일 때
     // } else if (authen === 'ROLE_ADMIN') {
       navigate(`/review/${id}`); // ROLE ADMIN일 때, 이 경우 승인 버튼을 누르면 모달창이 열리는게 아니라 그냥 ststus가 바뀌면서 저장된다.
+    // } else {
+    //     console.warn("Invalid authen value:", authen);
     // }
 
 
