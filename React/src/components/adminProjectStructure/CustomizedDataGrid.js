@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { DataGrid,GridRowEditStopReasons ,GridRowModes,apiRef,useGridApiRef,GridToolbarContainer,
+import { DataGrid,GridRowEditStopReasons ,GridRowModes,useGridApiRef,GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
     } from '@mui/x-data-grid';
@@ -25,7 +25,7 @@ import {
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'; // Remove 아이콘 import
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from "axios"; // InfiniteScroll 컴포넌트 import
-import PdfModal from './PdfModal';
+// import PdfModal from './PdfModal';
 
 // 환경 변수에서 API URL 가져오기
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -727,7 +727,7 @@ const handleCopy = () => {
         </Box>
       </Box>
 }
-      <PdfModal open={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />
+      {/*<PdfModal open={isModalOpen} onClose={handleCloseModal} pdfUrl={pdfUrl} />*/}
       <Dialog open={isConversionModalOpen} onClose={handleCloseConversionModal} fullWidth maxWidth="sm">
         <DialogTitle>변환 목록</DialogTitle>
         <DialogContent>
