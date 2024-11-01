@@ -17,7 +17,6 @@ export const fetchFolders = createAsyncThunk(
             Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
           }
         });
-        console.log("개편 후 데이터:", response.data.folders);
         return response.data.folders;
       } catch (e) {
         return thunkApi.rejectWithValue(e.response.data);
