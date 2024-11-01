@@ -386,7 +386,7 @@ export const updateProfileIntro = createAsyncThunk(
         }
     }
 );
-
+// workstatus//////////////////////////////////////////////////////////////////////////////////////////////////
 // 프로젝트 검색해서 가지고오기
 export const getProjectsBySearch = createAsyncThunk(
     'user-projects/getProjectsBySearch',
@@ -411,5 +411,9 @@ export const getProjectsBySearch = createAsyncThunk(
         }
     }
 );
+
+// alarm////////////////////////////////////////////////////////////////////////////////////
+// 알림 가지고 오기
+
 
 
