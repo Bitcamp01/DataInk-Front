@@ -115,13 +115,13 @@ function Header({ title }) {
                                             alt="프로필"
                                             className="notification-item__profile"
                                         />
-                                        <div className="notification-item__content">
+                                        <div className="notification-item__content" onClick={handleMoreClick}>
                                             <p>{notification.content}</p>
                                             <small>{timeAgo(notification.timestamp)}</small>
                                         </div>
                                     </div>
                                 ))}
-                                <button onClick={() => navigate('/mypage?section=Alarm')} className="notification-dropdown__more">
+                                <button onClick={handleMoreClick} className="notification-dropdown__more">
                                     더 보기
                                 </button>
                             </div>

@@ -1,29 +1,63 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/project-card.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setProjectId } from '../../slices/labelTableSlice';
 import { updateBookmarkStatus } from '../../apis/userProjectsApis';
+import axios from "axios";
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const fetchProjectMembersDirectly = async (projectId) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/user-projects/members/${projectId}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+            }
+        });
+        return response.data.items || []; // items 배열만 반환
+    } catch (error) {
+        console.error("Error fetching project members:", error);
+        return [];
+    }
+};
 
 const ProjectCard = ({ projects }) => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [projectMembers, setProjectMembers] = useState({});
 
-    // 북마크 클릭 핸들러
-    const handleBookmarkClick = (event, project) => {
-        event.stopPropagation(); // 클릭 이벤트가 카드로 전파되지 않도록 막음
-        dispatch(updateBookmarkStatus({
-            projectId: project.id,
-            isBookmarked: !project.isBookmarked
-        }));
-    }
+    useEffect(() => {
+        const fetchData = async () => {
+            if (projects.length > 0) {
+                const membersData = {};
+                for (let project of projects) {
+                    const members = await fetchProjectMembersDirectly(project.id);
+                    membersData[project.id] = members;
+                }
+                setProjectMembers(membersData);
+            }
+        };
+        fetchData();
+    }, [projects]);
 
-    // 카드 클릭 핸들러
+    const handleBookmarkClick = async (event, project) => {
+        event.stopPropagation();
+        try {
+            await updateBookmarkStatus({
+                projectId: project.id,
+                isBookmarked: !project.isBookmarked,
+            });
+        } catch (error) {
+            console.error("Error updating bookmark status:", error);
+        }
+    };
+
     const handleCardClick = (projectId) => {
-        dispatch(setProjectId(projectId)); // projectId를 전역 상태로 저장
+        dispatch(setProjectId(projectId));
         navigate(`/label/work`);
-    }
-  
+    };
+
     return (
         <div className="project-card__container">
             {projects.map((project, index) => (
@@ -61,26 +95,40 @@ const ProjectCard = ({ projects }) => {
                             )}
                         </div>
                     </div>
+                    {/* 멤버 데이터 */}
                     <div className="project-card__members">
                         <div className="project-card__admin">
-                            <span className='project-card__admin-text'>관리자</span>
-                            <span className='admin'>홍길동</span>
+                            <span className="project-card__admin-text">관리자</span>
+                            <span className="admin">
+                                {(projectMembers[project.id] || [])
+                                    .filter((member) => member.authen === 'ROLE_ADMIN')
+                                    .map((member) => member.name)
+                                    .join(', ') || '없음'}
+                            </span>
                         </div>
                         <div className="project-card__manager">
-                            <span className='project-card__manager-text'>검수자</span>
-                            <span className='manager'>홍길동</span>
+                            <span className="project-card__manager-text">검수자</span>
+                            <span className="manager">
+                                {(projectMembers[project.id] || [])
+                                    .filter((member) => member.authen === 'ROLE_MANAGER')
+                                    .map((member) => member.name)
+                                    .join(', ') || '없음'}
+                            </span>
                         </div>
                         <div className="project-card__labeler">
-                            <span className="project-card__labeler-text">멤버</span>
+                        <span className="project-card__labeler-text">멤버</span>
                             <div className="labeler">
-                                {project.members
-                                    .map((member) => member.memberName) // 이름만 추출
-                                    .filter((name) => name) // 빈 이름 제거
-                                    .slice(0, 4) // 최대 5명만 표시
-                                    .map((name, idx) => (
-                                        <span key={idx} className="labeler">{name}</span>
-                                    ))}
-                                {project.members.filter((member) => member.memberName).length > 5 && (
+                                {(projectMembers[project.id] && projectMembers[project.id].filter((member) => member.authen === 'ROLE_USER').length > 0)
+                                    ? projectMembers[project.id]
+                                        .filter((member) => member.authen === 'ROLE_USER')
+                                        .slice(0, 4)
+                                        .map((member, idx) => (
+                                            <span key={idx} className="labeler">
+                                                {member.name}
+                                            </span>
+                                        ))
+                                    : '없음'}
+                                {(projectMembers[project.id] && projectMembers[project.id].filter((member) => member.authen === 'ROLE_USER').length > 4) && (
                                     <span className="labeler">...</span>
                                 )}
                             </div>

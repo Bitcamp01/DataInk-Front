@@ -61,3 +61,20 @@ export const getProgress = createAsyncThunk(
         }
     }
 );
+
+// 프로젝트의 멤버 가져오기
+export const fetchProjectMembers = createAsyncThunk(
+  'userProjects/fetchProjectMembers',
+  async (projectId, thunkApi) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/user-projects/members/${projectId}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+        }
+      });
+      return response.data;
+    } catch (e) {
+      return thunkApi.rejectWithValue(e);
+    }
+  }
+);
