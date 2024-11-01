@@ -82,7 +82,6 @@ const Notice_detail = () => {
   const handleEditClick = () => {
     setIsEditing(true);
   };
-
   // 파일 업로드 핸들러, 파일을 여러개 업로드 가능
   const handleFileChange = (selectedFiles) => {
     setFiles(prevFiles => [...prevFiles, ...Array.from(selectedFiles)]);
@@ -91,7 +90,7 @@ const Notice_detail = () => {
   const currentIndex = noticeList.content ? noticeList.content.findIndex(item => item.noticeId === parseInt(id)) : -1;
   const previousNoticeId = currentIndex > 0 ? noticeList.content[currentIndex - 1]?.noticeId : null;
   const nextNoticeId = currentIndex < noticeList.content.length - 1 ? noticeList.content[currentIndex + 1]?.noticeId : null;
-
+  console.log(notice.noticeFileDtoList);
   return (
     <section className="member-list">
       <Box display="flex" flexDirection="column" alignItems="center" p={2} maxWidth='1135px' minWidth='1135px'>
