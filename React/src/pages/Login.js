@@ -44,24 +44,28 @@ const Login = () => {
 
     const googleSocialLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
+            console.log(tokenResponse);
             try {
-                // 구글에서 받은 access_token을 서버로 전달
                 const accessToken = tokenResponse.access_token;
+                console.log("Google access_token:", accessToken);
     
-                // accessToken을 백엔드로 보내서 사용자 정보를 요청
-                const response = await axios.post("http://localhost:9090/auth/google/callback", {
-                    token: accessToken
-                });
+                const response = await axios.get(
+                    `${process.env.REACT_APP_API_BASE_URL}/login/google`, {
+                        params: {
+                            "access_token": accessToken
+                        }
+                    }
+                );
     
-                console.log('User info:', response.data); // 사용자 정보 확인
-                navi("/dashboard"); // 성공 시 대시보드로 이동
+                console.log('User info:', response.data);
+                navi("/dashboard");
     
             } catch (error) {
                 console.error('Google login error:', error.response ? error.response.data : error.message);
             }
         },
         onError: (errorResponse) => {
-            console.error('Login failed:', errorResponse);
+            console.error('Google Login failed:', errorResponse);
         }
     });
 
@@ -114,7 +118,6 @@ const Login = () => {
     // 네이버 로그인 핸들러
     const naverLoginHandler = () => {
         if (window.naver) {
-            // 숨겨진 네이버 로그인 버튼을 클릭하여 로그인 프로세스 시작
             const loginButton = document.getElementById('naverIdLogin').firstChild;
             if (loginButton) {
                 loginButton.click();
@@ -147,20 +150,16 @@ const Login = () => {
                     <div className="login__social-buttons">
                         <Button
                             onClick={naverLoginHandler}
-
                             startIcon={<img src="../images/login/login-naver_icon.svg" alt="네이버 소셜 아이콘" className="login__social-icon" />}
-                        >
-                        </Button>
+                        ></Button>
                         <Button
                             onClick={kakaoLoginHandler}
                             startIcon={<img src="../images/login/login-kakao_icon.svg" alt="카카오 소셜 아이콘" className="login__social-icon" />}
-                        >
-                        </Button>
+                        ></Button>
                         <Button
                             onClick={googleSocialLogin}
                             startIcon={<img src="../images/login/login-google_icon.svg" alt="구글 소셜 아이콘" className="login__social-icon" />}
-                        >
-                        </Button>
+                        ></Button>
                     </div>
                 </div>
 
@@ -174,7 +173,6 @@ const Login = () => {
                 </div>
 
                 <form className="login__form" onSubmit={handleLogin}>
-                    {/* 아이디 입력 필드 */}
                     <div className="login__input-field">
                         <img
                             src="../images/login/login-id-input_icon.svg"
@@ -226,7 +224,6 @@ const Login = () => {
                         </button>
                     </div>
 
-
                     <div className="login__options">
                         <div className="login__remember-me">
                             <input type="checkbox" id="remember" className="login__checkbox" />
@@ -241,7 +238,7 @@ const Login = () => {
                         <button type="submit" className="login__button">로그인</button>
                     </div>
                 </form>
-
+                
                 {user && (
                     <div>
                         <h2>네이버 로그인 성공!</h2>
