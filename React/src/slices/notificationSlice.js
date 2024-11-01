@@ -1,14 +1,6 @@
 // slices/notificationSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchLatestNotifications } from '../apis/notificationApis';
-
-export const getLatestNotifications = createAsyncThunk(
-    'notifications/fetchLatest',
-    async () => {
-        const notifications = await fetchLatestNotifications();
-        return notifications;
-    }
-);
+import { fetchLatest, fetchLatestNotifications } from '../apis/notificationApis';
 
 const notificationSlice = createSlice({
     name: 'notifications',
@@ -20,15 +12,15 @@ const notificationSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getLatestNotifications.pending, (state) => {
+            .addCase(fetchLatest.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(getLatestNotifications.fulfilled, (state, action) => {
+            .addCase(fetchLatest.fulfilled, (state, action) => {
                 state.loading = false;
                 state.items = action.payload;
             })
-            .addCase(getLatestNotifications.rejected, (state, action) => {
+            .addCase(fetchLatest.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             });
