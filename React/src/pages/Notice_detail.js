@@ -90,7 +90,6 @@ const Notice_detail = () => {
   const currentIndex = noticeList.content ? noticeList.content.findIndex(item => item.noticeId === parseInt(id)) : -1;
   const previousNoticeId = currentIndex > 0 ? noticeList.content[currentIndex - 1]?.noticeId : null;
   const nextNoticeId = currentIndex < noticeList.content.length - 1 ? noticeList.content[currentIndex + 1]?.noticeId : null;
-  console.log(notice.noticeFileDtoList);
   return (
     <section className="member-list">
       <Box display="flex" flexDirection="column" alignItems="center" p={2} maxWidth='1135px' minWidth='1135px'>
@@ -152,24 +151,47 @@ const Notice_detail = () => {
             {/* 수정 모드일 때 파일 업로드 컴포넌트 */}
             {isEditing && <InputFileUpload onFileChange={handleFileChange} />}
 
-            {/* 파일 미리보기 */}
-            <List sx={{ mt: 2 }}>
-              {notice.noticeFileDtoList && notice.noticeFileDtoList.map((file, index) => (
-                <ListItem key={index}>
-                  <ListItemIcon>
-                    {file.fileType.startsWith('image/') ? (
-                      <img src={`https://kr.object.ncloudstorage.com/dataink/${file.fileName}`} alt={file.fileName} style={{ width: 50, height: 50 }} />
-                    ) : (
-                      <InsertDriveFileIcon />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={file.fileName}
-                    secondary={file.fileSize !== null ? (file.fileSize > 1024 ? `${(file.fileSize / 1024).toFixed(1)} KB` : `${file.fileSize} B`) : '0 KB'}
-                  />
-                </ListItem>
-              ))}
-            </List>
+            {isEditing === true && 
+              <List sx={{ mt: 2 }}>
+                {notice.noticeFileDtoList && notice.noticeFileDtoList.map((file, index) => (
+                  <ListItem key={index}>
+                    <ListItemIcon>
+                      {file.fileType.startsWith('image/') ? (
+                        <ImageIcon />
+                      ) : (
+                        <InsertDriveFileIcon />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={file.fileName}
+                      secondary={file.fileSize ? (file.fileSize > 1024 ? `${(file.fileSize / 1024).toFixed(1)} KB` : `${file.fileSize} B`) : '0 KB'}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            }
+
+            {isEditing === false &&
+                /* 파일 미리보기 */
+                <List sx={{ mt: 2 }}>
+                  {notice.noticeFileDtoList && notice.noticeFileDtoList.map((file, index) => (
+                    <ListItem key={index}>
+                      <ListItemIcon>
+                        {file.fileType.startsWith('image/') ? (
+                          <ImageIcon />
+                        ) : (
+                          <InsertDriveFileIcon />
+                        )}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={file.fileName}
+                        secondary={file.fileSize ? (file.fileSize > 1024 ? `${(file.fileSize / 1024).toFixed(1)} KB` : `${file.fileSize} B`) : '0 KB'}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+            }
+
           </Box>
         </Paper>
 
