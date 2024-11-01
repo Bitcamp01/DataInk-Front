@@ -176,7 +176,13 @@ const Login = () => {
                 </div>
 
                 <form className="login__form" onSubmit={handleLogin}>
+                    {/* 아이디 입력 필드 */}
                     <div className="login__input-field">
+                        <img
+                            src="../images/login/login-id-input_icon.svg"
+                            alt="아이디 아이콘"
+                            className="login__input-icon"
+                        />
                         <input
                             type="text"
                             placeholder="아이디를 입력해주세요."
@@ -190,6 +196,11 @@ const Login = () => {
                     </div>
 
                     <div className="login__input-field">
+                        <img
+                            src="../images/login/login-password-input_icon.svg"
+                            alt="비밀번호 아이콘"
+                            className="login__input-icon"
+                        />
                         <input
                             type={showPassword ? "text" : "password"}
                             placeholder="비밀번호를 입력해주세요."
@@ -200,6 +211,32 @@ const Login = () => {
                             onChange={handleInputChange}
                             required
                         />
+                        <button
+                            type="button"
+                            onClick={toggleShowPassword}
+                            className="login__input-icon--right"
+                            aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                        >
+                            <img
+                                src={
+                                    showPassword
+                                        ? "../images/login/login-password-input-hide_icon.svg"
+                                        : "../images/login/login-password-input-on_icon.svg"
+                                }
+                                alt={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                            />
+                        </button>
+                    </div>
+
+
+                    <div className="login__options">
+                        <div className="login__remember-me">
+                            <input type="checkbox" id="remember" className="login__checkbox" />
+                            <label htmlFor="remember" className="login__remember-text">아이디를 기억하겠습니다.</label>
+                        </div>
+                        <div className="login__find-links">
+                            <Link to="/findaccount" className="login__find-link">아이디 / 비밀번호 찾기</Link>
+                        </div>
                     </div>
 
                     <div className="login__button">
