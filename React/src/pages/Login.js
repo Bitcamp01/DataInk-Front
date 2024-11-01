@@ -43,20 +43,26 @@ const Login = () => {
     }, [loginForm, dispatch, navi]);
 
     const googleSocialLogin = useGoogleLogin({
-        scope: "email profile",
-        onSuccess: async ({ code }) => {
+        onSuccess: async (tokenResponse) => {
             try {
-                const { data } = await axios.post("http://localhost:9090/auth/google/callback", { code });
-                console.log(data);
-                navi("/dashboard");
+                // 구글에서 받은 access_token을 서버로 전달
+                const accessToken = tokenResponse.access_token;
+    
+                // accessToken을 백엔드로 보내서 사용자 정보를 요청
+                const response = await axios.post("http://localhost:9090/auth/google/callback", {
+                    token: accessToken
+                });
+    
+                console.log('User info:', response.data); // 사용자 정보 확인
+                navi("/dashboard"); // 성공 시 대시보드로 이동
+    
             } catch (error) {
-                console.error('Google login error:', error);
+                console.error('Google login error:', error.response ? error.response.data : error.message);
             }
         },
         onError: (errorResponse) => {
-            console.error(errorResponse);
-        },
-        flow: "auth-code",
+            console.error('Login failed:', errorResponse);
+        }
     });
 
     // 카카오 로그인 핸들러
@@ -129,7 +135,7 @@ const Login = () => {
                         alt="데이터잉크 로고"
                         className="login__logo"
                     />
-                    <span className="login__logo-text">Data Inc</span>
+                    <span className="login__logo-text">DataInk</span>
                 </div>
 
                 <div className="login__welcome-text">
@@ -141,27 +147,19 @@ const Login = () => {
                     <div className="login__social-buttons">
                         <Button
                             onClick={naverLoginHandler}
-                            variant="contained"
-                            color="success"
+
                             startIcon={<img src="../images/login/login-naver_icon.svg" alt="네이버 소셜 아이콘" className="login__social-icon" />}
                         >
-                            네이버로 로그인
                         </Button>
                         <Button
                             onClick={kakaoLoginHandler}
-                            variant="contained"
-                            color="warning"
                             startIcon={<img src="../images/login/login-kakao_icon.svg" alt="카카오 소셜 아이콘" className="login__social-icon" />}
                         >
-                            카카오로 로그인
                         </Button>
                         <Button
                             onClick={googleSocialLogin}
-                            variant="contained"
-                            color="primary"
                             startIcon={<img src="../images/login/login-google_icon.svg" alt="구글 소셜 아이콘" className="login__social-icon" />}
                         >
-                            구글로 로그인
                         </Button>
                     </div>
                 </div>
