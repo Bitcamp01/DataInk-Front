@@ -38,7 +38,6 @@ export default function App() {
 
         switch (view) {
             case '월별':
-                const currentYear = new Date().getFullYear(); // 현재 연도 가져오기
                 for (let i = -3; i <= 2; i++) {
                     const month = (currentMonth + i + 12) % 12 || 12; // 1~12로 조정
                     const year = currentYear + Math.floor((currentMonth + i - 1) / 12); // 년도 계산
