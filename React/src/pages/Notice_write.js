@@ -64,7 +64,6 @@ const Notice_write = () => {
     // files 상태에서 파일 추가
     files.forEach(file => {
       sendFormData.append('uploadFiles', file);
-      sendFormData.append('file_size', file.size);
     });
 
     dispatch(post(sendFormData)).then((action) => {
