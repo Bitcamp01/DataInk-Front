@@ -41,6 +41,17 @@ const Notice = () => {
       navigate('/notice_write'); 
     };
 
+    const userData = sessionStorage.getItem('persist:root');
+    let userAuthen = null;
+    if(userData) {
+      const parsedData = JSON.parse(userData);
+      const userSlice = JSON.parse(parsedData.userSlice);
+
+      userAuthen = userSlice.authen;
+    } else {
+      console.log("세션 스토리지에 사용자 데이터가 없습니다.");
+    }
+
   return (
       <>
         {/* 콘텐츠 영역 */}
@@ -60,13 +71,16 @@ const Notice = () => {
           </div>
 
         
-          {/* 멤버 추가 버튼: activeTab이 'member'일 때만 보이게 */}   
-          <div className="write-btn-container"  >
-            <button 
-            className="member-list__write-btn" 
-            style={{ float: 'right' }}
-            onClick={handleButtonClick}>글 쓰기</button>
-          </div>
+          {/* 글쓰기 버튼 : 권한이 admin(관리자)일 때만 작성 가능 */}   
+          {userAuthen === 'ROLE_ADMIN'&& ( // 현재 로그인한 사람이 admin일때만 버튼 렌더링
+            <div className="write-btn-container"  >
+              <button 
+              className="member-list__write-btn" 
+              style={{ float: 'right' }}
+              onClick={handleButtonClick}>새 글 작성</button>
+            </div>
+          )}
+          
 
           {/* 페이지네이션 */}
           <div className="pagination-container">
