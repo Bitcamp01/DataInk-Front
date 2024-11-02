@@ -79,7 +79,7 @@ const Table_memberListAll = () => {
 
       <DataGrid
          rows={(memberListAll ?? []).map((item, index) => ({
-          id: item.userId,                  
+          id: index+1,                  
           name: item.name,       
           department: item.userDetailDto?.dep || '부서 정보 없음', // userDetailDto가 존재하지 않으면 '부서 정보 없음'
           email: item.email,  
@@ -152,11 +152,11 @@ const Table_memberListAll = () => {
                 color: '#7c97fe', // 기본 페이지 버튼의 색상
               },
               '& .Mui-selected': {
-                backgroundColor: '#7c97fe ', // 선택된 페이지 색상
+                backgroundColor: '#7c97fe !important', // 선택된 페이지 색상
                 color: '#ffffff', 
               },
               '& .MuiPaginationItem-root:not(.Mui-selected)': {
-                color: '#3e3e3e !important', // 선택되지 않은 페이지 텍스트 색상 설정 
+                color: '#3e3e3e ', // 선택되지 않은 페이지 텍스트 색상 설정 
               },
               '& .MuiPaginationItem-ellipsis': {
                 color: '#3e3e3e', // 페이지 사이의 점 색상
