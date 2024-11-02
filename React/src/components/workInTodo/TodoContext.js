@@ -27,12 +27,14 @@ const TodoNextIdContext = createContext();
 export function TodoProvider({ children }) {
   const [state, dispatch] = useReducer(todoReducer, initialTodos);
   const nextId = useRef(5);
+  // 환경 변수에서 API URL 가져오기
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;  
 
   useEffect(() => {
     const fetchTodos = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       try {
-        const response = await axios.get('http://localhost:9090/TodoList/todoContent', {
+        const response = await axios.get(`${API_BASE_URL}/TodoList/todoContent`, {
           headers: {
             Authorization: `Bearer ${token}`
           },
