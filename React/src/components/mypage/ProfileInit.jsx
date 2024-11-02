@@ -8,7 +8,7 @@ import { passwordChk, fetchUserDetails  } from '../../apis/mypageApis';
 const BackgroundContainer = styled.div`
     font-family: 'Pretendard', 'NotoSansKR', sans-serif;
     background-color: #f9f9f9; /* 배경을 흰색으로 설정 */
-    height: 85vh;
+    height: 95vh;
     display: flex;
     justify-content: center;
     align-items: center;
