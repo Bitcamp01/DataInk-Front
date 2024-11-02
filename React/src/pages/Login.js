@@ -57,9 +57,17 @@ const Login = () => {
                     }
                 );
     
-                console.log('User info:', response.data);
-                navi("/dashboard");
-    
+                // 응답에 따라 분기 처리
+                const responseData = response.data;
+                if (responseData === "NEW_USER") {
+                    navi("/join");
+                } else if (responseData.startsWith("EXISTING_USER")) {
+                    const token = responseData.split("|")[1];
+                    // 필요한 경우 서버 토큰 저장 및 사용
+                    navi("/dashboard");
+                } else {
+                    console.error("Unknown response from server:", responseData);
+                }
             } catch (error) {
                 console.error('Google login error:', error.response ? error.response.data : error.message);
             }
@@ -68,12 +76,14 @@ const Login = () => {
             console.error('Google Login failed:', errorResponse);
         }
     });
-
+    
     // 카카오 로그인 핸들러
     const kakaoLoginHandler = () => {
         if (window.Kakao && window.Kakao.Auth) {
             window.Kakao.Auth.authorize({
-                redirectUri: 'http://localhost:9090/auth/kakao/callback',
+                redirectUri: `${process.env.REACT_APP_API_BASE_URL}/auth/kakao/callback`,
+                // 팝업으로 띄우기
+                isPopup: true,
             });
         } else {
             console.error("Kakao SDK가 로드되지 않았습니다.");
@@ -84,9 +94,9 @@ const Login = () => {
     useEffect(() => {
         if (window.naver) {
             const naverLogin = new window.naver.LoginWithNaverId({
-                clientId: 'j8_Y90ucR3pGMa_lXxg9', // 네이버에서 발급받은 클라이언트 ID
-                callbackUrl: 'http://localhost:9090/auth/naver/callback',
-                isPopup: false,
+                clientId: 'j8_Y90ucR3pGMa_lXxg9',
+                callbackUrl: `${process.env.REACT_APP_API_BASE_URL}/auth/naver/callback`,
+                isPopup: true,
                 loginButton: { color: 'green', type: 3, height: 50 },
             });
             naverLogin.init();
@@ -95,25 +105,34 @@ const Login = () => {
         }
     }, []);
 
-    // 네이버 로그인 후 사용자 정보 가져오기
-    useEffect(() => {
-        if (window.location.href.includes('access_token')) {
-            const naverLogin = new window.naver.LoginWithNaverId();
-            naverLogin.getLoginStatus((status) => {
-                if (status) {
-                    const userProfile = {
-                        name: naverLogin.user.getName(),
-                        email: naverLogin.user.getEmail(),
-                        profile_image: naverLogin.user.getProfileImage(),
-                    };
-                    setUser(userProfile);
-                    navi("/dashboard");
-                } else {
-                    console.error("네이버 로그인 실패");
-                }
-            });
-        }
-    }, [navi]);
+// 네이버 로그인 후 사용자 정보 가져오기
+useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.hash);
+    const accessToken = queryParams.get('access_token');
+    
+    if (accessToken) {
+        // access_token을 사용하여 사용자 정보 요청
+        axios.get('https://openapi.naver.com/v1/nid/me', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+        .then(response => {
+            // 응답 확인
+            console.log(response.data); // 응답 데이터 로그
+            const userProfile = {
+                name: response.data.response.name,
+                email: response.data.response.email,
+                profile_image: response.data.response.profile_image,
+            };
+            setUser(userProfile);
+            navi("/dashboard");
+        })
+        .catch(error => {
+            console.error("네이버 사용자 정보 요청 실패:", error.response ? error.response.data : error.message);
+        });
+    }
+}, [navi]);
 
     // 네이버 로그인 핸들러
     const naverLoginHandler = () => {
