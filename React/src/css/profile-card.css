@@ -5,11 +5,6 @@
     font-family: 'Pretendard', 'NotoSansKR', sans-serif
 }
 
-.bm-profileContainer {
-    width: 100%;
-    height: 100%;
-}
-
 .bm-username {
     color: #7C97FE;
     font-weight: normal;
@@ -21,6 +16,8 @@
 
 .bm-profileCard {
     width: 235px;
+    min-width: 235px;  /* 최소 너비 */
+    max-width: 235px;  /* 최대 너비 */
     height: 421px;
     background: white;
     border-radius: 7px;
@@ -34,6 +31,8 @@
 .bm-profile img {
     width: 130px;
     height: 130px;
+    object-fit: cover; /* 이미지의 왜곡 없이 원형에 맞도록 크기 조정 */
+    border-radius: 50%;
 }
 
 .bm-prodile-title {
@@ -44,6 +43,9 @@
     margin-bottom: 10px;
 }
 
+.bm-statusInfo {
+    position: relative;
+}
 
 .bm-roleInfo {
     display: flex;
@@ -54,10 +56,15 @@
 .bm-affiliation {
     padding-right: 20px;
     border-right: 1px dotted #D0D0D0;
-    margin-right: 15px;
+    margin-right: 35px;
     text-align: center;
     font-size: 1rem;
     margin-left: 10px;
+    
+}
+
+.bm-affiliation span{
+    display: block;
 }
 
 .bm-role {
@@ -66,14 +73,19 @@
     margin-right: 10px;
 }
 
+.bm-role span {
+    display: block;
+}
+
 .bm-announcement {
+    position: absolute;
+    top: 70px;
+    left: 117px;
+    transform: translateX(-50%);
     border: 1px dotted #DBDBDB;
     background: #F6F8FF;
     width: 220px;
     height: 100px;
-    margin-left: 6px;
-    margin-right: 6px;
-    margin-top: 20px;
 }
 
 .bm-announcementDetail {
@@ -128,4 +140,20 @@
 .bm-detailInfo span {
     margin: 0;
     font-size: 0.8rem;
+}
+
+.loading-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    color: #999;
+}
+
+.loading-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: #999;
 }

@@ -5,7 +5,9 @@ import {
   rejectLabelTask,
   approveLabelTask,
   fetchFieldValue,
-  submitForReview
+  submitForReview,
+  fetchLabelTaskDetails,
+  adminLabelTask
 } from '../apis/labelTaskApis';
 import axios from 'axios';
 
@@ -89,6 +91,33 @@ const labelTaskSlice = createSlice({
         // 승인 요청 성공 시 추가 작업 (예: 상태 업데이트)
       })
       .addCase(submitForReview.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+
+      // 1028 필드밸류 가져오기 위한 메서드 새로 작성해봄
+      .addCase(fetchLabelTaskDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchLabelTaskDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.labelTaskData = action.payload; // 가져온 LabelTask 데이터를 상태에 저장
+      })
+      .addCase(fetchLabelTaskDetails.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(adminLabelTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(adminLabelTask.fulfilled, (state) => {
+        state.loading = false;
+        // 승인 작업 성공 시 추가 작업 (예: 상태 업데이트)
+      })
+      .addCase(adminLabelTask.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

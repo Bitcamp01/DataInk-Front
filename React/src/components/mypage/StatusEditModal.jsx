@@ -104,19 +104,21 @@ const StatusEditModal = ({ isOpen, onClose }) => {
 
     return (
         <ModalOverlay>
-            <ModalContent>
-                <ModalTitle>상태 수정</ModalTitle>
-                <StatusInput
-                    type="text"
-                    value={status}
-                    onChange={handleStatusChange}
-                    placeholder="새 상태를 입력하세요"
-                />
-                <ModalButtons>
-                    <PrimaryButton onClick={handleSave}>저장</PrimaryButton>
-                    <SecondaryButton onClick={onClose}>취소</SecondaryButton>
-                </ModalButtons>
-            </ModalContent>
+            <form onSubmit={handleSave}>
+                <ModalContent>
+                    <ModalTitle>상태 수정</ModalTitle>
+                    <StatusInput
+                        type="text"
+                        value={status}
+                        onChange={handleStatusChange}
+                        placeholder="새 상태를 입력하세요"
+                    />
+                    <ModalButtons>
+                        <PrimaryButton>저장</PrimaryButton>
+                        <SecondaryButton onClick={onClose}>취소</SecondaryButton>
+                    </ModalButtons>
+                </ModalContent>
+            </form>
         </ModalOverlay>
     );
 };

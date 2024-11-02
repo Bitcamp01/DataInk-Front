@@ -6,6 +6,7 @@ import Modal_addMember from '../components/Modal_addMember';
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTabData } from '../apis/memberManagementApis';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const MemberManagement = () => {
   const [activeTab, setActiveTab] = useState('users');
@@ -14,9 +15,16 @@ const MemberManagement = () => {
   const [page, setPage] = useState(1); // 페이지 상태
   
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // // Redux 상태를 가져오기
-  // const {  data = [], totalPages, loading, error } = useSelector((state) => state.memberManagement || {});
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const tab = queryParams.get('tab');
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [location.search]);
 
 
   // 탭 전환 시 데이터를 가져오기 위해 useEffect 사용
@@ -35,6 +43,11 @@ const MemberManagement = () => {
     console.log("Tab 변경됨, tabName:", tabName); // 로그 추가
     setActiveTab(tabName);
     setPage(1); // 탭이 변경될 때 페이지를 초기화
+
+    const queryParams = new URLSearchParams(location.search);
+    queryParams.set('tab', tabName);
+    navigate({ search: queryParams.toString() });
+  
   };
 
   // 모달 열기
@@ -85,6 +98,7 @@ const MemberManagement = () => {
               </button>
             
               </div>
+
               {/* 멤버 추가 버튼: activeTab이 'users'일 때만 보이게 */}
               {activeTab === 'users' && (
                     <Button
@@ -106,7 +120,7 @@ const MemberManagement = () => {
                       멤버 추가
                     </Button>
                   )}
-          </div>
+             </div>  
 
 
             {/* 테이블 영역 */}
@@ -123,6 +137,6 @@ const MemberManagement = () => {
         </section>
       </>
   );
-}
+};
 
 export default MemberManagement;

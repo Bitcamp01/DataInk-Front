@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -9,47 +9,41 @@ import Stack from '@mui/material/Stack';
 import dayjs from 'dayjs';
 import '../../css/workstatus.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProjects } from '../../apis/mypageApis';
+import { getProjectsBySearch } from '../../apis/mypageApis';
+import { change_searchCondition, change_searchKeyword } from '../../slices/mypageSlice';
 
 const columns = [
-    { field: 'projectId', headerName: 'No', width: 100, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
-    { field: 'name', headerName: '프로젝트명', width: 300 },
-    { field: 'description', headerName: '작업명', width: 250 },
-    // { field: 'remainingTasks', headerName: '잔여작업', width: 110 }, // ProjectDto에 해당 필드가 없음
-    // { field: 'myTasks', headerName: '내 작업수', width: 110 }, // ProjectDto에 해당 필드가 없음
-    // { field: 'inspectionWaiting', headerName: '검수대기', width: 110 }, // ProjectDto에 해당 필드가 없음
-    // { field: 'rejected', headerName: '반려', width: 110 }, // ProjectDto에 해당 필드가 없음
-    // { field: 'inspectionDone', headerName: '검수완료', width: 110 }, // ProjectDto에 해당 필드가 없음
-    { field: 'endDate', headerName: '기한일', width: 180 },
+    { field: 'projectId', headerName: 'No', flex: 0.5, headerClassName: 'no-column-header', cellClassName: 'no-column-cell' },
+    { field: 'name', headerName: '프로젝트명', flex: 1.5 },
+    { field: 'description', headerName: '프로젝트 설명', flex: 2 },
+    { 
+        field: 'startDate', 
+        headerName: '시작일', 
+        flex: 1,
+        valueFormatter: (value) => dayjs(value).format('YYYY-MM-DD')
+    },
+    { 
+        field: 'endDate', 
+        headerName: '기한일', 
+        flex: 1,
+        valueFormatter: (value) => dayjs(value).format('YYYY-MM-DD')
+    },
 ];
 
 const Workstatus = () => {
     const dispatch = useDispatch();
     const projects = useSelector((state) => state.mypageSlice.projects) || [];
-    const loading = useSelector((state) => state.mypageSlice.loading);
-    const [category, setCategory] = useState('');
-    const [period, setPeriod] = useState('');
-    const [startDate, setStartDate] = useState(dayjs().subtract(1, 'day'));
-    const [endDate] = useState(dayjs()); // 종료 날짜는 오늘 날짜로 고정
-    const [searchKeyword, setSearchKeyword] = useState('');
+    const searchCondition = useSelector(state => state.mypageSlice.searchCondition);
+    const searchKeyword = useSelector(state => state.mypageSlice.searchKeyword);
+    const page = useSelector(state => state.mypageSlice.page);
+
+    // 입력용 상태 (검색 버튼을 누르기 전 임시 저장 상태)
+    const [searchConditionInput, setSearchConditionInput] = useState("all");
+    const [searchKeywordInput, setSearchKeywordInput] = useState("");
+    const [period, setPeriod] = useState("all");
+    const [inputStartDate, setInputStartDate] = useState(dayjs().subtract(1, 'month'));
+    const [inputEndDate, setInputEndDate] = useState(dayjs());
     
-
-    // 기간 선택 드롭다운 변경 핸들러
-    const handlePeriodChange = (event) => {
-        const selectedPeriod = event.target.value;
-        setPeriod(selectedPeriod);
-
-        // 각 기간에 맞는 날짜 설정
-        if (selectedPeriod === 'today') {
-            setStartDate(dayjs().subtract(1, 'day'));
-        } else if (selectedPeriod === 'week') {
-            setStartDate(dayjs().subtract(1, 'week'));
-        } else if (selectedPeriod === 'month') {
-            setStartDate(dayjs().subtract(1, 'month'));
-        } else if (selectedPeriod === 'custom') {
-            setStartDate(dayjs());
-        }
-    };
 
     const commonSelectStyles = {
         color: "#7785BE",
@@ -65,195 +59,234 @@ const Workstatus = () => {
         ".MuiSelect-icon": {
             color: "#7785BE",
         },
-        width: '140px',
+        width: '8.75rem',
     };
 
+    const changeSearchCondition = (e) => {
+        setSearchConditionInput(e.target.value);
+    };
+
+    const changeSearchKeyword = (e) => {
+        setSearchKeywordInput(e.target.value);
+    };
+
+    // 처음 렌더링 시 기본 검색 조건으로 데이터 로드
     useEffect(() => {
-        // 프로젝트 데이터를 가져오는 Thunk 호출
-        dispatch(getAllProjects());
-    }, [dispatch]);;
+        dispatch(getProjectsBySearch({
+            searchCondition: 'all',
+            searchKeyword: '',
+            page: 0,
+            startDate: '',
+            endDate: ''
+        }));
+    }, [dispatch]);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        dispatch(change_searchCondition(searchConditionInput));
+        dispatch(change_searchKeyword(searchKeywordInput));
+
+        dispatch(getProjectsBySearch({
+            searchCondition: searchConditionInput,
+            searchKeyword: searchKeywordInput,
+            page,
+            startDate: period === 'all' ? '' : inputStartDate.format('YYYY-MM-DDTHH:mm:ss'),
+            endDate: period === 'all' ? '' : inputEndDate.format('YYYY-MM-DDTHH:mm:ss'),
+        }));
+    };
+
+    const changePage = (e, v) => {
+        dispatch(getProjectsBySearch({
+            searchCondition,
+            searchKeyword,
+            page: v - 1,
+            startDate: period === 'all' ? '' : inputStartDate.format('YYYY-MM-DDTHH:mm:ss'),
+            endDate: period === 'all' ? '' : inputEndDate.format('YYYY-MM-DDTHH:mm:ss'),
+        }));
+    };
+
+    const handlePeriodChange = (event) => {
+        const selectedPeriod = event.target.value;
+        setPeriod(selectedPeriod);
+
+        if (selectedPeriod === 'today') {
+            setInputStartDate(dayjs().subtract(1, 'day'));
+            setInputEndDate(dayjs());
+        } else if (selectedPeriod === 'week') {
+            setInputStartDate(dayjs().subtract(1, 'week'));
+            setInputEndDate(dayjs());
+        } else if (selectedPeriod === 'month') {
+            setInputStartDate(dayjs().subtract(1, 'month'));
+            setInputEndDate(dayjs());
+        } else {
+            setInputStartDate(dayjs().subtract(1, 'month'));
+            setInputEndDate(dayjs());
+        }
+    };
 
     return (
         <div id="WorkStatus" className="tab-content">
             <h3>작업 관리</h3>
 
-            {/* 검색바 및 필터 섹션 */}
-            <div className="workstatus__filter-container">
-                {/* 카테고리 필터 */}
-                <FormControl size="small" sx={{ minWidth: 120 }}>
-                    <InputLabel sx={{ color: "#7785BE" }}>카테고리</InputLabel>
-                    <Select
-                        className="workstatus__filter-select"
-                        value={category}
-                        label="카테고리"
-                        onChange={(e) => setCategory(e.target.value)}
-                        sx={commonSelectStyles}
-                    >
-                        <MenuItem value=""></MenuItem>
-                        <MenuItem value="all">전체</MenuItem>
-                        <MenuItem value="projectName">프로젝트명</MenuItem>
-                        <MenuItem value="workName">작업명</MenuItem>
-                    </Select>
-                </FormControl>
+            <form onSubmit={handleSearch}>
+                <div className="workstatus__filter-container">
+                    <FormControl size="small" sx={{ minWidth: '7.5rem' }}>
+                        <InputLabel sx={{ 
+                            color: "#7785BE",
+                            fontSize: "0.9375rem"
+                            }}>
+                            카테고리</InputLabel>
+                        <Select
+                            className="workstatus__filter-select"
+                            value={searchConditionInput}
+                            label="카테고리"
+                            inputProps={{
+                                name: 'searchCondition'
+                            }}
+                            onChange={changeSearchCondition}
+                            sx={commonSelectStyles}
+                        >
+                            <MenuItem value="all">전체</MenuItem>
+                            <MenuItem value="projectName">프로젝트명</MenuItem>
+                            <MenuItem value="workName">프로젝트 설명</MenuItem>
+                        </Select>
+                    </FormControl>
 
-            {/* 구분선 */}
-            <div className="workstatus__filter-divider"></div>
+                    <Box sx={{ minWidth: '7.5rem' }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel className="workstatus__filter-group"
+                            sx={{
+                                color: "#7785BE",
+                            }}
+                            >기간</InputLabel>
+                            <Select
+                                className="workstatus__filter-select"
+                                value={period}
+                                label="기간"
+                                onChange={handlePeriodChange}
+                                variant="outlined"
+                                sx={commonSelectStyles}
+                            >
+                                <MenuItem value="all">기간전체</MenuItem>
+                                <MenuItem value="custom">직접입력</MenuItem>
+                                <MenuItem value="today">최근 1일</MenuItem>
+                                <MenuItem value="week">최근 1주일</MenuItem>
+                                <MenuItem value="month">최근 1개월</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
 
-                {/* 필터 그룹 2 */}
-                {/* 기간 필터 */}
-            <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth size="small">
-                    <InputLabel className="workstatus__filter-group"
-                    sx={{
-                        color: "#7785BE", // 라벨 폰트 색상
-                    }}
-                    >기간</InputLabel>
-                    <Select
-                        className="workstatus__filter-select"
-                        value={period}
-                        label="period"
-                        onChange={handlePeriodChange}
-                        variant="outlined"
-                        sx={{
-                            color: "#7785BE", // 선택된 값의 폰트 색깔 변경
-                            ".MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#7785BE", // Select의 외곽선 색깔 변경
-                            },
-                            "&:hover .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#7785BE", // 호버 시 외곽선 색깔 변경
-                            },
-                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#7785BE", // 포커스된 상태에서의 외곽선 색상
-                            },
-                            ".MuiSelect-icon": {
-                                color: "#7785BE", // 드롭다운 아이콘의 색상 변경
-                            },
-                            width: '130px',
-                        }}
-                    >
-                        <MenuItem value=""></MenuItem>
-                        <MenuItem value="all">기간전체</MenuItem>
-                        <MenuItem value="custom">직접입력</MenuItem>
-                        <MenuItem value="today">최근 1일</MenuItem>
-                        <MenuItem value="week">최근 1주일</MenuItem>
-                        <MenuItem value="month">최근 1개월</MenuItem>
-                    </Select>
-                </FormControl>
-            </Box>
+                    {period === 'custom' && (
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <div className="workstatus__filter-group" style={{ display: 'flex', gap: '0.5rem' }}>
+                                <DatePicker
+                                    label="시작 날짜"
+                                    slotProps={{ textField: { size: 'small', sx: { width: '9.375rem' }}}}
+                                    value={inputStartDate}
+                                    format="YYYY-MM-DD"
+                                    onChange={(newValue) => setInputStartDate(newValue)}
+                                    maxDate={inputEndDate}
+                                />
+                                <DatePicker
+                                    label="종료 날짜"
+                                    slotProps={{ textField: { size: 'small', sx: { width: '9.375rem' }}}}
+                                    value={inputEndDate}
+                                    format="YYYY-MM-DD"
+                                    onChange={(newValue) => setInputEndDate(newValue)}
+                                    minDate={inputStartDate}
+                                />
+                            </div>
+                        </LocalizationProvider>
+                    )}
 
-            {/* 기간에 따른 날짜 선택 */}
-                {period === 'custom' && (
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <div className="workstatus__filter-group" style={{ display: 'flex', gap: '8px' }}>
-                            {/* 시작 날짜 선택 가능 */}
-                            <DatePicker
+                    {/* 최근 1일, 1주일, 1개월 선택 시 */}
+                    {(period === 'today' || period === 'week' || period === 'month') && (
+                        <div className="workstatus__filter-group" style={{ display: 'flex', gap: '0.5rem' }}>
+                            <TextField
                                 label="시작 날짜"
-                                slotProps={{ textField: { size: 'small', sx: { width: '222.4px' }}}}
-                                value={startDate}
-                                showDaysOutsideCurrentMonth
-                                format="YYYY-MM-DD"
-                                onChange={(newValue) => setStartDate(newValue)}
-                                maxDate={endDate} // 종료 날짜를 넘어갈 수 없음
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        className="workstatus__filter-select"
-                                    />
-                                )}
+                                value={inputStartDate.format('YYYY-MM-DD')}
+                                className="workstatus__filter-select"
+                                size="small"
+                                disabled
                             />
-                            {/* 종료 날짜: 현재 날짜로 고정 */}
                             <TextField
                                 label="종료 날짜"
-                                value={endDate.format('YYYY-MM-DD')}
+                                value={inputEndDate.format('YYYY-MM-DD')}
                                 className="workstatus__filter-select"
                                 size="small"
                                 disabled
                             />
                         </div>
-                    </LocalizationProvider>
-                )}
+                    )}
 
-                {/* 최근 1일, 1주일, 1개월 선택 시 */}
-                {(period === 'today' || period === 'week' || period === 'month') && (
-                    <div className="workstatus__filter-group" style={{ display: 'flex', gap: '8px' }}>
-                        <TextField
-                            label="시작 날짜"
-                            value={startDate.format('YYYY-MM-DD')}
-                            className="workstatus__filter-select"
-                            size="small"
-                            disabled
-                        />
-                        <TextField
-                            label="종료 날짜"
-                            value={endDate.format('YYYY-MM-DD')}
-                            className="workstatus__filter-select"
-                            size="small"
-                            disabled
-                        />
-                    </div>
-                )}
+                    {(period === '' || period === 'all') && (
+                        <div className="workstatus__filter-group" style={{ display: 'flex', gap: '0.5rem' }}>
+                            <TextField
+                                label="시작 날짜"
+                                value=""
+                                placeholder="시작 날짜"
+                                className="workstatus__filter-select"
+                                size="small"
+                                disabled
+                            />
+                            <TextField
+                                label="종료 날짜"
+                                value=""
+                                placeholder="종료 날짜"
+                                className="workstatus__filter-select"
+                                size="small"
+                                disabled
+                            />
+                        </div>
+                    )}
 
-                {(period === '' || period === 'all') && (
-                    <div className="workstatus__filter-group" style={{ display: 'flex', gap: '8px' }}>
-                        <TextField
-                            label="시작 날짜"
-                            value=""
-                            placeholder="시작 날짜"
-                            className="workstatus__filter-select"
-                            size="small"
-                            disabled
-                        />
-                        <TextField
-                            label="종료 날짜"
-                            value=""
-                            placeholder="종료 날짜"
-                            className="workstatus__filter-select"
-                            size="small"
-                            disabled
-                        />
-                    </div>
-                )}
 
-                <div className="alarm__filter-divider"></div>
+                    <TextField
+                        value={searchKeywordInput}
+                        onChange={changeSearchKeyword}
+                        placeholder='검색어를 입력하세요.'
+                        size='small'
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleSearch(e);
+                            }
+                        }}
+                        variant='outlined'
+                        sx={{ width: '25rem'}}
+                    />
 
-                {/* 검색 입력 */}
-                <TextField
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    placeholder="검색어를 입력하세요."
-                    size="small"
-                    variant="outlined"
-                    sx={{ width: '400px'}}
-                />
+                    <button type='submit' className="workstatus__search-btn">검색</button>
+                </div>
+            </form>
 
-                {/* 검색 버튼 */}
-                <button type='button' className="workstatus__search-btn">검색</button>
-            </div>
-
-            {/* 데이터 그리드 섹션 */}
-            <Box sx={{ width: '100%', marginBottom: '39px', boxShadow: '0px 4px 20px 5px rgba(0, 0, 0, 0.08)' }}>
+            <Box sx={{ width: '83.6%',
+                        marginBottom: '2.4375rem',
+                        boxShadow: '0px 0.25rem 1.25rem 0.3125rem rgba(0, 0, 0, 0.08)',
+                        backgroundColor: 'white',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        margin: '0 auto'
+            }}>
                 <DataGrid
-                    rows={projects}
+                    rows={projects && projects.content ? projects.content : []}
                     columns={columns}
                     rowHeight={40}
                     headerHeight={50}
                     autoHeight
                     disableRowSelectionOnClick
-                    classes={{
-                        cell: 'custom-cell',
-                        columnHeader: 'custom-header',
-                    }}
-                    loading={loading}
                     getRowId={(row) => row.projectId}
+                    hideFooter
+                    classes={{
+                        cell: 'workstatus__custom-cell',
+                        columnHeader: 'workstatus__custom-header',
+                    }}
                 />
-                {loading && <div>로딩 중입니다...</div>}
             </Box>
 
-
-            {/* 페이지네이션 섹션 */}
             <div className="workstatus-pagination-container">
                 <Stack spacing={2} sx={{ marginBottom: '80px' }}>
-                    <Pagination count={10} color="primary" />
+                    <Pagination count={projects.totalPages || 1} page={page + 1} onChange={changePage} color="primary" />
                 </Stack>
             </div>
         </div>

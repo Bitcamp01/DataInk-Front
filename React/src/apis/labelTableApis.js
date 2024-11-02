@@ -9,12 +9,15 @@ export const fetchFolders = createAsyncThunk(
     'labelTable/fetchFolders',
     async (projectId, thunkApi) => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/projects/${projectId}/folders`, {
+        const response = await axios.get(`${API_BASE_URL}/projects/test`,{
+            params:{
+              projectId
+            }, 
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
           }
         });
-        return response.data;
+        return response.data.folders;
       } catch (e) {
         return thunkApi.rejectWithValue(e.response.data);
       }

@@ -3,18 +3,33 @@
     display: flex;
     align-items: center;
     background-color: white;
-    padding: 8px 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    gap: 0.7rem;
-    margin-bottom: 20px;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+    gap: 0.4375rem;
+    width: 83.6%;
+    height: 3.75rem;
+    margin: 0 auto;
+    margin-bottom: 1.25rem;
+}
+
+/* 데이터 그리드 셀 스타일 */
+.workstatus__custom-cell {
+    color: #3e3e3e;
+}
+
+/* 데이터 그리드 헤더 스타일 */
+.workstatus__custom-header {
+    color: #7785BE;
+    font-weight: bold !important;
+    background-color: rgb(235, 240, 245);
 }
 
 /* 구분선 스타일 */
 .workstatus__filter-divider {
-    border-right: 1px dashed #909090;
-    height: 28px;
-    margin: 0 8px;
+    border-right: 0.0625rem dashed #909090;
+    height: 1.75rem;
+    margin: 0 0.5rem;
 }
 
 /* 검색 입력 스타일 */
@@ -22,18 +37,18 @@
     flex-grow: 1;
     background-color: #EAEAEA;
     border: none;
-    border-radius: 5px;
-    min-width: 100px;
-    padding: 8px 15px;
+    border-radius: 0.3125rem;
+    min-width: 6.25rem;
+    padding: 0.5rem 0.9375rem;
     outline: none;
 }
 
 /* 검색 버튼 스타일 */
 .workstatus__search-btn {
-    font-size: 16px;
-    padding: 8.5px 20px;
-    border-radius: 5px;
-    border: 1px solid #7785BE;
+    font-size: 0.9375rem;
+    padding: 0.53125rem 1.20rem;
+    border-radius: 0.3125rem;
+    border: 0.0625rem solid #7785BE;
     color: #7785BE;
     background-color: white;
     cursor: pointer;
@@ -45,14 +60,13 @@
     color: white;
 }
 
-
 /* 데이터 그리드 헤더 스타일 */
 .workstatus__no-header {
-    padding-left: 20px !important;
+    padding-left: 1.25rem !important;
 }
 
 .workstatus__no-cell {
-    padding-left: 20px !important;
+    padding-left: 1.25rem !important;
 }
 
 /* 텍스트 컬러 */
@@ -62,8 +76,7 @@
 
 .workstatus__custom-header {
     color: #7785BE;
-    font-weight: bold !important; /* 두께가 적용 안 될 경우 !important 사용 */
-    /* 두께가 적용 안 될 때는, font-weight가 다른 스타일에 의해 덮어쓰이는지 확인 */
+    font-weight: bold !important;
 }
 
 /* 페이지네이션 스타일 */
@@ -72,5 +85,9 @@
     justify-content: center; 
     align-items: center; 
     width: 100%; 
-    margin-top: 20px;
+    margin-top: 1.25rem;
+}
+
+.workstatus__filter-select {
+    width: 9.6rem;
 }

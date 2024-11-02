@@ -5,10 +5,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import '../css/reviewer.css';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'; // dispatch 추가
-import { submitForReview } from '../apis/labelTaskApis'; // Thunk import
+import { submitForReview , approveLabelTask } from '../apis/labelTaskApis'; // Thunk import
 import axios from 'axios';
 
-const ReviewModal = ({ isOpen, onClose, taskId }) => {
+const ReviewModal = ({ isOpen, onClose, taskId, transformedData }) => {
     // 환경 변수에서 API URL 가져오기
     const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
     const navigate = useNavigate();
@@ -20,15 +20,23 @@ const ReviewModal = ({ isOpen, onClose, taskId }) => {
     const handleApplyClick = async () => {
         try {
             // 승인 API 호출
-            const response = await axios.patch('http://localhost:3000/labeltask/approve', {
-                taskId: taskId, // 필요한 데이터
-                comment: feedback // textarea의 내용
-            });
-            // const response = await dispatch(submitForReview({ taskId, fieldId, comment: feedback }));
+            // const response = await axios.patch('http://localhost:3000/labeltask/approve', {
+            //     taskId: taskId, // 필요한 데이터
+            //     comment: feedback // textarea의 내용
+            // });
+            // // const response = await dispatch(submitForReview({ taskId, fieldId, comment: feedback }));
 
-            if (response.meta.requestStatus === 'fulfilled') {
+            // if (response.meta.requestStatus === 'fulfilled') {
+            //     alert('승인되었습니다.');
+            //     navigate('/label/work'); // 승인 후 이동
+            // } else {
+            //     alert('승인 중 오류가 발생했습니다.');
+            // }
+            const result = await dispatch(approveLabelTask({ taskId, comment: feedback , transformedData })); // fieldId 포함
+
+            if (approveLabelTask.fulfilled.match(result)) { // 승인 성공 확인
                 alert('승인되었습니다.');
-                navigate('/label/work'); // 승인 후 이동
+                navigate('/label/work');
             } else {
                 alert('승인 중 오류가 발생했습니다.');
             }
@@ -84,18 +92,18 @@ const ReviewModal = ({ isOpen, onClose, taskId }) => {
                     />
                     <div className="profile-details">
                         <p style={{ margin: '0 0 1rem 0' }}>
-                            <strong className="modal-labelingname">고기천</strong>님의 작업입니다
+                            <strong className="modal-labelingname">작업</strong>승인 코멘트를 적어주세요
                         </p>
-                        <p style={{ margin: '0.5rem 0' }}>AI Clova | 인턴 (라벨러)</p>
+                        {/* <p style={{ margin: '0.5rem 0' }}>AI Clova | 인턴 (라벨러)</p>
                         <p style={{ margin: '0.5rem 0' }}>참여중인 작업: 5건</p>
-                        <p style={{ margin: '0.5rem 0' }}>완료한 작업: 12503건</p>
+                        <p style={{ margin: '0.5rem 0' }}>완료한 작업: 12503건</p> */}
                     </div>
                 </div>
                 <div className="report-section">
-                    <h4 style={{ color: '#7C97FE', margin: '0.5rem 0' }}>작업 특이사항</h4>
+                    {/* <h4 style={{ color: '#7C97FE', margin: '0.5rem 0' }}>작업 특이사항</h4>
                     <p style={{ margin: '0.5rem 0' }}>페이지 수: 5 페이지</p>
                     <p style={{ margin: '0.5rem 0' }}>작업 소요시간: 0.38시간</p>
-                    <p style={{ margin: '0.5rem 0' }}>반려 횟수: 0회</p>
+                    <p style={{ margin: '0.5rem 0' }}>반려 횟수: 0회</p> */}
                     <textarea 
                         placeholder="특이사항을 입력하세요" 
                         rows="5" 

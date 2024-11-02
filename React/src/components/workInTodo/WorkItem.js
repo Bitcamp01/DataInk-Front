@@ -70,7 +70,7 @@ const WorkItem = ({ text, deadline }) => {
   const today = moment();
   const endDate = moment(deadline);
   const diffDays = endDate.diff(today, 'days');
-  const isUrgent = diffDays <= 5;
+  const isUrgent = diffDays <= 30;
 
   return (
     <WorkItemBlock>

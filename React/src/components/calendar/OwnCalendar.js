@@ -23,7 +23,7 @@ const OwnCalendar = () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       // console.log(token);
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/project-end-dates`, {
+        const response = await axios.get(`${API_BASE_URL}/calendar/project-end-dates`, {
           headers: {
             Authorization: `Bearer ${token}`
           },
@@ -31,10 +31,9 @@ const OwnCalendar = () => {
         const items = response.data;
         const projectEnd = items.map(item => ({
           id: item.userId,
-          endDate: moment(item.endDate).format("YYYY-MM-DD"),  // 여기서 endDate를 포맷
-          projectName: item.projectName
+          endDate: moment(item.projectDto.endDate).format("YYYY-MM-DD"),  // 여기서 endDate를 포맷
+          projectName: item.projectDto.projectName
         }));
-
         setProjectEndDay(projectEnd);
       } catch (error) {
         console.error('Error fetching end dates: ', error);
@@ -90,7 +89,7 @@ const OwnCalendar = () => {
               const diffDays = endDate.diff(moment(), 'days');
 
               // 남은 날짜에 따라 색상 결정
-              const dotColor = diffDays <= 5 ? '#FF4949' : '#7C97FE';
+              const dotColor = diffDays <= 30 ? '#FF4949' : '#7C97FE';
               
               html.push(
                 <StyledDot key={formattedDate} style={{ backgroundColor: dotColor }} />

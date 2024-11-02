@@ -1,3 +1,138 @@
+import React, { useEffect, useState } from 'react';
+import { DataGridPro } from '@mui/x-data-grid-pro';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLabelTaskDetails } from '../apis/labelTaskApis';
+
+const ReviewerTable2 = ({ taskId, onDataTransform }) => {
+  const dispatch = useDispatch();
+  const [rowsArray, setRowsArray] = useState([]);
+
+  // const { labelTaskData, loading, error } = useSelector((state) => state.labelTaskSlice);
+  // const { labelTaskData, loading, error } = useSelector((state) => state.labelTaskSlice || {}); // 이게 일단은 정배
+  const { labelTaskData = null, loading, error } = useSelector((state) => state.labelTaskSlice || {});
+
+
+  useEffect(() => {
+    if (taskId) {
+      dispatch(fetchLabelTaskDetails(taskId));
+    }
+  }, [taskId, dispatch]);
+
+  const transformData = (data, hierarchy = [], index = 0) => {
+    const transformed = {};
+    
+    data.forEach((item, idx) => {
+      const currentHierarchy = [...hierarchy, item.fieldName];
+      const row = { id: index + idx }; // 각 행에 고유한 ID 추가
+    
+      currentHierarchy.forEach((level, levelIdx) => {
+        row[levelIdx === 0 ? "hierarchy" : `hierarchy${levelIdx + 1}`] = level;
+      });
+    
+      const contentValue = item.subFields ? item.subFields.content : "undefined";
+    
+      if (typeof item.subFields === 'string') {
+        transformed[index++] = {
+          ...row,
+          content: contentValue,
+          checked: false,
+        };
+      } else if (Array.isArray(item.subFields)) {
+        const subFieldsTransformed = transformData(item.subFields, currentHierarchy, index);
+        Object.keys(subFieldsTransformed).forEach((key) => {
+          transformed[index++] = { ...subFieldsTransformed[key], id: index++ };
+        });
+      } else if (typeof item.subFields === 'object') {
+        transformed[index++] = {
+          ...row,
+          content: contentValue,
+          checked: false,
+        };
+      }
+    });
+
+    onDataTransform(transformed);
+    
+    return Object.values(transformed); // 객체 대신 배열로 반환
+  };
+  useEffect(() => {
+    // labelTaskData가 존재할 때만 변환 수행
+    if (labelTaskData) { // 변경된 부분
+      const transformedData = transformData(labelTaskData);
+      setRowsArray(transformedData);
+      // if (onDataTransform) {
+      //   onDataTransform(transformedData);
+      // }
+    }
+  }, [labelTaskData]);
+
+
+  const columns = [
+    {
+      field: 'content',
+      headerName: '내용',
+      width: 300,
+      renderCell: (params) => {
+        // 숫자 부분을 제거하고 싶다면 여기에 맞는 내용으로 변경
+        return <div>{params.row.subFields ? '' : ''}</div>; // 빈 문자열 반환
+      },
+    },
+    {
+      field: 'checked',
+      headerName: '선택',
+      width: 100,
+      type: 'boolean',
+      editable: true,
+    },
+  ];
+
+  const handleRowEdit = (updatedRow) => {
+    const updatedRows = rowsArray.map((row) => {
+      if (row.id === updatedRow.id) {
+        return { ...row, checked: !row.checked }; // 체크박스 상태 변경
+      }
+      return row;
+    });
+    setRowsArray(updatedRows);
+  };
+
+  return (
+    rowsArray && <div className="review-table-container">
+      <div style={{ height: 400, width: '100%' }}>
+        <DataGridPro
+          treeData
+          rows={rowsArray}
+          columns={columns}
+          // checkboxSelection
+          getTreeDataPath={(row) => {
+            // hierarchy 계층의 모든 레벨을 추출하여 배열로 반환
+            const path = Object.keys(row)
+              .filter((key) => key.startsWith("hierarchy"))
+              .sort((a, b) => a.localeCompare(b)) // 순서 정렬
+              .map((key) => row[key]);
+
+            return path.length > 0 ? path : ["root"]; // path가 비어있으면 기본값 "root" 설정
+          }}
+          onRowEdit={handleRowEdit}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ReviewerTable2;
+
+
+
+
+
+
+
+
+
+
+
+
 // import React, { useState } from 'react';
 // import { DataGridPro } from '@mui/x-data-grid-pro';
 
@@ -177,149 +312,3 @@
 
 
 
-
-
-import React, { useEffect, useState } from 'react';
-import { DataGridPro } from '@mui/x-data-grid-pro';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchLabelTasks, fetchFieldValue, updateFieldValue } from '../apis/labelTaskApis';
-
-// <<<<<<< HEAD
-const ReviewerTable2 = ({ taskId }) => {
-  const dispatch = useDispatch();
-// =======
-// const fetchData = async () => {
-//   // 환경 변수에서 API URL 가져오기
-//   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-//   const response = await fetch(`${API_BASE_URL}/labeltask/data`);
-//   if (!response.ok) {
-//     throw new Error('네트워크 응답이 실패했습니다.');
-//   }
-//   return await response.json();
-// };
-
-// const ReviewerTable2 = () => {
-// >>>>>>> 9e90b4a6992dc679ea99d4c82b009fcb0ecb2439
-  const [rowsArray, setRowsArray] = useState([]);
-
-  // Redux store에서 상태 가져오기
-  const taskData = useSelector((state) => state.labelTaskSlice.taskData);
-  const fieldValueData = useSelector((state) => state.labelTaskSlice.fieldValueData);
-
-  useEffect(() => {
-    const loadData = async () => {
-      const result = await dispatch(fetchLabelTasks(taskId));
-      const fieldId = result.payload?.fieldId; // fetchLabelTasks 결과에서 fieldId 추출
-      if (fieldId) {
-        await dispatch(fetchFieldValue(fieldId)); // fieldValue API 호출
-      }
-    };
-
-    loadData();
-  }, [dispatch, taskId]);
-
-  useEffect(() => {
-    if (fieldValueData) {
-      const flattenData = (data, hierarchy = [], result = []) => {
-        for (const key in data) {
-          if (typeof data[key] === 'object' && data[key] !== null) {
-            flattenData(data[key], [...hierarchy, key], result);
-          } else {
-            result.push({
-              hierarchy: hierarchy[0] || '',
-              hierarchy2: hierarchy[1] || '',
-              hierarchy3: hierarchy[2] || '',
-              content: data[key],
-              checked: false,
-            });
-          }
-        }
-        return result;
-      };
-
-      const transformedData = flattenData(fieldValueData);
-      setRowsArray(transformedData);
-    }
-  }, [fieldValueData]);
-
-  const columns = [
-    {
-      field: 'content',
-      headerName: '내용',
-      width: 300,
-      renderCell: (params) => (
-        <div style={{
-          whiteSpace: 'normal',
-          wordWrap: 'break-word',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start'
-        }}>
-          <div style={{ color: 'black' }}>{params.value}</div>
-          <div style={{
-            padding: '5px',
-            borderRadius: '4px',
-            marginTop: '5px',
-          }}>
-            {params.row.hierarchyArray.join(' > ')}
-          </div>
-        </div>
-      ),
-    },
-    {
-      field: 'checked',
-      headerName: '선택',
-      width: 100,
-      type: 'boolean',
-      editable: true,
-    },
-  ];
-
-  const getTreeDataPath = (row) => {
-    return row.hierarchyArray.filter(Boolean); // 빈 값이 아닌 것만 사용
-  };
-
-  const handleRowEdit = async (updatedRow) => {
-    // 체크박스 상태 변경 시 호출되는 함수
-    const updatedRows = rowsArray.map((row) => {
-      if (row.id === updatedRow.id) {
-        // 현재 행의 checked 상태를 업데이트
-        const updatedChecked = !row.checked;
-        // 서버에 업데이트 요청
-        dispatch(updateFieldValue({ fieldId: updatedRow.id, checked: updatedChecked }));
-        return { ...row, checked: updatedChecked };
-      }
-      return row;
-    });
-    setRowsArray(updatedRows); // rowsArray 업데이트
-  };
-
-  return (
-    <div className="review-table-container">
-      <div style={{ height: 400, width: '100%' }}>
-        <DataGridPro
-          treeData
-          rows={rowsArray}
-          columns={columns}
-          getTreeDataPath={getTreeDataPath}
-          checkboxSelection
-          onRowEdit={handleRowEdit} // 행 수정 핸들러 추가
-        />
-      </div>
-    </div>
-  );
-};
-
-export default ReviewerTable2;
-
-
-
-
-/* 
-[
-  {"fieldName": "수정 테스트", "isParentField": false, 
-    "subFields": [
-      {"fieldName": "새로운키3 ㅁㄴㅇㅁ ", "isParentField": true, 
-        "subFields": [{"fieldName": "새로운키1", "isParentField": true, 
-          "subFields": [{"fieldName": "새로운키1", "isParentField": false}, {"fieldName": "새로운키2", "isParentField": false}, {"fieldName": "새로운키3", "isParentField": false}]}, {"fieldName": "새로운키2", "isParentField": true, "subFields": [{"fieldName": "새로운키1", "isParentField": false}, {"fieldName": "새로운키2", "isParentField": false}, {"fieldName": "새로운키3", "isParentField": false}, {"fieldName": "새로운키4", "isParentField": false}]}, {"fieldName": "새로운키3", "isParentField": false}, {"fieldName": "새로운키4", "isParentField": true, "subFields": [{"fieldName": "새로운키1", "isParentField": false}, {"fieldName": "새로운키2", "isParentField": false}, {"fieldName": "새로운키3", "isParentField": false}]}]}, {"fieldName": "새로운키2", "isParentField": true, "subFields": [{"fieldName": "새로운키1", "isParentField": false}, {"fieldName": "새로운키2", "isParentField": false}, {"fieldName": "새로운키3", "isParentField": false}]}]}, {"fieldName": "새로운키3", "isParentField": false, "subFields": [{"fieldName": "ㅁㄴㅇㅁㄴㅇ", "isParentField": false}]}] */

@@ -28,12 +28,12 @@ const NoTodosMessage = styled.p`
   align-items: center;
   height: 100%;
   color: #999;
+  margin-bottom: 0;
 `;
 
 function TodoList() {
   const todos = useTodoState();
   const [filteredTodos, setFilteredTodos] = useState(todos); // 상태를 별도로 관리
-
   // useEffect로 todos가 변경될 때마다 리렌더링
   useEffect(() => {
     setFilteredTodos(todos); // todos 상태가 변경되면 filteredTodos를 업데이트

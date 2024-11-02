@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { passwordChk, getAllProjects, fetchMypageInfo,updateMypageInfo,
-    updateProfileImage, deleteProfileImage,
-    updateBackgroundImage, deleteBackgroundImage, fetchProfileIntro, updateProfileIntro } from '../apis/mypageApis';
+import { passwordChk, getProjectsBySearch, updateMypageInfo, updateProfileImage, deleteProfileImage, getAlarmBySearch,
+    updateBackgroundImage, deleteBackgroundImage, fetchProfileIntro, updateProfileIntro, fetchUserDetails } from '../apis/mypageApis';
 
 const mypageSlice = createSlice({
     name: 'mypage',
@@ -9,20 +8,40 @@ const mypageSlice = createSlice({
         profileImage: '/images/dataInk_profile_default.png',
         backgroundImage: '/images/dataInk_background_default.jpg',
         isProfileAuthenticated: false,
-        userDetails: null,
+        userDetails: {
+            dep: '',
+            nickname: '',
+            addr: '',
+        },
         projects: [],
-        profileIntro: '소개 글을 입력해 주세요.'
+        searchCondition: 'all',
+        searchKeyword: '',
+        profileIntro: '소개 글을 입력해 주세요.',
+        page: 1,
+        notification:[],
     },
     reducers: {
-        resetProfileAuth: (state) => {
-            state.isProfileAuthenticated = false;
+        resetProfileAuth: (state, action) => {
+            state.isProfileAuthenticated = action.payload;  // 인증 상태 업데이트
         },
         setBackgroundImage: (state, action) => {
-            state.backgroundImage = action.payload || '/images/dataInk_background_default.jpg';
+            state.backgroundImage = action.payload || '/images/dataInk_profile_default.png';
         },
         setProfileImage: (state, action) => {
-            state.profileImage = action.payload || '/images/dataInk_profile_default.png';
+            state.profileImage = action.payload || '/images/dataInk_background_default.jpg';
         },
+        change_searchCondition: (state, action) => ({
+            ...state,
+            searchCondition: action.payload
+        }),
+        change_searchKeyword: (state, action) => ({
+            ...state,
+            searchKeyword: action.payload
+        }),
+        reset_page: (state, action) => ({
+            ...state,
+            page: 1
+        }),
     },
     extraReducers: (builder) => {
         builder
@@ -32,27 +51,13 @@ const mypageSlice = createSlice({
         })
         .addCase(passwordChk.rejected, (state, action) => {
             if (action.payload.status === 401) {
-                alert("잘못된 비밀번호입니다.");
             } else {
                 alert('확인 중 에러가 발생했습니다.');
             }
         })
-        // .addCase(fetchMypageInfo.fulfilled, (state, action) => {
-        //     const userData = action.payload.user;
-        //     state.profileImage = userData?.profileImage || '/images/dataInk_profile_default.png';
-        //     state.backgroundImage = userData?.backgroundImage || '/images/dataInk_background_default.jpg';
-        // })
-        // .addCase(fetchMypageInfo.fulfilled, (state, action) => {
-        //     state.userDetails = {
-        //         ...state.userDetails,
-        //         dep: action.payload.dep,
-        //         nickname: action.payload.nickname,
-        //         addr: action.payload.addr
-        //     };
-        // })
-        // .addCase(fetchMypageInfo.rejected, (state, action) => {
-        //     state.error = action.payload || "정보를 가져오는데 실패했습니다.";
-        // })
+        .addCase(fetchUserDetails.fulfilled, (state, action) => {
+            state.userDetails = action.payload;  // 가져온 유저 정보를 상태에 저장
+        })
         .addCase(updateMypageInfo.fulfilled, (state, action) => {
             // 업데이트된 사용자 정보로 상태 업데이트
             state.userDetails = {
@@ -65,13 +70,6 @@ const mypageSlice = createSlice({
         .addCase(updateMypageInfo.rejected, (state, action) => {
             state.error = action.error.message;
             alert('프로필 정보 업데이트 중 에러가 발생했습니다.');
-        })
-        .addCase(getAllProjects.fulfilled, (state, action) => {
-            state.projects = action.payload; // 프로젝트 데이터를 상태에 저장
-        })
-        .addCase(getAllProjects.rejected, (state, action) => {
-            state.error = action.error.message;
-            alert('프로젝트 데이터를 불러오는 중 에러가 발생했습니다.');
         })
         // 프로필 이미지 업로드 또는 업데이트 처리
         .addCase(updateProfileImage.fulfilled, (state, action) => {
@@ -111,10 +109,37 @@ const mypageSlice = createSlice({
         })
         .addCase(updateProfileIntro.rejected, (state, action) => {
             state.error = action.payload;
+        })
+        builder.addCase(getProjectsBySearch.fulfilled, (state, action) => ({
+            ...state,
+            projects: action.payload.pageItems,
+            searchCondition: action.payload.item.searchCondition,
+            searchKeyword: action.payload.item.searchKeyword,
+            page: action.payload.pageItems.pageable.pageNumber
+        }))
+        builder.addCase(getProjectsBySearch.rejected, (state, action) => {
+            console.log(action.payload);
+            alert('getProjectsBySearch 에러가 발생했습니다.');
+            return state;
+        })
+        // .addCase(getAlarm.fulfilled, (state, action) => {
+        //     state.notification = action.payload.item;
+        // })
+        // .addCase(getAlarm.rejected, (state, action) => {
+        //     state.error = action.payload;
+        // })
+        .addCase(getAlarmBySearch.fulfilled, (state, action) => {
+            state.notification = action.payload.pageItems;
+            state.searchCondition = action.payload.item.searchCondition;
+            state.searchKeyword = action.payload.item.searchKeyword;
+            state.page = action.payload.pageItems.pageable.pageNumber;
+        })
+        .addCase(getAlarmBySearch.rejected, (state, action) => {
+            state.error = action.payload;
         });
     }
 });
 
-export const { resetProfileAuth, setBackgroundImage, setProfileImage } = mypageSlice.actions;
+export const { change_searchCondition, change_searchKeyword, resetProfileAuth, setBackgroundImage, setProfileImage, reset_page } = mypageSlice.actions;
 
 export default mypageSlice.reducer;

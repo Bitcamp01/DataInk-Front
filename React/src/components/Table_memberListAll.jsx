@@ -21,6 +21,20 @@ const formatDate = (dateString) => {
   return `${year}-${month}-${day} ${hours}:${minutes}`; // 원하는 형식으로 반환
 };
 
+// 역할을 한국어로 변환하는 함수
+const translateRole = (role) => {
+  switch (role) {
+    case 'ROLE_USER':
+      return '라벨러';
+    case 'ROLE_ADMIN':
+      return '관리자';
+    case 'ROLE_MANAGER':
+      return '검수자';
+    default:
+      return role; // 변환할 내용이 없으면 원래의 역할을 반환
+  }
+};
+
 const columns = [
   { field: 'id', headerName: 'No', flex: 60 / 1100 ,cellClassName: 'first-column', headerClassName: 'header-text'  },  
   { field: 'name', headerName: '이름', flex: 170 / 1100 },  
@@ -65,12 +79,12 @@ const Table_memberListAll = () => {
 
       <DataGrid
          rows={(memberListAll ?? []).map((item, index) => ({
-          id: item.userId,                  
+          id: index+1,                  
           name: item.name,       
           department: item.userDetailDto?.dep || '부서 정보 없음', // userDetailDto가 존재하지 않으면 '부서 정보 없음'
           email: item.email,  
           tel: item.tel, 
-          role: item.authen, 
+          role: translateRole(item.authen),
           regdate: formatDate(item.regdate)      
         }))} 
         columns={columns}
@@ -135,14 +149,14 @@ const Table_memberListAll = () => {
               alignItems: 'center',
               margin: '20px 0',
               '& .MuiPaginationItem-root': {
-                color: '#7c97fe !important', // 기본 페이지 버튼의 색상
+                color: '#7c97fe', // 기본 페이지 버튼의 색상
               },
               '& .Mui-selected': {
-                backgroundColor: '#7c97fe', // 선택된 페이지 색상
+                backgroundColor: '#7c97fe !important', // 선택된 페이지 색상
                 color: '#ffffff', 
               },
               '& .MuiPaginationItem-root:not(.Mui-selected)': {
-                color: '#3e3e3e', // 선택되지 않은 페이지 텍스트 색상 설정 
+                color: '#3e3e3e ', // 선택되지 않은 페이지 텍스트 색상 설정 
               },
               '& .MuiPaginationItem-ellipsis': {
                 color: '#3e3e3e', // 페이지 사이의 점 색상

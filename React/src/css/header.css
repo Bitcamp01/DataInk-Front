@@ -63,21 +63,18 @@
 }
 
 .header__icon {
-    margin-left: 1rem;
+    margin-left: 1.7rem;
     width: 1.6rem;
     height: 1.6rem;
     object-fit: contain;
     cursor: pointer;
 }
 
-.header__icon--alert {
-    margin-top: 0.3rem;
-}
-
 .header__icon--profile {
     width: 2.475rem;
     height: 2.475rem;
     border-radius: 50%;
+    border: 0.12rem solid #7C97FE;
 }
 
 .header__icon--dropdown {
@@ -111,7 +108,7 @@
 }
 
 .notification-dropdown__content {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
@@ -133,6 +130,10 @@
     flex-grow: 1; /* 내용이 가로로 확장되도록 */
     font-size: 14px;
     cursor: pointer;
+}
+
+.notification-item__content p {
+    margin-bottom: 0;
 }
 
 .notification-item small {

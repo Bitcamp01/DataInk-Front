@@ -1,18 +1,35 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { saveLabelTask} from '../apis/labelDetailApis';
+import { useDispatch } from 'react-redux';
 import '../css/reviewer.css';
 
-const LabelSelectForm = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-    const [isAdminInputChecked, setIsAdminInputChecked] = useState(false); // 관리자 별도 입력 체크박스 상태
+// const LabelSelectForm = ({ taskId , transformedData}) => {
+const LabelSelectForm = ({ taskId , transformedData}) => {
     const navigate = useNavigate(); // 페이지 이동을 위한 navigate 함수
+    const dispatch = useDispatch();
 
 
     const handlePrevClick = () => {
         navigate('/label/detail');
     };
-    const handleNextClick = () => {
-        navigate('/label/detail');
+    const handleSubmit = () => {
+        // tasks의 fieldValue에 넣는 apis로
+        const userConfirmed = window.confirm('저장하시겠습니까?');
+        if (userConfirmed) {
+            dispatch(saveLabelTask({
+                taskId: taskId,
+                transformedData: transformedData, // 저장할 데이터 전달
+            }))
+            .then((result) => {
+                if (saveLabelTask.fulfilled.match(result)) {
+                    alert('저장이 완료되었습니다.');
+                    navigate('/label/work');
+                } else {
+                    alert('저장에 실패했습니다.');
+                }
+            });
+        }
     };
 
     return (
@@ -22,14 +39,15 @@ const LabelSelectForm = () => {
                 <button
                     className="prev-button"
                     onClick={handlePrevClick} // 반려 버튼 클릭 시 동작
+                    style={{ visibility: 'hidden' }} // 버튼을 보이지 않게 하되 자리 차지
                 >
-                    이전 작업
+                    이전
                 </button>
                 <button
                     className="next-button"
-                    onClick={handleNextClick} // 반려 버튼 클릭 시 동작
+                    onClick={handleSubmit} // 반려 버튼 클릭 시 동작
                 >
-                    다음 작업
+                    완료
                 </button>
             </div>
         </>

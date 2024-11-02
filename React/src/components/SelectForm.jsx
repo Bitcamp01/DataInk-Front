@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import ReviewModal from './ReviewModal';
 import { useNavigate } from 'react-router-dom';
 import '../css/reviewer.css';
-import { useDispatch } from 'react-redux';
-import { rejectLabelTask } from '../apis/labelTaskApis';
+import { useDispatch , useSelector} from 'react-redux';
+import { rejectLabelTask, adminLabelTask } from '../apis/labelTaskApis';
 
-const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
+const SelectForm = ({ taskId , transformedData}) => { // taskId를 props로 받도록 수정
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isAdminInputChecked, setIsAdminInputChecked] = useState(false);
     const [selectedReasons, setSelectedReasons] = useState([]);
@@ -13,16 +13,27 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const authen = useSelector((state) => state.users?.authen ?? null);
+    
+
     const handleApproveClick = () => {
-        setIsModalOpen(true);
-    };
-
-    const handlePrevClick = () => {
-        navigate('/review');
-    };
-
-    const handleNextClick = () => {
-        navigate('/review');
+        if (authen === 'ROLE_ADMIN') { // **여기 수정이요**
+            dispatch(adminLabelTask({
+                taskId: taskId,
+                transformedData: transformedData, // 반려할 데이터 전달
+            }))
+            .then((result) => {
+                if (adminLabelTask.fulfilled.match(result)) {
+                    alert('승인이 완료되었습니다.');
+                    navigate('/label/work');
+                } else {
+                    alert('승인에 실패했습니다.');
+                }
+            });
+        } else {
+            // **일반 사용자일 경우 모달 열기**
+            setIsModalOpen(true);
+        }
     };
 
     const handleCloseModal = () => {
@@ -47,12 +58,22 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
         setTextareaContent(e.target.value);
     };
 
+    // const getFinalSubmission = () => {
+    //     const submissionReasons = selectedReasons.join(', ');
+    //     return textareaContent ? `${submissionReasons} ${textareaContent}`.trim() : submissionReasons;
+    // };
+    const getFinalSubmission = () => {
+        const submissionReasons = selectedReasons.join(', ');
+        return textareaContent ? `${submissionReasons} ${textareaContent.trim()}` : submissionReasons;
+    };
+
     const handleRejectClick = () => {
         const userConfirmed = window.confirm('반려시키시겠습니까?');
         if (userConfirmed) {
             dispatch(rejectLabelTask({
-                taskId: taskId, // props로 받은 taskId 사용
+                taskId: taskId,
                 rejectionReason: getFinalSubmission(),
+                transformedData: transformedData, // 반려할 데이터 전달
             }))
             .then((result) => {
                 if (rejectLabelTask.fulfilled.match(result)) {
@@ -63,11 +84,6 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
                 }
             });
         }
-    };
-
-    const getFinalSubmission = () => {
-        const submissionReasons = selectedReasons.join(', ');
-        return textareaContent ? `${submissionReasons} ${textareaContent}`.trim() : submissionReasons;
     };
 
     return (
@@ -103,11 +119,18 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
                         <label>
                             <input
                                 type="checkbox"
+                                onChange={() => handleCheckboxChange('기타')}
+                                checked={selectedReasons.includes('기타')}
+                            />
+                            기타
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
                                 onChange={handleAdminInputChange}
                             />
                             관리자 별도 입력
                         </label>
-                        <button className="select-button" onClick={handlePrevClick}>입력</button>
                     </div>
                     <div className="detailboxes">
                         <label>
@@ -124,7 +147,6 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
             </div>
 
             <div className="review-submit-container">
-                <button className="prev-button" onClick={handlePrevClick}>이전 작업</button>
                 <button
                     className="reject-button"
                     onClick={handleRejectClick}
@@ -138,10 +160,9 @@ const SelectForm = ({ taskId }) => { // taskId를 props로 받도록 수정
                 >
                     승인
                 </button>
-                <button className="next-button" onClick={handleNextClick}>다음 작업</button>
             </div>
 
-            <ReviewModal isOpen={isModalOpen} onClose={handleCloseModal} />
+            <ReviewModal isOpen={isModalOpen} onClose={handleCloseModal} taskId={taskId} transformedData={transformedData}/>
         </>
     );
 };

@@ -23,6 +23,8 @@ const RenderProfileCard = () => {
           authen: response.data.authen,
           dep: response.data.dep,
           profileImg: response.data.profileImg
+            ? `https://kr.object.ncloudstorage.com/dataink/${response.data.profileImg}`
+            : '/icons/dataink-logo_icon.svg' // profileImg가 null 값일 때 기본 이미지로 설정하기
         };
         // console.log(profile);
         setProfile(profile);
@@ -52,9 +54,9 @@ const RenderProfileCard = () => {
         const latestNotices = items.slice(0, 3); // 최신 3개의 공지 추출
 
         const notice = latestNotices.map(item => ({
-          id: item.notice_id,
+          id: item.noticeId,
           title: item.title,
-          content: item.content,
+          dep: item.dep,
         }));
 
         setAnnouncements(notice);

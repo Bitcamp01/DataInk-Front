@@ -39,8 +39,11 @@ export default function App() {
         switch (view) {
             case '월별':
                 for (let i = -3; i <= 2; i++) {
-                    const month = (currentMonth + i + 12) % 12 || 12;
-                    const num = month <= currentMonth ? Math.floor(Math.random() * 30) : 0;
+                    const month = (currentMonth + i + 12) % 12 || 12; // 1~12로 조정
+                    const year = currentYear + Math.floor((currentMonth + i - 1) / 12); // 년도 계산
+                    const num = (year < currentYear || (year === currentYear && month <= currentMonth))
+                        ? Math.floor(Math.random() * 30)
+                        : 0;
                     generatedData.push({ name: month.toString(), num });
                 }
                 break;

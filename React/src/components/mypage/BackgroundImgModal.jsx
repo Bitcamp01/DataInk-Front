@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { updateBackgroundImage, deleteBackgroundImage } from '../../apis/mypageApis';
 import { setBackgroundImage } from '../../slices/mypageSlice';
@@ -63,6 +63,7 @@ const FileName = styled.span`
 
 const BackgroundImgModal = ({ isOpen, currentImage, defaultImage, onClose }) => {
     const dispatch = useDispatch();
+    const { backgroundImage, userDetails} = useSelector((state) => state.mypageSlice);
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(currentImage); // 현재 이미지로 초기화
     const [isDefaultImage, setIsDefaultImage] = useState(false); // 기본 이미지 여부 상태
@@ -77,14 +78,13 @@ const BackgroundImgModal = ({ isOpen, currentImage, defaultImage, onClose }) => 
         setFileName("기본 이미지로 설정됨");
     };
 
-    // 파일이 변경되었을 때 미리보기 이미지 업데이트
+     // 파일 변경 시 미리보기 업데이트
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file);
             const previewUrl = URL.createObjectURL(file);
             setPreviewUrl(previewUrl);
-            setIsDefaultImage(false);
             setFileName(file.name);
         }
     };
@@ -94,7 +94,7 @@ const BackgroundImgModal = ({ isOpen, currentImage, defaultImage, onClose }) => 
         if (selectedFile) {
             try {
                 const { imageUrl } = await dispatch(updateBackgroundImage(selectedFile)).unwrap();
-                dispatch(setBackgroundImage(imageUrl)); 
+                dispatch(setBackgroundImage(imageUrl));
             } catch (error) {
                 console.error("Error uploading profile image:", error);
             }
@@ -113,6 +113,11 @@ const BackgroundImgModal = ({ isOpen, currentImage, defaultImage, onClose }) => 
     if (!isOpen) {
         return null;
     }
+
+    const backgroundImageUrl = backgroundImage || userDetails?.backgroundImageUrl 
+        ? `https://kr.object.ncloudstorage.com/dataink/${userDetails.backgroundImageUrl}`
+        : '../../public/images/dataInk_background_default.jpg'; // 기본 배경 이미지
+
 
     return (
         <ModalOverlay>
