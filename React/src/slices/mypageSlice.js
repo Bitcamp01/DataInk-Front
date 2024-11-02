@@ -51,7 +51,6 @@ const mypageSlice = createSlice({
         })
         .addCase(passwordChk.rejected, (state, action) => {
             if (action.payload.status === 401) {
-                alert("잘못된 비밀번호입니다.");
             } else {
                 alert('확인 중 에러가 발생했습니다.');
             }

@@ -608,14 +608,22 @@ const Calendar = () => {
                 setTitle(clickedEvent.title);
     
                 // calendarName을 기준으로 calendars에서 일치하는 캘린더를 찾습니다.
-                const selectedCalendar = calendars.find(option => option.calendarName === clickedEvent.calendarName);
+                // const selectedCalendar = calendars.find(option => option.calendarName === clickedEvent.calendarName);
+                // if (selectedCalendar) {
+                //     setCalendarName(selectedCalendar.calendarName);
+                //     setColor(selectedCalendar.color);
+                // } else {
+                //     setCalendarName('');
+                // }
+                // 이벤트의 calendarId를 기준으로 calendars에서 일치하는 캘린더를 찾습니다.
+                const selectedCalendar = calendars.find(option => option.id === clickedEvent.calendarId);
                 if (selectedCalendar) {
                     setCalendarName(selectedCalendar.calendarName);
                     setColor(selectedCalendar.color);
                 } else {
                     setCalendarName('');
                 }
-
+                
                 // 시작 날짜를 "yyyy-MM-dd" 형식으로 변환하여 설정
                 const startDate = new Date(clickedEvent.start).toISOString().split("T")[0];
                 setStartDate(startDate);
