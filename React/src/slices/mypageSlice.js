@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { passwordChk, getProjectsBySearch, updateMypageInfo, updateProfileImage, deleteProfileImage, getAlarm, getAlarmBySearch,
+import { passwordChk, getProjectsBySearch, updateMypageInfo, updateProfileImage, deleteProfileImage, getAlarmBySearch,
     updateBackgroundImage, deleteBackgroundImage, fetchProfileIntro, updateProfileIntro, fetchUserDetails } from '../apis/mypageApis';
 
 const mypageSlice = createSlice({
@@ -123,12 +123,12 @@ const mypageSlice = createSlice({
             alert('getProjectsBySearch 에러가 발생했습니다.');
             return state;
         })
-        .addCase(getAlarm.fulfilled, (state, action) => {
-            state.notification = action.payload.item;
-        })
-        .addCase(getAlarm.rejected, (state, action) => {
-            state.error = action.payload;
-        })
+        // .addCase(getAlarm.fulfilled, (state, action) => {
+        //     state.notification = action.payload.item;
+        // })
+        // .addCase(getAlarm.rejected, (state, action) => {
+        //     state.error = action.payload;
+        // })
         .addCase(getAlarmBySearch.fulfilled, (state, action) => {
             state.notification = action.payload.pageItems;
             state.searchCondition = action.payload.item.searchCondition;
