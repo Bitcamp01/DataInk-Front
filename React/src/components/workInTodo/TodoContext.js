@@ -25,6 +25,7 @@ const TodoDispatchContext = createContext();
 const TodoNextIdContext = createContext();
 
 export function TodoProvider({ children }) {
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [state, dispatch] = useReducer(todoReducer, initialTodos);
   const nextId = useRef(5);
 
@@ -32,7 +33,7 @@ export function TodoProvider({ children }) {
     const fetchTodos = async () => {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
       try {
-        const response = await axios.get('http://localhost:9090/TodoList/todoContent', {
+        const response = await axios.get(`${API_BASE_URL}/TodoList/todoContent`, {
           headers: {
             Authorization: `Bearer ${token}`
           },

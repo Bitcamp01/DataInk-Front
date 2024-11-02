@@ -62,12 +62,13 @@ const Text = styled.div`
 `;
 
 function TodoItem({ id, done, text }) {
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const dispatch = useTodoDispatch();
 
   const onToggle = async () => {
     const token = sessionStorage.getItem('ACCESS_TOKEN');
     try {
-      await axios.put(`http://localhost:9090/TodoList/todoUpdate/${id}`,
+      await axios.put(`${API_BASE_URL}/TodoList/todoUpdate/${id}`,
         {completed: !done},
         {
           headers: {Authorization: `Bearer ${token}`},
@@ -85,7 +86,7 @@ function TodoItem({ id, done, text }) {
     try {
       
       // todoId 경로 변수에 `id` 삽입
-      await axios.delete(`http://localhost:9090/TodoList/todoDelete/${id}`, {
+      await axios.delete(`${API_BASE_URL}/TodoList/todoDelete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

@@ -28,6 +28,7 @@ const Input = styled.input`
 `;
 
 function TodoCreate({ open, setOpen }) {
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const [value, setValue] = useState('');
   const dispatch = useTodoDispatch();
 
@@ -46,7 +47,7 @@ function TodoCreate({ open, setOpen }) {
   
     try {
       const token = sessionStorage.getItem('ACCESS_TOKEN');
-      const response = await axios.post('http://localhost:9090/TodoList/todoCreate', newTodo, {
+      const response = await axios.post(`${API_BASE_URL}/TodoList/todoCreate`, newTodo, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -60,7 +61,7 @@ function TodoCreate({ open, setOpen }) {
       // fetchTodos 함수를 직접 정의하여 호출
       const fetchTodos = async () => {
         try {
-          const response = await axios.get('http://localhost:9090/TodoList/todoContent', {
+          const response = await axios.get(`${API_BASE_URL}/TodoList/todoContent`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
