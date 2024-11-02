@@ -335,7 +335,6 @@ export const deleteBackgroundImage = createAsyncThunk(
                     },
                 }
             );
-
             return response.data;
         } catch (error) {
             return thunkApi.rejectWithValue(error.response ? error.response.data : error.message);
@@ -414,6 +413,43 @@ export const getProjectsBySearch = createAsyncThunk(
 
 // alarm////////////////////////////////////////////////////////////////////////////////////
 // 알림 가지고 오기
+export const getAlarm = createAsyncThunk(
+    'notification/getAlarm',
+    async(_,thunkApi) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/notification/notifications`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+                }
+            });
+            return response.data;
+        } catch (e){
+            return thunkApi.rejectWithValue(e);
+        }
+    }
+)
 
+export const getAlarmBySearch = createAsyncThunk(
+    'notification/getAlarmBySearch',
+    async(searchObj,thunkApi) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/notification/search-alarm`, {
+                headers: {
+                    Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+                },
+                params: {
+                    searchCondition: searchObj.searchCondition,
+                    searchKeyword: searchObj.searchKeyword,
+                    page: searchObj.page,
+                    startDate: searchObj.startDate,
+                    endDate: searchObj.endDate,
+                }
+            });
+            return response.data;
+        } catch (e){
+            return thunkApi.rejectWithValue(e);
+        }
+    }
+)
 
 
