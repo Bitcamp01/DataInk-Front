@@ -131,6 +131,7 @@ const ProjectCard = ({ projects }) => {
                                 {(projectMembers[project.id] && projectMembers[project.id].filter((member) => member.authen === 'ROLE_USER').length > 4) && (
                                     <span className="labeler">...</span>
                                 )}
+                                
                             </div>
                         </div>
                     </div>
