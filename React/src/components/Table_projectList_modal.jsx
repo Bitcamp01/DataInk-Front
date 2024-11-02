@@ -47,27 +47,25 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   const [selectedLeftMemberIds, setSelectedLeftMemberIds] = useState([]); // 왼쪽에서 선택한 멤버
   const [selectedRightMembers, setSelectedRightMembers] = useState([]); // 오른쪽에서 선택한 멤버
   const [modalData, setModalData] = useState([]); // 왼쪽 그리드에 있는 멤버 (프로젝트에 아직참여하지 않은 멤버 )초기 멤버 소스 
-  const [projectMembers, setProjectMembers] = useState([]); // 왼쪽그리드의 멤버 (오른쪽으로 이동하기위한)현재 선택가능한 멤버 
   const [tempProjectMembers, setTempProjectMembers] = useState([]); // 임시 저장용 오른쪽 그리드 멤버
   const [page, setPage] = useState(0); // 페이지 추적
 
   const allMembersDB = useSelector((state) => state.memberModalSlice.modalDatas); // 전체 맴버 가져오기
   const projectMembersDB = useSelector((state) => state.memberProjectSlice.projectMembers);
-
-  // modalData = allMembersDB;
   
   // 각 DataGrid의 스크롤 컨테이너 참조
   const containerRef1 = useRef(null);
   const containerRef2 = useRef(null);
 
-  useEffect(() => {
-    // projectMembersDB에 없는 멤버만 modalData에 저장
-    const filteredMembers = allMembersDB.filter(
-      (member) => !projectMembersDB.some((projectMember) => projectMember.id === member.id)
-    );
-    setModalData(filteredMembers);
-  }, [allMembersDB, projectMembersDB]); // allMembersDB나 projectMembersDB가 변경될 때마다 실행
 
+  useEffect(() => {
+    if (allMembersDB.length > 0 && modalData.length === 0) {
+      const filteredMembers = allMembersDB.filter(
+        (member) => !projectMembersDB.some((projectMember) => projectMember.id === member.id)
+      );
+      setModalData(filteredMembers);
+    }
+  }, [allMembersDB, projectMembersDB]);
 
 
   // 모달이 열릴 때 초기 데이터 불러오기
@@ -83,31 +81,37 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
 
 
   //모달무한스크롤
-  // const loadMoreUsers = async (page) => {
-  //   try {
-  //     const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/modal`, {
-  //       params: { page, size: 15 },
-  //       headers: {
-  //         Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
-  //       },
-  //     });
-
-  //     if (response.status === 200) {
-  //       const newUsers = response.data.pageItems.content;
-  //       setModalData((prevData) => [...prevData, ...newUsers]); // 이전 데이터에 이어붙임
-  //     }
-  //   } catch (error) {
-  //     console.error('사용자 목록을 가져오는 중 오류 발생:', error);
-  //   }
-  // };
+  const loadMoreUsers = async (page) => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/modal`, {
+        params: { page, size: 15 },
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`,
+        },
+      });
+  
+      if (response.status === 200) {
+        const newUsers = response.data.pageItems.content;
+  
+        setModalData((prevData) => {
+          const uniqueUsers = newUsers.filter(
+            (newUser) => !prevData.some((existingUser) => existingUser.id === newUser.id)
+          );
+          return [...prevData, ...uniqueUsers];
+        });
+      }
+    } catch (error) {
+      console.error('사용자 목록을 가져오는 중 오류 발생:', error);
+    }
+  };
 
 
 
   // Redux의 modalData가 변경될 때마다 usersData 업데이트
-  useEffect(() => {
-    console.log('Redux에서 가져온 modalData:', modalData);
-    setProjectMembers([...modalData])
-  }, [modalData]);
+  // useEffect(() => {
+  //   console.log('Redux에서 가져온 modalData:', modalData);
+  //   setModalData([...modalData])
+  // }, [modalData]);
 
     // Redux의 modalData가 변경될 때마다 usersData 업데이트
     useEffect(() => {
@@ -123,33 +127,33 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
     );
     }, [projectMembersDB]);
 
-  // // 첫 번째 DataGrid의 스크롤 이벤트 처리
-  // const handleScroll1 = () => {
-  //   if (!containerRef1.current) return;
-  //   const { scrollTop, scrollHeight, clientHeight } = containerRef1.current;
+  // 첫 번째 DataGrid의 스크롤 이벤트 처리
+  const handleScroll1 = () => {
+    if (!containerRef1.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef1.current;
 
-  //   if (scrollHeight - scrollTop <= clientHeight + 50 ) { // 끝에서 30px 남았을 때
-  //     setPage((prevPage) => {
-  //       const newPage = prevPage + 1;
-  //       loadMoreUsers(newPage); // 새로운 페이지 데이터 불러오기
-  //       return newPage;
-  //     });
-  //   }
-  // };
+    if (scrollHeight - scrollTop <= clientHeight + 50 ) { // 끝에서 30px 남았을 때
+      setPage((prevPage) => {
+        const newPage = prevPage + 1;
+        loadMoreUsers(newPage); // 새로운 페이지 데이터 불러오기
+        return newPage;
+      });
+    }
+  };
 
-  // // 두 번째 DataGrid의 스크롤 이벤트 처리
-  // const handleScroll2 = () => {
-  //   if (!containerRef2.current) return;
-  //   const { scrollTop, scrollHeight, clientHeight } = containerRef2.current;
+  // 두 번째 DataGrid의 스크롤 이벤트 처리
+  const handleScroll2 = () => {
+    if (!containerRef2.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = containerRef2.current;
   
-  //   if (scrollHeight - scrollTop <= clientHeight + 30) { // 끝에서 30px 남았을 때
-  //     setPage((prevPage) => {
-  //       const newPage = prevPage + 1;
-  //       loadMoreUsers(newPage); // 새로운 페이지 데이터 불러오기
-  //       return newPage;
-  //     });
-  //   }
-  // };
+    if (scrollHeight - scrollTop <= clientHeight + 30) { // 끝에서 30px 남았을 때
+      setPage((prevPage) => {
+        const newPage = prevPage + 1;
+        loadMoreUsers(newPage); // 새로운 페이지 데이터 불러오기
+        return newPage;
+      });
+    }
+  };
 
   // Dialog 컴포넌트
   <Dialog open={open} onClose={handleClose}>
@@ -165,7 +169,7 @@ const handleAddMembers = () => {
     // selectedLeftMemberId에서 userId 부분만 추출 (예: '28_3'에서 '28' 추출)
     const [userId] = selectedLeftMemberId.split('_');
 
-    for (const [index, projectMember] of projectMembers.entries()) {
+    for (const [index, projectMember] of modalData.entries()) {
 
       if (projectMember.userId.toString() === userId) {
 
@@ -181,14 +185,14 @@ const handleAddMembers = () => {
           name: projectMember.name,
         };
         newMembers.push(newMember);
-        projectMembers.splice(index, 1);
+        modalData.splice(index, 1);
         break; // 해당 멤버를 찾으면 반복문 종료
       }
     }
   }
 
   setTempProjectMembers((prev) => [...prev, ...newMembers]); // 오른쪽 임시 그리드에 추가
-  setProjectMembers([...projectMembers]); // 왼쪽 그리드에서 제거
+  setModalData([...modalData]); // 왼쪽 그리드에서 제거
   setSelectedLeftMemberIds([]); // 선택 초기화
 };
 
@@ -213,7 +217,7 @@ const handleAddMembers = () => {
   });
 
   
-    setProjectMembers((prev) => [...prev, ...removedMembers]); // 왼쪽 그리드에 추가
+    setModalData((prev) => [...prev, ...removedMembers]); // 왼쪽 그리드에 추가
     setTempProjectMembers(remainingMembers); // 오른쪽 임시 그리드에서 제거
     setSelectedRightMembers([]); // 선택 초기화
   };
@@ -326,7 +330,7 @@ const handleAddMembers = () => {
                 
                       
               <DataGrid
-                rows={(projectMembers).map((item, index) => ({
+                rows={(modalData).map((item, index) => ({
                   // id: item.userId,
                   id: `${item.userId}_${index}`,  // 고유한 id 설정 (userId와 index를 조합)
                   name: item.name,
@@ -338,7 +342,6 @@ const handleAddMembers = () => {
                 editMode='row'
                 disableSelectionOnClick={false}
                 pagination={true} // 페이지네이션 활성화
-                pageSize={10} // 한 페이지당 표시할 항목 수
                 sx={{
                   height:'100%',
                   fontFamily:'Pretendard',
