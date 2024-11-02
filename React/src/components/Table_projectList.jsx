@@ -48,7 +48,6 @@ export default function Table_projectList() {
   const totalPageCount = useSelector(state => state.memberSlice.totalPages); // 총 페이지 수
   const projectListAll= useSelector(state => state.memberSlice.projectsData);
   // 콘솔에 데이터를 출력하여 확인
-console.log("Current projectListAll data:", projectListAll)
 
 const dispatch = useDispatch();
 
@@ -194,14 +193,14 @@ const changePage = useCallback((e, v) => {
               alignItems: 'center',
               margin: '20px 0',
               '& .MuiPaginationItem-root': {
-                color: '#7c97fe !important', // 기본 페이지 버튼의 색상
+                color: '#7c97fe', // 기본 페이지 버튼의 색상
               },
               '& .Mui-selected': {
                 backgroundColor: '#7c97fe', // 선택된 페이지 색상
                 color: '#ffffff', 
               },
               '& .MuiPaginationItem-root:not(.Mui-selected)': {
-                color: '#3e3e3e', // 선택되지 않은 페이지 텍스트 색상 설정 
+                color: '#3e3e3e  !important', // 선택되지 않은 페이지 텍스트 색상 설정 
               },
               '& .MuiPaginationItem-ellipsis': {
                 color: '#3e3e3e', // 페이지 사이의 점 색상

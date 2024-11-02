@@ -7,7 +7,7 @@
     border-radius: 0.625rem;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
     gap: 0.4375rem;
-    width: 95%; /* 컨테이너 너비 고정 */
+    width: 84%; /* 컨테이너 너비 고정 */
     height: 3.75rem;
     margin: 0 auto;
     margin-bottom: 1.25rem;
@@ -46,7 +46,7 @@
 /* 검색 버튼 스타일 */
 .alarm__search-btn {
     font-size: 0.9375rem;
-    padding: 0.5rem 1.25rem; 
+    padding: 0.5rem 1rem; 
     border-radius: 0.3125rem; 
     border: 0.0625rem solid #7785BE; 
     color: #7785BE;

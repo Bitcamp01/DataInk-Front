@@ -27,13 +27,21 @@ const memberModalSlice = createSlice({
     extraReducers: (builder) => {
       builder
       .addCase(fetchModalData.fulfilled, (state, action) => {
-        const data = action.payload;
+        const content = action.payload.content;
+        console.log(action.payload.content);
+        const modaldatas = state.modalDatas;
+
+        return {
+          ...state,
+          totalPages: action.payload.totalPages || 1,
+          loading: false,
+          modalDatas: [...modaldatas, ...content]
+        }
 
        // 기존 데이터와 새로 불러온 데이터를 병합
-        state.modalDatas = [...state.modalDatas, ...data.content];
-        state.totalPages = data.totalPages || 1;
-        state.loading = false;
-        console.log("리듀서 쪽: ", [...state.modalDatas, ...data.content]);
+        // state.modalDatas = [...state.modalDatas, ...data.content];
+        // state.totalPages = data.totalPages || 1;
+        // state.loading = false;
       })
       .addCase(fetchModalData.rejected, (state, action) => {
         state.loading = false;

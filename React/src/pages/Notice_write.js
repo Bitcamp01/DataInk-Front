@@ -36,8 +36,10 @@ const Notice_write = () => {
   const uploadFiles = [];
 
   //파일업로드 핸들러
-  const handleFileChange =(selectedFiles) =>{
-    setFiles(selectedFiles);
+  // 파일을 여러개 업로드 가능
+  const handleFileChange = (selectedFiles) => {
+    setFiles(prevFiles => [...prevFiles, ...Array.from(selectedFiles)]);
+    console.log(selectedFiles);
   };
 
   //등록 버튼 클릭 시 POST 요청을 보내는 함수 
@@ -59,7 +61,10 @@ const Notice_write = () => {
 
     sendFormData.append('noticeDto', noticeDto);
 
-    Array.from(uploadFiles).forEach(file => sendFormData.append('uploadFiles', file));
+    // files 상태에서 파일 추가
+    files.forEach(file => {
+      sendFormData.append('uploadFiles', file);
+    });
 
     dispatch(post(sendFormData)).then((action) => {
         if(action.type === 'notice/post/fulfilled') {
@@ -67,12 +72,8 @@ const Notice_write = () => {
         }
     });
 
-}, [dispatch, navi, uploadFiles]); 
+}, [dispatch, navi, files]); 
   
-  // if (!notice) {
-  //   return null;
-  // }
-    
   return (
     <>
     {/* 콘텐츠 영역 */}
@@ -160,8 +161,7 @@ const Notice_write = () => {
                 />
               </Box>
               {/* 파일 업로드 컴포넌트 */}
-              <InputFileUpload onFileChange={handleFileChange} 
-            />
+              <InputFileUpload onFileChange={handleFileChange} />
 
 
                 {/* 파일 미리보기 */}

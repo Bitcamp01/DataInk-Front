@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import CustomizedTreeView from '../components/adminProjectStructure/CustomizedTreeView';
-import CustomizedDataGrid from '../components/adminProjectStructure/CustomizedDataGrid';
+import CustomizedDataGrid from "../components/adminProjectStructure/CustomizedDataGrid";
 import axios from "axios";
 import { wait } from '@testing-library/user-event/dist/utils';
 import ErrorBoundary from '../components/adminProjectStructure/ErrorBoundary.js';

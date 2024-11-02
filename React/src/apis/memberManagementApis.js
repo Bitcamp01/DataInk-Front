@@ -30,18 +30,18 @@ export const fetchTabData = createAsyncThunk(
 
 export const fetchModalData = createAsyncThunk(
   'modalManagement/fetchModalData',
-  async ({ page, size = 15 }, thunkApi) =>{
+  async ({ page, size = 100}, thunkApi) =>{
     try{
       const response = await axios.get(`${API_BASE_URL}/member/modal`,{
         params:{
-          page: page,
-          size: size,
+          page,
+          size
         },
         headers: {
           Authorization : `Bearer ${sessionStorage.getItem(`ACCESS_TOKEN`)}`
         }
       });
-
+      console.log(response);
       return  response.data.pageItems;
     }catch(error){
       return thunkApi.rejectWithValue(error.response.data);

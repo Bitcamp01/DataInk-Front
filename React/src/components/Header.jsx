@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../css/header.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../apis/userApis';
+import { fetchLatest } from '../apis/notificationApis';
 
 function Header({ title }) {
     const [showNotifications, setShowNotifications] = useState(false);
@@ -10,6 +11,13 @@ function Header({ title }) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    // 초기 렌더링 시 알림 가져오기
+    useEffect(() => {
+        dispatch(fetchLatest());
+    }, [dispatch]);
+
+    // Redux에서 알림 목록과 사용자 프로필 이미지 URL 가져오기
+    const notifications = useSelector((state) => state.notificationSlice.items);
     const profileImageUrlDB = useSelector((state) => state.userSlice.profileImageUrl);
 
     const toggleNotifications = () => {
@@ -61,6 +69,21 @@ function Header({ title }) {
         }
     };
 
+    // 시간 경과 계산 유틸리티 함수
+    const timeAgo = (timestamp) => {
+        const now = new Date();
+        const diff = Math.floor((now - new Date(timestamp)) / 1000);
+        if (diff < 60) return `${diff}초 전`;
+        const minutes = Math.floor(diff / 60);
+        if (minutes < 60) return `${minutes}분 전`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}시간 전`;
+        const days = Math.floor(hours / 24);
+        if (days < 30) return `${days}일 전`;
+        const months = Math.floor(days / 30);
+        return `${months}달 전`;
+    };
+
     const profileImageUrl = profileImageUrlDB 
     ? `https://kr.object.ncloudstorage.com/dataink/${profileImageUrlDB}`
     : '/images/dataInk_profile_default.png';  // 기본값으로 설정
@@ -83,20 +106,21 @@ function Header({ title }) {
                         <div className="notification-dropdown">
                             <div className="notification-dropdown__header">알림</div>
                             <div className="notification-dropdown__content">
-                                <div className="notification-item">
-                                    <img src="/images/profile_img.png" alt="프로필" className="notification-item__profile" />
-                                    <div className="notification-item__content">
-                                        <p>분류번호 002 작업에 배정되었습니다. 지금 바로 확인해보세요.</p>
-                                        <small>방금 전</small>
+                                {notifications.map((notification) => (
+                                    <div className="notification-item" key={notification.id}>
+                                        <img
+                                            src={notification.profile_image_url 
+                                                ? `https://kr.object.ncloudstorage.com/dataink/${notification.profile_image_url}`
+                                                : '/images/dataInk_profile_default.png'}
+                                            alt="프로필"
+                                            className="notification-item__profile"
+                                        />
+                                        <div className="notification-item__content" onClick={handleMoreClick}>
+                                            <p>{notification.content}</p>
+                                            <small>{timeAgo(notification.timestamp)}</small>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="notification-item">
-                                    <img src="/images/profile_img.png" alt="프로필" className="notification-item__profile" />
-                                    <div className="notification-item__content">
-                                        <p>분류번호 001 작업 마감이 <strong>2일</strong> 남았습니다.</p>
-                                        <small>2시간 전</small>
-                                    </div>
-                                </div>
+                                ))}
                                 <button onClick={handleMoreClick} className="notification-dropdown__more">
                                     더 보기
                                 </button>

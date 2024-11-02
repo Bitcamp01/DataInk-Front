@@ -97,7 +97,7 @@ const RendarProjectCard = () => {
           ],
         };
         // progress 값 콘솔에 출력
-        console.log(`Project ID: ${project.projectId}, Progress: ${projectData.progress}`);
+        // console.log(`Project ID: ${project.projectId}, Progress: ${projectData.progress}`);
         
         return <ProjectCard 
         key={project.projectId} 
