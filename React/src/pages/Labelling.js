@@ -76,7 +76,7 @@ const Labelling = () => {
       <ContentContainer>
         <SearchContainer>
           <RefreshButton onClick={handleRefreshClick}>
-            <img src='/icons/Refresh_icon.svg' alt="search_refresh" />
+            <img src='/icons/refresh_icon.svg' alt="search_refresh" />
           </RefreshButton>
           <SearchComponent/>
         </SearchContainer>

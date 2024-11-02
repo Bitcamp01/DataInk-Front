@@ -105,7 +105,7 @@ export default function App() {
                 <div className="chart__controls">
                     <div className="chart__refresh-button-wrapper">
                         <button onClick={refreshChart} className="chart__refresh-button">
-                            <img src='/icons/Refresh_icon.svg' alt="refresh" />
+                            <img src='/icons/refresh_icon.svg' alt="refresh" />
                         </button>
                     </div>
                     <div className="chart__dropdown-wrapper">
