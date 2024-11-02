@@ -106,7 +106,6 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
   };
 
 
-
   // Redux의 modalData가 변경될 때마다 usersData 업데이트
   // useEffect(() => {
   //   console.log('Redux에서 가져온 modalData:', modalData);
@@ -115,17 +114,21 @@ export default function Table_projectList_Modal({ open, onClose, selectedRow , h
 
     // Redux의 modalData가 변경될 때마다 usersData 업데이트
     useEffect(() => {
-        console.log('leftMembers:', projectMembersDB);
-    setTempProjectMembers(
-      projectMembersDB.map((member) => ({
-        projectId: selectedRow?.id,
-        userId: member.userId,
-        name: member.name,
-        department: member.userDetailDto?.dep || '부서 정보 없음',
-        role: member.authen ? translateRole(member.authen) : '역할 정보 없음',
-      }))
-    );
-    }, [projectMembersDB]);
+        console.log('rightMembers:', projectMembersDB);
+        if (projectMembersDB && projectMembersDB.length > 0) {
+          setTempProjectMembers(
+            projectMembersDB.map((member) => ({
+              projectId: selectedRow?.id,
+              userId: member.userId,
+              name: member.name,
+              department: member.userDetailDto?.dep || '부서 정보 없음',
+              role: member.authen ? translateRole(member.authen) : '역할 정보 없음',
+            }))
+          );
+        }else{
+          setTempProjectMembers([]);
+        }
+    }, [projectMembersDB,selectedRow]);
 
   // 첫 번째 DataGrid의 스크롤 이벤트 처리
   const handleScroll1 = () => {
