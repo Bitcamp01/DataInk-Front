@@ -99,10 +99,9 @@ const Profile = ({userDetails}) => {
         }
     };
 
-    // 사용자 정보 업데이트 함수
     const handleSaveProfile = async (e) => {
         e.preventDefault();
-        
+    
         try {
             const fullAddress = `${postcode} ${address} ${detailAddress} ${extraAddress}`;
             await dispatch(updateMypageInfo({
@@ -111,8 +110,10 @@ const Profile = ({userDetails}) => {
                 addr: fullAddress
             })).unwrap();
             alert('회원 정보가 성공적으로 수정되었습니다.');
+            
+            // 저장 후 최신 정보를 다시 가져옴
+            dispatch(fetchUserDetails());
         } catch (error) {
-
             alert('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');
         }
     };

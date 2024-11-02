@@ -98,7 +98,9 @@ const Alarm = () => {
         },
         width: '7.5rem',
     };
+
     useEffect(() => {
+        // 초기 로드 시 알림 리스트를 가져옴 (검색 상태를 의존성에서 제외)
         dispatch(getAlarmBySearch({
             searchCondition: searchConditionInput,
             searchKeyword: searchKeywordInput,
@@ -106,16 +108,33 @@ const Alarm = () => {
             startDate: period === 'all' ? '' : inputStartDate.format('YYYY-MM-DDTHH:mm:ss'),
             endDate: period === 'all' ? '' : inputEndDate.format('YYYY-MM-DDTHH:mm:ss'),
         }));
-    }, [dispatch, searchConditionInput, searchKeywordInput, period, inputStartDate, inputEndDate]);
-
+    }, [dispatch]);
 
     const handleSearch = (e) => {
         e.preventDefault();
+
+         // 검색어 매핑 테이블
+        const searchKeywordMap = {
+            '공지사항': 'NOTICE',
+            '댓글': 'COMMENT',
+            '프로젝트': 'PROJECT_ASSIGNMENT',
+            '승인/반려': 'LABEL_REVIEW',
+            '제출': 'TASK_UPDATED',
+        };
+
+        // 입력된 검색어와 부분 일치하는 값을 찾기
+        let searchKeywordMapped = searchKeywordInput;
+        Object.keys(searchKeywordMap).forEach(key => {
+            if (key.includes(searchKeywordInput)) {
+                searchKeywordMapped = searchKeywordMap[key];
+            }
+        });
+
         dispatch(change_searchCondition(searchConditionInput));
-        dispatch(change_searchKeyword(searchKeywordInput));
+        dispatch(change_searchKeyword(searchKeywordMapped));
         dispatch(getAlarmBySearch({
             searchCondition: searchConditionInput,
-            searchKeyword: searchKeywordInput,
+            searchKeyword: searchKeywordMapped,
             page: 0,
             startDate: period === 'all' ? '' : inputStartDate.format('YYYY-MM-DDTHH:mm:ss'),
             endDate: period === 'all' ? '' : inputEndDate.format('YYYY-MM-DDTHH:mm:ss'),
