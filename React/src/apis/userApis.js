@@ -75,7 +75,7 @@ export const changePassword = createAsyncThunk(
         try {
             console.log(userId);
             const response = await axios.post(
-                `http://localhost:9090/users/${userId}/change-password`,
+                `${API_BASE_URL}/users/${userId}/change-password`,
                 { currentPassword, newPassword },
                 {
                     headers: {

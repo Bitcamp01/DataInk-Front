@@ -44,32 +44,46 @@ const Login = () => {
 
     const googleSocialLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
+            console.log(tokenResponse);
             try {
-                // 구글에서 받은 access_token을 서버로 전달
                 const accessToken = tokenResponse.access_token;
+                console.log("Google access_token:", accessToken);
     
-                // accessToken을 백엔드로 보내서 사용자 정보를 요청
-                const response = await axios.post("http://localhost:9090/auth/google/callback", {
-                    token: accessToken
-                });
+                const response = await axios.get(
+                    `${process.env.REACT_APP_API_BASE_URL}/login/google`, {
+                        params: {
+                            "access_token": accessToken
+                        }
+                    }
+                );
     
-                console.log('User info:', response.data); // 사용자 정보 확인
-                navi("/dashboard"); // 성공 시 대시보드로 이동
-    
+                // 응답에 따라 분기 처리
+                const responseData = response.data;
+                if (responseData === "NEW_USER") {
+                    navi("/join");
+                } else if (responseData.startsWith("EXISTING_USER")) {
+                    const token = responseData.split("|")[1];
+                    // 필요한 경우 서버 토큰 저장 및 사용
+                    navi("/dashboard");
+                } else {
+                    console.error("Unknown response from server:", responseData);
+                }
             } catch (error) {
                 console.error('Google login error:', error.response ? error.response.data : error.message);
             }
         },
         onError: (errorResponse) => {
-            console.error('Login failed:', errorResponse);
+            console.error('Google Login failed:', errorResponse);
         }
     });
-
+    
     // 카카오 로그인 핸들러
     const kakaoLoginHandler = () => {
         if (window.Kakao && window.Kakao.Auth) {
             window.Kakao.Auth.authorize({
-                redirectUri: 'http://localhost:9090/auth/kakao/callback',
+                redirectUri: `${process.env.REACT_APP_API_BASE_URL}/auth/kakao/callback`,
+                // 팝업으로 띄우기
+                isPopup: true,
             });
         } else {
             console.error("Kakao SDK가 로드되지 않았습니다.");
@@ -80,9 +94,9 @@ const Login = () => {
     useEffect(() => {
         if (window.naver) {
             const naverLogin = new window.naver.LoginWithNaverId({
-                clientId: 'j8_Y90ucR3pGMa_lXxg9', // 네이버에서 발급받은 클라이언트 ID
-                callbackUrl: 'http://localhost:9090/auth/naver/callback',
-                isPopup: false,
+                clientId: 'j8_Y90ucR3pGMa_lXxg9',
+                callbackUrl: `${process.env.REACT_APP_API_BASE_URL}/auth/naver/callback`,
+                isPopup: true,
                 loginButton: { color: 'green', type: 3, height: 50 },
             });
             naverLogin.init();
@@ -91,30 +105,38 @@ const Login = () => {
         }
     }, []);
 
-    // 네이버 로그인 후 사용자 정보 가져오기
-    useEffect(() => {
-        if (window.location.href.includes('access_token')) {
-            const naverLogin = new window.naver.LoginWithNaverId();
-            naverLogin.getLoginStatus((status) => {
-                if (status) {
-                    const userProfile = {
-                        name: naverLogin.user.getName(),
-                        email: naverLogin.user.getEmail(),
-                        profile_image: naverLogin.user.getProfileImage(),
-                    };
-                    setUser(userProfile);
-                    navi("/dashboard");
-                } else {
-                    console.error("네이버 로그인 실패");
-                }
-            });
-        }
-    }, [navi]);
+// 네이버 로그인 후 사용자 정보 가져오기
+useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.hash);
+    const accessToken = queryParams.get('access_token');
+    
+    if (accessToken) {
+        // access_token을 사용하여 사용자 정보 요청
+        axios.get('https://openapi.naver.com/v1/nid/me', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+        .then(response => {
+            // 응답 확인
+            console.log(response.data); // 응답 데이터 로그
+            const userProfile = {
+                name: response.data.response.name,
+                email: response.data.response.email,
+                profile_image: response.data.response.profile_image,
+            };
+            setUser(userProfile);
+            navi("/dashboard");
+        })
+        .catch(error => {
+            console.error("네이버 사용자 정보 요청 실패:", error.response ? error.response.data : error.message);
+        });
+    }
+}, [navi]);
 
     // 네이버 로그인 핸들러
     const naverLoginHandler = () => {
         if (window.naver) {
-            // 숨겨진 네이버 로그인 버튼을 클릭하여 로그인 프로세스 시작
             const loginButton = document.getElementById('naverIdLogin').firstChild;
             if (loginButton) {
                 loginButton.click();
@@ -147,20 +169,16 @@ const Login = () => {
                     <div className="login__social-buttons">
                         <Button
                             onClick={naverLoginHandler}
-
                             startIcon={<img src="../images/login/login-naver_icon.svg" alt="네이버 소셜 아이콘" className="login__social-icon" />}
-                        >
-                        </Button>
+                        ></Button>
                         <Button
                             onClick={kakaoLoginHandler}
                             startIcon={<img src="../images/login/login-kakao_icon.svg" alt="카카오 소셜 아이콘" className="login__social-icon" />}
-                        >
-                        </Button>
+                        ></Button>
                         <Button
                             onClick={googleSocialLogin}
                             startIcon={<img src="../images/login/login-google_icon.svg" alt="구글 소셜 아이콘" className="login__social-icon" />}
-                        >
-                        </Button>
+                        ></Button>
                     </div>
                 </div>
 
@@ -174,7 +192,6 @@ const Login = () => {
                 </div>
 
                 <form className="login__form" onSubmit={handleLogin}>
-                    {/* 아이디 입력 필드 */}
                     <div className="login__input-field">
                         <img
                             src="../images/login/login-id-input_icon.svg"
@@ -226,7 +243,6 @@ const Login = () => {
                         </button>
                     </div>
 
-
                     <div className="login__options">
                         <div className="login__remember-me">
                             <input type="checkbox" id="remember" className="login__checkbox" />
@@ -241,7 +257,7 @@ const Login = () => {
                         <button type="submit" className="login__button">로그인</button>
                     </div>
                 </form>
-
+                
                 {user && (
                     <div>
                         <h2>네이버 로그인 성공!</h2>
