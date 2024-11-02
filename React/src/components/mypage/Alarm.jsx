@@ -98,6 +98,16 @@ const Alarm = () => {
         },
         width: '7.5rem',
     };
+    useEffect(() => {
+        dispatch(getAlarmBySearch({
+            searchCondition: searchConditionInput,
+            searchKeyword: searchKeywordInput,
+            page: 0,
+            startDate: period === 'all' ? '' : inputStartDate.format('YYYY-MM-DDTHH:mm:ss'),
+            endDate: period === 'all' ? '' : inputEndDate.format('YYYY-MM-DDTHH:mm:ss'),
+        }));
+    }, [dispatch, searchConditionInput, searchKeywordInput, period, inputStartDate, inputEndDate]);
+
 
     const handleSearch = (e) => {
         e.preventDefault();

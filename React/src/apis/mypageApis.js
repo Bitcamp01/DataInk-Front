@@ -413,21 +413,21 @@ export const getProjectsBySearch = createAsyncThunk(
 
 // alarm////////////////////////////////////////////////////////////////////////////////////
 // 알림 가지고 오기
-export const getAlarm = createAsyncThunk(
-    'notification/getAlarm',
-    async(_,thunkApi) => {
-        try {
-            const response = await axios.get(`${API_BASE_URL}/notification/notifications`, {
-                headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
-                }
-            });
-            return response.data;
-        } catch (e){
-            return thunkApi.rejectWithValue(e);
-        }
-    }
-)
+// export const getAlarm = createAsyncThunk(
+//     'notification/getAlarm',
+//     async(_,thunkApi) => {
+//         try {
+//             const response = await axios.get(`${API_BASE_URL}/notification/notifications`, {
+//                 headers: {
+//                     Authorization: `Bearer ${sessionStorage.getItem('ACCESS_TOKEN')}`
+//                 }
+//             });
+//             return response.data;
+//         } catch (e){
+//             return thunkApi.rejectWithValue(e);
+//         }
+//     }
+// )
 
 export const getAlarmBySearch = createAsyncThunk(
     'notification/getAlarmBySearch',
